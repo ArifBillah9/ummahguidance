@@ -1327,6 +1327,67 @@
     #surahView .grid{ box-shadow:0 12px 30px -18px rgba(14,59,49,.25); }
     .ayah-block:first-child{ border-top:1px solid var(--line); }
   }
+
+  /* =======================================================================
+     GLOBAL AYAH SEARCH PAGE (opened from the header's search icon)
+     ======================================================================= */
+  #globalSearchView{ min-height:100vh; background:#f0f4f8; }
+  .gs-appbar{
+    display:flex; align-items:center; gap:8px; padding:14px 16px; background:#f0f4f8;
+    position:sticky; top:0; z-index:40;
+  }
+  .gs-appbar .m-back{ color:var(--mid-green); background:none; }
+  .gs-appbar .m-back svg{ width:22px; height:22px; }
+  .gs-appbar .m-title{
+    flex:1; text-align:center; margin:0; color:var(--mid-green);
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:18px;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .gs-body{ padding:0 16px 60px; max-width:1180px; margin:0 auto; position:relative; }
+  .gs-search-wrap{
+    display:flex; align-items:center; gap:8px; background:#fff;
+    border:1.5px solid #cfe3d4; border-radius:12px; padding:11px 16px; margin-bottom:16px;
+  }
+  .gs-search-wrap svg{ width:18px; height:18px; stroke:var(--mid-green); flex:0 0 auto; }
+  .gs-search-wrap input{
+    border:none; outline:none; flex:1; font-size:14.5px; background:transparent;
+    color:var(--ink); font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+  }
+  .gs-search-wrap input::placeholder{ color:#8a9a8e; }
+  .gs-list{ padding-right:44px; }
+  .gs-card{
+    padding:22px 0; border-bottom:1px solid var(--line); cursor:pointer;
+  }
+  .gs-card:first-child{ border-top:1px solid var(--line); }
+  .gs-pill-row{ display:flex; gap:10px; margin-bottom:16px; }
+  .gs-pill{
+    border:none; cursor:pointer; padding:7px 20px; border-radius:999px; font-weight:700; font-size:13px;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; background:var(--deep-teal); color:#fff;
+  }
+  .gs-arabic{
+    text-align:center; direction:rtl; font-size:26px; line-height:2.1; color:var(--ink); margin-bottom:14px;
+  }
+  .gs-icon-row{ display:flex; align-items:center; justify-content:center; gap:22px; margin-bottom:14px; }
+  .gs-icon-btn{
+    width:38px; height:38px; border-radius:50%; border:1.5px solid var(--mid-green); background:#fff;
+    color:var(--mid-green); display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+  }
+  .gs-icon-btn svg{ width:17px; height:17px; }
+  .gs-ref{ text-align:center; color:var(--muted); font-size:14px; margin-bottom:12px; }
+  .gs-hl{ background:#ffe98a; color:inherit; border-radius:2px; padding:0 1px; }
+  .gs-empty{ text-align:center; padding:60px 20px; color:var(--muted); }
+  .gs-rail{
+    position:fixed; right:6px; top:140px; bottom:60px; width:34px;
+    display:flex; flex-direction:column; justify-content:space-between; align-items:center;
+    pointer-events:none; z-index:10; overflow:hidden;
+  }
+  .gs-rail-item{ display:flex; flex-direction:column; align-items:center; gap:2px; }
+  .gs-rail-num{ font-size:9.5px; color:var(--muted); font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; }
+  .gs-rail-dot{ width:4px; height:4px; border-radius:50%; background:var(--leaf-green); }
+  @media (max-width:520px){
+    .gs-rail{ right:2px; width:26px; }
+    .gs-rail-num{ font-size:8.5px; }
+  }
 </style>
 </head>
 <body>
@@ -1700,6 +1761,25 @@
   </div>
   <div class="tp-ayah-dropdown" id="tpAyahDropdown"></div>
   <div class="tp-body" id="tpBody"></div>
+</div>
+
+<!-- ============ GLOBAL AYAH SEARCH PAGE (opened from the header search icon) ============ -->
+<div id="globalSearchView" style="display:none;">
+  <div class="gs-appbar">
+    <button class="m-back" id="gsBackBtn" title="ফিরে যান">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <h1 class="m-title" id="gsTitle">অনুসন্ধান</h1>
+    <span style="width:32px;"></span>
+  </div>
+  <div class="gs-body">
+    <div class="gs-search-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="gsSearchInput" type="text" placeholder="অনুসন্ধান">
+    </div>
+    <div class="gs-list" id="gsList"></div>
+  </div>
+  <div class="gs-rail" id="gsRail"></div>
 </div>
 
 <!-- ============ TAFSIR SELECTION PAGE ============ -->
@@ -2614,10 +2694,237 @@ document.querySelectorAll('.m-quick-pill').forEach(pill=>{
   pill.addEventListener('click', ()=> openReader('surah', Number(pill.dataset.quickSurah)));
 });
 
-document.getElementById('mSearchIconBtn').addEventListener('click', ()=> mSearchInput.focus());
+document.getElementById('mSearchIconBtn').addEventListener('click', openGlobalSearch);
 document.getElementById('mBackBtn').addEventListener('click', function(){
   window.location.href = 'https://ummahguidance.vercel.app/';
 });
+
+/* ================= GLOBAL AYAH SEARCH PAGE ================= */
+const globalSearchView = document.getElementById('globalSearchView');
+const gsBackBtn = document.getElementById('gsBackBtn');
+const gsTitle = document.getElementById('gsTitle');
+const gsSearchInput = document.getElementById('gsSearchInput');
+const gsList = document.getElementById('gsList');
+const gsRail = document.getElementById('gsRail');
+
+let gsMode = 'browse';       // 'browse' | 'search'
+let gsBrowseSurahNum = 1;    // next surah to lazily append while browsing
+let gsLoadingBrowse = false;
+let gsMatches = [];          // {surah, ayah, text}[] for search mode
+let gsRenderedCount = 0;
+let gsLastQuery = '';
+let gsSearchDebounce = null;
+const GS_BATCH = 20;
+const GS_TOTAL_AYAHS = 6236;
+
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function gsHighlight(text, query){
+  const esc = escapeHtml(text);
+  if(!query) return esc;
+  const escQuery = escapeHtml(query).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  if(!escQuery) return esc;
+  return esc.replace(new RegExp(escQuery, 'g'), m => `<mark class="gs-hl">${m}</mark>`);
+}
+
+function gsBuildRail(){
+  const segments = 25;
+  let html = '';
+  for(let k = 0; k <= segments; k++){
+    const val = Math.max(1, Math.round(1 + k * (GS_TOTAL_AYAHS - 1) / segments));
+    html += `<span class="gs-rail-item"><span class="gs-rail-num">${toBnDigits(val)}</span><span class="gs-rail-dot"></span></span>`;
+  }
+  gsRail.innerHTML = html;
+}
+
+function gsTranslationsHTML(surahNum, ayahNumInSurah, query){
+  if(selectedTranslations.length === 0) return '';
+  const key = `${surahNum}-${ayahNumInSurah}`;
+  const parts = selectedTranslations.map(id=>{
+    const entry = TRANSLATIONS.find(t=>t.id===id);
+    const map = translationDataCache[id];
+    const text = map ? map.get(key) : null;
+    if(!text) return null;
+    const name = entry ? entry.name : '';
+    return `<p class="ayah-translation"><span class="ayah-translation-source">${gsHighlight(name, query)}:</span>${gsHighlight(text, query)}</p>`;
+  }).filter(Boolean);
+  return parts.join('');
+}
+
+function renderGsCard(surahNum, ayahNum, arabicText, query){
+  const entry = surahs.find(s=>s[0]===surahNum);
+  const bnName = entry ? entry[1] : '';
+  const refText = `(${gsHighlight(bnName, query)} - ${toBnDigits(ayahNum)})`;
+  const transHTML = gsTranslationsHTML(surahNum, ayahNum, query);
+  return `
+    <div class="gs-card" data-surah="${surahNum}" data-ayah="${ayahNum}">
+      <div class="gs-pill-row">
+        <button class="gs-pill" data-gs-go="surah">সূরা</button>
+        <button class="gs-pill" data-gs-go="tafsir">তাফসীর</button>
+      </div>
+      <p class="gs-arabic ar">${arabicText || ''}</p>
+      <div class="gs-icon-row">
+        <button class="gs-icon-btn" data-gs-action="audio" title="অডিও">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+        <button class="gs-icon-btn" data-gs-action="share" title="শেয়ার">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+        </button>
+        <button class="gs-icon-btn" data-gs-action="bookmark" title="বুকমার্ক">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+      <p class="gs-ref">${refText}</p>
+      ${transHTML}
+    </div>`;
+}
+
+function gsResetBrowse(){
+  gsMode = 'browse';
+  gsBrowseSurahNum = 1;
+  gsLoadingBrowse = false;
+  gsTitle.textContent = 'অনুসন্ধান';
+  gsList.innerHTML = '';
+  gsLoadMoreBrowse();
+}
+
+async function gsLoadMoreBrowse(){
+  if(gsLoadingBrowse || gsMode !== 'browse' || gsBrowseSurahNum > 114) return;
+  gsLoadingBrowse = true;
+  const num = gsBrowseSurahNum++;
+  try{
+    const [{ arabic }] = await Promise.all([ fetchSurah(num), ensureSelectedTranslationsLoaded() ]);
+    if(gsMode === 'browse'){
+      const ayahs = (arabic && arabic.ayahs) || [];
+      let html = '';
+      ayahs.forEach(a=>{ html += renderGsCard(num, a.numberInSurah, a.text, ''); });
+      gsList.insertAdjacentHTML('beforeend', html);
+    }
+  } catch(e){ /* skip this surah, still allow the next one to load on further scroll */ }
+  gsLoadingBrowse = false;
+}
+
+async function gsPerformSearch(query){
+  gsMode = 'search';
+  gsLastQuery = query;
+  gsList.innerHTML = '<div class="gs-empty">খোঁজা হচ্ছে...</div>';
+  const primaryId = selectedTranslations[0] || TRANSLATIONS[0].id;
+  await ensureTranslationLoaded(primaryId).catch(()=>null);
+  const map = translationDataCache[primaryId];
+  const matches = [];
+  if(map){
+    map.forEach((text, key)=>{
+      if(text && text.includes(query)){
+        const [s, a] = key.split('-').map(Number);
+        matches.push({ surah:s, ayah:a });
+      }
+    });
+  }
+  matches.sort((x,y)=> x.surah - y.surah || x.ayah - y.ayah);
+  if(gsMode !== 'search' || gsLastQuery !== query) return; // a newer query has since started
+  gsMatches = matches;
+  gsRenderedCount = 0;
+  gsTitle.textContent = `${query} (${toBnDigits(matches.length)} আয়াত)`;
+  gsList.innerHTML = '';
+  await gsRenderMoreMatches();
+}
+
+async function gsRenderMoreMatches(){
+  if(gsMode !== 'search') return;
+  const slice = gsMatches.slice(gsRenderedCount, gsRenderedCount + GS_BATCH);
+  if(slice.length === 0){
+    if(gsRenderedCount === 0) gsList.innerHTML = '<div class="gs-empty">কোনো ফলাফল পাওয়া যায়নি।</div>';
+    return;
+  }
+  const surahNums = [...new Set(slice.map(m=>m.surah))];
+  await Promise.all(surahNums.map(n=> fetchSurah(n).catch(()=>null)));
+  if(gsMode !== 'search') return;
+  let html = '';
+  slice.forEach(m=>{
+    const data = surahCache[m.surah];
+    const ayahObj = data && data.arabic && data.arabic.ayahs ? data.arabic.ayahs.find(a=>a.numberInSurah === m.ayah) : null;
+    html += renderGsCard(m.surah, m.ayah, ayahObj ? ayahObj.text : '', gsLastQuery);
+  });
+  gsList.insertAdjacentHTML('beforeend', html);
+  gsRenderedCount += slice.length;
+}
+
+function gsOnScroll(){
+  if(globalSearchView.style.display !== 'block') return;
+  const nearBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 400);
+  if(!nearBottom) return;
+  if(gsMode === 'browse') gsLoadMoreBrowse();
+  else gsRenderMoreMatches();
+}
+window.addEventListener('scroll', gsOnScroll);
+
+gsList.addEventListener('click', (e)=>{
+  const card = e.target.closest('.gs-card');
+  if(!card) return;
+  const surahNum = Number(card.dataset.surah);
+  const ayahNum = Number(card.dataset.ayah);
+  const tafsirBtn = e.target.closest('[data-gs-go="tafsir"]');
+  globalSearchView.style.display = 'none';
+  if(tafsirBtn){
+    currentSurahNum = surahNum;
+    currentAyahIndex = ayahNum;
+    openTafsirPage();
+    return;
+  }
+  openReaderAtAyah(surahNum, ayahNum);
+});
+
+function openReaderAtAyah(surahNum, ayahNum){
+  openReader('surah', surahNum);
+  const tryScroll = (attempts)=>{
+    const block = readerBody.querySelector(`.ayah-block[data-surah="${surahNum}"][data-ayah-index="${ayahNum}"]`);
+    if(block){
+      currentAyahIndex = ayahNum;
+      document.querySelectorAll('.ayah-block.highlighted').forEach(b=>b.classList.remove('highlighted'));
+      block.classList.add('highlighted');
+      block.scrollIntoView({ behavior:'smooth', block:'center' });
+    } else if(attempts < 40){
+      setTimeout(()=> tryScroll(attempts + 1), 150);
+    }
+  };
+  tryScroll(0);
+}
+
+function openGlobalSearch(){
+  heroSection.style.display = 'none';
+  viewTabsEl.style.display = 'none';
+  listingMain.style.display = 'none';
+  siteFooter.style.display = 'none';
+  mAppbar.style.display = 'none';
+  mPanel.style.display = 'none';
+  readerView.style.display = 'none';
+  if(typeof hideHadithViews === 'function') hideHadithViews();
+  globalSearchView.style.display = 'block';
+  window.scrollTo(0,0);
+  gsSearchInput.value = '';
+  gsResetBrowse();
+  setTimeout(()=> gsSearchInput.focus(), 60);
+}
+
+function closeGlobalSearch(){
+  globalSearchView.style.display = 'none';
+  showListing();
+}
+
+gsBackBtn.addEventListener('click', closeGlobalSearch);
+
+gsSearchInput.addEventListener('input', ()=>{
+  clearTimeout(gsSearchDebounce);
+  const val = gsSearchInput.value.trim();
+  gsSearchDebounce = setTimeout(()=>{
+    if(val === '') gsResetBrowse();
+    else gsPerformSearch(val);
+  }, 250);
+});
+
+gsBuildRail();
 
 function setActiveListTab(mode){
   readerListMode = mode;
