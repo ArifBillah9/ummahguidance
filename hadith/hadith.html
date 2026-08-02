@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>কুরআনের সূরাসমূহ</title>
+<title>হাদীসের কিতাব সমূহ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&family=Noto+Serif+Bengali:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 
   @font-face{
     font-family:'Kalpurush';
-    src:url('icons/fonts/Kalpurush.woff2') format('woff2');
+    src:url('/fonts/Kalpurush.woff2') format('woff2');
     font-weight:normal;
     font-style:normal;
     font-display:swap;
@@ -552,6 +552,114 @@
     padding:3px 10px; border-radius:999px;
   }
 
+  /* ---------- Hadith HOME screen (matches native app screenshot) ---------- */
+  .hh-shell{ max-width:520px; margin:0 auto; background:#f0f4f8; min-height:100vh; position:relative; }
+  .hh-header{
+    background:linear-gradient(180deg,var(--deep-teal) 0%,var(--mid-green) 100%);
+    color:var(--paper); position:relative; overflow:hidden; padding-bottom:26px;
+  }
+  .hh-header::before{
+    content:""; position:absolute; inset:0;
+    background-image:
+      radial-gradient(circle at 15% 15%, rgba(200,162,74,0.12) 0, transparent 40%),
+      radial-gradient(circle at 90% 30%, rgba(200,162,74,0.10) 0, transparent 45%);
+    pointer-events:none;
+  }
+  .hh-topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:18px 18px 6px; position:relative; z-index:2;
+  }
+  .hh-icon-btn{
+    background:none; border:none; padding:6px; cursor:pointer; color:var(--paper);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .hh-icon-btn svg{ width:24px; height:24px; stroke:currentColor; }
+  .hh-title{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700;
+    font-size:21px; margin:0; letter-spacing:.02em;
+  }
+  .hh-quote-wrap{
+    position:relative; z-index:2; padding:22px 30px 8px; text-align:center;
+  }
+  .hh-quote-text{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:15px;
+    line-height:1.9; color:rgba(255,255,255,.94);
+  }
+  .hh-quote-cite{
+    margin-top:14px; font-size:14px; color:var(--gold); font-weight:600;
+  }
+  .hh-quote-moon{
+    margin:16px 0 4px; font-size:20px; color:rgba(255,255,255,.5); text-align:center;
+  }
+  .hh-mosque-silhouette{
+    position:absolute; left:0; right:0; bottom:0; height:64px; opacity:.16; z-index:1; pointer-events:none;
+  }
+  .hh-actions-card{
+    background:var(--paper); border-radius:18px; box-shadow:0 16px 34px -16px rgba(14,59,49,.4);
+    margin:-30px 18px 0; position:relative; z-index:3;
+    display:flex; padding:20px 6px 16px;
+  }
+  .hh-action{
+    flex:1; display:flex; flex-direction:column; align-items:center; gap:9px;
+    background:none; border:none; cursor:pointer; font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+  }
+  .hh-action-ic{
+    width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:#eef4ee; color:var(--mid-green);
+  }
+  .hh-action-ic svg{ width:22px; height:22px; stroke:currentColor; fill:none; }
+  .hh-action-ic.gold{ background:#fdf3e0; color:#c9772e; }
+  .hh-action-ic.pink{ background:#fde9ee; color:#d1495b; }
+  .hh-action-label{ font-size:12.5px; color:var(--ink); font-weight:600; }
+
+  .hh-section{ padding:24px 18px 10px; }
+  .hh-section-title{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:17px;
+    color:var(--deep-teal); margin-bottom:14px;
+  }
+  .hh-book-list{ display:flex; flex-direction:column; gap:12px; padding:0 18px 110px; }
+  .hh-book-row{
+    background:var(--paper); border:1px solid var(--line); border-radius:16px;
+    display:flex; align-items:center; gap:14px; padding:15px 16px;
+    cursor:pointer; transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .hh-book-row:hover{
+    transform:translateY(-2px); box-shadow:0 14px 26px -16px rgba(14,59,49,.35); border-color:var(--leaf-green);
+  }
+  .hh-book-badge{
+    flex:0 0 auto; width:46px; height:46px; border-radius:14px; color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:16px;
+  }
+  .hh-book-info{ flex:1; min-width:0; }
+  .hh-book-name{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:16px;
+    color:var(--deep-teal); margin:0 0 3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .hh-book-author{ font-size:13px; color:var(--muted); }
+  .hh-book-count{ flex:0 0 auto; text-align:right; }
+  .hh-book-count-num{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:16px; color:var(--deep-teal);
+    display:block;
+  }
+  .hh-book-count-label{ font-size:11.5px; color:var(--muted); }
+
+  /* Persistent bottom nav for the Hadith home screen — always visible on every screen size,
+     not restricted to a "mobile only" media query like the Quran section's r-bottomnav. */
+  .hh-bottomnav{
+    position:fixed; left:0; right:0; bottom:0; z-index:40;
+    max-width:520px; margin:0 auto;
+    background:var(--paper); border-top:1px solid var(--line);
+    display:flex; box-shadow:0 -10px 26px -18px rgba(14,59,49,.35);
+  }
+  .hh-bn-item{
+    flex:1; background:none; border:none; cursor:pointer; padding:9px 4px 10px;
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:11px; color:var(--muted);
+  }
+  .hh-bn-item svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.8; }
+  .hh-bn-item.active{ color:var(--mid-green); }
+
   /* ---------- তেলাওয়াত (recitation) continuous flow ---------- */
   .recitation-flow{
     background:var(--paper); border:1px solid var(--line); border-radius:18px;
@@ -586,7 +694,8 @@
   @media (max-width:680px){
 
     /* Hide the desktop chrome, show the app-style chrome instead */
-    .site-nav, header.top, .view-tabs, #filterBar{ display:none !important; }
+    #filterBar{ display:none !important; }
+    .site-nav{ display:none !important; }
 
     body{ background:#f0f4f8; }
 
@@ -952,39 +1061,6 @@
   .ms-ic-fontsize{ background:#fdeee0; color:#c9772e; font-size:19px; }
   .ms-ic-explain{ background:#e6f6ee; color:var(--mid-green); }
 
-  /* =======================================================================
-     AYAH TAP ACTION SHEET (mimics native app's per-ayah bottom bar)
-     ======================================================================= */
-  .ay-sheet-overlay{
-    display:none; position:fixed; inset:0; background:rgba(14,20,17,.45); z-index:230;
-    align-items:flex-end; justify-content:center;
-  }
-  .ay-sheet-overlay.open{ display:flex; }
-  .ay-sheet{
-    background:#fff; width:100%; max-width:520px; border-radius:18px 18px 0 0;
-    padding:16px 18px 26px; box-shadow:0 -20px 50px -20px rgba(0,0,0,.4);
-  }
-  .ay-sheet-title{
-    text-align:center; font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
-    font-weight:700; font-size:16px; color:var(--ink); padding-bottom:16px; margin-bottom:16px;
-    border-bottom:1px solid var(--line);
-  }
-  .ay-sheet-grid{ display:flex; justify-content:space-between; gap:6px; }
-  .ay-sheet-item{
-    flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; background:none; border:none;
-    cursor:pointer; text-align:center; font-size:11.5px; color:var(--ink); font-weight:600;
-    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; line-height:1.3; padding:2px;
-  }
-  .ay-sheet-ic{
-    width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    border:1.6px solid var(--leaf-green); color:var(--mid-green); background:#fff;
-  }
-  .ay-sheet-ic svg{ width:19px; height:19px; }
-  .ay-sheet-item.primary .ay-sheet-ic{ background:var(--mid-green); border-color:var(--mid-green); color:#fff; }
-  .ay-sheet-item.active .ay-sheet-ic{ background:var(--mid-green); border-color:var(--mid-green); color:#fff; }
-  .ayah-block{ cursor:pointer; }
-  .ayah-block [data-action], .ayah-block .ayah-num-link{ cursor:pointer; }
-
   @media (max-width:520px){
     .ar-modal, .wc-modal{ max-width:280px; }
   }
@@ -1043,8 +1119,8 @@
     <span>মুসলিম বাংলা</span>
   </a>
   <div class="nav-links">
-    <a class="current" id="navQuranLink">কুরআন</a>
-    <a id="navHadithLink">হাদীস</a>
+    <a id="navQuranLink">কুরআন</a>
+    <a class="current" id="navHadithLink">হাদীস</a>
     <a>নামাজের সময়</a>
     <a>মাসায়েল</a>
     <a>দু'আ</a>
@@ -1191,42 +1267,102 @@
   </nav>
 </div>
 
-<!-- ============ HADITH LISTING VIEW ============ -->
+<!-- ============ HADITH LISTING VIEW (app-style home screen) ============ -->
 <div id="hadithView" style="display:none;">
-  <header class="top">
-    <div class="lattice"></div>
-    <div class="top-inner">
-      <div class="eyebrow">মুসলিম বাংলা</div>
-      <h1 class="top-title">হাদীসের কিতাব সমূহ</h1>
-      <p class="top-sub">নির্ভরযোগ্য হাদীস গ্রন্থ থেকে অধ্যায় ও হাদীস অনুসারে পড়ুন</p>
-      <div class="search-wrap">
+  <div class="hh-shell">
+    <header class="hh-header">
+      <div class="hh-topbar">
+        <button class="hh-icon-btn" id="hhMenuBtn" aria-label="মেনু">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <h1 class="hh-title">আল হাদিস</h1>
+        <button class="hh-icon-btn" id="hhSearchBtn" aria-label="অনুসন্ধান">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+      </div>
+
+      <div class="hh-quote-wrap">
+        <p class="hh-quote-text">
+          "আল্লাহর রসূল (ﷺ) ইরশাদ করেন, ‘‘সে-ই মুসলিম যার জিহ্বা ও হাত হতে সকল মুসলিম নিরাপদ এবং সে-ই প্রকৃত মুহাজির, আল্লাহ যা নিষেধ করেছেন তা ত্যাগ করে।’’"
+        </p>
+        <div class="hh-quote-moon">☾</div>
+        <div class="hh-quote-cite">[সহিহ বুখারী]</div>
+      </div>
+
+      <svg class="hh-mosque-silhouette" viewBox="0 0 400 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#fff" d="M0,60 L0,40 L20,40 L20,30 L30,20 L40,30 L40,40 L60,40 L60,25 L70,15 L80,25 L80,40
+          L110,40 L110,20 L120,10 L130,20 L130,40 L160,40 L160,30 L170,20 L180,30 L180,40
+          L220,40 L220,15 L230,5 L240,15 L240,40 L270,40 L270,28 L280,18 L290,28 L290,40
+          L320,40 L320,22 L330,12 L340,22 L340,40 L370,40 L370,32 L380,24 L390,32 L390,40 L400,40 L400,60 Z"/>
+      </svg>
+
+      <div class="hh-actions-card">
+        <button class="hh-action" id="hhLatestBtn">
+          <span class="hh-action-ic">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="1.8"/><path stroke-width="1.8" stroke-linecap="round" d="M12 7v5l3.5 3.5"/></svg>
+          </span>
+          <span class="hh-action-label">সর্বশেষ</span>
+        </button>
+        <button class="hh-action" id="hhAppsBtn">
+          <span class="hh-action-ic">
+            <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linejoin="round" d="M4 5c4 -2 8 -2 8 0v14c0 -2 -4 -2 -8 0z"/><path stroke-width="1.8" stroke-linejoin="round" d="M20 5c-4 -2 -8 -2 -8 0v14c0 -2 4 -2 8 0z"/></svg>
+          </span>
+          <span class="hh-action-label">অ্যাপস</span>
+        </button>
+        <button class="hh-action" id="hhGotoBtn">
+          <span class="hh-action-ic gold">
+            <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" d="M3 11l18 -8l-8 18l-2 -8z"/></svg>
+          </span>
+          <span class="hh-action-label">হাদিসে যান</span>
+        </button>
+        <button class="hh-action" id="hhDonateBtn">
+          <span class="hh-action-ic pink">
+            <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linejoin="round" d="M12 21s-7 -4.5 -9.5 -9C1 8 2.5 4.5 6 4.5c2 0 3.5 1.2 4 2.6c.5 -1.4 2 -2.6 4 -2.6c3.5 0 5 3.5 3.5 7.5c-2.5 4.5 -9.5 9 -9.5 9z"/></svg>
+          </span>
+          <span class="hh-action-label">সদাকা</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="hh-section" id="hhSearchSection" style="display:none;">
+      <div class="search-wrap" style="max-width:none;">
         <input id="hadithSearchInput" type="text" placeholder="কিতাবের নাম লিখে খুঁজুন...">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </div>
     </div>
-  </header>
 
-  <div class="view-tabs">
-    <button class="view-tab active" data-hview="book">কিতাবভিত্তিক</button>
-    <button class="view-tab" data-hview="topic">বিষয়ভিত্তিক</button>
-    <button class="view-tab" data-hview="narrator">রাবী বর্ণিত</button>
-  </div>
+    <div class="hh-section">
+      <div class="hh-section-title">সব হাদিসের বই</div>
+    </div>
 
-  <main>
-    <div class="trans-empty-note" style="max-width:1180px; margin:0 auto 22px;">
+    <div class="trans-empty-note" style="margin:0 18px 16px;">
       এই মুহূর্তে যে কয়টি হাদীস গ্রন্থের প্রকৃত, ফ্রি/উন্মুক্ত API-ডেটা (আরবি + বাংলা/উর্দু অনুবাদসহ) পাওয়া গেছে শুধু সেগুলোই এখানে দেখানো হচ্ছে। মিশকাত, রিয়াদুস স্বা-লিহীন, মুসনাদে আহমাদ, শামায়েলে তিরমিযীর মতো আরও অনেক কিতাব উন্মুক্ত API-তে এখনো যুক্ত হয়নি বলে তালিকায় নেই।
     </div>
+
     <div id="hadithBookView">
-      <div class="grid" id="hadithGrid"></div>
+      <div class="hh-book-list" id="hadithGrid"></div>
       <div class="no-results" id="hadithNoResults">কোনো কিতাব পাওয়া যায়নি। অন্য নাম দিয়ে চেষ্টা করুন।</div>
     </div>
-    <div id="hadithTopicView" style="display:none; text-align:center; padding:60px 20px; color:var(--muted);">
-      বিষয়ভিত্তিক হাদীস তালিকা শীঘ্রই যুক্ত করা হবে।
-    </div>
-    <div id="hadithNarratorView" style="display:none; text-align:center; padding:60px 20px; color:var(--muted);">
-      রাবী অনুসারে হাদীস তালিকা শীঘ্রই যুক্ত করা হবে।
-    </div>
-  </main>
+
+    <nav class="hh-bottomnav" id="hhBottomNav">
+      <button class="hh-bn-item active" data-hhbn="home">
+        <svg viewBox="0 0 24 24"><path d="M3 11l9 -7l9 7"/><path d="M5 10v10h5v-6h4v6h5v-10"/></svg>
+        <span>হোম</span>
+      </button>
+      <button class="hh-bn-item" data-hhbn="books">
+        <svg viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
+        <span>কিতাব</span>
+      </button>
+      <button class="hh-bn-item" data-hhbn="notes">
+        <svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13h-14z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+        <span>নোট</span>
+      </button>
+      <button class="hh-bn-item" data-hhbn="bookmark">
+        <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6 -4l-6 4z"/></svg>
+        <span>বুকমার্ক</span>
+      </button>
+    </nav>
+  </div>
 </div>
 
 <!-- ============ HADITH READER VIEW ============ -->
@@ -1333,45 +1469,6 @@
       <button class="ms-item" data-ms="pronun">
         <span class="ms-ic ms-ic-flag"><img src="icons/icon-pronun.png" alt="উচ্চারণ: বাংলা"></span>
         <span>উচ্চারণ: বাংলা</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- ============ AYAH TAP ACTION SHEET (mimics native app screenshot) ============ -->
-<div class="ay-sheet-overlay" id="ayahSheetOverlay">
-  <div class="ay-sheet">
-    <div class="ay-sheet-title" id="ayahSheetTitle"></div>
-    <div class="ay-sheet-grid">
-      <button class="ay-sheet-item" data-ay="copy">
-        <span class="ay-sheet-ic">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-        </span>
-        <span>কপি</span>
-      </button>
-      <button class="ay-sheet-item" data-ay="share">
-        <span class="ay-sheet-ic">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
-        </span>
-        <span>শেয়ার</span>
-      </button>
-      <button class="ay-sheet-item primary" data-ay="play">
-        <span class="ay-sheet-ic">
-          <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
-        </span>
-        <span>প্লে করুন</span>
-      </button>
-      <button class="ay-sheet-item" data-ay="bookmark">
-        <span class="ay-sheet-ic">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        </span>
-        <span>বুকমার্ক</span>
-      </button>
-      <button class="ay-sheet-item" data-ay="tafsir">
-        <span class="ay-sheet-ic">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-        </span>
-        <span>তাফসীর</span>
       </button>
     </div>
   </div>
@@ -1998,8 +2095,8 @@ function openReader(mode, num){
   }
 }
 
-document.getElementById('navLogo').addEventListener('click', showListing);
-document.getElementById('navQuranLink').addEventListener('click', showListing);
+document.getElementById('navLogo').addEventListener('click', function(){ window.location.href = 'quran.html'; });
+document.getElementById('navQuranLink').addEventListener('click', function(){ window.location.href = 'quran.html'; });
 
 /* ---------- Mobile app-bar / panel wiring ---------- */
 const mAppbar = document.getElementById('mAppbar');
@@ -2228,7 +2325,7 @@ function renderAyahBlock(arabicAyah, surahNum){
   const translitMap = transliterationCache[resolvedSurahNum];
   const translit = translitMap ? translitMap.get(n) : null;
   return `
-    <div class="ayah-block" data-ayah-index="${n}" data-surah="${resolvedSurahNum}" data-g="${g}">
+    <div class="ayah-block" data-ayah-index="${n}">
       <div class="ayah-top-row">
         <span class="ayah-num-orn"><span>${toBnDigits(n)}</span></span>
         <span class="ayah-dots">
@@ -2359,8 +2456,7 @@ function selectJuz(num){
 
 function wireAyahActions(){
   readerBody.querySelectorAll('[data-action="audio"]').forEach(btn=>{
-    btn.addEventListener('click', (e)=>{
-      e.stopPropagation();
+    btn.addEventListener('click', ()=>{
       const g = btn.dataset.g;
       readerBody.querySelectorAll('.ayah-action.playing').forEach(b=>b.classList.remove('playing'));
       ayahAudio.src = `https://cdn.islamic.network/quran/audio/128/${RECITER}/${g}.mp3`;
@@ -2369,39 +2465,27 @@ function wireAyahActions(){
     });
   });
   readerBody.querySelectorAll('[data-action="bookmark"]').forEach(btn=>{
-    btn.addEventListener('click', (e)=>{ e.stopPropagation(); btn.classList.toggle('playing'); });
+    btn.addEventListener('click', ()=> btn.classList.toggle('playing'));
   });
   readerBody.querySelectorAll('[data-action="share"]').forEach(btn=>{
-    btn.addEventListener('click', (e)=>{
-      e.stopPropagation();
+    btn.addEventListener('click', ()=>{
       const url = window.location.href;
       if(navigator.share){ navigator.share({ title:'কুরআনের আয়াত', url }); }
       else if(navigator.clipboard){ navigator.clipboard.writeText(url); alert('লিংক কপি করা হয়েছে'); }
     });
   });
   readerBody.querySelectorAll('[data-action="tafsir"]').forEach(btn=>{
-    btn.addEventListener('click', (e)=>{
-      e.stopPropagation();
+    btn.addEventListener('click', ()=>{
       const surah = btn.dataset.surah;
       const ayah = btn.dataset.ayah;
       openTafsirModal(surah, ayah);
     });
   });
   readerBody.querySelectorAll('[data-surah-audio]').forEach(btn=>{
-    btn.addEventListener('click', (e)=>{
-      e.stopPropagation();
+    btn.addEventListener('click', ()=>{
       const num = btn.dataset.surahAudio;
       ayahAudio.src = `https://cdn.islamic.network/quran/audio-surah/128/${RECITER}/${num}.mp3`;
       ayahAudio.play().catch(()=>{});
-    });
-  });
-  readerBody.querySelectorAll('.ayah-block').forEach(block=>{
-    block.addEventListener('click', (e)=>{
-      if(e.target.closest('[data-action], .ayah-num-link, a, button')) return;
-      const surah = block.dataset.surah;
-      const ayah = block.dataset.ayahIndex;
-      const g = block.dataset.g;
-      openAyahSheet(surah, ayah, g);
     });
   });
 }
@@ -2472,23 +2556,24 @@ document.addEventListener('keydown', (e)=>{
 const HADITH_CDN = 'https://cdn.jsdelivr.net/gh/fawazahmed0/hadith-api@1/editions/';
 
 const HADITH_BOOKS = [
-  { key:'bukhari-ben',   edition:'ben-bukhari',   lang:'ben', name:'আল জামিউস সহীহ- ইমাম বুখারী রহঃ',        arabicName:'الجامع الصحيح للبخاري',  chapters:97, hadiths:7589 },
-  { key:'muslim-ben',    edition:'ben-muslim',    lang:'ben', name:'আল মুসনাদুস সহীহ- ইমাম মুসলিম রহঃ',       arabicName:'المسند الصحيح لمسلم',    chapters:56, hadiths:7563 },
-  { key:'tirmidhi-ben',  edition:'ben-tirmidhi',  lang:'ben', name:'আল জামিউল কাবীর- ইমাম তিরমিযী রহঃ',       arabicName:'الجامع الكبير للترمذي',  chapters:49, hadiths:3998 },
-  { key:'abudawud-ben',  edition:'ben-abudawud',  lang:'ben', name:'কিতাবুস সুনান - ইমাম আবু দাউদ রহঃ',        arabicName:'كتاب السنن لأبي داود',   chapters:43, hadiths:5274 },
-  { key:'nasai-ben',     edition:'ben-nasai',     lang:'ben', name:'কিতাবুস সুনান (আল-মুজতাবা)- ইমাম নাসায়ী রহঃ', arabicName:'المجتبى من السنن للنسائي', chapters:51, hadiths:5765 },
-  { key:'ibnmajah-ben',  edition:'ben-ibnmajah',  lang:'ben', name:'কিতাবুস সুনান- ইমাম ইবনে মাজাহ রহঃ',       arabicName:'كتاب السنن لابن ماجه',   chapters:37, hadiths:4343 },
-  { key:'malik-ben',     edition:'ben-malik',     lang:'ben', name:'আল মুওয়াত্তা - ইমাম মালিক রহঃ',            arabicName:'الموطأ للإمام مالك',     chapters:61, hadiths:1858 },
-  { key:'nawawi-ben',    edition:'ben-nawawi',    lang:'ben', name:'ইমাম নববী রহঃ এর চল্লিশ হাদীস',            arabicName:'الأربعون النووية',        chapters:1,  hadiths:42 },
+  { key:'bukhari-ben',   edition:'ben-bukhari',   lang:'ben', name:'আল জামিউস সহীহ- ইমাম বুখারী রহঃ',        arabicName:'الجامع الصحيح للبخاري',  chapters:97, hadiths:7589, short:'সহিহ বুখারী',        author:'ইমাম বুখারী রহঃ',   badge:'ব' },
+  { key:'muslim-ben',    edition:'ben-muslim',    lang:'ben', name:'আল মুসনাদুস সহীহ- ইমাম মুসলিম রহঃ',       arabicName:'المسند الصحيح لمسلم',    chapters:56, hadiths:7563, short:'সহিহ মুসলিম',        author:'ইমাম মুসলিম রহঃ',   badge:'ম' },
+  { key:'tirmidhi-ben',  edition:'ben-tirmidhi',  lang:'ben', name:'আল জামিউল কাবীর- ইমাম তিরমিযী রহঃ',       arabicName:'الجامع الكبير للترمذي',  chapters:49, hadiths:3998, short:'জামে তিরমিযী',       author:'ইমাম তিরমিযী রহঃ',  badge:'তি' },
+  { key:'abudawud-ben',  edition:'ben-abudawud',  lang:'ben', name:'কিতাবুস সুনান - ইমাম আবু দাউদ রহঃ',        arabicName:'كتاب السنن لأبي داود',   chapters:43, hadiths:5274, short:'সুনানে আবু দাউদ',    author:'ইমাম আবু দাউদ রহঃ', badge:'দা' },
+  { key:'nasai-ben',     edition:'ben-nasai',     lang:'ben', name:'কিতাবুস সুনান (আল-মুজতাবা)- ইমাম নাসায়ী রহঃ', arabicName:'المجتبى من السنن للنسائي', chapters:51, hadiths:5765, short:'সুনানে আন-নাসায়ী',   author:'ইমাম নাসায়ী রহঃ',   badge:'না' },
+  { key:'ibnmajah-ben',  edition:'ben-ibnmajah',  lang:'ben', name:'কিতাবুস সুনান- ইমাম ইবনে মাজাহ রহঃ',       arabicName:'كتاب السنن لابن ماجه',   chapters:37, hadiths:4343, short:'সুনানে ইবনে মাজাহ',  author:'ইমাম ইবনে মাজাহ রহঃ', badge:'মা' },
+  { key:'malik-ben',     edition:'ben-malik',     lang:'ben', name:'আল মুওয়াত্তা - ইমাম মালিক রহঃ',            arabicName:'الموطأ للإمام مالك',     chapters:61, hadiths:1858, short:'আল মুওয়াত্তা',       author:'ইমাম মালিক রহঃ',    badge:'মু' },
+  { key:'nawawi-ben',    edition:'ben-nawawi',    lang:'ben', name:'ইমাম নববী রহঃ এর চল্লিশ হাদীস',            arabicName:'الأربعون النووية',        chapters:1,  hadiths:42,   short:'চল্লিশ হাদীস',       author:'ইমাম নববী রহঃ',     badge:'ন' },
 
-  { key:'bukhari-urd',   edition:'urd-bukhari',   lang:'urd', name:'আল জামিউস সহীহ- ইমাম বুখারী রহঃ (উর্দু)',   arabicName:'الجامع الصحيح للبخاري',  chapters:97, hadiths:7589 },
-  { key:'muslim-urd',    edition:'urd-muslim',    lang:'urd', name:'আল মুসনাদুস সহীহ- ইমাম মুসলিম রহঃ (উর্দু)',  arabicName:'المسند الصحيح لمسلم',    chapters:56, hadiths:7564 },
-  { key:'tirmidhi-urd',  edition:'urd-tirmidhi',  lang:'urd', name:'আল জামিউল কাবীর- ইমাম তিরমিযী রহঃ (উর্দু)',  arabicName:'الجامع الكبير للترمذي',  chapters:49, hadiths:3998 },
-  { key:'abudawud-urd',  edition:'urd-abudawud',  lang:'urd', name:'কিতাবুস সুনান - ইমাম আবু দাউদ রহঃ (উর্দু)',   arabicName:'كتاب السنن لأبي داود',   chapters:43, hadiths:5274 },
-  { key:'nasai-urd',     edition:'urd-nasai',     lang:'urd', name:'কিতাবুস সুনান (আল-মুজতাবা)- ইমাম নাসায়ী রহঃ (উর্দু)', arabicName:'المجتبى من السنن للنسائي', chapters:51, hadiths:5765 },
-  { key:'ibnmajah-urd',  edition:'urd-ibnmajah',  lang:'urd', name:'কিতাবুস সুনান- ইমাম ইবনে মাজাহ রহঃ (উর্দু)', arabicName:'كتاب السنن لابن ماجه',   chapters:37, hadiths:4343 },
-  { key:'malik-urd',     edition:'urd-malik',     lang:'urd', name:'আল মুওয়াত্তা - ইমাম মালিক রহঃ (উর্দু)',      arabicName:'الموطأ للإمام مالك',     chapters:61, hadiths:1889 }
+  { key:'bukhari-urd',   edition:'urd-bukhari',   lang:'urd', name:'আল জামিউস সহীহ- ইমাম বুখারী রহঃ (উর্দু)',   arabicName:'الجامع الصحيح للبخاري',  chapters:97, hadiths:7589, short:'সহিহ বুখারী (উর্দু)', author:'ইমাম বুখারী রহঃ',   badge:'ব' },
+  { key:'muslim-urd',    edition:'urd-muslim',    lang:'urd', name:'আল মুসনাদুস সহীহ- ইমাম মুসলিম রহঃ (উর্দু)',  arabicName:'المسند الصحيح لمسلم',    chapters:56, hadiths:7564, short:'সহিহ মুসলিম (উর্দু)', author:'ইমাম মুসলিম রহঃ',   badge:'ম' },
+  { key:'tirmidhi-urd',  edition:'urd-tirmidhi',  lang:'urd', name:'আল জামিউল কাবীর- ইমাম তিরমিযী রহঃ (উর্দু)',  arabicName:'الجامع الكبير للترمذي',  chapters:49, hadiths:3998, short:'জামে তিরমিযী (উর্দু)', author:'ইমাম তিরমিযী রহঃ',  badge:'তি' },
+  { key:'abudawud-urd',  edition:'urd-abudawud',  lang:'urd', name:'কিতাবুস সুনান - ইমাম আবু দাউদ রহঃ (উর্দু)',   arabicName:'كتاب السنن لأبي داود',   chapters:43, hadiths:5274, short:'সুনানে আবু দাউদ (উর্দু)', author:'ইমাম আবু দাউদ রহঃ', badge:'দা' },
+  { key:'nasai-urd',     edition:'urd-nasai',     lang:'urd', name:'কিতাবুস সুনান (আল-মুজতাবা)- ইমাম নাসায়ী রহঃ (উর্দু)', arabicName:'المجتبى من السنن للنسائي', chapters:51, hadiths:5765, short:'সুনানে আন-নাসায়ী (উর্দু)', author:'ইমাম নাসায়ী রহঃ', badge:'না' },
+  { key:'ibnmajah-urd',  edition:'urd-ibnmajah',  lang:'urd', name:'কিতাবুস সুনান- ইমাম ইবনে মাজাহ রহঃ (উর্দু)', arabicName:'كتاب السنن لابن ماجه',   chapters:37, hadiths:4343, short:'সুনানে ইবনে মাজাহ (উর্দু)', author:'ইমাম ইবনে মাজাহ রহঃ', badge:'মা' },
+  { key:'malik-urd',     edition:'urd-malik',     lang:'urd', name:'আল মুওয়াত্তা - ইমাম মালিক রহঃ (উর্দু)',      arabicName:'الموطأ للإمام مالك',     chapters:61, hadiths:1889, short:'আল মুওয়াত্তা (উর্দু)', author:'ইমাম মালিক রহঃ',   badge:'মু' }
 ];
+const HADITH_BADGE_COLORS = ['#3fae5a','#2f7cc9','#1fa6a0','#c9772e','#8b5fbf','#d1495b','#4a6fd1','#a07a2e'];
 
 const hadithBookDataCache = {}; // edition -> { metadata, hadithsByChapter: Map(chapterNum -> [hadith,...]) }
 let currentHadithBook = null;   // currently open HADITH_BOOKS entry
@@ -2531,33 +2616,57 @@ function buildHadithGrid(){
   HADITH_BOOKS.forEach((b, idx)=>{
     if(q && !b.name.toLowerCase().includes(q) && !b.arabicName.includes(q)) return;
     shown++;
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.addEventListener('click', ()=> openHadithReader(b));
-    card.innerHTML = `
-      <div class="medallion">${toBnDigits(idx+1)}</div>
-      <div class="card-body">
-        <p class="card-name">${b.name}</p>
-        <p class="card-ar ar">${b.arabicName}</p>
-        <div class="card-meta">
-          <span class="badge">${toBnDigits(b.chapters)} অধ্যায়</span>
-          <span>${toBnDigits(b.hadiths)} হাদীস</span>
-        </div>
+    const row = document.createElement('div');
+    row.className = 'hh-book-row';
+    const color = HADITH_BADGE_COLORS[idx % HADITH_BADGE_COLORS.length];
+    row.addEventListener('click', ()=> openHadithReader(b));
+    row.innerHTML = `
+      <div class="hh-book-badge" style="background:${color};">${b.badge}</div>
+      <div class="hh-book-info">
+        <p class="hh-book-name">${b.short}</p>
+        <p class="hh-book-author">${b.author}</p>
+      </div>
+      <div class="hh-book-count">
+        <span class="hh-book-count-num">${toBnDigits(b.hadiths)}</span>
+        <span class="hh-book-count-label">হাদিস</span>
       </div>`;
-    hadithGrid.appendChild(card);
+    hadithGrid.appendChild(row);
   });
   hadithNoResults.style.display = shown===0 ? 'block' : 'none';
 }
 hadithSearchInput.addEventListener('input', buildHadithGrid);
 
-document.querySelectorAll('#hadithView .view-tab').forEach(tab=>{
-  tab.addEventListener('click', ()=>{
-    document.querySelectorAll('#hadithView .view-tab').forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active');
-    const v = tab.dataset.hview;
-    document.getElementById('hadithBookView').style.display = v==='book' ? '' : 'none';
-    document.getElementById('hadithTopicView').style.display = v==='topic' ? '' : 'none';
-    document.getElementById('hadithNarratorView').style.display = v==='narrator' ? '' : 'none';
+/* ---- Home-screen header controls (menu / search toggle / quick actions) ---- */
+const hhSearchSection = document.getElementById('hhSearchSection');
+document.getElementById('hhSearchBtn').addEventListener('click', ()=>{
+  const nowOpen = hhSearchSection.style.display === 'none';
+  hhSearchSection.style.display = nowOpen ? '' : 'none';
+  if(nowOpen) hadithSearchInput.focus();
+});
+document.getElementById('hhMenuBtn').addEventListener('click', ()=> openMoreSheet());
+document.getElementById('hhLatestBtn').addEventListener('click', ()=>{
+  if(HADITH_BOOKS.length) openHadithReader(HADITH_BOOKS[0]);
+});
+document.getElementById('hhAppsBtn').addEventListener('click', ()=> alert('এই ফিচারটি শীঘ্রই যুক্ত করা হবে।'));
+document.getElementById('hhGotoBtn').addEventListener('click', ()=>{
+  hhSearchSection.style.display = '';
+  hadithSearchInput.focus();
+});
+document.getElementById('hhDonateBtn').addEventListener('click', ()=> alert('জাযাকাল্লাহু খাইরান! সদাকা ফিচারটি শীঘ্রই যুক্ত করা হবে।'));
+
+/* ---- Persistent bottom nav: always visible, works the same on desktop and mobile ---- */
+document.querySelectorAll('#hhBottomNav .hh-bn-item').forEach(item=>{
+  item.addEventListener('click', ()=>{
+    document.querySelectorAll('#hhBottomNav .hh-bn-item').forEach(i=>i.classList.remove('active'));
+    item.classList.add('active');
+    const which = item.dataset.hhbn;
+    if(which === 'home' || which === 'books'){
+      showHadithListing();
+    } else if(which === 'bookmark'){
+      alert('বুকমার্ক ফিচারটি শীঘ্রই যুক্ত করা হবে।');
+    } else if(which === 'notes'){
+      alert('নোট ফিচারটি শীঘ্রই যুক্ত করা হবে।');
+    }
   });
 });
 
@@ -2952,60 +3061,9 @@ moreSheetOverlay.querySelectorAll('.ms-item').forEach(item=>{
   });
 });
 
-/* ================= PER-AYAH TAP ACTION SHEET ================= */
-const ayahSheetOverlay = document.getElementById('ayahSheetOverlay');
-const ayahSheetTitle = document.getElementById('ayahSheetTitle');
-let ayahSheetCtx = { surah:null, ayah:null, g:null };
+/* This page opens directly into the Hadith section by default */
+showHadithListing();
 
-function openAyahSheet(surahNum, ayahNum, globalAyahNum){
-  const num = Number(surahNum);
-  const entry = surahs.find(s=>s[0]===num);
-  const bnName = entry ? entry[1] : `সূরা ${toBnDigits(num)}`;
-  ayahSheetTitle.textContent = `${bnName} : ${toBnDigits(Number(ayahNum))}`;
-  ayahSheetCtx = { surah:surahNum, ayah:ayahNum, g:globalAyahNum };
-  ayahSheetOverlay.classList.add('open');
-}
-function closeAyahSheet(){
-  ayahSheetOverlay.classList.remove('open');
-}
-ayahSheetOverlay.addEventListener('click', (e)=>{
-  if(e.target === ayahSheetOverlay) closeAyahSheet();
-});
-document.addEventListener('keydown', (e)=>{
-  if(e.key === 'Escape' && ayahSheetOverlay.classList.contains('open')) closeAyahSheet();
-});
-ayahSheetOverlay.querySelectorAll('.ay-sheet-item').forEach(item=>{
-  item.addEventListener('click', ()=>{
-    const action = item.dataset.ay;
-    const { surah, ayah, g } = ayahSheetCtx;
-    if(action === 'copy'){
-      const block = readerBody.querySelector(`[data-ayah-index="${ayah}"][data-surah="${surah}"]`);
-      const arabic = block ? block.querySelector('.ayah-arabic')?.textContent.replace(/[০-৯]+$/,'').trim() : '';
-      const translation = block ? Array.from(block.querySelectorAll('.ayah-translation')).map(p=>p.textContent.replace(/[০-৯]+$/,'').trim()).join(' ') : '';
-      const text = `${arabic}\n${translation}`.trim();
-      if(navigator.clipboard){ navigator.clipboard.writeText(text); }
-      alert('আয়াতটি কপি করা হয়েছে');
-      closeAyahSheet();
-    } else if(action === 'share'){
-      const url = window.location.href;
-      if(navigator.share){ navigator.share({ title:'কুরআনের আয়াত', url }); }
-      else if(navigator.clipboard){ navigator.clipboard.writeText(url); alert('লিংক কপি করা হয়েছে'); }
-      closeAyahSheet();
-    } else if(action === 'play'){
-      readerBody.querySelectorAll('.ayah-action.playing').forEach(b=>b.classList.remove('playing'));
-      ayahAudio.src = `https://cdn.islamic.network/quran/audio/128/${RECITER}/${g}.mp3`;
-      ayahAudio.play().catch(()=>{});
-      closeAyahSheet();
-    } else if(action === 'bookmark'){
-      item.classList.toggle('active');
-      const btn = readerBody.querySelector(`.ayah-action[data-action="bookmark"][data-g="${g}"]`);
-      if(btn) btn.classList.toggle('playing');
-    } else if(action === 'tafsir'){
-      closeAyahSheet();
-      openTafsirModal(surah, ayah);
-    }
-  });
-});
 </script>
 
 </body>
