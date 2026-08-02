@@ -3631,6 +3631,287 @@ wordSheetOverlay.addEventListener('click', (e)=>{
 document.addEventListener('keydown', (e)=>{
   if(e.key === 'Escape' && wordSheetOverlay.classList.contains('open')) closeWordSheet();
 });
+
+/* ================= TAFSIR SELECTION PAGE ("তাফসীরের তালিকা থেকে বেছে নিন") ================= */
+const tafsirSelectPageView = document.getElementById('tafsirSelectPageView');
+const tselBackBtn = document.getElementById('tselBackBtn');
+const tselList = document.getElementById('tselList');
+
+const TSEL_DOWNLOAD_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 11 12 16 17 11"/><path d="M4 19h16"/></svg>`;
+const TSEL_DONE_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+let tselOnSelect = null;
+let tselOnCancel = null;
+
+function tselRenderList(){
+  const langsInOrder = [];
+  TAFSIR_SOURCES.forEach(s=>{ if(!langsInOrder.includes(s.lang)) langsInOrder.push(s.lang); });
+  tselList.innerHTML = langsInOrder.map(lang=>{
+    const cards = TAFSIR_SOURCES.filter(s=>s.lang===lang).map(s=>{
+      const isDownloaded = downloadedTafsirSources.has(s.key);
+      const isSelected = s.key === selectedTafsirSource && tafsirSourceChosenByUser;
+      return `
+        <div class="tsel-card${isSelected ? ' selected' : ''}" data-key="${s.key}">
+          <div class="tsel-card-info">
+            <div class="tsel-card-name">${s.name}</div>
+            <div class="tsel-card-lang">${lang}</div>
+          </div>
+          <button class="tsel-dl-btn${isDownloaded ? ' done' : ''}" data-key="${s.key}" title="${isDownloaded ? 'নির্বাচন করুন' : 'ডাউনলোড করুন'}">
+            ${isDownloaded ? TSEL_DONE_ICON : TSEL_DOWNLOAD_ICON}
+          </button>
+        </div>`;
+    }).join('');
+    return `<div class="tsel-lang-label">${lang}</div>${cards}`;
+  }).join('');
+
+  tselList.querySelectorAll('.tsel-card').forEach(card=>{
+    card.addEventListener('click', ()=> tselChoose(card.dataset.key));
+  });
+}
+
+function tselChoose(key){
+  const source = getTafsirSource(key);
+  if(downloadedTafsirSources.has(key)){
+    selectedTafsirSource = key;
+    tafsirSourceChosenByUser = true;
+    persistTafsirSourceState();
+    closeTafsirSelectPage(true);
+    return;
+  }
+  runDownloadProgress(`তাফসীর: ${source.name}<br>ভাষা: ${source.langBn}`, ()=>{
+    downloadedTafsirSources.add(key);
+    selectedTafsirSource = key;
+    tafsirSourceChosenByUser = true;
+    persistTafsirSourceState();
+    closeTafsirSelectPage(true);
+  });
+}
+
+function openTafsirSelectPage(onSelect, onCancel){
+  tselOnSelect = typeof onSelect === 'function' ? onSelect : null;
+  tselOnCancel = typeof onCancel === 'function' ? onCancel : null;
+  heroSection.style.display = 'none';
+  viewTabsEl.style.display = 'none';
+  listingMain.style.display = 'none';
+  siteFooter.style.display = 'none';
+  mAppbar.style.display = 'none';
+  mPanel.style.display = 'none';
+  readerView.style.display = 'none';
+  tafsirPageView.style.display = 'none';
+  bookmarksPageView.style.display = 'none';
+  if(typeof hideHadithViews === 'function') hideHadithViews();
+  tselRenderList();
+  tafsirSelectPageView.style.display = 'block';
+}
+
+function closeTafsirSelectPage(wasSelected){
+  tafsirSelectPageView.style.display = 'none';
+  if(wasSelected && tselOnSelect) tselOnSelect();
+  else if(!wasSelected && tselOnCancel) tselOnCancel();
+}
+
+tselBackBtn.addEventListener('click', ()=> closeTafsirSelectPage(false));
+
+/* ================= BOOKMARKS ("সংরক্ষিত আয়াতসমূহ") ================= */
+const bookmarksPageView = document.getElementById('bookmarksPageView');
+const bmBackBtn = document.getElementById('bmBackBtn');
+const bmBody = document.getElementById('bmBody');
+const mBookmarkBtn = document.getElementById('mBookmarkBtn');
+
+let bookmarkedAyahs = new Map(
+  (function(){
+    try{ return JSON.parse(localStorage.getItem('bn_quran_bookmarks') || '[]'); }
+    catch(e){ return []; }
+  })()
+);
+
+function persistBookmarks(){
+  localStorage.setItem('bn_quran_bookmarks', JSON.stringify(Array.from(bookmarkedAyahs.entries())));
+}
+
+function bookmarkKey(surah, ayah){ return `${surah}:${ayah}`; }
+
+function isAyahBookmarked(surah, ayah){
+  return bookmarkedAyahs.has(bookmarkKey(surah, ayah));
+}
+
+function syncBookmarkButtonsUI(surah, ayah){
+  const bookmarked = isAyahBookmarked(surah, ayah);
+  readerBody.querySelectorAll(`.ayah-block[data-surah="${surah}"][data-ayah-index="${ayah}"] [data-action="bookmark"]`)
+    .forEach(btn=> btn.classList.toggle('playing', bookmarked));
+  const sheetBtn = ayahSheetOverlay.querySelector('[data-ay="bookmark"]');
+  if(sheetBtn && ayahSheetCtx.surah == surah && ayahSheetCtx.ayah == ayah){
+    sheetBtn.classList.toggle('active', bookmarked);
+  }
+}
+
+// Adds/removes an ayah from the saved list and keeps every on-screen bookmark icon in sync.
+function toggleBookmarkAyah(surah, ayah, g){
+  const key = bookmarkKey(surah, ayah);
+  if(bookmarkedAyahs.has(key)){
+    bookmarkedAyahs.delete(key);
+  } else {
+    bookmarkedAyahs.set(key, { surah:Number(surah), ayah:Number(ayah), g:Number(g) });
+  }
+  persistBookmarks();
+  syncBookmarkButtonsUI(surah, ayah);
+  if(bookmarksPageView.style.display === 'block') renderBookmarksList();
+  return bookmarkedAyahs.has(key);
+}
+
+function bmEmptyStateHTML(){
+  return `
+    <div class="bm-empty">
+      <div class="bm-empty-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="bm-empty-title">কোনো আয়াত সংরক্ষিত নেই</div>
+      <div class="bm-empty-sub">কোনো আয়াত বুকমার্ক করলে তা এখানে দেখা যাবে</div>
+    </div>`;
+}
+
+function bmCardHTML(entry){
+  const bnEntry = surahs.find(s=>s[0]===entry.surah);
+  const surahName = bnEntry ? bnEntry[1] : `সূরা ${toBnDigits(entry.surah)}`;
+  return `
+    <div class="bm-card" data-surah="${entry.surah}" data-ayah="${entry.ayah}" data-g="${entry.g}">
+      <div class="bm-tags">
+        <button class="bm-tag-btn" data-bm-action="surah">সূরা</button>
+        <button class="bm-tag-btn" data-bm-action="tafsir">তাফসীর</button>
+      </div>
+      <p class="bm-arabic ar" id="bmArabic-${entry.surah}-${entry.ayah}">লোড হচ্ছে...</p>
+      <div class="bm-icon-row">
+        <button class="bm-ic-btn" data-bm-action="play" title="শুনুন">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        </button>
+        <button class="bm-ic-btn" data-bm-action="share" title="শেয়ার">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+        </button>
+        <button class="bm-ic-btn active" data-bm-action="remove" title="বুকমার্ক সরান">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        </button>
+      </div>
+      <div class="bm-ref">(${surahName} - ${toBnDigits(entry.ayah)})</div>
+      <div class="bm-translation">
+        <span class="bm-translation-source" id="bmTransSrc-${entry.surah}-${entry.ayah}">অনুবাদ</span>
+        <p class="bm-translation-text bm-translation-loading" id="bmTransText-${entry.surah}-${entry.ayah}">লোড হচ্ছে...</p>
+      </div>
+    </div>`;
+}
+
+async function bmFillCard(entry){
+  try{
+    const { arabic } = await fetchSurah(entry.surah);
+    const ayahData = arabic.ayahs.find(a=>a.numberInSurah===entry.ayah);
+    const el = document.getElementById(`bmArabic-${entry.surah}-${entry.ayah}`);
+    if(el) el.textContent = ayahData ? ayahData.text : '—';
+  } catch(e){
+    const el = document.getElementById(`bmArabic-${entry.surah}-${entry.ayah}`);
+    if(el) el.textContent = 'আরবি লোড করা যায়নি';
+  }
+  const translationId = selectedTranslations[0] || TRANSLATIONS[0].id;
+  const translationEntry = TRANSLATIONS.find(t=>t.id===translationId) || TRANSLATIONS[0];
+  const srcEl = document.getElementById(`bmTransSrc-${entry.surah}-${entry.ayah}`);
+  if(srcEl) srcEl.textContent = translationEntry.name;
+  try{
+    const map = await ensureTranslationLoaded(translationEntry.id);
+    const text = map ? map.get(`${entry.surah}-${entry.ayah}`) : null;
+    const textEl = document.getElementById(`bmTransText-${entry.surah}-${entry.ayah}`);
+    if(textEl){
+      textEl.textContent = text || 'অনুবাদ পাওয়া যায়নি';
+      textEl.classList.remove('bm-translation-loading');
+    }
+  } catch(e){
+    const textEl = document.getElementById(`bmTransText-${entry.surah}-${entry.ayah}`);
+    if(textEl){
+      textEl.textContent = 'অনুবাদ লোড করা যায়নি';
+      textEl.classList.remove('bm-translation-loading');
+    }
+  }
+}
+
+function wireBmCardActions(){
+  bmBody.querySelectorAll('.bm-card').forEach(card=>{
+    const surah = Number(card.dataset.surah);
+    const ayah = Number(card.dataset.ayah);
+    const g = Number(card.dataset.g);
+    card.querySelectorAll('[data-bm-action]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const action = btn.dataset.bmAction;
+        if(action === 'surah'){
+          closeBookmarksPage();
+          openReader('surah', surah);
+          setTimeout(()=> jumpToAyah(ayah), 60);
+        } else if(action === 'tafsir'){
+          closeBookmarksPage();
+          currentSurahNum = surah;
+          currentAyahIndex = ayah;
+          openTafsirPage();
+        } else if(action === 'play'){
+          ayahAudio.src = `https://cdn.islamic.network/quran/audio/128/${RECITER}/${g}.mp3`;
+          ayahAudio.play().catch(()=>{});
+        } else if(action === 'share'){
+          const url = window.location.href;
+          if(navigator.share){ navigator.share({ title:'কুরআনের আয়াত', url }); }
+          else if(navigator.clipboard){ navigator.clipboard.writeText(url); alert('লিংক কপি করা হয়েছে'); }
+        } else if(action === 'remove'){
+          toggleBookmarkAyah(surah, ayah, g);
+        }
+      });
+    });
+  });
+}
+
+function renderBookmarksList(){
+  const entries = Array.from(bookmarkedAyahs.values()).sort((a,b)=> a.g - b.g);
+  if(entries.length === 0){
+    bmBody.innerHTML = bmEmptyStateHTML();
+    return;
+  }
+  bmBody.innerHTML = entries.map(bmCardHTML).join('');
+  wireBmCardActions();
+  entries.forEach(bmFillCard);
+}
+
+function openBookmarksPage(){
+  heroSection.style.display = 'none';
+  viewTabsEl.style.display = 'none';
+  listingMain.style.display = 'none';
+  siteFooter.style.display = 'none';
+  mAppbar.style.display = 'none';
+  mPanel.style.display = 'none';
+  readerView.style.display = 'none';
+  tafsirPageView.style.display = 'none';
+  tafsirSelectPageView.style.display = 'none';
+  if(typeof hideHadithViews === 'function') hideHadithViews();
+  renderBookmarksList();
+  bookmarksPageView.style.display = 'block';
+}
+
+function closeBookmarksPage(){
+  bookmarksPageView.style.display = 'none';
+  showListing();
+}
+
+mBookmarkBtn.addEventListener('click', openBookmarksPage);
+bmBackBtn.addEventListener('click', closeBookmarksPage);
+
+// Wire the real "বুকমার্ক" toggle in both the per-ayah action row and the ayah tap sheet
+// to persistent storage (they previously only flipped a CSS class).
+document.addEventListener('click', (e)=>{
+  const btn = e.target.closest('.ayah-action[data-action="bookmark"]');
+  if(btn){
+    const block = btn.closest('.ayah-block');
+    if(block){
+      toggleBookmarkAyah(block.dataset.surah, block.dataset.ayahIndex, block.dataset.g);
+    }
+  }
+  const sheetBtn = e.target.closest('.ay-sheet-item[data-ay="bookmark"]');
+  if(sheetBtn){
+    const { surah, ayah, g } = ayahSheetCtx;
+    if(surah != null) toggleBookmarkAyah(surah, ayah, g);
+  }
+});
 </script>
 
 </body>
