@@ -407,7 +407,7 @@
   }
   .search-btn{
     width:40px;height:40px;
-    border-radius:50%;
+    border-radius:3px;
     background:var(--active-green);
     display:flex;align-items:center;justify-content:center;
     flex-shrink:0;
@@ -441,7 +441,7 @@
   }
   .search-modal{
     background:#fff;
-    border-radius:22px;
+    border-radius:3px;
     padding:30px 24px 24px;
     width:100%;
     max-width:340px;
@@ -466,7 +466,7 @@
   .search-modal-input{
     width:100%;
     border:1.5px solid var(--active-green);
-    border-radius:999px;
+    border-radius:3px;
     padding:12px 18px;
     font-size:13px;
     font-family:inherit;
@@ -483,20 +483,269 @@
   .search-modal-btn{
     width:100%;
     border:none;
-    border-radius:999px;
+    border-radius:3px;
     padding:13px 18px;
-    background:var(--ring-dark);
-    color:#fff;
+    background:#d3d6d3;
+    color:#8b9089;
     font-size:15px;
     font-weight:700;
     font-family:inherit;
     cursor:pointer;
     -webkit-tap-highlight-color:transparent;
-    transition:transform .15s ease, opacity .15s ease;
+    transition:background .25s ease, color .25s ease, box-shadow .25s ease, transform .15s ease;
   }
   .search-modal-btn:active{transform:scale(0.97); opacity:0.9;}
+  .search-modal-btn.highlight{
+    background:var(--active-green);
+    color:#fff;
+    box-shadow:0 8px 20px rgba(31,138,95,0.45);
+  }
   .search-btn{cursor:pointer; -webkit-tap-highlight-color:transparent; transition:transform .15s ease;}
   .search-btn:active{transform:scale(0.92);}
+
+  /* ===== Search results (full-screen page) ===== */
+  .search-results-screen{
+    position:fixed;
+    top:0; left:50%;
+    transform:translateX(-50%) translateX(100%);
+    width:100%;
+    max-width:430px;
+    height:100vh;
+    height:100dvh;
+    background:#f3f6f4;
+    z-index:130;
+    display:flex;
+    flex-direction:column;
+    opacity:0;
+    visibility:hidden;
+    transition:transform .38s cubic-bezier(.32,.72,.35,1), opacity .3s ease, visibility 0s linear .38s;
+    overflow:hidden;
+  }
+  .search-results-screen.open{
+    transform:translateX(-50%) translateX(0);
+    opacity:1;
+    visibility:visible;
+    transition:transform .38s cubic-bezier(.32,.72,.35,1), opacity .3s ease, visibility 0s linear 0s;
+  }
+  .sr-topbar{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding:16px 18px;
+    background:#173c2f;
+    flex-shrink:0;
+  }
+  .sr-back{
+    position:absolute;
+    left:16px;
+    width:36px;height:36px;
+    border-radius:3px;
+    display:flex;align-items:center;justify-content:center;
+    border:1.5px solid rgba(255,255,255,0.55);
+    color:#fff;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:background .15s ease, transform .15s ease;
+    flex-shrink:0;
+  }
+  .sr-back:active{background:rgba(255,255,255,0.12); transform:scale(0.92);}
+  .sr-back svg{width:19px;height:19px;}
+  .sr-topbar h2{
+    margin:0;
+    font-size:19px;
+    font-weight:700;
+    color:#fff;
+  }
+  .sr-body{
+    flex:1 1 auto;
+    min-height:0;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    background:#f3f6f4;
+  }
+  .sr-hero{
+    position:relative;
+    min-height:280px;
+    display:flex;
+    align-items:flex-end;
+    padding:26px 20px 22px;
+    background-image:
+      linear-gradient(180deg, rgba(18,14,10,0.32) 0%, rgba(18,14,10,0.5) 55%, rgba(18,14,10,0.72) 100%),
+      url('https://i.pinimg.com/736x/07/37/03/07370357ea922574f928190aa192819d.jpg');
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    overflow:hidden;
+  }
+  .sr-hero-content{
+    position:relative;
+    z-index:2;
+    width:100%;
+    text-align:center;
+  }
+  .sr-hero-content h3{
+    margin:6px 0 16px;
+    font-size:19px;
+    font-weight:700;
+    color:#fff;
+    text-shadow:0 2px 8px rgba(0,0,0,0.45);
+  }
+  .sr-searchbar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:#fff;
+    border-radius:3px;
+    padding:6px 6px 6px 18px;
+    box-shadow:0 8px 22px rgba(0,0,0,0.28);
+  }
+  .sr-searchbar input{
+    flex:1 1 auto;
+    min-width:0;
+    border:none;
+    outline:none;
+    background:transparent;
+    font-size:15px;
+    font-family:inherit;
+    color:var(--text-dark);
+    padding:8px 0;
+  }
+  .sr-searchbar input::placeholder{color:#b7bcb9;}
+  .sr-mic-btn{
+    width:34px;height:34px;
+    border-radius:3px;
+    background:var(--active-green);
+    border:none;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:transform .15s ease;
+  }
+  .sr-mic-btn:active{transform:scale(0.92);}
+  .sr-mic-btn svg{width:16px;height:16px;}
+  .sr-lang-select{
+    display:flex;
+    align-items:center;
+    gap:3px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--menu-text-green);
+    padding:6px 10px 6px 4px;
+    flex-shrink:0;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    border-left:1px solid #e7e7e7;
+  }
+  .sr-lang-select svg{width:10px;height:10px;}
+
+  .sr-filters-wrap{
+    background:#dfeae3;
+    padding:14px 16px;
+  }
+  .sr-filters{
+    display:flex;
+    flex-wrap:wrap;
+    gap:9px;
+  }
+  .sr-chip{
+    padding:8px 16px;
+    border-radius:3px;
+    font-size:13.5px;
+    font-weight:600;
+    background:#fff;
+    color:var(--menu-text-green);
+    border:1px solid rgba(0,0,0,0.06);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:background .15s ease, color .15s ease, transform .1s ease;
+    white-space:nowrap;
+  }
+  .sr-chip:active{transform:scale(0.95);}
+  .sr-chip.active{
+    background:var(--active-green);
+    color:#fff;
+    border-color:var(--active-green);
+  }
+
+  .sr-results{
+    padding:18px 16px 28px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .sr-card{
+    background:#fff;
+    border-radius:3px;
+    padding:18px 18px 16px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.05);
+  }
+  .sr-card h4{
+    margin:0 0 12px;
+    font-size:17px;
+    font-weight:700;
+    color:var(--menu-text-green);
+    line-height:1.5;
+  }
+  .sr-card h4 mark, .sr-card p mark{
+    background:#ffe066;
+    color:inherit;
+    border-radius:3px;
+    padding:0 1px;
+  }
+  .sr-card p{
+    margin:0 0 14px;
+    font-size:14.5px;
+    line-height:2;
+    color:#3c4440;
+    text-align:justify;
+  }
+  .sr-card-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .sr-tag{
+    font-size:12px;
+    font-weight:600;
+    padding:6px 12px;
+    border-radius:3px;
+    background:var(--active-bg);
+    color:var(--active-green);
+  }
+  .sr-tag.alt{
+    background:#eaf1fb;
+    color:#3266c9;
+  }
+  .sr-empty{
+    text-align:center;
+    padding:60px 20px;
+    color:#8b909a;
+  }
+  .sr-empty svg{width:46px;height:46px;opacity:0.5;margin-bottom:14px;}
+  .sr-empty p{margin:0;font-size:14.5px;font-weight:600;}
+
+  .sr-bottomnav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 26px;
+    background:#173c2f;
+    flex-shrink:0;
+  }
+  .sr-nav-btn{
+    width:38px;height:38px;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    border-radius:3px;
+    transition:background .15s ease, transform .15s ease, opacity .15s ease;
+  }
+  .sr-nav-btn:active{background:rgba(255,255,255,0.12); transform:scale(0.9);}
+  .sr-nav-btn.disabled{opacity:0.35; pointer-events:none;}
+  .sr-nav-btn svg{width:22px;height:22px;}
 
   .menu-grid{
     display:grid;
@@ -1755,6 +2004,67 @@
     </div>
   </div>
 
+  <div class="search-results-screen" id="searchResultsScreen" aria-hidden="true">
+    <div class="sr-topbar">
+      <div class="sr-back" id="srBack" role="button" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 5L8 12L15 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2>অনুসন্ধান</h2>
+    </div>
+
+    <div class="sr-body" id="srBody">
+      <div class="sr-hero">
+        <div class="sr-hero-content">
+          <h3>অনুসন্ধান করুন</h3>
+          <div class="sr-searchbar">
+            <input type="text" id="srInput" placeholder="যা খুঁজছেন তা লিখুন">
+            <button type="button" class="sr-mic-btn" id="srMicBtn" aria-label="ভয়েস সার্চ">
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="9" y="2" width="6" height="12" rx="3" fill="white"/>
+                <path d="M5 11a7 7 0 0 0 14 0M12 18v4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <div class="sr-lang-select" id="srLangSelect">
+              <span id="srLangLabel">আরবি</span>
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 8L12 15L19 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sr-filters-wrap">
+        <div class="sr-filters" id="srFilters">
+          <div class="sr-chip active" data-cat="all">সব</div>
+          <div class="sr-chip" data-cat="quran">কুরআন</div>
+          <div class="sr-chip" data-cat="hadith">হাদীস</div>
+          <div class="sr-chip" data-cat="masayel">মাসায়েল</div>
+          <div class="sr-chip" data-cat="dua">দু'আ</div>
+          <div class="sr-chip" data-cat="probondho">প্রবন্ধ</div>
+          <div class="sr-chip" data-cat="kitab">কিতাব</div>
+          <div class="sr-chip" data-cat="boyan">বয়ান</div>
+          <div class="sr-chip" data-cat="jiboni">জীবনী</div>
+          <div class="sr-chip" data-cat="jibonbrittanto">জীবনবৃত্তান্ত</div>
+        </div>
+      </div>
+
+      <div class="sr-results" id="srResults"></div>
+    </div>
+
+    <div class="sr-bottomnav">
+      <div class="sr-nav-btn disabled" id="srPrevBtn" aria-label="পূর্ববর্তী">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 5L8 12L15 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="sr-nav-btn" id="srRefreshBtn" aria-label="রিফ্রেশ">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3M17 3v5h-5M7 21v-5h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="sr-nav-btn" id="srNextBtn" aria-label="পরবর্তী">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 5L16 12L9 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -2249,11 +2559,18 @@
   var searchModalInput = document.getElementById('searchModalInput');
   var searchModalBtn = document.getElementById('searchModalBtn');
 
+  function updateSearchModalBtnState(){
+    if(!searchModalBtn) return;
+    var hasText = !!(searchModalInput && searchModalInput.value.trim().length > 0);
+    searchModalBtn.classList.toggle('highlight', hasText);
+  }
+
   function openSearchOverlay(){
     if(!searchOverlay) return;
     searchOverlay.classList.add('open');
     searchOverlay.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    updateSearchModalBtnState();
     setTimeout(function(){
       if(searchModalInput) searchModalInput.focus();
     }, 300);
@@ -2273,18 +2590,176 @@
       if(e.target === searchOverlay) closeSearchOverlay();
     });
   }
-  if(searchModalBtn){
-    searchModalBtn.addEventListener('click', function(){
-      closeSearchOverlay();
-    });
-  }
   if(searchModalInput){
+    searchModalInput.addEventListener('input', updateSearchModalBtnState);
     searchModalInput.addEventListener('keydown', function(e){
       if(e.key === 'Enter'){
         e.preventDefault();
         if(searchModalBtn) searchModalBtn.click();
       }
     });
+  }
+
+  // ===== অনুসন্ধান ফলাফল পেজ (Search Results Page) =====
+  var srScreen = document.getElementById('searchResultsScreen');
+  var srBody = document.getElementById('srBody');
+  var srBack = document.getElementById('srBack');
+  var srInput = document.getElementById('srInput');
+  var srFilters = document.getElementById('srFilters');
+  var srResults = document.getElementById('srResults');
+  var srMicBtn = document.getElementById('srMicBtn');
+  var srLangSelect = document.getElementById('srLangSelect');
+  var srLangLabel = document.getElementById('srLangLabel');
+  var srPrevBtn = document.getElementById('srPrevBtn');
+  var srNextBtn = document.getElementById('srNextBtn');
+  var srRefreshBtn = document.getElementById('srRefreshBtn');
+
+  var srActiveCat = 'all';
+
+  // নমুনা ডেটা — প্রকৃত কনটেন্টের সাথে API/ডাটাবেজ যুক্ত হলে এখানে বদলে দিন
+  var SR_DEMO_DATA = [
+    { cat:'quran', catLabel:'কুরআন', title:'সূরা আল-বাকারার একটি বিষয়', snippet:'এখানে কুরআন সেকশনের একটি নমুনা লেখা দেখানো হয়েছে। প্রকৃত অনুসন্ধান ফলাফলে আয়াতের অনুবাদ ও তাফসীর এই স্থানে প্রদর্শিত হবে।', tags:[{t:'সূরা: আল-বাকারা', alt:false},{t:'আয়াত নং: ০০১', alt:true}] },
+    { cat:'hadith', catLabel:'হাদীস', title:'হাদীসের একটি নমুনা শিরোনাম', snippet:'এটি হাদীস সেকশনের একটি নমুনা অনুচ্ছেদ। বর্ণনাকারীর নাম, মূল পাঠ ও সংক্ষিপ্ত ব্যাখ্যা প্রকৃত ডেটা যুক্ত হলে এখানে প্রদর্শিত হবে।', tags:[{t:'উৎস: নমুনা কিতাব', alt:false},{t:'হাদীস নং: ০০০১', alt:false},{t:'আন্তর্জাতিক নং: ০০০১', alt:true}] },
+    { cat:'masayel', catLabel:'মাসায়েল', title:'একটি সাধারণ মাসয়ালার নমুনা', snippet:'মাসায়েল সেকশনের প্রশ্নোত্তর এখানে প্রদর্শিত হবে। প্রশ্ন, উত্তর ও দলিলসমূহ প্রকৃত কনটেন্ট যুক্ত করার পর দেখা যাবে।', tags:[{t:'বিভাগ: ইবাদত', alt:false}] },
+    { cat:'dua', catLabel:'দু\'আ', title:'একটি নমুনা দু\'আর শিরোনাম', snippet:'দু\'আ সেকশনের আরবি উচ্চারণ, বাংলা অর্থ ও ফযীলত এই কার্ডে প্রদর্শিত হবে। এটি শুধুমাত্র লে-আউট প্রদর্শনের নমুনা।', tags:[{t:'উপলক্ষ: সাধারণ', alt:false}] },
+    { cat:'probondho', catLabel:'প্রবন্ধ', title:'একটি নমুনা প্রবন্ধের শিরোনাম', snippet:'প্রবন্ধ সেকশনের লেখার সংক্ষিপ্তসার এখানে প্রদর্শিত হয়। সম্পূর্ণ প্রবন্ধ পড়তে কার্ডে ট্যাপ করার ব্যবস্থা যুক্ত করা যাবে।', tags:[{t:'লেখক: নমুনা', alt:true}] },
+    { cat:'kitab', catLabel:'কিতাব', title:'একটি নমুনা কিতাবের নাম', snippet:'কিতাব সেকশনে বইয়ের সংক্ষিপ্ত পরিচিতি ও লেখক পরিচিতি এই কার্ডে প্রদর্শিত হবে।', tags:[{t:'লেখক: নমুনা', alt:false},{t:'পৃষ্ঠা: ০০০', alt:true}] },
+    { cat:'boyan', catLabel:'বয়ান', title:'একটি নমুনা বয়ানের শিরোনাম', snippet:'বয়ান সেকশনের অডিও/ভিডিও বিবরণ এখানে প্রদর্শিত হবে, সাথে বক্তার নাম ও সময়কাল যুক্ত থাকবে।', tags:[{t:'বক্তা: নমুনা', alt:false}] },
+    { cat:'jiboni', catLabel:'জীবনী', title:'একটি নমুনা জীবনীর শিরোনাম', snippet:'জীবনী সেকশনে ব্যক্তিত্বের সংক্ষিপ্ত পরিচিতি এখানে প্রদর্শিত হবে।', tags:[{t:'যুগ: নমুনা', alt:true}] },
+    { cat:'jibonbrittanto', catLabel:'জীবনবৃত্তান্ত', title:'একটি নমুনা জীবনবৃত্তান্তের শিরোনাম', snippet:'জীবনবৃত্তান্ত সেকশনের বিস্তারিত বিবরণ এখানে প্রদর্শিত হবে।', tags:[{t:'বিভাগ: নমুনা', alt:false}] }
+  ];
+
+  function srEscapeHtml(str){
+    return String(str)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function srHighlight(text, query){
+    var safe = srEscapeHtml(text);
+    if(!query) return safe;
+    var safeQuery = srEscapeHtml(query).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    var re = new RegExp('(' + safeQuery + ')', 'gi');
+    return safe.replace(re, '<mark>$1</mark>');
+  }
+
+  function srRenderResults(){
+    if(!srResults) return;
+    var query = (srInput && srInput.value ? srInput.value.trim() : '');
+    var qLower = query.toLowerCase();
+
+    var filtered = SR_DEMO_DATA.filter(function(item){
+      var inCat = (srActiveCat === 'all') || (item.cat === srActiveCat);
+      if(!inCat) return false;
+      if(!query) return true;
+      return (item.title.toLowerCase().indexOf(qLower) !== -1) ||
+             (item.snippet.toLowerCase().indexOf(qLower) !== -1);
+    });
+
+    srResults.innerHTML = '';
+
+    if(filtered.length === 0){
+      var empty = document.createElement('div');
+      empty.className = 'sr-empty';
+      empty.innerHTML = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="M21 21L16 16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><p>কোনো ফলাফল পাওয়া যায়নি</p>';
+      srResults.appendChild(empty);
+      return;
+    }
+
+    filtered.forEach(function(item){
+      var card = document.createElement('div');
+      card.className = 'sr-card';
+
+      var h4 = document.createElement('h4');
+      h4.innerHTML = srHighlight(item.title, query);
+      card.appendChild(h4);
+
+      var p = document.createElement('p');
+      p.innerHTML = srHighlight(item.snippet, query);
+      card.appendChild(p);
+
+      var tagsWrap = document.createElement('div');
+      tagsWrap.className = 'sr-card-tags';
+      item.tags.forEach(function(tag){
+        var span = document.createElement('span');
+        span.className = 'sr-tag' + (tag.alt ? ' alt' : '');
+        span.textContent = tag.t;
+        tagsWrap.appendChild(span);
+      });
+      card.appendChild(tagsWrap);
+
+      srResults.appendChild(card);
+    });
+  }
+
+  function openSearchResults(query){
+    if(!srScreen) return;
+    if(srInput) srInput.value = query || '';
+    srScreen.classList.add('open');
+    srScreen.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    if(srBody) srBody.scrollTop = 0;
+    srRenderResults();
+  }
+  function closeSearchResults(){
+    if(!srScreen) return;
+    srScreen.classList.remove('open');
+    srScreen.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  if(searchModalBtn){
+    searchModalBtn.addEventListener('click', function(){
+      var q = searchModalInput ? searchModalInput.value.trim() : '';
+      closeSearchOverlay();
+      openSearchResults(q);
+    });
+  }
+  if(srBack){
+    srBack.addEventListener('click', closeSearchResults);
+  }
+  if(srFilters){
+    srFilters.addEventListener('click', function(e){
+      var chip = e.target.closest ? e.target.closest('.sr-chip') : null;
+      if(!chip) return;
+      var chips = srFilters.querySelectorAll('.sr-chip');
+      for(var i = 0; i < chips.length; i++) chips[i].classList.remove('active');
+      chip.classList.add('active');
+      srActiveCat = chip.getAttribute('data-cat');
+      srRenderResults();
+    });
+  }
+  if(srInput){
+    srInput.addEventListener('input', srRenderResults);
+    srInput.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){ e.preventDefault(); srRenderResults(); }
+    });
+  }
+  if(srMicBtn){
+    srMicBtn.addEventListener('click', function(){
+      var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if(!SpeechRec){
+        srMicBtn.classList.add('loading');
+        setTimeout(function(){ srMicBtn.classList.remove('loading'); }, 400);
+        return;
+      }
+      try{
+        var rec = new SpeechRec();
+        rec.lang = 'bn-BD';
+        rec.onresult = function(ev){
+          var text = ev.results[0][0].transcript;
+          if(srInput){ srInput.value = text; srRenderResults(); }
+        };
+        rec.start();
+      }catch(err){}
+    });
+  }
+  if(srLangSelect){
+    srLangSelect.addEventListener('click', function(){
+      if(!srLangLabel) return;
+      srLangLabel.textContent = (srLangLabel.textContent === 'আরবি') ? 'বাংলা' : 'আরবি';
+    });
+  }
+  if(srRefreshBtn){
+    srRefreshBtn.addEventListener('click', srRenderResults);
   }
 })();
 </script>
