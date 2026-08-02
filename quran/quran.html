@@ -10,7 +10,7 @@
 
   @font-face{
     font-family:'Kalpurush';
-    src:url('icons/fonts/Kalpurush.woff2') format('woff2');
+    src:url('/fonts/Kalpurush.woff2') format('woff2');
     font-weight:normal;
     font-style:normal;
     font-display:swap;
@@ -170,6 +170,56 @@
   }
   .topic-sub:hover{color:var(--mid-green);}
 
+  /* ---------- Topic detail (drill-down: verse list for one subject) ---------- */
+  .topic-detail-header{
+    display:flex; align-items:center; gap:12px; margin-bottom:18px;
+  }
+  .topic-detail-back{
+    flex:0 0 auto; width:34px; height:34px; border-radius:50%; border:none;
+    background:#eef4ee; color:var(--deep-teal); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; transition:background .15s;
+  }
+  .topic-detail-back:hover{background:#e0ebe0;}
+  .topic-detail-back svg{width:18px; height:18px; stroke:currentColor;}
+  .topic-detail-title{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700;
+    font-size:19px; color:var(--ink);
+  }
+  .topic-verse-list{display:flex; flex-direction:column; gap:12px;}
+  .tv-card{
+    background:var(--paper); border:1px solid var(--line); border-radius:12px;
+    overflow:hidden; transition:border-color .16s;
+  }
+  .tv-card.open{border-color:var(--leaf-green);}
+  .tv-card-head{
+    width:100%; display:flex; align-items:center; gap:12px;
+    padding:16px 18px; background:none; border:none; cursor:pointer; text-align:left;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+  }
+  .tv-card-surah{font-weight:700; font-size:15px; color:var(--deep-teal); flex:0 0 auto;}
+  .tv-card-ayat{margin-left:auto; padding-left:10px; font-size:13.5px; color:var(--muted); white-space:nowrap;}
+  .tv-chevron{flex:0 0 auto; width:18px; height:18px; stroke:var(--muted); transition:transform .2s;}
+  .tv-card.open .tv-chevron{transform:rotate(180deg); stroke:var(--leaf-green);}
+  .tv-panel{max-height:0; overflow:hidden; transition:max-height .3s ease;}
+  .tv-panel-inner{padding:2px 18px 18px; border-top:1px solid var(--line);}
+  .tv-ayah-block{padding-top:16px;}
+  .tv-ayah-block + .tv-ayah-block{margin-top:16px; border-top:1px dashed var(--line);}
+  .tv-ayah-num{
+    display:inline-block; font-weight:700; font-size:12.5px; color:#fff; background:var(--mid-green);
+    border-radius:999px; padding:2px 10px; margin-bottom:10px;
+  }
+  .tv-ayah-arabic{
+    font-family:'Amiri Quran','Amiri',serif; direction:rtl; text-align:right;
+    font-size:25px; line-height:2.05; color:var(--deep-teal); margin-bottom:12px;
+  }
+  .tv-ayah-source{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700;
+    font-size:12.5px; color:var(--gold); margin-bottom:4px;
+  }
+  .tv-ayah-translation{font-size:14.5px; line-height:1.85; color:var(--ink);}
+  .tv-loading, .tv-error{padding:16px 0; text-align:center; color:var(--muted); font-size:13.5px;}
+  .tv-empty{text-align:center; padding:60px 20px; color:var(--muted); font-size:14.5px;}
+
   /* ---------- Grid ---------- */
   main{max-width:1180px; margin:0 auto; padding:40px 28px 20px;}
   .grid{
@@ -225,6 +275,22 @@
   .badge.medani{background:#f3ede0; color:#8a6d1f;}
   .no-results{
     text-align:center; padding:60px 20px; color:var(--muted); display:none;
+  }
+
+  /* ---------- পারা (Para/Juz) plain list ---------- */
+  .para-list{ display:flex; flex-direction:column; }
+  .para-list-item{
+    display:flex; align-items:center; justify-content:space-between; gap:18px;
+    padding:24px 4px; border-bottom:1px solid var(--line); cursor:pointer;
+  }
+  .para-list-item:hover{ background:var(--cream); }
+  .para-num{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700;
+    font-size:18px; color:var(--deep-teal); white-space:nowrap;
+  }
+  .para-ar{
+    font-family:'Amiri Quran','Amiri',serif; font-size:26px; color:var(--mid-green);
+    text-align:right; direction:rtl; line-height:1.5;
   }
 
   /* ---------- Footer CTA ---------- */
@@ -397,6 +463,21 @@
     border-radius:50%; border:1.5px solid var(--leaf-green); color:var(--mid-green);
     font-size:13px; font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; margin:0 6px; vertical-align:middle;
   }
+  .wbw-grid{
+    display:flex; flex-wrap:wrap; gap:18px 20px; justify-content:flex-end; align-items:flex-start;
+    direction:rtl; margin-bottom:4px;
+  }
+  .wbw-item{
+    background:none; border:none; cursor:pointer; display:flex; flex-direction:column;
+    align-items:center; gap:6px; padding:4px 2px;
+  }
+  .wbw-item .wbw-ar{ font-family:'Amiri Quran','Amiri',serif; font-size:26px; color:var(--deep-teal); line-height:1.6; }
+  .wbw-item .wbw-meaning{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:13px; color:var(--muted);
+    white-space:nowrap;
+  }
+  .wbw-item:hover .wbw-ar{ color:var(--mid-green); }
+  .wbw-num-circle{ align-self:center; margin:0 0 0 6px; }
   .ayah-actions{display:flex; gap:10px; margin:14px 0; flex-wrap:wrap;}
   .ayah-action{
     display:flex; align-items:center; gap:6px; padding:8px 16px; border-radius:999px;
@@ -713,7 +794,7 @@
   /* =======================================================================
      MOBILE READER (SURAH SCREEN) — mimics the native app's ayah-by-ayah page
      ======================================================================= */
-  .r-appbar, .r-bottomnav{ display:none; }
+  .r-appbar, .r-bottomnav, .r-mode-pills{ display:none; }
 
   /* Ornate ayah-number badge, reuses the same scalloped gold ring artwork as
      the surah-list medallions but recoloured per-ayah via CSS mask */
@@ -737,6 +818,7 @@
     font-weight:700; font-size:13px; color:var(--ink);
   }
   .ayah-top-row{ display:none; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .ayah-citation, .ayah-translator, .ayah-icon-row{ display:none; }
   .ayah-dots{ display:flex; align-items:center; gap:7px; }
   .ayah-dots .dot{
     width:11px; height:11px; border-radius:50%; border:none; cursor:pointer; padding:0;
@@ -765,6 +847,39 @@
     }
     .r-appbar .m-title{ margin:0; }
 
+    .r-mode-pills{
+      display:flex; justify-content:center; gap:10px; position:sticky; top:44px; z-index:55;
+      background:var(--paper); padding:10px 12px; border-bottom:1px solid var(--line);
+    }
+    .r-mode-pill{
+      border:1px solid var(--line); background:var(--paper); color:var(--deep-teal);
+      font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:13.5px;
+      padding:7px 20px; border-radius:999px; cursor:pointer; transition:background .15s, color .15s;
+    }
+    .r-mode-pill.active{
+      background:linear-gradient(180deg,var(--mid-green) 0%, var(--deep-teal) 100%); color:#fff; border-color:transparent;
+    }
+
+    /* Verse citation + translator label + circular action icons, mimicking the reference screenshot */
+    .ayah-citation{
+      text-align:center; font-size:13.5px; color:var(--muted); margin:2px 0 10px;
+      font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    }
+    .ayah-translator{
+      font-weight:700; color:var(--deep-teal); font-size:13.5px; margin-bottom:6px;
+      font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    }
+    .ayah-icon-row{
+      display:flex; align-items:center; justify-content:center; gap:16px; margin:14px 0 4px;
+    }
+    .ayah-icon-btn{
+      width:40px; height:40px; border-radius:50%; border:1.5px solid var(--mid-green);
+      background:var(--paper); color:var(--mid-green); display:flex; align-items:center; justify-content:center;
+      cursor:pointer; padding:0;
+    }
+    .ayah-icon-btn svg{ width:18px; height:18px; }
+    .ayah-icon-btn.playing{ background:var(--mid-green); color:#fff; }
+
     /* Hide the desktop two-column reader chrome; the sidebar becomes a
        slide-down search/list overlay instead */
     .reader-shell{ display:block; }
@@ -788,6 +903,9 @@
     .ayah-num-circle, .ayah-actions{ display:none; }
     .ayah-arabic{ font-size:24px; line-height:2.1; }
     .ayah-translation{ font-size:15px; }
+    .ayah-citation{ display:block; }
+    .ayah-translator{ display:block; }
+    .ayah-icon-row{ display:flex; }
 
     .r-bottomnav{
       display:flex; position:fixed; left:0; right:0; bottom:0; z-index:70;
@@ -832,6 +950,27 @@
   .ar-btn:last-child{ border-bottom:none; }
   .ar-btn:hover{ background:var(--cream); }
   .ar-btn-cancel{ color:#c0392b; }
+
+  /* =======================================================================
+     SURAH AUDIO DOWNLOAD PROGRESS MODAL
+     ======================================================================= */
+  .dl-overlay{
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:225;
+    align-items:center; justify-content:center; padding:20px;
+  }
+  .dl-overlay.open{ display:flex; }
+  .dl-box{
+    background:#e9e9e9; border-radius:6px; width:100%; max-width:340px;
+    padding:24px 22px; box-shadow:0 20px 50px -15px rgba(0,0,0,.5);
+  }
+  .dl-title{ text-align:center; font-size:18px; color:#222; margin-bottom:20px; }
+  .dl-info{
+    text-align:center; font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-weight:700; font-size:15px; color:#1c2620; line-height:1.9; margin-bottom:18px;
+  }
+  .dl-progress-track{ width:100%; height:8px; border-radius:4px; background:#c9c9c9; overflow:hidden; margin-bottom:14px; }
+  .dl-progress-fill{ height:100%; width:0%; background:#2563eb; border-radius:4px; transition:width .18s linear; }
+  .dl-percent{ text-align:center; font-size:17px; color:#222; font-weight:600; }
 
   /* =======================================================================
      SHOBDE SHOBDE DOWNLOAD CONFIRM MODAL
@@ -985,6 +1124,29 @@
   .ayah-block{ cursor:pointer; }
   .ayah-block [data-action], .ayah-block .ayah-num-link{ cursor:pointer; }
 
+  /* =======================================================================
+     PER-WORD DETAIL SHEET (mimics native app's word tap screenshot)
+     ======================================================================= */
+  .word-sheet-overlay{
+    display:none; position:fixed; inset:0; background:rgba(14,20,17,.4); z-index:231;
+    align-items:flex-end; justify-content:center;
+  }
+  .word-sheet-overlay.open{ display:flex; }
+  .word-sheet{
+    background:#fff; width:100%; max-width:520px; border-radius:18px 18px 0 0;
+    padding:26px 24px 40px; text-align:center; box-shadow:0 -20px 50px -20px rgba(0,0,0,.4);
+  }
+  .word-sheet-title{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:15px;
+    color:var(--ink); margin-bottom:26px;
+  }
+  .word-sheet-ar{ font-family:'Amiri Quran','Amiri',serif; font-size:36px; color:var(--deep-teal); margin-bottom:26px; }
+  .word-sheet-line{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:15px; color:var(--ink);
+    margin-bottom:10px;
+  }
+  .word-sheet-line b{ color:var(--mid-green); font-weight:700; }
+
   @media (max-width:520px){
     .ar-modal, .wc-modal{ max-width:280px; }
   }
@@ -1100,12 +1262,22 @@
   </div>
 
   <div id="paraView" style="display:none;">
-    <div class="grid" id="paraGrid"></div>
+    <div class="para-list" id="paraGrid"></div>
     <div class="no-results" id="noResultsPara" style="display:none;">কোনো পারা পাওয়া যায়নি।</div>
   </div>
 
   <div id="topicView" style="display:none;">
     <div class="topic-list" id="topicList"></div>
+  </div>
+
+  <div id="topicDetailView" style="display:none;">
+    <div class="topic-detail-header">
+      <button class="topic-detail-back" id="topicDetailBackBtn" title="ফিরে যান">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <h2 class="topic-detail-title" id="topicDetailTitle">বিষয়</h2>
+    </div>
+    <div class="topic-verse-list" id="topicVerseList"></div>
   </div>
 
   <div class="cta">
@@ -1133,6 +1305,12 @@
     <button class="m-icon-btn plain" id="rSearchToggleBtn" title="অনুসন্ধান">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </button>
+  </div>
+
+  <!-- Mode pills (matches native app screenshot): সূরা = normal reading, তাফসীর = jump to the tafsir page -->
+  <div class="r-mode-pills" id="rModePills">
+    <button class="r-mode-pill active" id="rModePillSurah" data-mode="surah">সূরা</button>
+    <button class="r-mode-pill" id="rModePillTafsir" data-mode="tafsir">তাফসীর</button>
   </div>
 
   <div class="reader-shell">
@@ -1255,6 +1433,15 @@
 </div>
 
 <!-- ============ AUDIO RANGE MODAL (mimics native app screenshot) ============ -->
+<div class="dl-overlay" id="downloadOverlay">
+  <div class="dl-box">
+    <div class="dl-title">Downloading...</div>
+    <div class="dl-info" id="downloadInfo"></div>
+    <div class="dl-progress-track"><div class="dl-progress-fill" id="downloadProgressFill"></div></div>
+    <div class="dl-percent" id="downloadPercent">0%</div>
+  </div>
+</div>
+
 <div class="ar-overlay" id="audioRangeOverlay">
   <div class="ar-modal">
     <div class="ar-title">আয়াতের পরিসীমা নির্বাচন করুন</div>
@@ -1374,6 +1561,16 @@
         <span>তাফসীর</span>
       </button>
     </div>
+  </div>
+</div>
+
+<!-- ============ PER-WORD DETAIL SHEET (mimics native app screenshot) ============ -->
+<div class="word-sheet-overlay" id="wordSheetOverlay">
+  <div class="word-sheet">
+    <div class="word-sheet-title" id="wordSheetTitle"></div>
+    <div class="word-sheet-ar ar" id="wordSheetAr"></div>
+    <div class="word-sheet-line">অর্থ: <b id="wordSheetMeaning"></b></div>
+    <div class="word-sheet-line">উচ্চারণ: <b id="wordSheetTranslit"></b></div>
   </div>
 </div>
 
@@ -1756,9 +1953,18 @@ searchInput.addEventListener('input', ()=>{
 
 render();
 
-/* ---------- পারা (Para/Juz) grid ---------- */
+/* ---------- পারা (Para/Juz) list ---------- */
 const paraGrid = document.getElementById('paraGrid');
 const noResultsPara = document.getElementById('noResultsPara');
+
+// The actual first words of each of the 30 Juz (para), in Uthmani-style Arabic script
+const JUZ_START_ARABIC = [
+  'الم', 'سَيَقُولُ', 'تِلْكَ الرُّسُلُ', 'لَنْ تَنَالُوا', 'وَٱلْمُحْصَنَاتُ', 'لَا يُحِبُّ ٱللَّهُ',
+  'وَإِذَا سَمِعُوا', 'وَلَوْ أَنَّنَا', 'قَالَ ٱلْمَلَأُ', 'وَٱعْلَمُوا', 'يَعْتَذِرُونَ', 'وَمَا مِنْ دَابَّةٍ',
+  'وَمَا أُبَرِّئُ', 'رُبَمَا', 'سُبْحَٰنَ ٱلَّذِي', 'قَالَ أَلَمْ', 'ٱقْتَرَبَ لِلنَّاسِ', 'قَدْ أَفْلَحَ',
+  'وَقَالَ ٱلَّذِينَ', 'أَمَّنْ خَلَقَ', 'ٱتْلُ مَا أُوحِيَ', 'وَمَنْ يَقْنُتْ', 'وَمَا لِيَ', 'فَمَنْ أَظْلَمُ',
+  'إِلَيْهِ يُرَدُّ', 'حم', 'قَالَ فَمَا خَطْبُكُمْ', 'قَدْ سَمِعَ ٱللَّهُ', 'تَبَارَكَ ٱلَّذِي', 'عَمَّ'
+];
 
 function renderPara(){
   const q = searchInput.value.trim().toLowerCase();
@@ -1768,20 +1974,14 @@ function renderPara(){
     const matchesSearch = !q || String(i)===q || toBnDigits(i).includes(q);
     if(!matchesSearch) continue;
     shown++;
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.dataset.num = i;
-    card.addEventListener('click', ()=>openReader('para', i));
-    card.innerHTML = `
-      <div class="medallion">${toBnDigits(i)}</div>
-      <div class="card-body">
-        <p class="card-name">পারা ${toBnDigits(i)}</p>
-        <p class="card-ar ar">الجزء ${i}</p>
-        <div class="card-meta">
-          <span>কুরআনের ৩০ ভাগের ১ ভাগ</span>
-        </div>
-      </div>`;
-    paraGrid.appendChild(card);
+    const row = document.createElement('div');
+    row.className = 'para-list-item';
+    row.dataset.num = i;
+    row.addEventListener('click', ()=>openReader('para', i));
+    row.innerHTML = `
+      <span class="para-num">পারা - ${toBnDigits(i)}</span>
+      <span class="para-ar ar">${JUZ_START_ARABIC[i-1]}</span>`;
+    paraGrid.appendChild(row);
   }
   noResultsPara.style.display = shown===0 ? 'block' : 'none';
 }
@@ -1814,7 +2014,7 @@ topics.forEach((t,i)=>{
     </button>
     <div class="topic-panel">
       <div class="topic-panel-inner">
-        ${t.subs.map(s=>`<a class="topic-sub" href="#">${s}</a>`).join('')}
+        ${t.subs.map(s=>`<button type="button" class="topic-sub" data-sub="${s.replace(/"/g,'&quot;')}">${s}</button>`).join('')}
       </div>
     </div>`;
   const head = item.querySelector('.topic-head');
@@ -1830,8 +2030,118 @@ topics.forEach((t,i)=>{
       panel.style.maxHeight = panel.scrollHeight + 'px';
     }
   });
+  item.querySelectorAll('.topic-sub').forEach(btn=>{
+    btn.addEventListener('click', ()=> openTopicDetail(btn.dataset.sub));
+  });
   topicList.appendChild(item);
 });
+
+/* ---------- বিষয়ভিত্তিক drill-down: verse list for a selected subject ----------
+   Each entry below is a real, verifiable surah:ayah reference for that subject.
+   Subjects that don't have a curated list yet show a "coming soon" message
+   instead of guessing at references. */
+const topicVerses = {
+  "তাওহীদ (আল্লাহর একত্ববাদ)": [
+    { surah:2,  name:"আল-বাকারা", from:255, to:255 },
+    { surah:4,  name:"আন-নিসা",   from:87,  to:87  },
+    { surah:13, name:"আর-রাদ",    from:2,   to:2   },
+    { surah:14, name:"ইব্রাহীম",  from:32,  to:34  },
+    { surah:20, name:"ত্বা-হা",   from:8,   to:8   },
+    { surah:24, name:"আন-নূর",    from:35,  to:35  },
+    { surah:30, name:"আর-রুম",    from:11,  to:11  },
+    { surah:30, name:"আর-রুম",    from:40,  to:40  }
+  ]
+};
+
+const topicDetailView = document.getElementById('topicDetailView');
+const topicDetailTitle = document.getElementById('topicDetailTitle');
+const topicVerseList = document.getElementById('topicVerseList');
+const topicDetailBackBtn = document.getElementById('topicDetailBackBtn');
+const topicVerseAyahCache = {}; // "surah:ayah" -> { arabic, translation }
+
+function ayatLabel(entry){
+  return entry.from === entry.to ? `আয়াত নং ${toBnDigits(entry.from)}` : `আয়াত নং ${toBnDigits(entry.from)}-${toBnDigits(entry.to)}`;
+}
+
+function openTopicDetail(subTitle){
+  topicDetailTitle.textContent = subTitle;
+  const entries = topicVerses[subTitle];
+  if(!entries || !entries.length){
+    topicVerseList.innerHTML = `<div class="tv-empty">এই বিষয়ের আয়াত তালিকা শীঘ্রই যুক্ত করা হবে।</div>`;
+  } else {
+    topicVerseList.innerHTML = entries.map((entry,i)=>`
+      <div class="tv-card" data-idx="${i}">
+        <button type="button" class="tv-card-head">
+          <span class="tv-card-surah">${toBnDigits(entry.surah)}. ${entry.name}</span>
+          <span class="tv-card-ayat">${ayatLabel(entry)}</span>
+          <svg class="tv-chevron" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="tv-panel"><div class="tv-panel-inner"></div></div>
+      </div>`).join('');
+    topicVerseList.querySelectorAll('.tv-card').forEach((card,i)=>{
+      const head = card.querySelector('.tv-card-head');
+      head.addEventListener('click', ()=> toggleTopicVerseCard(card, entries[i]));
+    });
+  }
+  topicView.style.display = 'none';
+  topicDetailView.style.display = 'block';
+}
+
+function closeTopicDetail(){
+  topicDetailView.style.display = 'none';
+  topicView.style.display = '';
+}
+
+topicDetailBackBtn.addEventListener('click', closeTopicDetail);
+
+async function fetchTopicAyah(surah, ayah){
+  const key = `${surah}:${ayah}`;
+  if(topicVerseAyahCache[key]) return topicVerseAyahCache[key];
+  const [arRes, tafsirData] = await Promise.all([
+    fetch(`${API_BASE}/ayah/${surah}:${ayah}/${ARABIC_EDITION}`).then(r=> r.ok ? r.json() : Promise.reject(new Error('network'))),
+    fetchTafsir(surah, ayah).catch(()=>null)
+  ]);
+  const data = {
+    arabic: arRes && arRes.data ? arRes.data.text : '',
+    translation: tafsirData ? tafsirData.translation : null
+  };
+  topicVerseAyahCache[key] = data;
+  return data;
+}
+
+async function toggleTopicVerseCard(card, entry){
+  const isOpen = card.classList.contains('open');
+  const panel = card.querySelector('.tv-panel');
+  const inner = card.querySelector('.tv-panel-inner');
+  if(isOpen){
+    card.classList.remove('open');
+    panel.style.maxHeight = null;
+    return;
+  }
+  card.classList.add('open');
+  if(!inner.dataset.loaded){
+    inner.innerHTML = `<div class="tv-loading">লোড হচ্ছে...</div>`;
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+    try{
+      const nums = [];
+      for(let n = entry.from; n <= entry.to; n++) nums.push(n);
+      const results = await Promise.all(nums.map(n => fetchTopicAyah(entry.surah, n)));
+      inner.innerHTML = results.map((r,idx)=>`
+        <div class="tv-ayah-block">
+          <span class="tv-ayah-num">${entry.name} : ${toBnDigits(nums[idx])}</span>
+          <p class="tv-ayah-arabic ar">${r.arabic}</p>
+          ${r.translation ? `
+            <div class="tv-ayah-source">আল-মুখতাসার ফী তাফসীরিল কুরআন (বাংলা)</div>
+            <p class="tv-ayah-translation">${r.translation}</p>
+          ` : `<p class="tv-ayah-translation" style="color:var(--muted);">অনুবাদ লোড করা যায়নি।</p>`}
+        </div>`).join('');
+      inner.dataset.loaded = '1';
+    } catch(e){
+      inner.innerHTML = `<div class="tv-error">দুঃখিত, আয়াত লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</div>`;
+    }
+  }
+  panel.style.maxHeight = panel.scrollHeight + 'px';
+}
 
 /* ---------- View tab switching ---------- */
 const surahView = document.getElementById('surahView');
@@ -1877,6 +2187,7 @@ document.querySelectorAll('.view-tab').forEach(tab=>{
     surahView.style.display = view === 'surah' ? '' : 'none';
     paraView.style.display = view === 'para' ? '' : 'none';
     topicView.style.display = view === 'topic' ? '' : 'none';
+    if(topicDetailView) topicDetailView.style.display = 'none';
     filterBar.style.display = view === 'surah' ? '' : 'none';
 
     if(view === 'surah') render();
@@ -1888,6 +2199,7 @@ document.querySelectorAll('.view-tab').forEach(tab=>{
 const API_BASE = 'https://api.alquran.cloud/v1';
 const ARABIC_EDITION = 'quran-uthmani';
 const RECITER = 'ar.alafasy';
+const RECITER_BN_NAME = 'মিশারী রাশেদ আল-আফাসী';
 
 /* ---- Bangla translations (freely available full-Quran JSON editions) ----
    Source: fawazahmed0/quran-api (mirrors Tanzil.net / trusted translation files).
@@ -1964,6 +2276,9 @@ let currentBodyView = 'surah'; // 'surah' | 'para' — tracks what's actually re
 const surahCache = {};   // num -> {arabic, bengali}
 const juzCache = {};     // num -> data
 const transliterationCache = {}; // num -> Map(numberInSurah -> latin transliteration text) | null
+const wordByWordCache = {}; // num -> Map(numberInSurah -> words[])
+const wordByWordSurahs = new Set(); // surah numbers that have "downloaded" word-by-word data
+const WORD_API_BASE = 'https://api.quran.com/api/v4';
 
 function showListing(){
   readerView.style.display = 'none';
@@ -2123,7 +2438,7 @@ if(rBottomNav){
     if(action === 'audio'){
       openAudioRange();
     } else if(action === 'word'){
-      openWordConfirm();
+      handleWordByWordRequest();
     } else if(action === 'tafsir'){
       openTafsirPage();
     } else if(action === 'more'){
@@ -2166,6 +2481,21 @@ async function fetchTransliteration(num){
     transliterationCache[num] = null; // not available — the reader simply omits the pronunciation line
   }
   return transliterationCache[num];
+}
+
+async function fetchWordByWord(surahNum){
+  if(wordByWordCache[surahNum]) return wordByWordCache[surahNum];
+  const res = await fetch(`${WORD_API_BASE}/verses/by_chapter/${surahNum}?words=true&word_fields=text_uthmani&language=bn&per_page=300`);
+  if(!res.ok) throw new Error('network');
+  const json = await res.json();
+  const map = new Map();
+  (json.verses || []).forEach(v=>{
+    const ayahNum = Number(String(v.verse_key).split(':')[1]);
+    const words = (v.words || []).filter(w=> w.char_type_name === 'word');
+    map.set(ayahNum, words);
+  });
+  wordByWordCache[surahNum] = map;
+  return map;
 }
 
 async function fetchJuz(num){
@@ -2221,12 +2551,37 @@ function translationsHTMLFor(surahNum, ayahNumInSurah){
   return parts.join('');
 }
 
+function wordByWordHTMLFor(surahNum, n, fallbackArabic){
+  const map = wordByWordCache[surahNum];
+  const words = map ? map.get(n) : null;
+  const hasArabic = words && words.some(w=> w.text_uthmani || w.text_indopak);
+  if(!words || !words.length || !hasArabic){
+    return `<p class="ayah-arabic">${fallbackArabic}<span class="ayah-num-circle">${toBnDigits(n)}</span></p>`;
+  }
+  const items = words.map(w=>{
+    const ar = w.text_uthmani || w.text_indopak || '';
+    const meaning = (w.translation && w.translation.text) ? w.translation.text : '';
+    const translit = (w.transliteration && w.transliteration.text) ? w.transliteration.text : '';
+    const meaningAttr = meaning.replace(/"/g,'&quot;');
+    const translitAttr = translit.replace(/"/g,'&quot;');
+    return `
+      <button type="button" class="wbw-item" data-surah="${surahNum}" data-ayah="${n}" data-ar="${ar}" data-meaning="${meaningAttr}" data-translit="${translitAttr}">
+        <span class="wbw-ar ar">${ar}</span>
+        <span class="wbw-meaning">${meaning}</span>
+      </button>`;
+  }).join('');
+  return `<div class="wbw-grid" dir="rtl">${items}<span class="ayah-num-circle wbw-num-circle">${toBnDigits(n)}</span></div>`;
+}
+
 function renderAyahBlock(arabicAyah, surahNum){
   const resolvedSurahNum = surahNum || (arabicAyah.surah && arabicAyah.surah.number) || currentSurahNum;
   const g = arabicAyah.number;
   const n = arabicAyah.numberInSurah;
   const translitMap = transliterationCache[resolvedSurahNum];
   const translit = translitMap ? translitMap.get(n) : null;
+  const arabicHTML = wordByWordSurahs.has(resolvedSurahNum)
+    ? wordByWordHTMLFor(resolvedSurahNum, n, arabicAyah.text)
+    : `<p class="ayah-arabic">${arabicAyah.text}<span class="ayah-num-circle">${toBnDigits(n)}</span></p>`;
   return `
     <div class="ayah-block" data-ayah-index="${n}" data-surah="${resolvedSurahNum}" data-g="${g}">
       <div class="ayah-top-row">
@@ -2237,7 +2592,7 @@ function renderAyahBlock(arabicAyah, surahNum){
           <button class="dot dot-tafsir" data-action="tafsir" data-surah="${resolvedSurahNum}" data-ayah="${n}" title="তাফসীর"></button>
         </span>
       </div>
-      <p class="ayah-arabic">${arabicAyah.text}<span class="ayah-num-circle">${toBnDigits(n)}</span></p>
+      ${arabicHTML}
       ${translit ? `<p class="ayah-translit">${translit}।</p>` : ``}
       ${ayahActionsHTML(g, n, resolvedSurahNum)}
       ${contentMode==='translation' ? translationsHTMLFor(resolvedSurahNum, n) : ``}
@@ -2393,6 +2748,12 @@ function wireAyahActions(){
       const num = btn.dataset.surahAudio;
       ayahAudio.src = `https://cdn.islamic.network/quran/audio-surah/128/${RECITER}/${num}.mp3`;
       ayahAudio.play().catch(()=>{});
+    });
+  });
+  readerBody.querySelectorAll('.wbw-item').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      openWordSheet(btn.dataset.surah, btn.dataset.ayah, btn.dataset.ar, btn.dataset.meaning, btn.dataset.translit);
     });
   });
   readerBody.querySelectorAll('.ayah-block').forEach(block=>{
@@ -2712,6 +3073,46 @@ document.addEventListener('keydown', (e)=>{
   if(e.key === 'Escape' && tafsirOverlay.classList.contains('open')) closeTafsirModal();
 });
 
+/* ================= GENERIC DOWNLOAD PROGRESS MODAL ================= */
+const downloadOverlay = document.getElementById('downloadOverlay');
+const downloadInfo = document.getElementById('downloadInfo');
+const downloadProgressFill = document.getElementById('downloadProgressFill');
+const downloadPercent = document.getElementById('downloadPercent');
+const downloadedSurahs = new Set();
+
+function runDownloadProgress(infoHtml, onComplete){
+  downloadInfo.innerHTML = infoHtml;
+  downloadProgressFill.style.width = '0%';
+  downloadPercent.textContent = '0%';
+  downloadOverlay.classList.add('open');
+  let pct = 0;
+  const timer = setInterval(()=>{
+    pct = Math.min(100, pct + Math.round(6 + Math.random()*10));
+    downloadProgressFill.style.width = pct + '%';
+    downloadPercent.textContent = pct + '%';
+    if(pct >= 100){
+      clearInterval(timer);
+      setTimeout(()=>{
+        downloadOverlay.classList.remove('open');
+        onComplete();
+      }, 250);
+    }
+  }, 160);
+}
+
+function downloadSurahAudio(surahNum, onComplete){
+  if(downloadedSurahs.has(surahNum)){
+    onComplete();
+    return;
+  }
+  const entry = surahs.find(s=>s[0]===surahNum);
+  const bnName = entry ? entry[1] : `সূরা ${toBnDigits(surahNum)}`;
+  runDownloadProgress(`সূরা: ${bnName}<br>ক্বারী: ${RECITER_BN_NAME}`, ()=>{
+    downloadedSurahs.add(surahNum);
+    onComplete();
+  });
+}
+
 /* ================= AUDIO RANGE MODAL ("অডিও") ================= */
 const audioRangeOverlay = document.getElementById('audioRangeOverlay');
 const audioRangeFrom = document.getElementById('audioRangeFrom');
@@ -2728,12 +3129,15 @@ function currentSurahAyahCount(){
 }
 
 function openAudioRange(){
-  const total = currentSurahAyahCount();
-  audioRangeFrom.max = total;
-  audioRangeTo.max = total;
-  audioRangeFrom.value = 1;
-  audioRangeTo.value = Math.min(7, total);
-  audioRangeOverlay.classList.add('open');
+  const surahNum = currentSurahNum;
+  downloadSurahAudio(surahNum, ()=>{
+    const total = currentSurahAyahCount();
+    audioRangeFrom.max = total;
+    audioRangeTo.max = total;
+    audioRangeFrom.value = 1;
+    audioRangeTo.value = total;
+    audioRangeOverlay.classList.add('open');
+  });
 }
 function closeAudioRange(){
   audioRangeOverlay.classList.remove('open');
@@ -2792,6 +3196,16 @@ const wordConfirmOverlay = document.getElementById('wordConfirmOverlay');
 const wordDownloadBtn = document.getElementById('wordDownloadBtn');
 const wordCancelBtn = document.getElementById('wordCancelBtn');
 
+function handleWordByWordRequest(){
+  if(wordByWordSurahs.has(currentSurahNum)){
+    // already downloaded for this surah — just make sure the word-by-word view is showing
+    if(currentBodyView === 'surah') renderSurahBody(currentSurahNum);
+    else if(currentBodyView === 'para') renderJuzBody(currentJuzNum);
+    return;
+  }
+  openWordConfirm();
+}
+
 function openWordConfirm(){
   wordConfirmOverlay.classList.add('open');
 }
@@ -2800,7 +3214,19 @@ function closeWordConfirm(){
 }
 wordDownloadBtn.addEventListener('click', ()=>{
   closeWordConfirm();
-  alert('শব্দে শব্দে কুরআন ডাউনলোড করা হচ্ছে। ডাউনলোড শেষ হলে সূরার প্রতিটি আয়াতের নিচে শব্দে শব্দে অর্থ দেখা যাবে।');
+  if(wordByWordSurahs.has(currentSurahNum)) return;
+  const entry = surahs.find(s=>s[0]===currentSurahNum);
+  const bnName = entry ? entry[1] : `সূরা ${toBnDigits(currentSurahNum)}`;
+  runDownloadProgress(`সূরা: ${bnName}<br>মোড: শব্দে শব্দে অনুবাদ`, async ()=>{
+    try{
+      await fetchWordByWord(currentSurahNum);
+      wordByWordSurahs.add(currentSurahNum);
+      if(currentBodyView === 'surah') renderSurahBody(currentSurahNum);
+      else if(currentBodyView === 'para') renderJuzBody(currentJuzNum);
+    } catch(e){
+      alert('দুঃখিত, শব্দে শব্দে তথ্য লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।');
+    }
+  });
 });
 wordCancelBtn.addEventListener('click', closeWordConfirm);
 wordConfirmOverlay.addEventListener('click', (e)=>{
@@ -2980,7 +3406,10 @@ ayahSheetOverlay.querySelectorAll('.ay-sheet-item').forEach(item=>{
     const { surah, ayah, g } = ayahSheetCtx;
     if(action === 'copy'){
       const block = readerBody.querySelector(`[data-ayah-index="${ayah}"][data-surah="${surah}"]`);
-      const arabic = block ? block.querySelector('.ayah-arabic')?.textContent.replace(/[০-৯]+$/,'').trim() : '';
+      let arabic = block ? block.querySelector('.ayah-arabic')?.textContent.replace(/[০-৯]+$/,'').trim() : '';
+      if(!arabic && block){
+        arabic = Array.from(block.querySelectorAll('.wbw-item .wbw-ar')).map(s=>s.textContent).join(' ');
+      }
       const translation = block ? Array.from(block.querySelectorAll('.ayah-translation')).map(p=>p.textContent.replace(/[০-৯]+$/,'').trim()).join(' ') : '';
       const text = `${arabic}\n${translation}`.trim();
       if(navigator.clipboard){ navigator.clipboard.writeText(text); }
@@ -3005,6 +3434,33 @@ ayahSheetOverlay.querySelectorAll('.ay-sheet-item').forEach(item=>{
       openTafsirModal(surah, ayah);
     }
   });
+});
+
+/* ================= PER-WORD DETAIL SHEET ================= */
+const wordSheetOverlay = document.getElementById('wordSheetOverlay');
+const wordSheetTitle = document.getElementById('wordSheetTitle');
+const wordSheetAr = document.getElementById('wordSheetAr');
+const wordSheetMeaning = document.getElementById('wordSheetMeaning');
+const wordSheetTranslit = document.getElementById('wordSheetTranslit');
+
+function openWordSheet(surahNum, ayahNum, arabic, meaning, translit){
+  const num = Number(surahNum);
+  const entry = surahs.find(s=>s[0]===num);
+  const bnName = entry ? entry[1] : `সূরা ${toBnDigits(num)}`;
+  wordSheetTitle.textContent = `${bnName}, আয়াত: ${toBnDigits(Number(ayahNum))}`;
+  wordSheetAr.textContent = arabic || '';
+  wordSheetMeaning.textContent = meaning || '—';
+  wordSheetTranslit.textContent = translit || '—';
+  wordSheetOverlay.classList.add('open');
+}
+function closeWordSheet(){
+  wordSheetOverlay.classList.remove('open');
+}
+wordSheetOverlay.addEventListener('click', (e)=>{
+  if(e.target === wordSheetOverlay) closeWordSheet();
+});
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape' && wordSheetOverlay.classList.contains('open')) closeWordSheet();
 });
 </script>
 

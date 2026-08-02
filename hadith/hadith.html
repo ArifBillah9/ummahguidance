@@ -539,8 +539,8 @@
   .hadith-chapter-item:hover{background:#f1ede0;}
   .hadith-chapter-item.active{background:#eef4ee; border-color:var(--leaf-green); color:var(--mid-green); font-weight:600;}
   .hadith-chapter-num{color:var(--gold); font-weight:700; margin-right:4px;}
-  .hadith-block{padding:20px 0; border-bottom:1px solid var(--line);}
-  .hadith-block.rtl-text{direction:rtl; text-align:right;}
+  .hadith-block{padding:22px 0; border-bottom:1px solid var(--line);}
+  .hadith-block.rtl-text .hadith-text{direction:rtl; text-align:right;}
   .hadith-num-badge{
     display:inline-flex; align-items:center; justify-content:center; min-width:34px; height:34px; padding:0 8px;
     border-radius:999px; background:var(--mid-green); color:#fff; font-weight:700; font-size:13px;
@@ -550,6 +550,35 @@
   .hadith-grade{
     display:inline-block; margin-top:10px; font-size:12px; color:var(--muted); background:#f1ede0;
     padding:3px 10px; border-radius:999px;
+  }
+
+  /* ---- Hadith card header (book badge + name + hadith no + grade pill), matches native app ---- */
+  .hadith-card-head{
+    display:flex; align-items:center; gap:12px; margin-bottom:14px;
+  }
+  .hadith-card-badge{
+    flex:0 0 auto; width:38px; height:38px; border-radius:10px;
+    background:var(--mid-green); color:#fff; display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:15px; font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+  }
+  .hadith-card-info{flex:1; min-width:0;}
+  .hadith-card-book{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:14.5px;
+    color:var(--deep-teal); line-height:1.3;
+  }
+  .hadith-card-num{font-size:12.5px; color:var(--muted); margin-top:1px;}
+  .hadith-card-gradepill{
+    flex:0 0 auto; font-size:12px; font-weight:600; color:#fff; background:var(--leaf-green);
+    padding:5px 14px; border-radius:999px;
+  }
+  /* ---- Arabic hadith text, shown above the translation like the native app ---- */
+  .hadith-arabic{
+    direction:rtl; text-align:right; font-family:'Amiri Quran','Amiri',serif;
+    font-size:21px; line-height:2.1; color:var(--ink); margin-bottom:14px;
+  }
+  .hadith-translation-label{
+    font-size:11.5px; color:var(--gold); font-weight:700; letter-spacing:.05em;
+    margin:0 0 6px; text-transform:uppercase;
   }
 
   /* ---------- Hadith HOME screen (matches native app screenshot) ---------- */
@@ -660,6 +689,63 @@
   .hh-bn-item svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.8; }
   .hh-bn-item.active{ color:var(--mid-green); }
 
+  /* ---------- Hadith CHAPTER LIST screen (matches native app screenshot) ---------- */
+  .hcl-shell{ max-width:520px; margin:0 auto; background:#f0f4f8; min-height:100vh; position:relative; }
+  .hcl-header{
+    background:linear-gradient(180deg,var(--deep-teal) 0%,var(--mid-green) 100%);
+    color:var(--paper); padding:16px 18px 46px; position:relative; overflow:hidden;
+  }
+  .hcl-header::before{
+    content:""; position:absolute; inset:0;
+    background-image: radial-gradient(circle at 85% 20%, rgba(200,162,74,0.10) 0, transparent 45%);
+    pointer-events:none;
+  }
+  .hcl-topbar{ display:flex; align-items:center; gap:14px; position:relative; z-index:2; }
+  .hcl-back-btn{
+    background:none; border:none; padding:6px; cursor:pointer; color:var(--paper);
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+  }
+  .hcl-back-btn svg{ width:24px; height:24px; stroke:currentColor; }
+  .hcl-title-block{ flex:1; min-width:0; }
+  .hcl-book-title{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:19px;
+    margin:0 0 3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .hcl-book-count{ font-size:13px; color:rgba(255,255,255,.82); }
+  .hcl-search-card{
+    background:var(--paper); border-radius:16px; box-shadow:0 16px 30px -16px rgba(14,59,49,.4);
+    margin:-30px 18px 0; position:relative; z-index:3;
+    display:flex; align-items:center; gap:10px; padding:15px 18px;
+  }
+  .hcl-search-card input{
+    flex:1; border:none; outline:none; font-size:14.5px; color:var(--ink); background:none;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+  }
+  .hcl-search-card input::placeholder{ color:var(--muted); }
+  .hcl-search-card svg{ width:20px; height:20px; stroke:var(--muted); flex:0 0 auto; }
+  .hcl-list{ display:flex; flex-direction:column; gap:14px; padding:20px 18px 40px; }
+  .hcl-item{
+    background:var(--paper); border:1px solid var(--line); border-radius:16px;
+    display:flex; align-items:center; gap:16px; padding:16px 18px;
+    cursor:pointer; transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .hcl-item:hover{
+    transform:translateY(-2px); box-shadow:0 14px 26px -16px rgba(14,59,49,.35); border-color:var(--leaf-green);
+  }
+  .hcl-item.active{ border-color:var(--leaf-green); background:#f3fbf6; }
+  .hcl-badge{
+    flex:0 0 auto; width:46px; height:46px; background:var(--leaf-green); color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:17px;
+    clip-path:polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  }
+  .hcl-item-info{ flex:1; min-width:0; }
+  .hcl-item-name{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:16.5px;
+    color:var(--ink); margin:0 0 4px;
+  }
+  .hcl-item-range{ font-size:13px; color:var(--muted); }
+
   /* ---------- তেলাওয়াত (recitation) continuous flow ---------- */
   .recitation-flow{
     background:var(--paper); border:1px solid var(--line); border-radius:18px;
@@ -728,6 +814,8 @@
     }
     .m-icon-btn svg{width:15px; height:15px;}
     .m-icon-btn.plain{ border-color:transparent; background:transparent; }
+    .m-icon-btn.sq{ border-radius:9px; width:34px; height:34px; }
+    .m-icon-btn.sq svg{ width:18px; height:18px; }
 
     .m-panel{ display:block; padding:10px 14px 4px; background:#f0f4f8; }
 
@@ -820,9 +908,128 @@
   }
 
   /* =======================================================================
+     READER SETTINGS PANEL — slide-in sheet matching the native app's
+     "সেটিংস" screen (কন্টেন্ট / ফন্ট / ভিউ সেটিংস)
+     ======================================================================= */
+  .rs-overlay{
+    position:fixed; inset:0; z-index:200; background:rgba(10,20,16,.42);
+    display:none; opacity:0; transition:opacity .22s ease;
+  }
+  .rs-overlay.open{ display:block; }
+  .rs-overlay.show{ opacity:1; }
+  .rs-panel{
+    position:absolute; top:0; right:0; bottom:0; width:82%; max-width:360px;
+    background:#eef2f0; box-shadow:-10px 0 30px -6px rgba(0,0,0,.35);
+    display:flex; flex-direction:column;
+    transform:translateX(100%); transition:transform .26s cubic-bezier(.2,.8,.3,1);
+    overflow-y:auto;
+  }
+  .rs-overlay.show .rs-panel{ transform:translateX(0); }
+  .rs-head{
+    display:flex; align-items:center; gap:10px; padding:14px 14px;
+    background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:2;
+  }
+  .rs-head-back{
+    width:30px; height:30px; border:none; background:transparent; color:var(--ink);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; flex:0 0 auto;
+  }
+  .rs-head-back svg{ width:20px; height:20px; }
+  .rs-head-title{
+    flex:1; text-align:center; font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-weight:700; font-size:17px; color:var(--ink);
+  }
+  .rs-head-gear{
+    width:30px; height:30px; border:none; background:transparent; color:var(--mid-green);
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+  }
+  .rs-head-gear svg{ width:19px; height:19px; }
+  .rs-body{ padding:14px; display:flex; flex-direction:column; gap:14px; }
+  .rs-card{
+    background:#fff; border-radius:14px; padding:6px 16px; box-shadow:0 2px 10px -6px rgba(14,59,49,.18);
+  }
+  .rs-card-label{
+    display:flex; align-items:center; gap:10px; padding:14px 0 10px;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:15.5px;
+    color:var(--ink);
+  }
+  .rs-card-label svg{ width:19px; height:19px; stroke:var(--mid-green); flex:0 0 auto; }
+  .rs-row{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:14px 0; border-top:1px solid var(--line);
+  }
+  .rs-row-label{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:15px; color:var(--ink);
+  }
+  .rs-toggle{
+    width:46px; height:26px; border-radius:20px; background:#d3dad5; position:relative;
+    cursor:pointer; transition:background .2s; flex:0 0 auto; border:none; padding:0;
+  }
+  .rs-toggle .rs-knob{
+    position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:50%;
+    background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.28); transition:left .2s;
+  }
+  .rs-toggle.on{ background:#1b6b52; }
+  .rs-toggle.on .rs-knob{ left:23px; }
+
+  .rs-slider-row{ padding:14px 0; border-top:1px solid var(--line); }
+  .rs-slider-row:first-child{ border-top:none; }
+  .rs-slider-top{
+    display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:15px; color:var(--ink);
+  }
+  .rs-slider-val{ color:var(--mid-green); font-weight:700; }
+  .rs-slider{
+    -webkit-appearance:none; appearance:none; width:100%; height:5px; border-radius:4px;
+    background:#dfe6e1; outline:none; cursor:pointer;
+  }
+  .rs-slider::-webkit-slider-thumb{
+    -webkit-appearance:none; appearance:none; width:18px; height:18px; border-radius:50%;
+    background:var(--mid-green); border:3px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.35); cursor:pointer;
+  }
+  .rs-slider::-moz-range-thumb{
+    width:18px; height:18px; border-radius:50%; background:var(--mid-green); border:3px solid #fff;
+    box-shadow:0 1px 4px rgba(0,0,0,.35); cursor:pointer;
+  }
+
+  .rs-dropdown-row{ padding:14px 0; border-top:1px solid var(--line); }
+  .rs-dropdown-label{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:15px; color:var(--ink);
+    margin-bottom:8px;
+  }
+  .rs-dropdown{
+    display:flex; align-items:center; justify-content:space-between; background:#f1f4f2;
+    border-radius:10px; padding:11px 14px; cursor:pointer; position:relative;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:14.5px; color:var(--ink);
+  }
+  .rs-dropdown svg{ width:16px; height:16px; stroke:var(--muted); transition:transform .18s; }
+  .rs-dropdown.open svg{ transform:rotate(180deg); }
+  .rs-dropdown-list{
+    display:none; margin-top:6px; background:#fff; border:1px solid var(--line); border-radius:10px;
+    overflow:hidden; box-shadow:0 8px 20px -10px rgba(14,59,49,.3);
+  }
+  .rs-dropdown-list.open{ display:block; }
+  .rs-dropdown-opt{
+    padding:11px 14px; font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:14px;
+    color:var(--ink); cursor:pointer; border-bottom:1px solid var(--line);
+  }
+  .rs-dropdown-opt:last-child{ border-bottom:none; }
+  .rs-dropdown-opt:hover{ background:#f4f8f4; }
+  .rs-dropdown-opt.sel{ color:var(--mid-green); font-weight:700; }
+
+  .rs-view-btns{ display:flex; gap:10px; padding:14px 0; border-top:1px solid var(--line); }
+  .rs-view-btn{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:8px;
+    border:1.5px solid var(--line); background:#f6f8f6; border-radius:10px; padding:11px 8px;
+    cursor:pointer; font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:600; font-size:14px;
+    color:var(--muted);
+  }
+  .rs-view-btn svg{ width:17px; height:17px; }
+  .rs-view-btn.active{ background:var(--mid-green); border-color:var(--mid-green); color:#fff; }
+
+  /* =======================================================================
      MOBILE READER (SURAH SCREEN) — mimics the native app's ayah-by-ayah page
      ======================================================================= */
-  .r-appbar, .r-bottomnav{ display:none; }
+  .r-appbar, .r-bottomnav, .hr-appbar{ display:none; }
 
   /* Ornate ayah-number badge, reuses the same scalloped gold ring artwork as
      the surah-list medallions but recoloured per-ayah via CSS mask */
@@ -873,6 +1080,26 @@
       color:#fff; padding:9px 10px; box-shadow:0 6px 14px -8px rgba(14,59,49,.35);
     }
     .r-appbar .m-title{ margin:0; }
+
+    /* Hadith reader mobile appbar — pinned to the very top so the current
+       book + chapter name stays visible no matter how far the hadith list
+       is scrolled (mirrors the marked header in the native app screenshot). */
+    #hadithReaderView{ padding-bottom:10px; }
+    .hr-appbar{
+      display:flex; align-items:center; gap:8px; position:sticky; top:0; z-index:60;
+      background:linear-gradient(180deg,var(--deep-teal) 0%, var(--mid-green) 100%);
+      color:#fff; padding:9px 10px; box-shadow:0 6px 14px -8px rgba(14,59,49,.35);
+    }
+    .hr-appbar-titles{ flex:1; min-width:0; text-align:center; }
+    .hr-appbar .m-title{
+      margin:0; font-size:16.5px; line-height:1.3; white-space:nowrap;
+      overflow:hidden; text-overflow:ellipsis;
+    }
+    .hr-subtitle{
+      font-size:12px; color:rgba(255,255,255,.78); margin-top:1px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    }
 
     /* Hide the desktop two-column reader chrome; the sidebar becomes a
        slide-down search/list overlay instead */
@@ -1063,6 +1290,137 @@
 
   @media (max-width:520px){
     .ar-modal, .wc-modal{ max-width:280px; }
+  }
+
+  /* =======================================================================
+     SIMPLE APP SCREENS — বিষয়ভিত্তিক হাদিস / তাহকিক / কালেকশন
+     (reached from the persistent bottom nav, mimic the native app screens)
+     ======================================================================= */
+  .sas-screen{ display:none; }
+  .sas-header{
+    background:linear-gradient(180deg,var(--deep-teal) 0%, var(--mid-green) 100%);
+    color:#fff; padding:16px 16px 42px; position:relative; text-align:center;
+  }
+  .sas-topbar{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .sas-title{
+    flex:1; font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-weight:700; font-size:19px; margin:0;
+  }
+  .sas-header-icons{ display:flex; align-items:center; gap:8px; flex:0 0 auto; }
+  .sas-icon-btn{
+    width:34px; height:34px; border-radius:10px; border:none; background:rgba(255,255,255,.14);
+    color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+  }
+  .sas-icon-btn svg{ width:18px; height:18px; }
+  .sas-header-spacer{ width:34px; flex:0 0 auto; }
+
+  .sas-body{
+    background:#f0f4f8; margin-top:-26px; border-radius:22px 22px 0 0; position:relative; z-index:2;
+    padding:16px 16px 100px; min-height:60vh;
+  }
+  .sas-search{
+    display:flex; align-items:center; gap:10px; background:#fff; border-radius:14px;
+    padding:14px 16px; box-shadow:0 10px 26px -14px rgba(14,59,49,.3); margin-bottom:16px;
+  }
+  .sas-search input{
+    flex:1; border:none; outline:none; font-size:14px; background:transparent; color:var(--ink);
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+  }
+  .sas-search input::placeholder{ color:#9aa8a0; }
+  .sas-search svg{ width:19px; height:19px; stroke:#8a9a90; flex:0 0 auto; }
+
+  .sas-search-row{ display:flex; align-items:center; gap:8px; margin-bottom:16px; }
+  .sas-search-row .sas-search{ margin-bottom:0; flex:1; }
+  .sas-filter-btn{
+    flex:0 0 auto; width:47px; height:47px; border-radius:12px; background:#fff; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .sas-filter-btn svg{ width:18px; height:18px; stroke:var(--muted); }
+
+  .sas-list{ display:flex; flex-direction:column; gap:12px; }
+  .sas-card{
+    background:#fff; border-radius:14px; padding:15px 16px; display:flex; align-items:center; gap:14px;
+    box-shadow:0 2px 10px -6px rgba(14,59,49,.15); cursor:pointer; border:none; width:100%; text-align:right;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+  }
+  .sas-card-icon{
+    flex:0 0 auto; width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+    color:var(--mid-green);
+  }
+  .sas-card-icon svg{ width:27px; height:27px; }
+  .sas-card-body{ flex:1; min-width:0; text-align:left; }
+  .sas-card-title{
+    margin:0 0 2px; font-weight:700; font-size:15.5px; color:var(--ink); line-height:1.35;
+  }
+  .sas-card-sub{ margin:0; font-size:13px; color:var(--muted); }
+  .sas-card.compact .sas-card-body{ display:flex; align-items:center; }
+  .sas-card.compact .sas-card-title{ font-weight:600; margin:0; }
+
+  .sas-hex-icon{ flex:0 0 auto; width:30px; height:30px; color:var(--mid-green); }
+  .sas-hex-icon svg{ width:30px; height:30px; }
+
+  /* কালেকশন screen specifics */
+  .sas-note-banner{
+    display:flex; align-items:center; gap:10px; background:#dcf0e6; border-radius:12px;
+    padding:12px 14px; margin-bottom:16px; color:var(--deep-teal); font-size:13.5px; line-height:1.5;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+  }
+  .sas-note-banner .info-ic{
+    flex:0 0 auto; width:20px; height:20px; border-radius:50%; background:var(--mid-green); color:#fff;
+    display:flex; align-items:center; justify-content:center; margin-top:2px;
+  }
+  .sas-note-banner .info-ic svg{ width:12px; height:12px; }
+  .sas-note-banner p{ flex:1; margin:0; }
+  .sas-note-banner .check-ic{ flex:0 0 auto; color:var(--mid-green); }
+  .sas-note-banner .check-ic svg{ width:18px; height:18px; }
+
+  .sas-tabs{
+    display:flex; background:#fff; border:1.5px solid var(--mid-green); border-radius:12px; padding:4px; margin-bottom:14px;
+  }
+  .sas-tab{
+    flex:1; border:none; background:transparent; padding:10px 6px; border-radius:9px; cursor:pointer;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:600; font-size:13.5px; color:var(--muted);
+  }
+  .sas-tab.active{ background:var(--mid-green); color:#fff; }
+
+  .sas-folder-card{
+    display:flex; align-items:center; gap:14px; background:#fff; border-radius:14px; padding:15px 16px;
+    box-shadow:0 2px 10px -6px rgba(14,59,49,.15); cursor:pointer;
+  }
+  .sas-folder-ic{ flex:0 0 auto; width:32px; height:32px; color:#d2557a; }
+  .sas-folder-ic svg{ width:32px; height:32px; }
+  .sas-folder-title{ margin:0 0 2px; font-weight:700; font-size:15.5px; color:var(--ink); font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;}
+  .sas-folder-sub{ margin:0; font-size:12.5px; color:var(--muted); }
+
+  .sas-empty{
+    text-align:center; padding:60px 16px; color:var(--muted); font-size:14px;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+  }
+  .sas-no-results{ display:none; text-align:center; padding:40px 16px; color:var(--muted); font-size:14px; }
+
+  .sas-pin-ic{ color:#d2557a; }
+  .sas-pin-ic svg{ width:30px; height:30px; }
+
+  .sas-empty-block{ text-align:center; padding:60px 20px 30px; }
+  .sas-empty-illust{ width:120px; height:120px; margin:0 auto 18px; color:var(--mid-green); }
+  .sas-empty-illust svg{ width:100%; height:100%; }
+  .sas-empty-block p{
+    margin:0; color:var(--muted); font-size:14.5px;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+  }
+
+  /* তাহকিক / বিষয়ভিত্তিক detail sub-pages (header + description card),
+     reuses the .hcl-header green header pattern for visual consistency */
+  .tqd-body, .tsc-body{
+    background:#f0f4f8; margin-top:-30px; border-radius:22px 22px 0 0; position:relative; z-index:2;
+    padding:18px 16px 60px; min-height:60vh;
+  }
+  .tqd-card{
+    background:#fff; border-radius:16px; padding:20px 18px; box-shadow:0 2px 10px -6px rgba(14,59,49,.15);
+  }
+  .tqd-card p{
+    margin:0; font-size:15.5px; line-height:2; color:var(--ink);
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
   }
 </style>
 </head>
@@ -1365,10 +1723,262 @@
   </div>
 </div>
 
+<!-- ============ বিষয়ভিত্তিক হাদিস (Topic-based Hadith) ============ -->
+<div class="sas-screen" id="hadithTopicsScreen">
+  <header class="sas-header">
+    <div class="sas-topbar">
+      <div class="sas-header-spacer"></div>
+      <h1 class="sas-title">বিষয়ভিত্তিক হাদিস</h1>
+      <div class="sas-header-spacer"></div>
+    </div>
+  </header>
+  <div class="sas-body">
+    <div class="sas-search">
+      <input type="text" id="topicsSearchInput" placeholder="বিষয় সার্চ করুন">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </div>
+    <div class="sas-list" id="topicsList"></div>
+    <div class="sas-no-results" id="topicsNoResults">কোনো বিষয় পাওয়া যায়নি।</div>
+  </div>
+  <nav class="hh-bottomnav">
+    <button class="hh-bn-item" data-hhbn="home">
+      <svg viewBox="0 0 24 24"><path d="M3 11l9 -7l9 7"/><path d="M5 10v10h5v-6h4v6h5v-10"/></svg>
+      <span>হোম</span>
+    </button>
+    <button class="hh-bn-item active" data-hhbn="books">
+      <svg viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
+      <span>কিতাব</span>
+    </button>
+    <button class="hh-bn-item" data-hhbn="notes">
+      <svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13h-14z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+      <span>নোট</span>
+    </button>
+    <button class="hh-bn-item" data-hhbn="bookmark">
+      <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6 -4l-6 4z"/></svg>
+      <span>বুকমার্ক</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ============ তাহকিক (Hadith Grading) ============ -->
+<div class="sas-screen" id="hadithTahqiqScreen">
+  <header class="sas-header">
+    <div class="sas-topbar">
+      <div class="sas-header-spacer"></div>
+      <h1 class="sas-title">তাহকিক</h1>
+      <div class="sas-header-spacer"></div>
+    </div>
+  </header>
+  <div class="sas-body">
+    <div class="sas-search">
+      <input type="text" id="tahqiqSearchInput" placeholder="তাহকিক সার্চ করুন">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </div>
+    <div class="sas-list" id="tahqiqList"></div>
+    <div class="sas-no-results" id="tahqiqNoResults">কোনো তাহকিক পাওয়া যায়নি।</div>
+  </div>
+  <nav class="hh-bottomnav">
+    <button class="hh-bn-item" data-hhbn="home">
+      <svg viewBox="0 0 24 24"><path d="M3 11l9 -7l9 7"/><path d="M5 10v10h5v-6h4v6h5v-10"/></svg>
+      <span>হোম</span>
+    </button>
+    <button class="hh-bn-item" data-hhbn="books">
+      <svg viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
+      <span>কিতাব</span>
+    </button>
+    <button class="hh-bn-item active" data-hhbn="notes">
+      <svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13h-14z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+      <span>নোট</span>
+    </button>
+    <button class="hh-bn-item" data-hhbn="bookmark">
+      <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6 -4l-6 4z"/></svg>
+      <span>বুকমার্ক</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ============ কালেকশন (Bookmarks / Pins / Notes) ============ -->
+<div class="sas-screen" id="hadithCollectionsScreen">
+  <header class="sas-header">
+    <div class="sas-topbar">
+      <div class="sas-header-spacer"></div>
+      <h1 class="sas-title">কালেকশন</h1>
+      <div class="sas-header-icons">
+        <button class="sas-icon-btn" id="colFolderBtn" title="প্রাইভেট কালেকশন">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="14" r="1.6"/><path d="M12 15.6V17"/></svg>
+        </button>
+        <button class="sas-icon-btn" id="colLoginBtn" title="লগইন করুন">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+  <div class="sas-body">
+    <div class="sas-note-banner">
+      <span class="info-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="10" x2="12" y2="16"/><circle cx="12" cy="7" r=".6" fill="currentColor" stroke="none"/></svg>
+      </span>
+      <p>আপনার কালেকশনগুলো অনলাইনে সেভ রাখতে উপরের বাটনে ক্লিক করে Gmail-এ লগইন করুন</p>
+      <span class="check-ic">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </span>
+    </div>
+
+    <div class="sas-tabs">
+      <button class="sas-tab active" data-col-tab="bookmarks">বুকমার্কস</button>
+      <button class="sas-tab" data-col-tab="pins">পিনস</button>
+      <button class="sas-tab" data-col-tab="notes">নোটস</button>
+    </div>
+
+    <div class="sas-search-row">
+      <div class="sas-search">
+        <input type="text" id="colSearchInput" placeholder="বুকমার্ক সার্চ করুন">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <button class="sas-filter-btn" id="colFilterBtn" title="সাজান">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="7" r="1.3" fill="currentColor" stroke="none"/><line x1="8" y1="7" x2="21" y2="7"/><circle cx="15" cy="17" r="1.3" fill="currentColor" stroke="none"/><line x1="3" y1="17" x2="12" y2="17"/></svg>
+      </button>
+    </div>
+
+    <div id="colBookmarksPane">
+      <div class="sas-folder-card" id="colFavouriteFolder">
+        <span class="sas-folder-ic">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 5a2 2 0 0 1 2-2h6l2 2h6a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        </span>
+        <div>
+          <p class="sas-folder-title">Favourite</p>
+          <p class="sas-folder-sub">কোন হাদিস যুক্ত করা হয়নি</p>
+        </div>
+      </div>
+    </div>
+    <div id="colPinsPane" style="display:none;">
+      <div class="sas-folder-card" id="colFavouritePin">
+        <span class="sas-folder-ic sas-pin-ic">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 3l5 5-4.5 4.5 1 4-1.5 1.5-4-4-5 5-1-1 5-5-4-4L8.5 6.5l4 1L17 3z"/></svg>
+        </span>
+        <div>
+          <p class="sas-folder-title">Favourite</p>
+          <p class="sas-folder-sub">কোন হাদিস যুক্ত করা হয়নি</p>
+        </div>
+      </div>
+    </div>
+    <div id="colNotesPane" style="display:none;">
+      <div class="sas-empty-block">
+        <div class="sas-empty-illust">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 9l2.5-4h9l2.5 4"/>
+            <path d="M4 9v7a2 2 0 0 0 2 2h9.5"/>
+            <path d="M4 9h6l1.3 2h4.2"/>
+            <circle cx="18.5" cy="16.5" r="3.4"/>
+            <path d="M17.1 15.1l2.8 2.8M19.9 15.1l-2.8 2.8"/>
+            <circle cx="4.2" cy="3.8" r=".4" fill="currentColor" stroke="none"/>
+            <circle cx="9" cy="2.2" r=".4" fill="currentColor" stroke="none"/>
+            <path d="M6.2 2.6l1 1"/>
+          </svg>
+        </div>
+        <p>কোন নোট পাওয়া যায়নি</p>
+      </div>
+    </div>
+  </div>
+  <nav class="hh-bottomnav">
+    <button class="hh-bn-item" data-hhbn="home">
+      <svg viewBox="0 0 24 24"><path d="M3 11l9 -7l9 7"/><path d="M5 10v10h5v-6h4v6h5v-10"/></svg>
+      <span>হোম</span>
+    </button>
+    <button class="hh-bn-item" data-hhbn="books">
+      <svg viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
+      <span>কিতাব</span>
+    </button>
+    <button class="hh-bn-item" data-hhbn="notes">
+      <svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13h-14z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+      <span>নোট</span>
+    </button>
+    <button class="hh-bn-item active" data-hhbn="bookmark">
+      <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6 -4l-6 4z"/></svg>
+      <span>বুকমার্ক</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ============ তাহকিক বিস্তারিত (Grading definition) ============ -->
+<div id="tahqiqDetailScreen" style="display:none;">
+  <div class="hcl-header">
+    <div class="hcl-topbar">
+      <button class="hcl-back-btn" id="tahqiqDetailBackBtn" title="তাহকিক তালিকায় ফিরুন">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="hcl-title-block">
+        <div class="hcl-book-title" id="tahqiqDetailTitle">নির্ণীত নয়</div>
+      </div>
+    </div>
+  </div>
+  <div class="tqd-body">
+    <div class="tqd-card"><p id="tahqiqDetailText"></p></div>
+  </div>
+</div>
+
+<!-- ============ বিষয়ভিত্তিক হাদিস — সাবক্যাটাগরি তালিকা ============ -->
+<div id="topicSubcatScreen" style="display:none;">
+  <div class="hcl-header">
+    <div class="hcl-topbar">
+      <button class="hcl-back-btn" id="topicSubcatBackBtn" title="বিষয় তালিকায় ফিরুন">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="hcl-title-block">
+        <div class="hcl-book-title" id="topicSubcatTitle">বিষয়</div>
+      </div>
+    </div>
+  </div>
+  <div class="tsc-body">
+    <div class="sas-list" id="topicSubcatList"></div>
+  </div>
+</div>
+
+<!-- ============ HADITH CHAPTER LIST VIEW (matches native app screenshot) ============ -->
+<div id="hadithChapterListView" style="display:none;">
+  <div class="hcl-shell">
+    <div class="hcl-header">
+      <div class="hcl-topbar">
+        <button class="hcl-back-btn" id="hclBackBtn" title="কিতাবের তালিকায় ফিরুন">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <div class="hcl-title-block">
+          <div class="hcl-book-title" id="hclBookTitle">কিতাব</div>
+          <div class="hcl-book-count" id="hclBookCount">০ টি হাদিস</div>
+        </div>
+      </div>
+    </div>
+    <div class="hcl-search-card">
+      <input id="hclSearchInput" type="text" placeholder="অধ্যায় সার্চ করুন">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </div>
+    <div class="hcl-list" id="hclList"></div>
+    <div class="no-results" id="hclNoResults" style="display:none;">কোনো অধ্যায় পাওয়া যায়নি। অন্য নাম দিয়ে চেষ্টা করুন।</div>
+  </div>
+</div>
+
 <!-- ============ HADITH READER VIEW ============ -->
 <div id="hadithReaderView" style="display:none;">
+
+
+  <!-- Mobile app-style reader header: stays pinned to the top while the hadith list
+       scrolls underneath, always showing the book name + current chapter (matches
+       the native app screenshot). -->
+  <div class="hr-appbar" id="hrAppbar">
+    <button class="m-back" id="hrBackBtn" title="কিতাবের তালিকায় ফিরুন">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <div class="hr-appbar-titles" id="hrAppbarTitles">
+      <h1 class="m-title" id="hrMobileTitle">কিতাব</h1>
+      <div class="hr-subtitle" id="hrMobileSubtitle">অধ্যায়</div>
+    </div>
+    <button class="m-icon-btn sq" id="hrSettingsBtn" title="সেটিংস">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><circle cx="15" cy="7" r="2" fill="currentColor" stroke="none"/><line x1="4" y1="14" x2="20" y2="14"/><circle cx="9" cy="14" r="2" fill="currentColor" stroke="none"/><line x1="4" y1="21" x2="20" y2="21"/><circle cx="13" cy="21" r="2" fill="currentColor" stroke="none"/></svg>
+    </button>
+  </div>
+
   <div class="reader-shell">
-    <aside class="reader-sidebar">
+    <aside class="reader-sidebar" id="hadithReaderSidebar">
       <div class="reader-search">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input id="hadithChapterSearch" type="text" placeholder="অধ্যায় খুঁজুন...">
@@ -1387,6 +1997,90 @@
         <div class="reader-loading">লোড হচ্ছে...</div>
       </div>
     </section>
+  </div>
+</div>
+
+<!-- ============ READER SETTINGS PANEL (মোবাইল অ্যাপ "সেটিংস" স্ক্রিন) ============ -->
+<div class="rs-overlay" id="rsOverlay">
+  <div class="rs-panel" id="rsPanel">
+    <div class="rs-head">
+      <button class="rs-head-back" id="rsBackBtn" title="পিছনে যান">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <div class="rs-head-title">সেটিংস</div>
+      <div class="rs-head-gear">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
+    </div>
+
+    <div class="rs-body">
+      <!-- কন্টেন্ট সেটিংস -->
+      <div class="rs-card">
+        <div class="rs-card-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          কন্টেন্ট সেটিংস
+        </div>
+        <div class="rs-row">
+          <div class="rs-row-label">আরবি দেখান</div>
+          <button class="rs-toggle on" data-rs-toggle="showArabic"><span class="rs-knob"></span></button>
+        </div>
+        <div class="rs-row">
+          <div class="rs-row-label">যবর-যের</div>
+          <button class="rs-toggle on" data-rs-toggle="diacritics"><span class="rs-knob"></span></button>
+        </div>
+      </div>
+
+      <!-- ফন্ট সেটিংস -->
+      <div class="rs-card">
+        <div class="rs-card-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+          ফন্ট সেটিংস
+        </div>
+        <div class="rs-slider-row">
+          <div class="rs-slider-top"><span>আরবি ফন্টের আকার</span><span class="rs-slider-val" id="rsArabicSizeVal">২২</span></div>
+          <input type="range" class="rs-slider" id="rsArabicSize" min="14" max="36" value="22">
+        </div>
+        <div class="rs-slider-row">
+          <div class="rs-slider-top"><span>অনুবাদ ফন্টের আকার</span><span class="rs-slider-val" id="rsTransSizeVal">১৭</span></div>
+          <input type="range" class="rs-slider" id="rsTransSize" min="12" max="28" value="17">
+        </div>
+        <div class="rs-dropdown-row">
+          <div class="rs-dropdown-label">আরবি ফন্ট</div>
+          <div class="rs-dropdown" id="rsFontDropdown">
+            <span id="rsFontDropdownLabel">KFGQ</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="rs-dropdown-list" id="rsFontDropdownList">
+            <div class="rs-dropdown-opt sel">KFGQ</div>
+            <div class="rs-dropdown-opt">Amiri</div>
+            <div class="rs-dropdown-opt">Amiri Quran</div>
+            <div class="rs-dropdown-opt">Uthmanic</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ভিউ সেটিংস -->
+      <div class="rs-card">
+        <div class="rs-card-label">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          ভিউ সেটিংস
+        </div>
+        <div class="rs-row">
+          <div class="rs-row-label">নাইট মোড</div>
+          <button class="rs-toggle" id="rsNightMode"><span class="rs-knob"></span></button>
+        </div>
+        <div class="rs-view-btns">
+          <button class="rs-view-btn active" data-rs-view="list">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            লিস্ট ভিউ
+          </button>
+          <button class="rs-view-btn" data-rs-view="slide">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="18" rx="1"/></svg>
+            স্লাইড ভিউ
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2575,6 +3269,432 @@ const HADITH_BOOKS = [
 ];
 const HADITH_BADGE_COLORS = ['#3fae5a','#2f7cc9','#1fa6a0','#c9772e','#8b5fbf','#d1495b','#4a6fd1','#a07a2e'];
 
+/* Base collection name for each edition (e.g. 'ben-bukhari' -> 'bukhari'), used to
+   look up the Bengali chapter names below and the matching Arabic ('ara-<book>') edition. */
+function hadithBaseBook(entry){
+  const parts = entry.edition.split('-');
+  return parts.slice(1).join('-');
+}
+
+/* Bengali (অধ্যায়) names for every chapter of each collection, since the upstream
+   hadith-api only ships English section titles even inside its Bengali editions.
+   Keyed by base collection name -> { chapterNumber: বাংলা নাম }. */
+const HADITH_CHAPTER_BN = {
+  "bukhari": {
+    "1": "ওহী",
+    "2": "ঈমান",
+    "3": "ইলম",
+    "4": "ওযু",
+    "5": "গোসল",
+    "6": "হায়েজ",
+    "7": "তায়াম্মুম",
+    "8": "সালাত",
+    "9": "সালাতের ওয়াক্ত",
+    "10": "আযান",
+    "11": "জুমু'আ",
+    "12": "সালাতুল খাওফ",
+    "13": "দুই ঈদ",
+    "14": "বিতর",
+    "15": "ইসতিসকা (বৃষ্টি প্রার্থনা)",
+    "16": "সূর্য/চন্দ্রগ্রহণ (কুসুফ)",
+    "17": "তিলাওয়াতের সিজদা",
+    "18": "সালাত কসর করা",
+    "19": "তাহাজ্জুদ",
+    "20": "মক্কা-মদীনার মসজিদে সালাতের ফযীলত",
+    "21": "সালাতে বিভিন্ন আচরণ",
+    "22": "সালাতে ভুলে যাওয়া (সাহু সিজদা)",
+    "23": "জানাযা",
+    "24": "যাকাত",
+    "25": "হজ্জ",
+    "26": "উমরা",
+    "27": "হজ্জ থেকে বাধাপ্রাপ্ত হওয়া",
+    "28": "ইহরাম অবস্থায় শিকারের কাফফারা",
+    "29": "মদীনার ফযীলত",
+    "30": "সিয়াম (রোযা)",
+    "31": "তারাবীহ",
+    "32": "লাইলাতুল কদরের ফযীলত",
+    "33": "ই'তিকাফ",
+    "34": "ক্রয়-বিক্রয়",
+    "35": "সালাম (অগ্রিম মূল্যে পণ্য ক্রয়)",
+    "36": "শুফআ",
+    "37": "ভাড়া (ইজারা)",
+    "38": "হাওয়ালা (ঋণ স্থানান্তর)",
+    "39": "কাফালাত (জামানত)",
+    "40": "প্রতিনিধিত্ব (ওকালত)",
+    "41": "কৃষিকাজ",
+    "42": "পানি বণ্টন",
+    "43": "ঋণ ও দেউলিয়াত্ব",
+    "44": "ঝগড়া-বিবাদ (মামলা মোকদ্দমা)",
+    "45": "কুড়িয়ে পাওয়া বস্তু (লুকতা)",
+    "46": "যুলুম",
+    "47": "শরীকী কারবার",
+    "48": "বন্ধক",
+    "49": "দাস মুক্তি",
+    "50": "মুকাতাবাত (দাস মুক্তির চুক্তি)",
+    "51": "হেবা (উপহার)",
+    "52": "সাক্ষ্য",
+    "53": "সন্ধি",
+    "54": "শর্তাবলী",
+    "55": "ওসিয়ত",
+    "56": "জিহাদ",
+    "57": "খুমুস (গনীমতের এক-পঞ্চমাংশ)",
+    "58": "জিযিয়া ও সন্ধি",
+    "59": "সৃষ্টির সূচনা",
+    "60": "আম্বিয়া (নবীগণ)",
+    "61": "নবী ও সাহাবীদের ফযীলত",
+    "62": "সাহাবীদের মর্যাদা",
+    "63": "আনসারদের মর্যাদা",
+    "64": "মাগাযী (যুদ্ধাভিযান)",
+    "65": "কুরআনের তাফসীর",
+    "66": "কুরআনের ফযীলত",
+    "67": "বিবাহ",
+    "68": "তালাক",
+    "69": "ভরণপোষণ",
+    "70": "খাদ্য",
+    "71": "আকীকা",
+    "72": "শিকার ও যবেহ",
+    "73": "কুরবানী",
+    "74": "পানীয়",
+    "75": "রোগী",
+    "76": "চিকিৎসা",
+    "77": "পোশাক",
+    "78": "চাল-চলন (আদব)",
+    "79": "অনুমতি প্রার্থনা",
+    "80": "দু'আ",
+    "81": "হৃদয় বিগলিত হওয়া (রিকাক)",
+    "82": "তাকদীর",
+    "83": "কসম ও মানত",
+    "84": "কসমের কাফফারা",
+    "85": "ফারায়েয (উত্তরাধিকার)",
+    "86": "হদ্দসমূহ",
+    "87": "দিয়াত (রক্তপণ)",
+    "88": "মুরতাদ",
+    "89": "জবরদস্তি (ইকরাহ)",
+    "90": "কূটকৌশল (হিলা)",
+    "91": "স্বপ্নের ব্যাখ্যা",
+    "92": "ফিতনা ও কিয়ামতের আলামত",
+    "93": "বিচার-ফায়সালা",
+    "94": "আকাঙ্ক্ষা (তামান্না)",
+    "95": "বিশ্বস্ত ব্যক্তির সংবাদ গ্রহণ",
+    "96": "কুরআন-সুন্নাহ দৃঢ়ভাবে আঁকড়ে ধরা",
+    "97": "তাওহীদ (আল্লাহর একত্ব)"
+  },
+  "muslim": {
+    "1": "ঈমান",
+    "2": "পবিত্রতা (তাহারাত)",
+    "3": "হায়েজ",
+    "4": "সালাত",
+    "5": "মসজিদ ও সালাতের স্থানসমূহ",
+    "6": "মুসাফিরের সালাত",
+    "7": "জুমু'আর সালাত",
+    "8": "দুই ঈদের সালাত",
+    "9": "ইসতিসকার সালাত",
+    "10": "কুসুফ (গ্রহণ)-এর সালাত",
+    "11": "জানাযা",
+    "12": "যাকাত",
+    "13": "সিয়াম",
+    "14": "ই'তিকাফ",
+    "15": "হজ্জ",
+    "16": "বিবাহ",
+    "17": "দুধপান (রেযাআত)",
+    "18": "তালাক",
+    "19": "লি'আন",
+    "20": "দাস মুক্তি",
+    "21": "ক্রয়-বিক্রয়",
+    "22": "মুসাকাত (বাগান পরিচর্যার চুক্তি)",
+    "23": "ফারায়েয",
+    "24": "হেবা",
+    "25": "ওসিয়ত",
+    "26": "মানত",
+    "27": "কসম",
+    "28": "কসম, ডাকাত, কিসাস ও দিয়াত",
+    "29": "হদ্দসমূহ",
+    "30": "বিচার-ফায়সালা",
+    "31": "হারানো বস্তু",
+    "32": "জিহাদ ও যুদ্ধাভিযান",
+    "33": "শাসনকার্য (ইমারত)",
+    "34": "শিকার, যবেহ ও খাদ্য",
+    "35": "কুরবানী",
+    "36": "পানীয়",
+    "37": "পোশাক ও সাজসজ্জা",
+    "38": "আদব-কায়দা",
+    "39": "সালাম",
+    "40": "সঠিক শব্দ ব্যবহার",
+    "41": "কবিতা",
+    "42": "স্বপ্ন",
+    "43": "ফযীলত",
+    "44": "সাহাবীদের মর্যাদা",
+    "45": "সদাচরণ ও আত্মীয়তার সম্পর্ক",
+    "46": "তাকদীর",
+    "47": "ইলম",
+    "48": "যিকর, দু'আ, তওবা ও ইস্তিগফার",
+    "49": "হৃদয়বিগলিতকারী বর্ণনা",
+    "50": "তওবা",
+    "51": "মুনাফিকদের বৈশিষ্ট্য",
+    "52": "কিয়ামত, জান্নাত ও জাহান্নামের বিবরণ",
+    "53": "জান্নাতের বর্ণনা",
+    "54": "ফিতনা ও কিয়ামতের আলামত",
+    "55": "যুহদ (বৈরাগ্য)",
+    "56": "কুরআনের তাফসীর"
+  },
+  "tirmidhi": {
+    "1": "পবিত্রতা",
+    "2": "সালাত",
+    "3": "বিতর",
+    "4": "জুমু'আ",
+    "5": "দুই ঈদ",
+    "6": "সফর",
+    "7": "যাকাত",
+    "8": "সিয়াম",
+    "9": "হজ্জ",
+    "10": "জানাযা",
+    "11": "বিবাহ",
+    "12": "দুধপান",
+    "13": "তালাক ও লি'আন",
+    "14": "ব্যবসা-বাণিজ্য",
+    "15": "বিচার-ফায়সালা",
+    "16": "দিয়াত",
+    "17": "হদ্দসমূহ",
+    "18": "শিকার",
+    "19": "কুরবানী",
+    "20": "মানত ও কসম",
+    "21": "যুদ্ধাভিযান",
+    "22": "জিহাদের ফযীলত",
+    "23": "জিহাদ",
+    "24": "পোশাক",
+    "25": "খাদ্য",
+    "26": "পানীয়",
+    "27": "সদাচরণ ও আত্মীয়তা",
+    "28": "চিকিৎসা",
+    "29": "ফারায়েয",
+    "30": "ওসিয়ত",
+    "31": "ওয়ালা ও হেবা",
+    "32": "তাকদীর",
+    "33": "ফিতনা",
+    "34": "স্বপ্ন",
+    "35": "সাক্ষ্য",
+    "36": "যুহদ",
+    "37": "কিয়ামত, রিকাক ও ওয়ারা",
+    "38": "জান্নাতের বর্ণনা",
+    "39": "জাহান্নামের বর্ণনা",
+    "40": "ঈমান",
+    "41": "ইলম",
+    "42": "অনুমতি প্রার্থনা",
+    "43": "আদব",
+    "44": "দৃষ্টান্ত",
+    "45": "কুরআনের ফযীলত",
+    "46": "কিরাআত",
+    "47": "তাফসীর",
+    "48": "দু'আ",
+    "49": "ফযীলত"
+  },
+  "abudawud": {
+    "1": "পবিত্রতা",
+    "2": "সালাত",
+    "3": "ইসতিসকা (বৃষ্টি প্রার্থনা)",
+    "4": "সফরের সালাত",
+    "5": "নফল সালাত",
+    "6": "রমাযান সংক্রান্ত বিধান",
+    "7": "তিলাওয়াতের সিজদা",
+    "8": "বিতর সংক্রান্ত বিধান",
+    "9": "যাকাত",
+    "10": "হারানো বস্তু",
+    "11": "হজ্জের বিধিবিধান",
+    "12": "বিবাহ",
+    "13": "তালাক",
+    "14": "সিয়াম",
+    "15": "জিহাদ",
+    "16": "কুরবানী",
+    "17": "শিকার",
+    "18": "ওসিয়ত",
+    "19": "ফারায়েয",
+    "20": "কর, গণিমত ও শাসনকার্য",
+    "21": "জানাযা",
+    "22": "কসম ও মানত",
+    "23": "ক্রয়-বিক্রয়",
+    "24": "মজুরি (ইজারা)",
+    "25": "বিচারকার্য",
+    "26": "ইলম",
+    "27": "পানীয়",
+    "28": "খাদ্য",
+    "29": "চিকিৎসা",
+    "30": "গণনা ও কুলক্ষণ",
+    "31": "দাস মুক্তি",
+    "32": "কুরআনের কিরাআত",
+    "33": "গোসলখানা (হাম্মাম)",
+    "34": "পোশাক",
+    "35": "চুল আঁচড়ানো",
+    "36": "আংটি",
+    "37": "ফিতনা ও যুদ্ধবিগ্রহ",
+    "38": "মাহদী",
+    "39": "যুদ্ধ (মালাহিম)",
+    "40": "হদ্দসমূহ",
+    "41": "দিয়াত",
+    "42": "সুন্নাত",
+    "43": "আদব-কায়দা"
+  },
+  "nasai": {
+    "1": "পবিত্রতা",
+    "2": "পানি",
+    "3": "হায়েজ ও ইস্তিহাযা",
+    "4": "গোসল ও তায়াম্মুম",
+    "5": "সালাত",
+    "6": "সালাতের ওয়াক্ত",
+    "7": "আযান",
+    "8": "মসজিদসমূহ",
+    "9": "কিবলা",
+    "10": "ইমামতি",
+    "11": "সালাত শুরু করা",
+    "12": "তাতবীক (হাত মেলানো)",
+    "13": "সাহু সিজদা",
+    "14": "জুমু'আ",
+    "15": "সফরে সালাত কসর করা",
+    "16": "কুসুফ",
+    "17": "ইসতিসকা",
+    "18": "সালাতুল খাওফ",
+    "19": "দুই ঈদের সালাত",
+    "20": "কিয়ামুল লাইল ও নফল সালাত",
+    "21": "জানাযা",
+    "22": "সিয়াম",
+    "23": "যাকাত",
+    "24": "হজ্জ",
+    "25": "জিহাদ",
+    "26": "বিবাহ",
+    "27": "তালাক",
+    "28": "ঘোড়দৌড় ও তীরন্দাজি",
+    "29": "ওয়াকফ",
+    "30": "ওসিয়ত",
+    "31": "উপঢৌকন",
+    "32": "হেবা",
+    "33": "রুকবা",
+    "34": "উমরা (দান)",
+    "35": "কৃষিকাজ",
+    "36": "নারীদের প্রতি সদ্ব্যবহার",
+    "37": "রক্তপাত নিষিদ্ধকরণ",
+    "38": "ফাই বণ্টন",
+    "39": "বাইয়াত (আনুগত্যের শপথ)",
+    "40": "আকীকা",
+    "41": "ফারা ও আতীরা",
+    "42": "শিকার ও যবেহ",
+    "43": "কুরবানী",
+    "44": "আর্থিক লেনদেন",
+    "45": "কসামত, কিসাস ও দিয়াত",
+    "46": "চোরের হাত কাটা",
+    "47": "ঈমান ও তার আলামত",
+    "48": "সাজসজ্জা",
+    "49": "বিচারকদের শিষ্টাচার",
+    "50": "আল্লাহর কাছে আশ্রয় প্রার্থনা",
+    "51": "পানীয়"
+  },
+  "ibnmajah": {
+    "1": "পবিত্রতা ও তার সুন্নাত",
+    "2": "সালাত",
+    "3": "আযান",
+    "4": "মসজিদ ও জামাআত",
+    "5": "সালাত কায়েম করা",
+    "6": "জানাযা",
+    "7": "সিয়াম",
+    "8": "যাকাত",
+    "9": "বিবাহ",
+    "10": "তালাক",
+    "11": "কাফফারা",
+    "12": "ক্রয়-বিক্রয়",
+    "13": "বিচার-ফায়সালা",
+    "14": "হেবা",
+    "15": "সদকা",
+    "16": "বন্ধক",
+    "17": "শুফআ",
+    "18": "হারানো বস্তু",
+    "19": "দাস মুক্তি",
+    "20": "হদ্দসমূহ",
+    "21": "দিয়াত",
+    "22": "ওসিয়ত",
+    "23": "ফারায়েয",
+    "24": "জিহাদ",
+    "25": "হজ্জের বিধিবিধান",
+    "26": "কুরবানী",
+    "27": "যবেহ",
+    "28": "শিকার",
+    "29": "খাদ্য",
+    "30": "পানীয়",
+    "31": "চিকিৎসা",
+    "32": "পোশাক",
+    "33": "শিষ্টাচার (আদব)",
+    "34": "দু'আ",
+    "35": "স্বপ্নের ব্যাখ্যা",
+    "36": "ফিতনা",
+    "37": "যুহদ"
+  },
+  "malik": {
+    "1": "সালাতের ওয়াক্ত",
+    "2": "পবিত্রতা",
+    "3": "সালাত",
+    "4": "সালাতে ভুলে যাওয়া",
+    "5": "জুমু'আ",
+    "6": "রমাযানের সালাত",
+    "7": "তাহাজ্জুদ",
+    "8": "জামাআতে সালাত",
+    "9": "সালাত কসর করা",
+    "10": "দুই ঈদ",
+    "11": "সালাতুল খাওফ",
+    "12": "কুসুফের সালাত",
+    "13": "ইসতিসকা",
+    "14": "কিবলা",
+    "15": "কুরআন",
+    "16": "দাফন-কাফন",
+    "17": "যাকাত",
+    "18": "সিয়াম",
+    "19": "রমাযানের ই'তিকাফ",
+    "20": "হজ্জ",
+    "21": "জিহাদ",
+    "22": "মানত ও কসম",
+    "23": "কুরবানীর পশু",
+    "24": "পশু যবেহ",
+    "25": "শিকার",
+    "26": "আকীকা",
+    "27": "ফারায়েয",
+    "28": "বিবাহ",
+    "29": "তালাক",
+    "30": "দুধপান",
+    "31": "ক্রয়-বিক্রয়",
+    "32": "কিরায (মুদারাবা)",
+    "33": "বর্গাচাষ",
+    "34": "জমি ভাড়া",
+    "35": "সম্পত্তিতে শুফআ",
+    "36": "বিচার-ফায়সালা",
+    "37": "ওসিয়ত",
+    "38": "দাস মুক্তি ও ওয়ালা",
+    "39": "মুকাতাব",
+    "40": "মুদাব্বার",
+    "41": "হদ্দসমূহ",
+    "42": "পানীয়",
+    "43": "দিয়াত",
+    "44": "কসামত",
+    "45": "মদীনা",
+    "46": "তাকদীর",
+    "47": "উত্তম চরিত্র",
+    "48": "পোশাক",
+    "49": "নবীজির বর্ণনা",
+    "50": "বদনজর",
+    "51": "চুল",
+    "52": "স্বপ্ন",
+    "53": "সালাম",
+    "54": "বিবিধ বিষয়",
+    "55": "বাইয়াত",
+    "56": "বাক্য/কথাবার্তা",
+    "57": "জাহান্নাম",
+    "58": "সদকা",
+    "59": "ইলম",
+    "60": "মজলুমের দু'আ",
+    "61": "নবীজির নামসমূহ"
+  },
+  "nawawi": {
+    "1": "ইমাম নববীর চল্লিশ হাদীস"
+  }
+};
+
+
+
 const hadithBookDataCache = {}; // edition -> { metadata, hadithsByChapter: Map(chapterNum -> [hadith,...]) }
 let currentHadithBook = null;   // currently open HADITH_BOOKS entry
 let currentHadithChapter = null;
@@ -2588,13 +3708,50 @@ const hadithChapterListWrap = document.getElementById('hadithChapterListWrap');
 const hadithChapterSearch = document.getElementById('hadithChapterSearch');
 const hadithReaderBody = document.getElementById('hadithReaderBody');
 const hadithBookTitleBar = document.getElementById('hadithBookTitleBar');
+const hadithReaderSidebar = document.getElementById('hadithReaderSidebar');
+const hrAppbar = document.getElementById('hrAppbar');
+const hrMobileTitle = document.getElementById('hrMobileTitle');
+const hrMobileSubtitle = document.getElementById('hrMobileSubtitle');
+const hrBackBtn = document.getElementById('hrBackBtn');
+const hrSettingsBtn = document.getElementById('hrSettingsBtn');
+const hrAppbarTitles = document.getElementById('hrAppbarTitles');
+
+const hadithChapterListView = document.getElementById('hadithChapterListView');
+const hclBackBtn = document.getElementById('hclBackBtn');
+const hclBookTitle = document.getElementById('hclBookTitle');
+const hclBookCount = document.getElementById('hclBookCount');
+const hclSearchInput = document.getElementById('hclSearchInput');
+const hclList = document.getElementById('hclList');
+const hclNoResults = document.getElementById('hclNoResults');
+
+if(hrAppbarTitles){
+  hrAppbarTitles.addEventListener('click', ()=>{
+    hadithReaderSidebar.classList.toggle('mobile-open');
+    if(hadithReaderSidebar.classList.contains('mobile-open')) hadithChapterSearch.focus();
+  });
+}
+if(hrSettingsBtn){
+  hrSettingsBtn.addEventListener('click', openReaderSettings);
+}
+
+const hadithTopicsScreen = document.getElementById('hadithTopicsScreen');
+const hadithTahqiqScreen = document.getElementById('hadithTahqiqScreen');
+const hadithCollectionsScreen = document.getElementById('hadithCollectionsScreen');
+const tahqiqDetailScreen = document.getElementById('tahqiqDetailScreen');
+const topicSubcatScreen = document.getElementById('topicSubcatScreen');
 
 function hideHadithViews(){
   hadithView.style.display = 'none';
+  hadithChapterListView.style.display = 'none';
   hadithReaderView.style.display = 'none';
+  hadithTopicsScreen.style.display = 'none';
+  hadithTahqiqScreen.style.display = 'none';
+  hadithCollectionsScreen.style.display = 'none';
+  tahqiqDetailScreen.style.display = 'none';
+  topicSubcatScreen.style.display = 'none';
 }
 
-function showHadithListing(){
+function hideAllAppScreens(){
   heroSection.style.display = 'none';
   viewTabsEl.style.display = 'none';
   listingMain.style.display = 'none';
@@ -2602,12 +3759,279 @@ function showHadithListing(){
   mAppbar.style.display = 'none';
   mPanel.style.display = 'none';
   readerView.style.display = 'none';
+  hadithChapterListView.style.display = 'none';
   hadithReaderView.style.display = 'none';
+  hadithView.style.display = 'none';
+  hadithTopicsScreen.style.display = 'none';
+  hadithTahqiqScreen.style.display = 'none';
+  hadithCollectionsScreen.style.display = 'none';
+  tahqiqDetailScreen.style.display = 'none';
+  topicSubcatScreen.style.display = 'none';
+}
+
+function setActiveNav(which){
+  document.querySelectorAll('.hh-bn-item').forEach(i=>{
+    i.classList.toggle('active', i.dataset.hhbn === which);
+  });
+}
+
+function showHadithListing(){
+  hideAllAppScreens();
   hadithView.style.display = 'block';
   window.scrollTo(0,0);
   buildHadithGrid();
+  setActiveNav('home');
 }
 document.getElementById('navHadithLink').addEventListener('click', showHadithListing);
+
+/* ---- বিষয়ভিত্তিক হাদিস (Topic-based Hadith) ---- */
+const TOPIC_CATEGORIES = [
+  { title:'ইসলামী অর্থনীতি', count:59 },
+  { title:'ইসলামী আকিদা', count:27 },
+  { title:'ইসলামী উত্তরাধিকার', count:14 },
+  { title:'ইসলামী দাওয়াহ', count:3 },
+  { title:'ইসলামী নৈতিকতা', count:92 },
+  { title:'ইসলামী যুদ্ধনীতি', count:32 },
+  { title:'ইসলামের ইতিহাস', count:48 },
+  { title:'ইসলামী রাজনীতি', count:21 },
+  { title:'ইসলামী শিক্ষা', count:16 },
+  { title:'ইসলামী আইন ও বিচার', count:37 },
+  { title:'ইবাদত', count:64 },
+  { title:'পারিবারিক জীবন', count:29 }
+];
+const topicsList = document.getElementById('topicsList');
+const topicsNoResults = document.getElementById('topicsNoResults');
+const topicsSearchInput = document.getElementById('topicsSearchInput');
+const TOPIC_BOOK_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`;
+
+function buildTopicsList(){
+  const q = (topicsSearchInput.value||'').trim().toLowerCase();
+  topicsList.innerHTML = '';
+  let shown = 0;
+  TOPIC_CATEGORIES.forEach(t=>{
+    if(q && !t.title.toLowerCase().includes(q)) return;
+    shown++;
+    const card = document.createElement('button');
+    card.className = 'sas-card';
+    card.innerHTML = `
+      <span class="sas-card-icon">${TOPIC_BOOK_ICON}</span>
+      <span class="sas-card-body">
+        <p class="sas-card-title">${t.title}</p>
+        <p class="sas-card-sub">${toBnDigits(t.count)} টি সাবক্যাটাগরি</p>
+      </span>`;
+    card.addEventListener('click', ()=> showTopicSubcatList(t.title));
+    topicsList.appendChild(card);
+  });
+  topicsNoResults.style.display = shown===0 ? 'block' : 'none';
+}
+if(topicsSearchInput) topicsSearchInput.addEventListener('input', buildTopicsList);
+
+function showHadithTopics(){
+  hideAllAppScreens();
+  hadithTopicsScreen.style.display = 'block';
+  window.scrollTo(0,0);
+  buildTopicsList();
+  setActiveNav('books');
+}
+
+/* ---- বিষয়ভিত্তিক হাদিস: প্রতিটি বিষয়ের সাবক্যাটাগরি তালিকা ---- */
+const TOPIC_SUBCATEGORIES = {
+  'ইসলামী অর্থনীতি': [
+    { title:'আমানত ও গচ্ছিত সম্পদ', count:2 },
+    { title:'ইসলামী অগ্রক্রয়াধিকার আইন', count:3 },
+    { title:'ইসলামী বাণিজ্যের নিয়ম', count:4 },
+    { title:'ইসলামী ব্যবসা ও বাণিজ্য', count:5 },
+    { title:'ইসলামী ব্যবসার নিয়ম', count:73 },
+    { title:'ইসলামে অবৈধ উপার্জন', count:23 },
+    { title:'ইসলামে আজীবন দান', count:23 },
+    { title:'ইসলামে ঋণ', count:29 }
+  ],
+  'ইসলামী আকিদা': [
+    { title:'তাওহীদের মূলনীতি', count:18 },
+    { title:'ঈমানের রুকনসমূহ', count:22 },
+    { title:'আখিরাত ও পরকাল বিশ্বাস', count:15 },
+    { title:'শিরক ও তার প্রকারভেদ', count:11 },
+    { title:'তাকদীরে বিশ্বাস', count:9 }
+  ],
+  'ইসলামী উত্তরাধিকার': [
+    { title:'ওয়ারিসের হকসমূহ', count:6 },
+    { title:'ওসিয়তের বিধান', count:4 },
+    { title:'সম্পদ বণ্টনের নিয়ম', count:4 }
+  ],
+  'ইসলামী দাওয়াহ': [
+    { title:'দাওয়াতের পদ্ধতি', count:2 },
+    { title:'দাঈর গুণাবলি', count:1 }
+  ],
+  'ইসলামী নৈতিকতা': [
+    { title:'সততা ও আমানতদারিতা', count:14 },
+    { title:'ক্ষমা ও সহনশীলতা', count:12 },
+    { title:'প্রতিবেশীর হক', count:9 },
+    { title:'সদাচরণ ও শিষ্টাচার', count:20 },
+    { title:'মিথ্যা ও গীবত পরিহার', count:16 }
+  ],
+  'ইসলামী যুদ্ধনীতি': [
+    { title:'জিহাদের বিধান', count:13 },
+    { title:'যুদ্ধবন্দীর অধিকার', count:7 },
+    { title:'যুদ্ধের নৈতিকতা', count:6 }
+  ],
+  'ইসলামের ইতিহাস': [
+    { title:'নবুওয়াতের সূচনা', count:10 },
+    { title:'মক্কী জীবন', count:12 },
+    { title:'মাদানী জীবন', count:14 },
+    { title:'খুলাফায়ে রাশেদীন', count:8 }
+  ],
+  'ইসলামী রাজনীতি': [
+    { title:'শাসকের দায়িত্ব', count:9 },
+    { title:'শূরা ও পরামর্শ', count:5 },
+    { title:'ন্যায়বিচার', count:7 }
+  ],
+  'ইসলামী শিক্ষা': [
+    { title:'ইলম অর্জনের ফজিলত', count:11 },
+    { title:'শিক্ষক-ছাত্রের সম্পর্ক', count:5 }
+  ],
+  'ইসলামী আইন ও বিচার': [
+    { title:'বিচারকের যোগ্যতা', count:8 },
+    { title:'সাক্ষ্যদানের বিধান', count:10 },
+    { title:'হদ্দের বিধান', count:9 },
+    { title:'দিয়াত ও কিসাস', count:10 }
+  ],
+  'ইবাদত': [
+    { title:'সালাতের গুরুত্ব', count:22 },
+    { title:'সিয়ামের ফজিলত', count:16 },
+    { title:'যাকাতের বিধান', count:14 },
+    { title:'হজ্জের নিয়মাবলি', count:12 }
+  ],
+  'পারিবারিক জীবন': [
+    { title:'স্বামী-স্ত্রীর হক', count:11 },
+    { title:'সন্তান লালন-পালন', count:9 },
+    { title:'পিতা-মাতার হক', count:9 }
+  ]
+};
+
+const topicSubcatList = document.getElementById('topicSubcatList');
+const topicSubcatTitle = document.getElementById('topicSubcatTitle');
+const topicSubcatBackBtn = document.getElementById('topicSubcatBackBtn');
+let currentTopicCategory = null;
+
+function showTopicSubcatList(categoryTitle){
+  hideAllAppScreens();
+  currentTopicCategory = categoryTitle;
+  topicSubcatTitle.textContent = categoryTitle;
+  const subs = TOPIC_SUBCATEGORIES[categoryTitle] || [];
+  topicSubcatList.innerHTML = '';
+  subs.forEach(s=>{
+    const card = document.createElement('button');
+    card.className = 'sas-card';
+    card.innerHTML = `
+      <span class="sas-card-icon">${TOPIC_BOOK_ICON}</span>
+      <span class="sas-card-body">
+        <p class="sas-card-title">${s.title}</p>
+        <p class="sas-card-sub">${toBnDigits(s.count)} টি হাদিস</p>
+      </span>`;
+    card.addEventListener('click', ()=> openTopicHadithDetail(categoryTitle, s.title));
+    topicSubcatList.appendChild(card);
+  });
+  topicSubcatScreen.style.display = 'block';
+  window.scrollTo(0,0);
+}
+topicSubcatBackBtn.addEventListener('click', showHadithTopics);
+
+/* ---- তাহকিক (Hadith Grading) ---- */
+const TAHQIQ_GRADES = [
+  'নির্ণীত নয়', 'সহিহ', 'হাসান', 'দুর্বল', 'জাল', 'অন্যান্য',
+  'সহিহ লিগাইরিহি', 'সহিহ মাকতু', 'হাসান লিগাইরিহি', 'মুনকার'
+];
+const tahqiqList = document.getElementById('tahqiqList');
+const tahqiqNoResults = document.getElementById('tahqiqNoResults');
+const tahqiqSearchInput = document.getElementById('tahqiqSearchInput');
+const TAHQIQ_HEX_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 2 L21 7 L21 17 L12 22 L3 17 L3 7 Z"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></svg>`;
+
+function buildTahqiqList(){
+  const q = (tahqiqSearchInput.value||'').trim().toLowerCase();
+  tahqiqList.innerHTML = '';
+  let shown = 0;
+  TAHQIQ_GRADES.forEach(g=>{
+    if(q && !g.toLowerCase().includes(q)) return;
+    shown++;
+    const card = document.createElement('button');
+    card.className = 'sas-card compact';
+    card.innerHTML = `
+      <span class="sas-hex-icon">${TAHQIQ_HEX_ICON}</span>
+      <span class="sas-card-body"><p class="sas-card-title">${g}</p></span>`;
+    card.addEventListener('click', ()=> showTahqiqDetail(g));
+    tahqiqList.appendChild(card);
+  });
+  tahqiqNoResults.style.display = shown===0 ? 'block' : 'none';
+}
+if(tahqiqSearchInput) tahqiqSearchInput.addEventListener('input', buildTahqiqList);
+
+function showHadithTahqiq(){
+  hideAllAppScreens();
+  hadithTahqiqScreen.style.display = 'block';
+  window.scrollTo(0,0);
+  buildTahqiqList();
+  setActiveNav('notes');
+}
+
+/* ---- তাহকিক-এর সংজ্ঞা (বিস্তারিত পাতা) ---- */
+const TAHQIQ_DEFS = {
+  'নির্ণীত নয়': 'আমাদের অ্যাপে, যেসব হাদিসের মান পাওয়া যায়নি সেসব হাদিসের মান দেয়া হয়েছে "নির্ণীত নয়"। এসব হাদিসের মান জানতে একজন আলেমের সাথে পরামর্শ করে নিন।',
+  'সহিহ': 'যে হাদিসের সনদ ন্যায়পরায়ণ ও পূর্ণ স্মরণশক্তিসম্পন্ন রাবীদের দ্বারা অবিচ্ছিন্নভাবে বর্ণিত এবং যাতে কোনো শায বা ইল্লত (গোপন ত্রুটি) নেই, তাকে সহিহ হাদিস বলা হয়। এটি হাদিসের মানের দিক থেকে সর্বোচ্চ স্তর।',
+  'হাসান': 'যে হাদিসের সনদ অবিচ্ছিন্ন এবং রাবীগণ ন্যায়পরায়ণ হলেও তাদের কারো স্মরণশক্তি সহিহ পর্যায়ের তুলনায় কিছুটা কম, আর হাদিসটিতে কোনো শায বা ইল্লত নেই—তাকে হাসান হাদিস বলা হয়। এটি সহিহ হাদিসের পরের স্তর, যা আমলযোগ্য।',
+  'দুর্বল': 'যে হাদিস সহিহ বা হাসান হাদিসের শর্তসমূহ পূরণ করে না—অর্থাৎ সনদে ধারাবাহিকতার ঘাটতি, রাবীর দুর্বল স্মরণশক্তি বা চরিত্রগত ত্রুটি রয়েছে—তাকে দুর্বল বা যঈফ হাদিস বলা হয়। শরীয়তের বিধান নির্ধারণে এটি সাধারণত গ্রহণযোগ্য নয়।',
+  'জাল': 'যে বর্ণনা রাসূলুল্লাহ (ﷺ)-এর নামে মিথ্যাভাবে রচনা করা হয়েছে, অথচ তিনি তা বলেননি—তাকে জাল বা মাউদূ হাদিস বলা হয়। এ ধরনের বর্ণনা শরীয়তে কোনোভাবেই গ্রহণযোগ্য নয় এবং তা বর্ণনা করাও নিষিদ্ধ।',
+  'অন্যান্য': 'যেসব হাদিসের মান উপরের নির্দিষ্ট শ্রেণিগুলোর কোনোটির আওতায় সরাসরি পড়ে না, বা মুহাদ্দিসগণের মধ্যে যার মান নিয়ে ভিন্নমত রয়েছে, সেসব হাদিসকে এখানে "অন্যান্য" শ্রেণিতে অন্তর্ভুক্ত করা হয়েছে।',
+  'সহিহ লিগাইরিহি': 'যে হাদিস মূলত হাসান পর্যায়ের, কিন্তু একাধিক সনদ বা সমর্থনকারী বর্ণনার মাধ্যমে শক্তিশালী হয়ে সহিহ হাদিসের মর্যাদা লাভ করে, তাকে সহিহ লিগাইরিহি (অন্যের কারণে সহিহ) বলা হয়।',
+  'সহিহ মাকতু': 'মাকতু হাদিস বলা হয় তাবিয়ীর নিজস্ব উক্তি বা কর্মকে, যা সরাসরি রাসূলুল্লাহ (ﷺ) পর্যন্ত পৌঁছায় না। যখন এর সনদ সহিহ হওয়ার শর্তসমূহ পূরণ করে, তখন তাকে সহিহ মাকতু বলা হয়।',
+  'হাসান লিগাইরিহি': 'যে হাদিস মূলত দুর্বল সনদে বর্ণিত, কিন্তু অন্য সমর্থনকারী সনদের মাধ্যমে শক্তিশালী হয়ে হাসান হাদিসের মর্যাদা লাভ করে, তাকে হাসান লিগাইরিহি (অন্যের কারণে হাসান) বলা হয়।',
+  'মুনকার': 'দুর্বল রাবী কর্তৃক বর্ণিত এমন হাদিস, যা নির্ভরযোগ্য রাবীদের বর্ণনার বিপরীত—তাকে মুনকার হাদিস বলা হয়। এটি দুর্বল হাদিসের একটি বিশেষ প্রকার, যা গ্রহণযোগ্য নয়।'
+};
+const tahqiqDetailTitle = document.getElementById('tahqiqDetailTitle');
+const tahqiqDetailText = document.getElementById('tahqiqDetailText');
+const tahqiqDetailBackBtn = document.getElementById('tahqiqDetailBackBtn');
+
+function showTahqiqDetail(grade){
+  hideAllAppScreens();
+  tahqiqDetailTitle.textContent = grade;
+  tahqiqDetailText.textContent = TAHQIQ_DEFS[grade] || 'এই তাহকিকের সংজ্ঞা শীঘ্রই যুক্ত করা হবে।';
+  tahqiqDetailScreen.style.display = 'block';
+  window.scrollTo(0,0);
+}
+tahqiqDetailBackBtn.addEventListener('click', showHadithTahqiq);
+
+/* ---- কালেকশন (Bookmarks / Pins / Notes) ---- */
+const colBookmarksPane = document.getElementById('colBookmarksPane');
+const colPinsPane = document.getElementById('colPinsPane');
+const colNotesPane = document.getElementById('colNotesPane');
+const colSearchInput = document.getElementById('colSearchInput');
+document.querySelectorAll('.sas-tab[data-col-tab]').forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    document.querySelectorAll('.sas-tab[data-col-tab]').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const which = tab.dataset.colTab;
+    colBookmarksPane.style.display = which==='bookmarks' ? 'block' : 'none';
+    colPinsPane.style.display = which==='pins' ? 'block' : 'none';
+    colNotesPane.style.display = which==='notes' ? 'block' : 'none';
+    colSearchInput.placeholder = which==='bookmarks' ? 'বুকমার্ক সার্চ করুন'
+      : which==='pins' ? 'পিন সার্চ করুন' : 'নোট সার্চ করুন';
+  });
+});
+document.getElementById('colFavouriteFolder').addEventListener('click', ()=>{
+  alert('এই ফোল্ডারে কোনো হাদিস যুক্ত করা হয়নি।');
+});
+document.getElementById('colFavouritePin').addEventListener('click', ()=>{
+  alert('এই পিনে কোনো হাদিস যুক্ত করা হয়নি।');
+});
+document.getElementById('colFolderBtn').addEventListener('click', ()=> alert('এই ফিচারটি শীঘ্রই যুক্ত করা হবে।'));
+document.getElementById('colLoginBtn').addEventListener('click', ()=> alert('Gmail লগইন ফিচারটি শীঘ্রই যুক্ত করা হবে।'));
+document.getElementById('colFilterBtn').addEventListener('click', ()=> alert('সাজানোর ফিচারটি শীঘ্রই যুক্ত করা হবে।'));
+
+function showHadithCollections(){
+  hideAllAppScreens();
+  hadithCollectionsScreen.style.display = 'block';
+  window.scrollTo(0,0);
+  setActiveNav('bookmark');
+}
 
 function buildHadithGrid(){
   const q = hadithSearchInput.value.trim().toLowerCase();
@@ -2619,7 +4043,7 @@ function buildHadithGrid(){
     const row = document.createElement('div');
     row.className = 'hh-book-row';
     const color = HADITH_BADGE_COLORS[idx % HADITH_BADGE_COLORS.length];
-    row.addEventListener('click', ()=> openHadithReader(b));
+    row.addEventListener('click', ()=> openHadithChapterList(b));
     row.innerHTML = `
       <div class="hh-book-badge" style="background:${color};">${b.badge}</div>
       <div class="hh-book-info">
@@ -2645,7 +4069,7 @@ document.getElementById('hhSearchBtn').addEventListener('click', ()=>{
 });
 document.getElementById('hhMenuBtn').addEventListener('click', ()=> openMoreSheet());
 document.getElementById('hhLatestBtn').addEventListener('click', ()=>{
-  if(HADITH_BOOKS.length) openHadithReader(HADITH_BOOKS[0]);
+  if(HADITH_BOOKS.length) openHadithChapterList(HADITH_BOOKS[0]);
 });
 document.getElementById('hhAppsBtn').addEventListener('click', ()=> alert('এই ফিচারটি শীঘ্রই যুক্ত করা হবে।'));
 document.getElementById('hhGotoBtn').addEventListener('click', ()=>{
@@ -2654,18 +4078,20 @@ document.getElementById('hhGotoBtn').addEventListener('click', ()=>{
 });
 document.getElementById('hhDonateBtn').addEventListener('click', ()=> alert('জাযাকাল্লাহু খাইরান! সদাকা ফিচারটি শীঘ্রই যুক্ত করা হবে।'));
 
-/* ---- Persistent bottom nav: always visible, works the same on desktop and mobile ---- */
-document.querySelectorAll('#hhBottomNav .hh-bn-item').forEach(item=>{
+/* ---- Persistent bottom nav: always visible, works the same on desktop and mobile,
+       and across every screen (home / books / notes / bookmark each have their own
+       copy of the nav so it never needs to be re-inserted). ---- */
+document.querySelectorAll('.hh-bn-item').forEach(item=>{
   item.addEventListener('click', ()=>{
-    document.querySelectorAll('#hhBottomNav .hh-bn-item').forEach(i=>i.classList.remove('active'));
-    item.classList.add('active');
     const which = item.dataset.hhbn;
-    if(which === 'home' || which === 'books'){
+    if(which === 'home'){
       showHadithListing();
-    } else if(which === 'bookmark'){
-      alert('বুকমার্ক ফিচারটি শীঘ্রই যুক্ত করা হবে।');
+    } else if(which === 'books'){
+      showHadithTopics();
     } else if(which === 'notes'){
-      alert('নোট ফিচারটি শীঘ্রই যুক্ত করা হবে।');
+      showHadithTahqiq();
+    } else if(which === 'bookmark'){
+      showHadithCollections();
     }
   });
 });
@@ -2676,21 +4102,57 @@ function digitsFor(lang, n){
 
 async function loadHadithBookData(entry){
   if(hadithBookDataCache[entry.edition]) return hadithBookDataCache[entry.edition];
-  const res = await fetch(`${HADITH_CDN}${entry.edition}.min.json`);
+  const baseBook = hadithBaseBook(entry);
+  const arabicEdition = `ara-${baseBook}`;
+
+  const [res, araRes] = await Promise.all([
+    fetch(`${HADITH_CDN}${entry.edition}.min.json`),
+    // The Arabic original is always fetched too, so every hadith can be shown
+    // with its Arabic text the way the native app displays it.
+    fetch(`${HADITH_CDN}${arabicEdition}.min.json`).catch(()=>null)
+  ]);
   if(!res.ok) throw new Error('network');
   const json = await res.json();
+
+  // Arabic text by hadithnumber, used to enrich each translated hadith below.
+  // If the Arabic fetch failed (or this is itself the Arabic edition) we
+  // simply skip enrichment rather than failing the whole book load.
+  let arabicByNumber = null;
+  if(araRes && araRes.ok && arabicEdition !== entry.edition){
+    try{
+      const araJson = await araRes.json();
+      arabicByNumber = new Map();
+      (araJson.hadiths || []).forEach(ah=>{
+        arabicByNumber.set(ah.hadithnumber, ah.text);
+      });
+    }catch(e){ arabicByNumber = null; }
+  }
+
   const hadithsByChapter = new Map();
   (json.hadiths || []).forEach(h=>{
     const chNum = h.reference ? h.reference.book : 0;
+    if(arabicByNumber && arabicByNumber.has(h.hadithnumber)){
+      h.arabicText = arabicByNumber.get(h.hadithnumber);
+    }
     if(!hadithsByChapter.has(chNum)) hadithsByChapter.set(chNum, []);
     hadithsByChapter.get(chNum).push(h);
   });
-  const data = { metadata: json.metadata, hadithsByChapter };
+  const data = { metadata: json.metadata, hadithsByChapter, baseBook };
   hadithBookDataCache[entry.edition] = data;
   return data;
 }
 
-function openHadithReader(entry){
+/* Bengali chapter label for a given collection + chapter number, falling back
+   to the section title shipped by the API (English) if we don't have a
+   Bengali translation for that particular chapter. */
+function hadithChapterLabel(entry, data, chNum){
+  const bnMap = HADITH_CHAPTER_BN[data.baseBook || hadithBaseBook(entry)];
+  if(entry.lang === 'ben' && bnMap && bnMap[chNum]) return bnMap[chNum];
+  const sections = (data.metadata && data.metadata.sections) || {};
+  return sections[String(chNum)] || `অধ্যায় ${digitsFor(entry.lang, chNum)}`;
+}
+
+function openHadithChapterList(entry){
   heroSection.style.display = 'none';
   viewTabsEl.style.display = 'none';
   listingMain.style.display = 'none';
@@ -2699,24 +4161,99 @@ function openHadithReader(entry){
   mPanel.style.display = 'none';
   readerView.style.display = 'none';
   hadithView.style.display = 'none';
-  hadithReaderView.style.display = 'block';
+  hadithReaderView.style.display = 'none';
+  hadithChapterListView.style.display = 'block';
   window.scrollTo(0,0);
 
   currentHadithBook = entry;
-  hadithBookTitleBar.textContent = entry.name;
-  hadithChapterListWrap.innerHTML = '';
-  hadithReaderBody.innerHTML = '<div class="reader-loading">লোড হচ্ছে... (প্রথমবার একটু সময় নিতে পারে)</div>';
+  hclSearchInput.value = '';
+  hclBookTitle.textContent = entry.short || entry.name;
+  hclBookCount.textContent = `${digitsFor(entry.lang, entry.hadiths)} টি হাদিস`;
+  hclList.innerHTML = '<div class="reader-loading">লোড হচ্ছে... (প্রথমবার একটু সময় নিতে পারে)</div>';
+  hclNoResults.style.display = 'none';
 
   loadHadithBookData(entry).then(data=>{
-    buildHadithChapterList(entry, data);
-    const firstChapter = [...data.hadithsByChapter.keys()].filter(k=>k!==0).sort((a,b)=>a-b)[0];
-    selectHadithChapter(firstChapter !== undefined ? firstChapter : 1);
+    buildHclList(entry, data);
   }).catch(()=>{
-    hadithReaderBody.innerHTML = '<div class="reader-error">দুঃখিত, হাদীসের তথ্য লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</div>';
+    hclList.innerHTML = '<div class="reader-error">দুঃখিত, হাদীসের তথ্য লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।</div>';
   });
 }
 
-document.getElementById('hadithBackBtn').addEventListener('click', showHadithListing);
+function buildHclList(entry, data){
+  const sections = (data.metadata && data.metadata.sections) || {};
+  const q = hclSearchInput.value.trim().toLowerCase();
+  hclList.innerHTML = '';
+  let shown = 0;
+  Object.keys(sections)
+    .map(Number)
+    .filter(chNum => chNum !== 0 && data.hadithsByChapter.has(chNum))
+    .sort((a,b)=>a-b)
+    .forEach(chNum=>{
+      const label = hadithChapterLabel(entry, data, chNum);
+      if(q && !label.toLowerCase().includes(q) && !String(chNum).includes(q)) return;
+      shown++;
+      const list = data.hadithsByChapter.get(chNum) || [];
+      const nums = list.map(h=>h.hadithnumber);
+      const lo = nums.length ? Math.min(...nums) : chNum;
+      const hi = nums.length ? Math.max(...nums) : chNum;
+      const rangeText = lo === hi
+        ? digitsFor(entry.lang, lo)
+        : `${digitsFor(entry.lang, lo)} - ${digitsFor(entry.lang, hi)}`;
+
+      const item = document.createElement('div');
+      item.className = 'hcl-item';
+      item.dataset.ch = chNum;
+      item.innerHTML = `
+        <div class="hcl-badge">${digitsFor(entry.lang, chNum)}</div>
+        <div class="hcl-item-info">
+          <p class="hcl-item-name">${label}</p>
+          <p class="hcl-item-range">হাদিসের রেঞ্জ: ${rangeText}</p>
+        </div>`;
+      item.addEventListener('click', ()=> openHadithReaderForChapter(chNum));
+      hclList.appendChild(item);
+    });
+  hclNoResults.style.display = shown===0 ? 'block' : 'none';
+}
+hclSearchInput.addEventListener('input', ()=>{
+  if(currentHadithBook) buildHclList(currentHadithBook, hadithBookDataCache[currentHadithBook.edition]);
+});
+hclBackBtn.addEventListener('click', showHadithListing);
+
+function openHadithReaderForChapter(chNum){
+  const entry = currentHadithBook;
+  const data = hadithBookDataCache[entry.edition];
+
+  heroSection.style.display = 'none';
+  viewTabsEl.style.display = 'none';
+  listingMain.style.display = 'none';
+  siteFooter.style.display = 'none';
+  mAppbar.style.display = 'none';
+  mPanel.style.display = 'none';
+  readerView.style.display = 'none';
+  hadithView.style.display = 'none';
+  hadithChapterListView.style.display = 'none';
+  hadithReaderView.style.display = 'block';
+  window.scrollTo(0,0);
+
+  hadithBookTitleBar.textContent = entry.name;
+  if(hrMobileTitle) hrMobileTitle.textContent = entry.short || entry.name;
+  if(hrMobileSubtitle) hrMobileSubtitle.textContent = '';
+  if(hadithReaderSidebar) hadithReaderSidebar.classList.remove('mobile-open');
+
+  buildHadithChapterList(entry, data);
+  selectHadithChapter(chNum);
+}
+
+/* Back from the hadith reader returns to the chapter-list screen (image 1 in the
+   flow) rather than all the way to the book list, matching the native app's
+   book -> chapters -> hadiths navigation hierarchy. Book data is already
+   cached, so re-opening the chapter list is instant. */
+function backFromHadithReader(){
+  if(currentHadithBook) openHadithChapterList(currentHadithBook);
+  else showHadithListing();
+}
+document.getElementById('hadithBackBtn').addEventListener('click', backFromHadithReader);
+if(hrBackBtn) hrBackBtn.addEventListener('click', backFromHadithReader);
 
 function buildHadithChapterList(entry, data){
   const sections = (data.metadata && data.metadata.sections) || {};
@@ -2726,7 +4263,7 @@ function buildHadithChapterList(entry, data){
     const chNum = Number(k);
     if(chNum === 0) return;
     if(!data.hadithsByChapter.has(chNum)) return;
-    const label = sections[k] || `অধ্যায় ${chNum}`;
+    const label = hadithChapterLabel(entry, data, chNum);
     if(q && !label.toLowerCase().includes(q) && !String(chNum).includes(q)) return;
     const item = document.createElement('div');
     item.className = 'hadith-chapter-item' + (chNum===currentHadithChapter ? ' active' : '');
@@ -2740,6 +4277,28 @@ hadithChapterSearch.addEventListener('input', ()=>{
   if(currentHadithBook) buildHadithChapterList(currentHadithBook, hadithBookDataCache[currentHadithBook.edition]);
 });
 
+/* Sahih al-Bukhari and Sahih Muslim are, by definition/consensus, collections
+   of authentic (সহিহ) hadith, so the upstream data leaves their `grades` field
+   empty. For the other collections (which mix সহিহ/হাসান/যঈফ etc.) we translate
+   whatever scholarly grade is present instead of assuming; if we can't
+   confidently parse it, no grade pill is shown rather than guessing. */
+function hadithGradeLabel(entry, h){
+  const baseBook = hadithBaseBook(entry);
+  if(baseBook === 'bukhari' || baseBook === 'muslim') return 'সহিহ';
+  const raw = (h.grades && h.grades[0] && h.grades[0].grade) ? h.grades[0].grade.toLowerCase() : '';
+  if(!raw) return '';
+  if(raw.includes('hasan') && raw.includes('sahih')) return 'হাসান সহিহ';
+  if(raw.includes('daif') || raw.includes("da'if") || raw.includes('weak')) return 'যঈফ';
+  if(raw.includes('munkar')) return 'মুনকার';
+  if(raw.includes('mursal')) return 'মুরসাল';
+  if(raw.includes('maqtu')) return 'মাকতু';
+  if(raw.includes('shadh')) return 'শায';
+  if(raw.includes('mawquf') || raw.includes('muquf')) return 'মাওকুফ';
+  if(raw.includes('hasan')) return 'হাসান';
+  if(raw.includes('sahih')) return 'সহিহ';
+  return '';
+}
+
 function selectHadithChapter(chNum){
   currentHadithChapter = chNum;
   const entry = currentHadithBook;
@@ -2748,21 +4307,39 @@ function selectHadithChapter(chNum){
     el.classList.toggle('active', Number(el.dataset.ch) === chNum);
   });
   const list = (data.hadithsByChapter.get(chNum) || []);
-  const sectionName = (data.metadata && data.metadata.sections && data.metadata.sections[String(chNum)]) || '';
+  const chapterLabel = hadithChapterLabel(entry, data, chNum);
   const rtlClass = entry.lang === 'urd' ? ' rtl-text' : '';
-  let html = `<div class="surah-head"><h2>${sectionName || ('অধ্যায় ' + digitsFor(entry.lang, chNum))}</h2></div>`;
+  const bookIdx = HADITH_BOOKS.indexOf(entry);
+  const badgeColor = HADITH_BADGE_COLORS[(bookIdx >= 0 ? bookIdx : 0) % HADITH_BADGE_COLORS.length];
+  let html = `<div class="surah-head"><h2>${chapterLabel}</h2></div>`;
   if(list.length === 0){
     html += `<div class="reader-error">এই অধ্যায়ে কোনো হাদীস পাওয়া যায়নি।</div>`;
   } else {
     list.forEach(h=>{
+      const grade = hadithGradeLabel(entry, h);
       html += `
         <div class="hadith-block${rtlClass}">
-          <span class="hadith-num-badge">${digitsFor(entry.lang, h.hadithnumber)}</span>
+          <div class="hadith-card-head">
+            <div class="hadith-card-badge" style="background:${badgeColor};">${entry.badge}</div>
+            <div class="hadith-card-info">
+              <p class="hadith-card-book">${entry.short}</p>
+              <p class="hadith-card-num">হাদিস: ${digitsFor(entry.lang, h.hadithnumber)}</p>
+            </div>
+            ${grade ? `<span class="hadith-card-gradepill">${grade}</span>` : ''}
+          </div>
+          ${h.arabicText ? `<p class="hadith-arabic">${h.arabicText}</p>` : ''}
           <p class="hadith-text">${h.text}</p>
         </div>`;
     });
   }
   hadithReaderBody.innerHTML = html;
+
+  // Keep the pinned mobile header in sync with the chapter being read, and
+  // close the slide-down chapter list so the newly picked chapter is visible.
+  if(hrMobileSubtitle) hrMobileSubtitle.textContent = chapterLabel;
+  if(hadithReaderSidebar) hadithReaderSidebar.classList.remove('mobile-open');
+
+  window.scrollTo(0,0);
   hadithReaderBody.scrollTo && hadithReaderBody.scrollTo(0,0);
 }
 
@@ -3058,6 +4635,77 @@ moreSheetOverlay.querySelectorAll('.ms-item').forEach(item=>{
     } else {
       alert('এই ফিচারটি শীঘ্রই যুক্ত করা হবে।');
     }
+  });
+});
+
+/* ================= READER SETTINGS PANEL ("সেটিংস") ================= */
+const rsOverlay = document.getElementById('rsOverlay');
+const rsBackBtn = document.getElementById('rsBackBtn');
+
+function openReaderSettings(){
+  rsOverlay.classList.add('open');
+  requestAnimationFrame(()=> rsOverlay.classList.add('show'));
+}
+function closeReaderSettings(){
+  rsOverlay.classList.remove('show');
+  setTimeout(()=>{ rsOverlay.classList.remove('open'); }, 260);
+}
+if(rsBackBtn) rsBackBtn.addEventListener('click', closeReaderSettings);
+if(rsOverlay){
+  rsOverlay.addEventListener('click', (e)=>{
+    if(e.target === rsOverlay) closeReaderSettings();
+  });
+}
+document.addEventListener('keydown', (e)=>{
+  if(e.key === 'Escape' && rsOverlay && rsOverlay.classList.contains('open')) closeReaderSettings();
+});
+
+/* toggle switches (আরবি দেখান / যবর-যের / নাইট মোড) */
+document.querySelectorAll('.rs-toggle').forEach(t=>{
+  t.addEventListener('click', ()=> t.classList.toggle('on'));
+});
+
+/* font-size sliders */
+const rsArabicSize = document.getElementById('rsArabicSize');
+const rsArabicSizeVal = document.getElementById('rsArabicSizeVal');
+if(rsArabicSize){
+  rsArabicSize.addEventListener('input', ()=>{
+    rsArabicSizeVal.textContent = toBnDigits(rsArabicSize.value);
+  });
+}
+const rsTransSize = document.getElementById('rsTransSize');
+const rsTransSizeVal = document.getElementById('rsTransSizeVal');
+if(rsTransSize){
+  rsTransSize.addEventListener('input', ()=>{
+    rsTransSizeVal.textContent = toBnDigits(rsTransSize.value);
+  });
+}
+
+/* আরবি ফন্ট dropdown */
+const rsFontDropdown = document.getElementById('rsFontDropdown');
+const rsFontDropdownList = document.getElementById('rsFontDropdownList');
+const rsFontDropdownLabel = document.getElementById('rsFontDropdownLabel');
+if(rsFontDropdown){
+  rsFontDropdown.addEventListener('click', ()=>{
+    rsFontDropdown.classList.toggle('open');
+    rsFontDropdownList.classList.toggle('open');
+  });
+  rsFontDropdownList.querySelectorAll('.rs-dropdown-opt').forEach(opt=>{
+    opt.addEventListener('click', ()=>{
+      rsFontDropdownList.querySelectorAll('.rs-dropdown-opt').forEach(o=>o.classList.remove('sel'));
+      opt.classList.add('sel');
+      rsFontDropdownLabel.textContent = opt.textContent;
+      rsFontDropdown.classList.remove('open');
+      rsFontDropdownList.classList.remove('open');
+    });
+  });
+}
+
+/* লিস্ট ভিউ / স্লাইড ভিউ toggle buttons */
+document.querySelectorAll('.rs-view-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.rs-view-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
   });
 });
 
