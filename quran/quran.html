@@ -1949,7 +1949,9 @@ document.querySelectorAll('.m-quick-pill').forEach(pill=>{
 });
 
 document.getElementById('mSearchIconBtn').addEventListener('click', ()=> mSearchInput.focus());
-document.getElementById('mBackBtn').addEventListener('click', showListing);
+document.getElementById('mBackBtn').addEventListener('click', function(){
+  window.location.href = 'https://ummahguidance.vercel.app/';
+});
 
 function setActiveListTab(mode){
   readerListMode = mode;
