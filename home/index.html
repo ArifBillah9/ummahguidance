@@ -1186,7 +1186,7 @@
     </div>
 
     <div class="menu-grid">
-      <div class="menu-card">
+      <div class="menu-card" id="quranMenuCard" style="cursor:pointer;">
         <div class="icon-box">
           <img src="assets/quran.png" alt="কুরআন">
         </div>
@@ -1579,6 +1579,15 @@
 </div>
 
 <script>
+  (function(){
+    var quranCard = document.getElementById('quranMenuCard');
+    if(quranCard){
+      quranCard.addEventListener('click', function(){
+        window.location.href = 'https://ummahguidance-w5us.vercel.app/';
+      });
+    }
+  })();
+
   (function(){
     var navItems = Array.prototype.slice.call(document.querySelectorAll('#bottomNav .nav-item'));
     var sections = navItems
