@@ -1,0 +1,2052 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>নামাজের সময়সূচী</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-top:#fbecb0;
+    --sky-mid:#f6d879;
+    --sky-bottom:#e2a83e;
+    --card-bg:#ffffff;
+    --text-dark:#20242b;
+    --text-mute:#8b909a;
+    --ring-dark:#17352b;
+    --ring-track:rgba(23,53,43,0.14);
+    --ring-fg:#17352b;
+    --pill-bg:rgba(255,255,255,0.55);
+    --badge-pink:#ec1876;
+    --sun-1:#f6c35a;
+    --sun-2:#e0862a;
+    --dusk-color:#2f7a6b;
+    --dusk-dark:#1f4d43;
+    --night-color:#3b3663;
+    --active-green:#1f8a5f;
+    --active-bg:#eef8f3;
+    --makrooh:#e08b2b;
+    --menu-bg:#e4e4e4;
+    --menu-card-bg:#ffffff;
+    --menu-text-green:#2f473f;
+    --menu-teal:#03c3d2;
+    /* live prayer-time theme: lets JS smoothly cross-fade colors */
+    transition: --sky-top .9s ease, --sky-mid .9s ease, --sky-bottom .9s ease,
+                --ring-dark .9s ease, --ring-fg .9s ease, --ring-track .9s ease,
+                --pill-bg .9s ease;
+  }
+  @property --sky-top{syntax:'<color>';inherits:true;initial-value:#fbecb0;}
+  @property --sky-mid{syntax:'<color>';inherits:true;initial-value:#f6d879;}
+  @property --sky-bottom{syntax:'<color>';inherits:true;initial-value:#e2a83e;}
+  @property --ring-dark{syntax:'<color>';inherits:true;initial-value:#17352b;}
+  @property --ring-fg{syntax:'<color>';inherits:true;initial-value:#17352b;}
+  @property --ring-track{syntax:'<color>';inherits:true;initial-value:rgba(23,53,43,0.14);}
+  @property --pill-bg{syntax:'<color>';inherits:true;initial-value:rgba(255,255,255,0.55);}
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  html,body{
+    margin:0;padding:0;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    background:#111;
+  }
+  /* left-pane is a transparent wrapper on mobile/tablet: it doesn't affect
+     layout there, children behave exactly as if not wrapped. On desktop it
+     becomes a real sticky column (see desktop media query below). */
+  .left-pane{display:contents;}
+  body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+  }
+  .phone{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    background:linear-gradient(160deg, var(--sky-top) 0%, var(--sky-mid) 48%, var(--sky-bottom) 100%);
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* subtle atmospheric glow */
+  .phone::before{
+    content:"";
+    position:absolute;
+    top:40px; left:-40px;
+    width:280px; height:280px;
+    background:radial-gradient(circle, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0) 68%);
+    pointer-events:none;
+  }
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 22px 0;
+    color:var(--ring-dark);
+    position:relative;
+    z-index:2;
+  }
+  .date-block{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .date-icon{
+    width:22px;height:22px;
+    margin-top:4px;
+    opacity:0.95;
+    flex-shrink:0;
+  }
+  .date-text .hijri{
+    font-size:15px;
+    font-weight:600;
+    line-height:1.35;
+  }
+  .date-text .gregorian{
+    font-size:13px;
+    font-weight:400;
+    opacity:0.8;
+    line-height:1.35;
+  }
+  .top-icons{
+    display:flex;
+    gap:18px;
+    align-items:center;
+  }
+  .top-icons svg{
+    width:22px;height:22px;
+    opacity:0.95;
+  }
+  .bell-wrap{
+    position:relative;
+    display:flex;
+    align-items:center;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;
+    transition:transform 0.15s ease;
+  }
+  .bell-wrap:active{transform:scale(0.92);}
+  .bell-wrap .badge{
+    position:absolute;
+    top:-6px; right:-8px;
+    min-width:16px;
+    height:16px;
+    padding:0 4px;
+    background:var(--badge-pink);
+    border-radius:999px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 0 0 2px rgba(255,255,255,0.7);
+    color:#fff;
+    font-size:10px;
+    font-weight:700;
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .bell-wrap .badge:empty,
+  .bell-wrap .badge[data-count="0"]{
+    display:none;
+  }
+
+  .ring-section{
+    position:relative;
+    z-index:2;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:8px 24px 6px;
+  }
+  .ring-arc{
+    position:relative;
+    width:100%;
+    max-width:178px;
+  }
+  .ring-arc svg{
+    display:block;
+    width:100%;
+    height:auto;
+    overflow:visible;
+  }
+  .ring-center{
+    position:absolute;
+    left:50%; top:44%;
+    transform:translate(-50%,0);
+    text-align:center;
+    color:var(--ring-dark);
+    width:100%;
+  }
+  .ring-center .label{
+    font-size:16px;
+    font-weight:700;
+    margin-bottom:3px;
+    letter-spacing:0.3px;
+  }
+  .ring-center .sub{
+    font-size:10.5px;
+    opacity:0.75;
+    margin-bottom:3px;
+    font-weight:500;
+  }
+  .ring-center .countdown{
+    font-size:17px;
+    font-weight:700;
+    letter-spacing:0.5px;
+    font-variant-numeric:tabular-nums;
+  }
+
+  .pills-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:24px;
+    width:100%;
+  }
+  .location-row,
+  .suntimes-row{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    background:var(--pill-bg);
+    border:1px solid rgba(255,255,255,0.6);
+    padding:5px 13px;
+    border-radius:999px;
+    color:var(--ring-dark);
+    font-size:11.5px;
+    font-weight:600;
+    backdrop-filter:blur(6px);
+  }
+  .location-row svg{width:15px;height:15px;opacity:0.9;}
+  .location-row .chev{width:11px;height:11px;opacity:0.75;margin-left:2px;}
+  .location-row{cursor:pointer; -webkit-tap-highlight-color:transparent; transition:transform .15s ease, opacity .15s ease;}
+  .location-row:active{transform:scale(0.96); opacity:0.85;}
+
+  .suntimes-row{
+    gap:10px;
+    font-size:12.5px;
+    font-weight:600;
+  }
+  .suntimes-row span{display:flex;align-items:center;gap:5px;}
+  .suntimes-row svg{width:14px;height:14px;}
+  .divider-dot{
+    width:3px;height:3px;
+    border-radius:50%;
+    background:rgba(23,53,43,0.35);
+  }
+
+  .card{
+    position:relative;
+    z-index:3;
+    background:var(--card-bg);
+    border-radius:24px 24px 0 0;
+    margin-top:auto;
+    padding:4px 20px 8px;
+    box-shadow:0 -12px 30px rgba(0,0,0,0.18);
+  }
+  .prayer-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:5.5px 4px;
+    border-radius:12px;
+    transition:background-color .4s ease, padding .4s ease;
+  }
+  .prayer-row.active{
+    background:var(--active-bg);
+  }
+  .prayer-row.active .radio{
+    border-color:var(--active-green);
+    background:var(--active-green);
+    box-shadow:inset 0 0 0 3px #fff;
+  }
+  .prayer-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .prayer-icon{
+    width:20px;height:20px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .prayer-name{
+    font-size:14px;
+    font-weight:600;
+    color:var(--text-dark);
+  }
+  .prayer-row.active .prayer-name{color:var(--active-green);}
+  .prayer-time{
+    font-size:12px;
+    font-weight:600;
+    color:#3d4249;
+    font-variant-numeric:tabular-nums;
+  }
+  .prayer-right{
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .radio{
+    width:17px;height:17px;
+    border-radius:50%;
+    border:2.2px solid #d7dade;
+    flex-shrink:0;
+  }
+  .prayer-row.active .radio{border-color:#bfe3d1;}
+
+  .makrooh-row{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:6px 8px 0;
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--text-dark);
+  }
+  .makrooh-dot{
+    width:9px;height:9px;
+    border-radius:50%;
+    background:var(--makrooh);
+    transition:box-shadow .4s ease;
+  }
+  .makrooh-row{transition:color .4s ease;}
+  .makrooh-row.active{color:var(--makrooh);font-weight:800;}
+  .makrooh-row.active .makrooh-dot{box-shadow:0 0 0 5px rgba(224,139,43,0.22);}
+
+  @media (prefers-reduced-motion: no-preference){
+    .arc-fg{
+      transition: stroke-dashoffset 0.6s ease;
+    }
+  }
+
+  /* ===== App menu section (added below prayer card) ===== */
+  .app-menu{
+    position:relative;
+    z-index:3;
+    background:var(--menu-bg);
+    padding:16px 16px 90px;
+  }
+
+  .ad-banner{
+    position:relative;
+    width:100%;
+    aspect-ratio:772/189;
+    border-radius:16px;
+    overflow:hidden;
+    background:#14213a;
+  }
+  .ad-banner .ad-slide{
+    position:absolute;
+    top:0;left:0;
+    width:100%;height:100%;
+    opacity:0;
+    transition:opacity 0.6s ease-in-out;
+  }
+  .ad-banner .ad-slide.on{
+    opacity:1;
+  }
+  .ad-banner .ad-slide img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .ad-dots{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    margin:12px 0 22px;
+  }
+  .ad-dots span{
+    width:6px;height:6px;
+    border-radius:50%;
+    background:#c7c7c7;
+  }
+  .ad-dots span.on{background:var(--menu-text-green);}
+
+  .menu-section-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:6px 0 16px;
+  }
+  .menu-section-title .left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .menu-section-title .bar{
+    width:5px;height:22px;
+    border-radius:3px;
+  }
+  .menu-section-title.ilm .bar{background:var(--active-green);}
+  .menu-section-title.amol .bar{background:var(--menu-teal);}
+  .menu-section-title.seba .bar{background:#e08b2b;}
+  .menu-section-title.bibidho .bar{background:#e0209f;}
+  .menu-section-title h3{
+    margin:0;
+    font-size:20px;
+    font-weight:700;
+    color:var(--menu-text-green);
+  }
+  .search-btn{
+    width:40px;height:40px;
+    border-radius:50%;
+    background:var(--active-green);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+  }
+  .search-btn svg{width:18px;height:18px;}
+
+  .menu-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:12px;
+    margin-bottom:26px;
+  }
+  .menu-card{
+    background:var(--menu-card-bg);
+    border-radius:20px;
+    padding:18px 6px 14px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    gap:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  }
+  .menu-card .icon-box{
+    width:42px;height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .menu-card .icon-box svg,
+  .menu-card .icon-box img{
+    width:32px;
+    height:32px;
+    max-width:32px;
+    max-height:32px;
+    object-fit:contain;
+    display:block;
+  }
+  .menu-card .lbl{
+    font-size:13px;
+    font-weight:700;
+    color:var(--menu-text-green);
+    line-height:1.3;
+  }
+
+  .bottom-nav{
+    position:fixed;
+    left:50%;
+    transform:translateX(-50%);
+    bottom:0;
+    width:100%;
+    max-width:430px;
+    display:flex;
+    background:var(--menu-card-bg);
+    border-top:1px solid rgba(0,0,0,0.06);
+    padding:10px 0 14px;
+    z-index:10;
+  }
+  .bottom-nav .nav-item{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    color:#9aa0a3;
+    font-size:12px;
+    font-weight:600;
+  }
+  .bottom-nav .nav-item svg{width:22px;height:22px;}
+  .bottom-nav .nav-item.on{color:var(--menu-text-green);}
+  .bottom-nav .nav-item{
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;
+    transition:color 0.2s ease, transform 0.15s ease;
+  }
+  .bottom-nav .nav-item:active{transform:scale(0.94);}
+  .menu-section-title{scroll-margin-top:16px;}
+
+  /* ============================================================
+     RESPONSIVE — TABLET (641px – 1023px)
+     Keep the phone-style single column but let it breathe: wider
+     card, larger touch targets, more columns in the icon grid.
+     ============================================================ */
+  @media (min-width:641px) and (max-width:1023px){
+    body{align-items:flex-start; padding:32px 0;}
+    .phone{
+      max-width:680px;
+      min-height:auto;
+      border-radius:32px;
+      box-shadow:0 24px 60px rgba(0,0,0,0.35);
+    }
+    .bottom-nav{
+      max-width:680px;
+      border-radius:0 0 32px 32px;
+    }
+    .ring-arc{max-width:320px;}
+    .card{padding:8px 32px 30px;}
+    .app-menu{padding:20px 32px 100px;}
+    .menu-grid{grid-template-columns:repeat(5, 1fr);}
+    .menu-card .icon-box{width:48px;height:48px;}
+    .menu-card .icon-box svg,
+    .menu-card .icon-box img{width:36px;height:36px;max-width:36px;max-height:36px;}
+  }
+
+  /* ============================================================
+     RESPONSIVE — DESKTOP (1024px and up)
+     Dashboard-style layout: a slim icon rail on the far left, a
+     sticky "today" column (topbar + ring + prayer card) next to
+     it, and the scrollable app-menu filling the remaining width.
+     ============================================================ */
+  @media (min-width:1024px){
+    body{align-items:flex-start; padding:0;}
+    .phone{
+      max-width:1180px;
+      width:100%;
+      min-height:100vh;
+      display:flex;
+      flex-direction:row;
+      align-items:flex-start;
+      overflow:visible;
+      box-shadow:none;
+    }
+    .phone::before{display:none;}
+
+    .bottom-nav{
+      position:sticky;
+      top:0;
+      left:auto;
+      transform:none;
+      order:-1;
+      flex:0 0 104px;
+      max-width:104px;
+      width:104px;
+      height:100vh;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      gap:36px;
+      padding:0;
+      border-top:none;
+      border-right:1px solid rgba(0,0,0,0.06);
+      border-radius:0;
+    }
+    .bottom-nav .nav-item{flex:0 0 auto; width:100%;}
+
+    .left-pane{
+      display:flex;
+      flex-direction:column;
+      flex:0 0 430px;
+      width:430px;
+      position:sticky;
+      top:0;
+      max-height:100vh;
+      overflow-y:auto;
+      background:linear-gradient(160deg, var(--sky-top) 0%, var(--sky-mid) 48%, var(--sky-bottom) 100%);
+      scrollbar-width:none;
+    }
+    .left-pane::-webkit-scrollbar{display:none;}
+
+    .card{
+      margin-top:0;
+      border-radius:0 0 28px 28px;
+      box-shadow:none;
+    }
+
+    .app-menu{
+      flex:1 1 auto;
+      min-width:0;
+      padding:28px 40px 60px;
+      border-radius:0;
+    }
+    .menu-grid{grid-template-columns:repeat(6, 1fr);}
+    .ad-banner{max-width:820px;}
+    .menu-card{cursor:pointer; transition:transform 0.15s ease, box-shadow 0.15s ease;}
+    .menu-card:hover{transform:translateY(-3px); box-shadow:0 8px 18px rgba(0,0,0,0.1);}
+  }
+
+  /* Large desktop: a little extra room for the icon grid */
+  @media (min-width:1440px){
+    .phone{max-width:1320px;}
+    .app-menu{padding:32px 56px 60px;}
+    .menu-grid{grid-template-columns:repeat(7, 1fr);}
+  }
+
+  /* ===== Location screen (full-screen overlay) ===== */
+  .location-screen{
+    position:fixed;
+    top:0; left:50%;
+    transform:translateX(-50%) translateX(100%);
+    width:100%;
+    max-width:430px;
+    height:100dvh;
+    height:100vh;
+    background:#f3f5f4;
+    z-index:100;
+    display:flex;
+    flex-direction:column;
+    opacity:0;
+    visibility:hidden;
+    transition:transform .38s cubic-bezier(.32,.72,.35,1), opacity .3s ease, visibility 0s linear .38s;
+    overflow:hidden;
+  }
+  .location-screen.open{
+    transform:translateX(-50%) translateX(0);
+    opacity:1;
+    visibility:visible;
+    transition:transform .38s cubic-bezier(.32,.72,.35,1), opacity .3s ease, visibility 0s linear 0s;
+  }
+  .loc-topbar{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:16px 20px;
+    background:#f3f5f4;
+    flex-shrink:0;
+  }
+  .loc-back{
+    width:34px;height:34px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    color:var(--menu-text-green);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    border-radius:50%;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .loc-back:active{background:rgba(0,0,0,0.06); transform:scale(0.92);}
+  .loc-back svg{width:22px;height:22px;}
+  .loc-topbar h2{
+    margin:0;
+    font-size:19px;
+    font-weight:700;
+    color:var(--menu-text-green);
+  }
+  .loc-body{
+    flex:1 1 auto;
+    overflow-y:auto;
+    background:#fff;
+    padding:22px 20px 28px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .loc-body h3{
+    margin:0 0 10px;
+    font-size:19px;
+    font-weight:700;
+    color:var(--menu-text-green);
+  }
+  .loc-body p.loc-desc{
+    margin:0 0 20px;
+    font-size:14px;
+    line-height:1.6;
+    color:#5a6660;
+  }
+  .loc-map{
+    position:relative;
+    width:100%;
+    aspect-ratio:682/430;
+    border-radius:18px;
+    overflow:hidden;
+    margin-bottom:22px;
+    background:
+      radial-gradient(ellipse 60% 45% at 30% 70%, rgba(158,205,222,0.9) 0%, rgba(158,205,222,0) 70%),
+      linear-gradient(120deg, #cfe6b8 0%, #e9edc6 35%, #f2ecc7 60%, #d7e6b3 100%);
+    border:1px solid rgba(0,0,0,0.06);
+  }
+  .loc-map::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:
+      repeating-linear-gradient(100deg, rgba(255,255,255,0.55) 0 2px, transparent 2px 46px),
+      repeating-linear-gradient(10deg, rgba(255,255,255,0.4) 0 1.5px, transparent 1.5px 60px);
+    opacity:0.8;
+  }
+  .loc-map-tag{
+    position:absolute;
+    background:#fff;
+    border:1px solid rgba(0,0,0,0.12);
+    border-radius:4px;
+    font-size:10px;
+    font-weight:700;
+    color:#3d4249;
+    padding:2px 5px;
+    box-shadow:0 1px 3px rgba(0,0,0,0.12);
+  }
+  .loc-map-pin{
+    position:absolute;
+    left:50%; top:44%;
+    transform:translate(-50%,-92%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+  }
+  .loc-map-pin .pin-icon{
+    width:34px;height:34px;
+    border-radius:50% 50% 50% 0;
+    transform:rotate(-45deg);
+    background:var(--badge-pink);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 10px rgba(0,0,0,0.25);
+  }
+  .loc-map-pin .pin-icon svg{
+    transform:rotate(45deg);
+    width:15px;height:15px;
+  }
+  .loc-map-pin .pin-label{
+    background:rgba(255,255,255,0.92);
+    padding:2px 9px;
+    border-radius:6px;
+    font-size:11.5px;
+    font-weight:700;
+    color:#2a2f2c;
+    white-space:nowrap;
+    box-shadow:0 1px 3px rgba(0,0,0,0.15);
+  }
+  .loc-map-city{
+    position:absolute;
+    left:50%; bottom:10%;
+    transform:translateX(-50%);
+    font-size:22px;
+    font-weight:800;
+    color:rgba(40,45,42,0.55);
+    letter-spacing:0.5px;
+  }
+  .loc-map-attrib{
+    position:absolute;
+    left:10px; bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:10px;
+    font-weight:600;
+    color:#4a4f4c;
+    opacity:0.85;
+  }
+
+  .loc-gps-card{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:var(--active-bg);
+    border-radius:16px;
+    padding:16px;
+    margin-bottom:18px;
+  }
+  .loc-gps-icon{
+    width:38px;height:38px;
+    border-radius:50%;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    color:var(--active-green);
+    box-shadow:0 2px 6px rgba(0,0,0,0.08);
+  }
+  .loc-gps-icon svg{width:19px;height:19px;}
+  .loc-gps-text{flex:1 1 auto; min-width:0;}
+  .loc-gps-text .t1{
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--menu-text-green);
+    margin-bottom:2px;
+  }
+  .loc-gps-text .t2{
+    font-size:12px;
+    line-height:1.4;
+    color:#6b756f;
+  }
+  .loc-gps-btn{
+    flex-shrink:0;
+    background:var(--active-green);
+    color:#fff;
+    border:none;
+    font-family:inherit;
+    font-size:13px;
+    font-weight:700;
+    padding:11px 18px;
+    border-radius:999px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  .loc-gps-btn:active{transform:scale(0.95); opacity:0.9;}
+
+  .loc-divider{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin:6px 0 18px;
+    color:#9aa39d;
+    font-size:12.5px;
+    font-weight:600;
+  }
+  .loc-divider::before,
+  .loc-divider::after{
+    content:"";
+    flex:1 1 auto;
+    height:1px;
+    background:rgba(0,0,0,0.1);
+  }
+
+  .loc-city-card{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:#fff;
+    border:1.6px solid var(--active-green);
+    border-radius:16px;
+    padding:16px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .loc-city-card:active{transform:scale(0.98); background:var(--active-bg);}
+  .loc-city-icon{
+    width:34px;height:34px;
+    border-radius:50%;
+    background:var(--active-bg);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    color:var(--active-green);
+  }
+  .loc-city-icon svg{width:18px;height:18px;}
+  .loc-city-text{flex:1 1 auto; min-width:0;}
+  .loc-city-text .t1{
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--menu-text-green);
+    margin-bottom:2px;
+  }
+  .loc-city-text .t2{
+    font-size:12.5px;
+    color:#6b756f;
+  }
+  .loc-city-arrow{
+    width:30px;height:30px;
+    border-radius:50%;
+    background:#eef0ef;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    color:#4a4f4c;
+  }
+  .loc-city-arrow svg{width:15px;height:15px;}
+
+  .loc-gps-status{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin:-8px 0 16px;
+    padding:0 4px;
+    font-size:12px;
+    font-weight:600;
+    line-height:1.5;
+  }
+  .loc-gps-status.err{color:#c23b3b;}
+  .loc-gps-status.ok{color:var(--active-green);}
+  .loc-gps-btn.loading{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    opacity:0.85;
+    cursor:default;
+  }
+  .loc-gps-btn .spin{
+    width:13px;height:13px;
+    border-radius:50%;
+    border:2px solid rgba(255,255,255,0.4);
+    border-top-color:#fff;
+    animation:locspin .7s linear infinite;
+    flex-shrink:0;
+  }
+  @keyframes locspin{ to{ transform:rotate(360deg); } }
+
+  /* ===== City picker sub-view ===== */
+  .loc-picker-view{ display:none; }
+  .loc-search-wrap{
+    position:relative;
+    margin-bottom:14px;
+  }
+  .loc-search-wrap svg{
+    position:absolute;
+    left:14px; top:50%;
+    transform:translateY(-50%);
+    width:17px;height:17px;
+    color:#8b948e;
+    pointer-events:none;
+  }
+  .loc-search-input{
+    width:100%;
+    font-family:inherit;
+    font-size:14.5px;
+    font-weight:600;
+    color:var(--menu-text-green);
+    background:#f2f4f3;
+    border:1.6px solid transparent;
+    border-radius:14px;
+    padding:13px 14px 13px 40px;
+    outline:none;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .loc-search-input::placeholder{color:#9aa39d; font-weight:500;}
+  .loc-search-input:focus{border-color:var(--active-green); background:#fff;}
+
+  .loc-city-list{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .loc-city-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:13px 6px;
+    border-bottom:1px solid rgba(0,0,0,0.06);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:background .15s ease;
+  }
+  .loc-city-item:active{background:var(--active-bg);}
+  .loc-city-item .nm{
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--menu-text-green);
+  }
+  .loc-city-item .en{
+    font-size:12px;
+    font-weight:500;
+    color:#8b948e;
+  }
+  .loc-city-item.selected{background:var(--active-bg);}
+  .loc-city-item.selected .nm{color:var(--active-green);}
+  .loc-city-item .check{
+    width:18px;height:18px;
+    color:var(--active-green);
+    flex-shrink:0;
+    display:none;
+  }
+  .loc-city-item.selected .check{display:block;}
+  .loc-city-item .row-main{display:flex; flex-direction:column; gap:1px;}
+  .loc-city-item .row-right{display:flex; align-items:center; gap:8px;}
+  .loc-city-empty{
+    text-align:center;
+    padding:40px 10px;
+    color:#8b948e;
+    font-size:13.5px;
+    font-weight:600;
+  }
+
+  .loc-footer{
+    flex-shrink:0;
+    padding:16px 20px calc(16px + env(safe-area-inset-bottom));
+    background:#fff;
+    border-top:1px solid rgba(0,0,0,0.06);
+  }
+  .loc-save-btn{
+    width:100%;
+    background:var(--active-green);
+    color:#fff;
+    border:none;
+    font-family:inherit;
+    font-size:15.5px;
+    font-weight:700;
+    padding:16px;
+    border-radius:999px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  .loc-save-btn:active{transform:scale(0.98); opacity:0.92;}
+</style>
+
+</head>
+<body>
+<div class="phone">
+
+  <div class="left-pane">
+  <div class="topbar">
+    <div class="date-block">
+      <svg class="date-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M3 9.5H21" stroke="currentColor" stroke-width="1.6"/>
+        <path d="M8 3V6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <path d="M16 3V6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <div class="date-text">
+        <div class="hijri">শনি, ১৭ সফর</div>
+        <div class="gregorian">০১ আগস্ট, ১৭ শ্রাবণ</div>
+      </div>
+    </div>
+    <div class="top-icons">
+      <div class="bell-wrap" id="notifBell">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2.5C10.6 2.5 9.5 3.6 9.4 5C7.1 5.7 5.4 7.8 5.4 10.4V13.6C5.4 14.6 5 15.5 4.3 16.2L3.6 16.9C3.1 17.4 3.4 18.3 4.1 18.3H19.9C20.6 18.3 20.9 17.4 20.4 16.9L19.7 16.2C19 15.5 18.6 14.6 18.6 13.6V10.4C18.6 7.8 16.9 5.7 14.6 5C14.5 3.6 13.4 2.5 12 2.5Z" fill="currentColor"/>
+          <path d="M9.3 20C9.3 21.1 10.5 22 12 22C13.5 22 14.7 21.1 14.7 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span class="badge" id="notifBadge" data-count="3">৩</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ring-section">
+    <div class="ring-arc">
+      <svg viewBox="0 0 280 170" xmlns="http://www.w3.org/2000/svg">
+        <path class="arc-track" d="M35 150 A105 105 0 0 1 245 150" stroke="var(--ring-track)" stroke-width="16" fill="none" stroke-linecap="round"/>
+        <path id="arcFg" class="arc-fg" d="M35 150 A105 105 0 0 1 245 150" stroke="var(--ring-fg)" stroke-width="16" fill="none"
+          stroke-linecap="round"
+          stroke-dasharray="330"
+          stroke-dashoffset="8"/>
+      </svg>
+      <div class="ring-center">
+        <div class="label" id="ringLabel">ইশরাক</div>
+        <div class="sub" id="ringSub">শেষ হতে বাকি</div>
+        <div class="countdown" id="ringCountdown">০০:০২:৩৯</div>
+      </div>
+    </div>
+
+    <div class="pills-row">
+      <div class="location-row" id="locationRow" role="button">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 21C12 21 19 14.5 19 9.5C19 5.6 15.9 2.5 12 2.5C8.1 2.5 5 5.6 5 9.5C5 14.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.6"/>
+          <circle cx="12" cy="9.5" r="2.5" stroke="currentColor" stroke-width="1.6"/>
+        </svg>
+        <span>Dhaka</span>
+        <svg class="chev" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <div class="suntimes-row">
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M12 2V4.5M12 19.5V22M2 12H4.5M19.5 12H22M4.9 4.9L6.6 6.6M17.4 17.4L19.1 19.1M19.1 4.9L17.4 6.6M6.6 17.4L4.9 19.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          সূর্যোদয়: ০৫:২৭
+        </span>
+        <span class="divider-dot"></span>
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M12 2V4.5M12 19.5V22M2 12H4.5M19.5 12H22M4.9 4.9L6.6 6.6M17.4 17.4L19.1 19.1M19.1 4.9L17.4 6.6M6.6 17.4L4.9 19.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+          সূর্যাস্ত: ০৬:৪২
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+
+    <div class="prayer-row" data-waqt="fajr">
+      <div class="prayer-left">
+        <div class="prayer-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3V6" stroke="var(--sun-2)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M5.3 10.2L7.1 10.6" stroke="var(--sun-2)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M18.7 10.2L16.9 10.6" stroke="var(--sun-2)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M6.5 6.4L8 8" stroke="var(--sun-2)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M17.5 6.4L16 8" stroke="var(--sun-2)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M6.3 15C6.3 11.6 8.8 9 12 9C15.2 9 17.7 11.6 17.7 15" fill="var(--sun-1)" stroke="var(--sun-2)" stroke-width="0.6"/>
+            <path d="M3 15H21" stroke="var(--sun-2)" stroke-width="1.7" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="prayer-name">ফজর</div>
+      </div>
+      <div class="prayer-right">
+        <div class="prayer-time">০৪:০৪ - ০৫:২৬</div>
+        <div class="radio"></div>
+      </div>
+    </div>
+
+    <div class="prayer-row" data-waqt="zuhr">
+      <div class="prayer-left">
+        <div class="prayer-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="4.5" fill="var(--sun-1)" stroke="var(--sun-2)" stroke-width="1"/>
+            <path d="M12 2.5V5M12 19V21.5M3 12H5.5M18.5 12H21M5.6 5.6L7.4 7.4M16.6 16.6L18.4 18.4M18.4 5.6L16.6 7.4M7.4 16.6L5.6 18.4" stroke="var(--sun-2)" stroke-width="1.7" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="prayer-name">যুহর</div>
+      </div>
+      <div class="prayer-right">
+        <div class="prayer-time">১২:০৭ - ০৪:৪২</div>
+        <div class="radio"></div>
+      </div>
+    </div>
+
+    <div class="prayer-row" data-waqt="asr">
+      <div class="prayer-left">
+        <div class="prayer-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="4.5" fill="var(--sun-1)" stroke="var(--sun-2)" stroke-width="1"/>
+            <path d="M12 2.5V5M12 19V21.5M3 12H5.5M18.5 12H21M5.6 5.6L7.4 7.4M16.6 16.6L18.4 18.4M18.4 5.6L16.6 7.4M7.4 16.6L5.6 18.4" stroke="var(--sun-2)" stroke-width="1.7" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="prayer-name">আসর</div>
+      </div>
+      <div class="prayer-right">
+        <div class="prayer-time">০৪:৪৩ - ০৬:৪১</div>
+        <div class="radio"></div>
+      </div>
+    </div>
+
+    <div class="prayer-row" data-waqt="maghrib">
+      <div class="prayer-left">
+        <div class="prayer-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 16C5.8 16 4 14.4 4 12.4C4 10.6 5.4 9.1 7.2 8.9C7.8 6.7 9.8 5 12.2 5C14.8 5 17 6.9 17.4 9.4C19 9.7 20 11 20 12.6C20 14.5 18.4 16 16.4 16H8Z" fill="var(--dusk-color)"/>
+            <path d="M9.6 5.7C10.1 4.6 11.1 3.8 12.4 3.6C11.7 4.4 11.4 5.4 11.7 6.4C12.1 7.7 13.4 8.4 14.6 8.1C14.1 9.2 12.9 9.9 11.6 9.7C10 9.4 9 7.9 9.3 6.3C9.3 6.1 9.5 5.9 9.6 5.7Z" fill="var(--dusk-dark)"/>
+          </svg>
+        </div>
+        <div class="prayer-name">মাগরিব</div>
+      </div>
+      <div class="prayer-right">
+        <div class="prayer-time">০৬:৪২ - ০৮:০৪</div>
+        <div class="radio"></div>
+      </div>
+    </div>
+
+    <div class="prayer-row" data-waqt="isha">
+      <div class="prayer-left">
+        <div class="prayer-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17 14.5C15.3 15.9 12.7 15.7 11.2 14.1C9.7 12.5 9.7 9.9 11.3 8.3C8.9 8.5 7 10.6 7 13.1C7 15.8 9.2 18 11.9 18C14.2 18 16.1 16.4 16.7 14.3" fill="var(--night-color)"/>
+            <path d="M18.5 5.5L19 7L20.5 7.5L19 8L18.5 9.5L18 8L16.5 7.5L18 7L18.5 5.5Z" fill="var(--night-color)"/>
+            <path d="M6 5L6.3 5.9L7.2 6.2L6.3 6.5L6 7.4L5.7 6.5L4.8 6.2L5.7 5.9L6 5Z" fill="var(--night-color)"/>
+          </svg>
+        </div>
+        <div class="prayer-name">ইশা</div>
+      </div>
+      <div class="prayer-right">
+        <div class="prayer-time">০৮:০৫ - ০৪:০৫</div>
+        <div class="radio"></div>
+      </div>
+    </div>
+
+    <div class="makrooh-row" id="makroohRow">
+      <div class="makrooh-dot"></div>
+      <span>মাকরূহ: ১১:২৪</span>
+    </div>
+
+  </div>
+  </div>
+
+  <div class="app-menu">
+
+    <div class="ad-banner" id="adBanner">
+      <div class="ad-slide on"><img src="assets/ad-sadaqah.jpg" alt="সদকা বিজ্ঞাপন"></div>
+      <div class="ad-slide"><img src="assets/ad-sadaqah.jpg" alt="সদকা বিজ্ঞাপন"></div>
+      <div class="ad-slide"><img src="assets/ad-sadaqah.jpg" alt="সদকা বিজ্ঞাপন"></div>
+    </div>
+    <div class="ad-dots" id="adDots">
+      <span class="on"></span><span></span><span></span>
+    </div>
+    <script>
+      (function(){
+        var slides = document.querySelectorAll('#adBanner .ad-slide');
+        var dots = document.querySelectorAll('#adDots span');
+        var idx = 0;
+        setInterval(function(){
+          slides[idx].classList.remove('on');
+          dots[idx].classList.remove('on');
+          idx = (idx + 1) % slides.length;
+          slides[idx].classList.add('on');
+          dots[idx].classList.add('on');
+        }, 3000);
+      })();
+    </script>
+
+    <div class="menu-section-title ilm" id="sec-ilm">
+      <div class="left">
+        <div class="bar"></div>
+        <h3>ইলম</h3>
+      </div>
+      <div class="search-btn">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="11" r="6.5" stroke="white" stroke-width="2"/>
+          <path d="M20 20L15.8 15.8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/quran.png" alt="কুরআন">
+        </div>
+        <div class="lbl">কুরআন</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/books.png" alt="মাসায়েল">
+        </div>
+        <div class="lbl">কিতাব</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/hadith.png" alt="হাদীস">
+        </div>
+        <div class="lbl">হাদীস</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/probondho.png" alt="প্রবন্ধ">
+        </div>
+        <div class="lbl">প্রবন্ধ</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/bayan.png" alt="বয়ান">
+          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <rect x="12" y="5" width="8" height="14" rx="4" fill="#2fb0a8"/>
+            <path d="M9 15C9 19 12 22 16 22C20 22 23 19 23 15" stroke="#1f8a83" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+            <path d="M16 22V27" stroke="#1f8a83" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M12 27H20" stroke="#1f8a83" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="lbl">বয়ান</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/quran-shikkha.png" alt="কুরআন শিক্ষা">
+          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <rect x="5" y="7" width="22" height="15" rx="2" fill="#2f6fd0"/>
+            <path d="M11 26H21" stroke="#2f6fd0" stroke-width="2" stroke-linecap="round"/>
+            <path d="M16 22V26" stroke="#2f6fd0" stroke-width="2" stroke-linecap="round"/>
+            <path d="M13.5 11L19.5 14.5L13.5 18V11Z" fill="#fff"/>
+          </svg>
+        </div>
+        <div class="lbl">কুরআন শিক্ষা</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/namaz-shikkha.png" alt="নামায শিক্ষা">
+          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 26V15C8 10 11.5 6 16 6C20.5 6 24 10 24 15V26" stroke="#2fa76a" stroke-width="2" fill="none"/>
+            <path d="M13 26V17C13 14.5 14.5 12.5 16 11C17.5 12.5 19 14.5 19 17V26" stroke="#2fa76a" stroke-width="1.6" fill="none"/>
+            <path d="M8 26H24" stroke="#2fa76a" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="lbl">নামায শিক্ষা</div>
+      </div>
+    </div>
+
+    <div class="menu-section-title amol" id="sec-amol">
+      <div class="left">
+        <div class="bar"></div>
+        <h3>আমল</h3>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/namazer-somoy.png" alt="নামাযের সময়">
+          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="17" r="10" fill="#3a8ee0"/>
+            <path d="M16 11V17L20.5 19.5" stroke="#eaf3ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M13 6H19" stroke="#3a8ee0" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="lbl">নামাযের সময়</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/tilawat.png" alt="তিলাওয়াত">
+          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 9C13.7 7.5 10.8 7 8 7.6V22.6C10.8 22 13.7 22.5 16 24V9Z" fill="#2fa76a"/>
+            <path d="M16 9C18.3 7.5 21.2 7 24 7.6V22.6C21.2 22 18.3 22.5 16 24V9Z" fill="#59c98a"/>
+          </svg>
+        </div>
+        <div class="lbl">তিলাওয়াত</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/dua.png" alt="দু'আ">
+          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 26C9 20 10 16 11.5 13C12 12 13.2 12.2 13.3 13.3C13.5 15.5 13.5 18 13 20" stroke="#e0a94a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+            <path d="M23 26C23 20 22 16 20.5 13C20 12 18.8 12.2 18.7 13.3C18.5 15.5 18.5 18 19 20" stroke="#e0a94a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+            <path d="M11 26C10.5 22 10.7 19.5 12 17.5" stroke="#e0a94a" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+            <path d="M21 26C21.5 22 21.3 19.5 20 17.5" stroke="#e0a94a" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="lbl">দু'আ</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/tasbih.png" alt="তাসবীহ্">
+          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="7" r="2.6" fill="#3a8ee0"/>
+            <circle cx="22" cy="10.5" r="2.6" fill="#2fa76a"/>
+            <circle cx="24.5" cy="17" r="2.6" fill="#e0a02a"/>
+            <circle cx="22" cy="23.5" r="2.6" fill="#d9483f"/>
+            <circle cx="16" cy="27" r="2.6" fill="#3a8ee0"/>
+            <circle cx="10" cy="23.5" r="2.6" fill="#2fa76a"/>
+            <circle cx="7.5" cy="17" r="2.6" fill="#e0a02a"/>
+            <circle cx="10" cy="10.5" r="2.6" fill="#d9483f"/>
+          </svg>
+        </div>
+        <div class="lbl">তাসবীহ্</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/amol-tracker.png" alt="আমল ট্রাকার">
+          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <rect x="7" y="6" width="18" height="21" rx="2.5" fill="#2fb0a8"/>
+            <rect x="12" y="4.5" width="8" height="4" rx="1.5" fill="#e8fbf9"/>
+            <path d="M11 15L14 18L21 12" stroke="#e8fbf9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M11 22H21" stroke="#e8fbf9" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="lbl">আমল ট্রাকার</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/hajj-umrah.png" alt="হজ্জ ও উমরা">
+          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="10" width="16" height="16" fill="#1c1c1c" stroke="#3a3a3a" stroke-width="1"/>
+            <path d="M8 15H24" stroke="#e0b95a" stroke-width="1.6"/>
+            <path d="M8 21H24" stroke="#e0b95a" stroke-width="1.6"/>
+            <path d="M13 10V26M19 10V26" stroke="#e0b95a" stroke-width="1.2"/>
+          </svg>
+        </div>
+        <div class="lbl">হজ্জ ও উমরা</div>
+      </div>
+    </div>
+
+    <div class="menu-section-title seba" id="sec-seba">
+      <div class="left">
+        <div class="bar"></div>
+        <h3>সেবা</h3>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/subsidy.png" alt="যাকাত-ফিতরা">
+        </div>
+        <div class="lbl">যাকাত-ফিতরা</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/earning.png" alt="বিনিয়োগ">
+        </div>
+        <div class="lbl">বিনিয়োগ</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/phone-call.png" alt="দ্বীনি জিজ্ঞাসা">
+        </div>
+        <div class="lbl">দ্বীনি জিজ্ঞাসা</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/quiz.png" alt="কুইজ">
+        </div>
+        <div class="lbl">কুইজ</div>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/wedding-couple.png" alt="বিবাহ">
+        </div>
+        <div class="lbl">বিবাহ</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/shopping-cart.png" alt="কেনাকাটা">
+        </div>
+        <div class="lbl">কেনাকাটা</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/job-offer.png" alt="চাকরি">
+        </div>
+        <div class="lbl">চাকরি</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/support.png" alt="সাপোর্ট">
+        </div>
+        <div class="lbl">সাপোর্ট</div>
+      </div>
+    </div>
+
+    <div class="menu-section-title bibidho" id="sec-bibidho">
+      <div class="left">
+        <div class="bar"></div>
+        <h3>বিবিধ</h3>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/qibla.png" alt="ক্বিবলা">
+        </div>
+        <div class="lbl">ক্বিবলা</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/mosque.png" alt="মসজিদ খুঁজি">
+        </div>
+        <div class="lbl">মসজিদ খুঁজি</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/masjid-al-nabawi.png" alt="আমার মসজিদ">
+        </div>
+        <div class="lbl">আমার মসজিদ</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/islam.png" alt="আসমাউল হুসনা">
+        </div>
+        <div class="lbl">আসমাউল হুসনা</div>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/kaaba.png" alt="মক্কা লাইভ">
+        </div>
+        <div class="lbl">মক্কা লাইভ</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/moon.png" alt="রোজা">
+        </div>
+        <div class="lbl">রোজা</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/sunnah.png" alt="সুন্নাহ">
+        </div>
+        <div class="lbl">সুন্নাহ</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/label.png" alt="ইসলামিক নাম">
+        </div>
+        <div class="lbl">ইসলামিক নাম</div>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/ramadan.png" alt="ক্যালেন্ডার">
+        </div>
+        <div class="lbl">ক্যালেন্ডার</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/calendar.png" alt="গুরুত্বপূর্ণ দিন">
+        </div>
+        <div class="lbl">গুরুত্বপূর্ণ দিন</div>
+      </div>
+      <div class="menu-card">
+        <div class="icon-box">
+          <img src="assets/arrange.png" alt="অন্যান্য">
+        </div>
+        <div class="lbl">অন্যান্য</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bottom-nav" id="bottomNav">
+    <div class="nav-item on" data-target="sec-ilm">
+      <img src="assets/ilm-nav.png" alt="ইলম" style="width:24px;height:24px;object-fit:contain;">
+      <span>ইলম</span>
+    </div>
+    <div class="nav-item" data-target="sec-amol">
+        <img src="assets/amol-nav.png" alt="ইলম" style="width:24px;height:24px;object-fit:contain;">
+      <span>আমল</span>
+    </div>
+    <div class="nav-item" data-target="sec-seba">
+         <img src="assets/service-nav.png" alt="ইলম" style="width:24px;height:24px;object-fit:contain;">
+      <span>সেবা</span>
+    </div>
+    <div class="nav-item" data-target="sec-bibidho">
+      <img src="assets/bibidho-nav.png" alt="বিবিধ" style="width:24px;height:24px;object-fit:contain;">
+      <span>বিবিধ</span>
+    </div>
+  </div>
+
+  <div class="location-screen" id="locationScreen" aria-hidden="true">
+    <div class="loc-topbar">
+      <div class="loc-back" id="locBack" role="button" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 5L8 12L15 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2 id="locTitle">অবস্থান</h2>
+    </div>
+
+    <div class="loc-body" id="locMainView">
+      <h3>অবস্থান নির্ধারণ করুন</h3>
+      <p class="loc-desc">আমরা নামাজ এবং রোজার সঠিক সময় গণনার জন্য আপনার শহর ব্যবহার করব</p>
+
+      <div class="loc-map">
+        <span class="loc-map-tag" style="top:20%; right:16%;">AH2</span>
+        <span class="loc-map-tag" style="bottom:22%; right:6%;">R112</span>
+        <div class="loc-map-pin">
+          <div class="pin-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="4" fill="#fff"/>
+            </svg>
+          </div>
+          <div class="pin-label" id="locPinLabel">Saved Location</div>
+        </div>
+        <div class="loc-map-city" id="locMapCity">Dhaka</div>
+        <div class="loc-map-attrib">ম্যাপ ডেটা · আইনি তথ্য</div>
+      </div>
+
+      <div class="loc-gps-card">
+        <div class="loc-gps-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M12 2V5M12 19V22M2 12H5M19 12H22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="loc-gps-text">
+          <div class="t1">GPS লোকেশন সেট করুন</div>
+          <div class="t2">আপনার অবস্থান অনুযায়ী সময়সূচী দেখাবে</div>
+        </div>
+        <button class="loc-gps-btn" id="locGpsBtn" type="button">অনুমতি দিন</button>
+      </div>
+      <div class="loc-gps-status" id="locGpsStatus" style="display:none;"></div>
+
+      <div class="loc-divider">অথবা</div>
+
+      <div class="loc-city-card" id="locCityCard" role="button">
+        <div class="loc-city-icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7"/>
+            <path d="M3 12H21M12 3C14.5 5.5 15.8 8.6 15.8 12C15.8 15.4 14.5 18.5 12 21C9.5 18.5 8.2 15.4 8.2 12C8.2 8.6 9.5 5.5 12 3Z" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="loc-city-text">
+          <div class="t1">শহর ম্যানুয়ালি বেছে নিন</div>
+          <div class="t2" id="locCitySelected">Dhaka, Bangladesh</div>
+        </div>
+        <div class="loc-city-arrow">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 12H19M13 6L19 12L13 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="loc-body loc-picker-view" id="locPickerView">
+      <div class="loc-search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"/>
+          <path d="M20 20L15.8 15.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <input type="text" class="loc-search-input" id="citySearchInput" placeholder="শহর বা জেলার নাম লিখুন..." autocomplete="off">
+      </div>
+      <div class="loc-city-list" id="cityListContainer"></div>
+    </div>
+
+    <div class="loc-footer">
+      <button class="loc-save-btn" id="locSaveBtn" type="button">সংরক্ষণ করুন</button>
+    </div>
+  </div>
+
+
+</div>
+
+<script>
+  (function(){
+    var navItems = Array.prototype.slice.call(document.querySelectorAll('#bottomNav .nav-item'));
+    var sections = navItems
+      .map(function(item){ return document.getElementById(item.getAttribute('data-target')); })
+      .filter(Boolean);
+
+    function setActive(id){
+      navItems.forEach(function(item){
+        item.classList.toggle('on', item.getAttribute('data-target') === id);
+      });
+    }
+
+    // Click a bottom-nav item -> smooth scroll to matching app-menu section
+    navItems.forEach(function(item){
+      item.addEventListener('click', function(){
+        var targetId = item.getAttribute('data-target');
+        var targetEl = document.getElementById(targetId);
+        if(!targetEl) return;
+        isClickScrolling = true;
+        setActive(targetId);
+        targetEl.scrollIntoView({ behavior:'smooth', block:'start' });
+        clearTimeout(window.__navScrollTimer);
+        window.__navScrollTimer = setTimeout(function(){ isClickScrolling = false; }, 700);
+      });
+    });
+
+    // Scroll-spy: highlight the nav item matching the section currently in view
+    var isClickScrolling = false;
+    if('IntersectionObserver' in window && sections.length){
+      var observer = new IntersectionObserver(function(entries){
+        if(isClickScrolling) return;
+        entries.forEach(function(entry){
+          if(entry.isIntersecting){
+            setActive(entry.target.id);
+          }
+        });
+      }, { root:null, rootMargin:'-30% 0px -60% 0px', threshold:0 });
+
+      sections.forEach(function(sec){ observer.observe(sec); });
+    }
+  })();
+</script>
+
+<script>
+/* =========================================================
+   নামাজের রিয়েল-টাইম ইঞ্জিন
+   - প্রতি সেকেন্ডে বর্তমান ওয়াক্ত/উপ-সময় বের করে
+   - রিং-এর লেবেল, কাউন্টডাউন ও প্রোগ্রেস আপডেট করে
+   - কার্ডের সঠিক ওয়াক্ত-রো হাইলাইট করে
+   - প্রতিটি ওয়াক্ত অনুযায়ী ring-section/phone-এর
+     ব্যাকগ্রাউন্ড ও টেক্সট কালার থিম বদলে দেয়
+   ========================================================= */
+(function(){
+
+  var bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+  function toBn(n){
+    return String(n).split('').map(function(c){
+      return (c>='0'&&c<='9') ? bn[+c] : c;
+    }).join('');
+  }
+  function pad2(n){ n = Math.floor(n); return (n<10?'0'+n:''+n); }
+
+  // দিনের মিনিট হিসেবে সময়সীমা (ঘণ্টা*৬০+মিনিট)
+  var FAJR_START   = 4*60+4;     // ০৪:০৪
+  var SUNRISE      = 5*60+26;    // ০৫:২৬
+  var ISHRAQ_END   = 6*60+26;    // ইশরাক ~১ ঘণ্টা
+  var MAKROOH_PRE  = 11*60+24;   // মাকরূহ শুরু (যুহরের আগে)
+  var ZUHR_START   = 12*60+7;    // ১২:০৭
+  var ASR_START    = 16*60+43;   // ০৪:৪৩ PM
+  var MAGHRIB_START= 18*60+42;   // ০৬:৪২ PM
+  var ISHA_START   = 20*60+5;    // ০৮:০৫ PM
+  var DAY          = 1440;
+
+  // থিম: [sky-top, sky-mid, sky-bottom, ring-dark/ring-fg টেক্সট কালার, ring-track, pill-bg]
+  var THEMES = {
+    isha:    { top:'#141a35', mid:'#232a52', bot:'#3b3663', ink:'#f3f0ff', track:'rgba(255,255,255,0.16)', pill:'rgba(255,255,255,0.14)' },
+    fajr:    { top:'#2c3560', mid:'#5b5a8c', bot:'#e2a37a', ink:'#fbf3ea', track:'rgba(255,255,255,0.22)', pill:'rgba(255,255,255,0.35)' },
+    ishraq:  { top:'#fbecb0', mid:'#f6d879', bot:'#e2a83e', ink:'#17352b', track:'rgba(23,53,43,0.14)',    pill:'rgba(255,255,255,0.55)' },
+    duha:    { top:'#eaf6ff', mid:'#bfe3f5', bot:'#79b8d9', ink:'#123a4a', track:'rgba(18,58,74,0.14)',    pill:'rgba(255,255,255,0.6)' },
+    makrooh: { top:'#fbdca0', mid:'#f0b45a', bot:'#e08b2b', ink:'#3a2408', track:'rgba(58,36,8,0.18)',     pill:'rgba(255,255,255,0.5)' },
+    zuhr:    { top:'#fff6df', mid:'#ffe29a', bot:'#f2b955', ink:'#3a2a08', track:'rgba(58,42,8,0.14)',     pill:'rgba(255,255,255,0.6)' },
+    asr:     { top:'#ffe3b0', mid:'#f6b65a', bot:'#d97a35', ink:'#3a220a', track:'rgba(58,34,10,0.16)',    pill:'rgba(255,255,255,0.55)' },
+    maghrib: { top:'#3a2f55', mid:'#a1517a', bot:'#e08a4a', ink:'#fdf2e9', track:'rgba(255,255,255,0.2)',  pill:'rgba(255,255,255,0.3)' }
+  };
+
+  // দিনের সময়সূচী অনুযায়ী উপ-সময়সমূহ (ring লেবেল ও থিমের জন্য)
+  var SEGMENTS = [
+    { key:'fajr',    label:'ফজর',            start:FAJR_START,  end:SUNRISE,     theme:'fajr',    row:'fajr'    },
+    { key:'ishraq',  label:'ইশরাক',          start:SUNRISE,     end:ISHRAQ_END,  theme:'ishraq',  row:null      },
+    { key:'duha',    label:'চাশত',           start:ISHRAQ_END,  end:MAKROOH_PRE, theme:'duha',    row:null      },
+    { key:'makrooh', label:'মাকরূহ ওয়াক্ত',   start:MAKROOH_PRE, end:ZUHR_START,  theme:'makrooh', row:null      },
+    { key:'zuhr',    label:'যুহর',           start:ZUHR_START,  end:ASR_START,   theme:'zuhr',    row:'zuhr'    },
+    { key:'asr',     label:'আসর',            start:ASR_START,   end:MAGHRIB_START, theme:'asr',   row:'asr'     },
+    { key:'maghrib', label:'মাগরিব',         start:MAGHRIB_START, end:ISHA_START, theme:'maghrib', row:'maghrib'},
+    { key:'isha',    label:'ইশা',            start:ISHA_START,  end:FAJR_START+DAY, theme:'isha',  row:'isha'    }
+  ];
+
+  var root = document.documentElement;
+  var ringLabel = document.getElementById('ringLabel');
+  var ringSub = document.getElementById('ringSub');
+  var ringCountdown = document.getElementById('ringCountdown');
+  var arcFg = document.getElementById('arcFg');
+  var makroohRow = document.getElementById('makroohRow');
+  var prayerRows = Array.prototype.slice.call(document.querySelectorAll('.prayer-row[data-waqt]'));
+  var arcLen = 330; // path length ≈ dasharray
+
+  var currentThemeKey = null;
+
+  function applyTheme(key){
+    if(key === currentThemeKey) return;
+    currentThemeKey = key;
+    var t = THEMES[key];
+    if(!t) return;
+    root.style.setProperty('--sky-top', t.top);
+    root.style.setProperty('--sky-mid', t.mid);
+    root.style.setProperty('--sky-bottom', t.bot);
+    root.style.setProperty('--ring-dark', t.ink);
+    root.style.setProperty('--ring-fg', t.ink);
+    root.style.setProperty('--ring-track', t.track);
+    root.style.setProperty('--pill-bg', t.pill);
+  }
+
+  function setActiveRow(rowKey){
+    prayerRows.forEach(function(row){
+      row.classList.toggle('active', row.getAttribute('data-waqt') === rowKey);
+    });
+  }
+
+  function findSegment(minuteOfDay){
+    // isha ওয়াক্ত মধ্যরাত পার হয়ে পরদিন ফজর পর্যন্ত চলে
+    var pos = minuteOfDay;
+    if(pos < FAJR_START){
+      pos += DAY; // আগের রাতের ইশার সাথে যুক্ত করে হিসাব
+    }
+    for(var i=0;i<SEGMENTS.length;i++){
+      var s = SEGMENTS[i];
+      if(pos >= s.start && pos < s.end){
+        return { seg:s, pos:pos };
+      }
+    }
+    // সবশেষ ফলব্যাক (ইশা)
+    return { seg:SEGMENTS[SEGMENTS.length-1], pos:pos };
+  }
+
+  function update(){
+    var now = new Date();
+    var minuteOfDay = now.getHours()*60 + now.getMinutes() + now.getSeconds()/60;
+    var found = findSegment(minuteOfDay);
+    var seg = found.seg;
+    var pos = found.pos;
+
+    // থিম ও লেবেল
+    applyTheme(seg.theme);
+    ringLabel.textContent = seg.label;
+
+    // কাউন্টডাউন (বাকি সময়)
+    var remainMin = seg.end - pos;
+    if(remainMin < 0) remainMin = 0;
+    var totalSec = Math.round(remainMin*60);
+    var hh = Math.floor(totalSec/3600);
+    var mm = Math.floor((totalSec%3600)/60);
+    var ss = totalSec%60;
+    var countdownText = toBn(pad2(hh))+':'+toBn(pad2(mm))+':'+toBn(pad2(ss));
+    ringCountdown.textContent = countdownText;
+    ringSub.textContent = 'শেষ হতে বাকি';
+
+    // রিং প্রোগ্রেস: সময় যত পার হয়, রিং তত খালি হয়ে আসে
+    var span = seg.end - seg.start;
+    var elapsed = pos - seg.start;
+    var frac = span>0 ? Math.min(Math.max(elapsed/span,0),1) : 0;
+    var offset = arcLen * frac;
+    if(arcFg) arcFg.setAttribute('stroke-dashoffset', offset.toFixed(1));
+
+    // কার্ডে সঠিক ওয়াক্ত-রো হাইলাইট
+    setActiveRow(seg.row);
+
+    // মাকরূহ সময়ে বিশেষ হাইলাইট
+    if(makroohRow) makroohRow.classList.toggle('active', seg.key === 'makrooh');
+  }
+
+  update();
+  setInterval(update, 1000);
+})();
+</script>
+
+
+<script>
+/* =========================================================
+   অবস্থান (Location) স্ক্রিন — সম্পূর্ণ কার্যকর সংস্করণ
+   - GPS দিয়ে প্রকৃত অবস্থান সনাক্তকরণ (Geolocation API)
+   - বাংলাদেশের ৬৪ জেলার তালিকা থেকে নিকটতম শহর নির্ণয়
+   - সার্চ-সহ শহর নির্বাচনের তালিকা
+   - নির্বাচিত শহর সংরক্ষণ করে হোম স্ক্রিনে প্রতিফলিত হয়
+   ========================================================= */
+(function(){
+  var locationRow = document.getElementById('locationRow');
+  var screen = document.getElementById('locationScreen');
+  var backBtn = document.getElementById('locBack');
+  var saveBtn = document.getElementById('locSaveBtn');
+  var gpsBtn = document.getElementById('locGpsBtn');
+  var gpsStatus = document.getElementById('locGpsStatus');
+  var cityCard = document.getElementById('locCityCard');
+  var locTitle = document.getElementById('locTitle');
+  var mainView = document.getElementById('locMainView');
+  var pickerView = document.getElementById('locPickerView');
+  var footer = document.querySelector('.loc-footer');
+  var searchInput = document.getElementById('citySearchInput');
+  var cityListContainer = document.getElementById('cityListContainer');
+  var pinLabel = document.getElementById('locPinLabel');
+  var mapCity = document.getElementById('locMapCity');
+  var citySelectedText = document.getElementById('locCitySelected');
+  if(!locationRow || !screen) return;
+
+  // বাংলাদেশের ৬৪ জেলা — নাম ও স্থানাঙ্ক (নিকটতম-শহর নির্ণয়ের জন্য)
+  var BD_CITIES = [
+    {bn:'ঢাকা', en:'Dhaka', lat:23.8103, lon:90.4125},
+    {bn:'ফরিদপুর', en:'Faridpur', lat:23.6070, lon:89.8429},
+    {bn:'গাজীপুর', en:'Gazipur', lat:23.9999, lon:90.4203},
+    {bn:'গোপালগঞ্জ', en:'Gopalganj', lat:23.0050, lon:89.8266},
+    {bn:'কিশোরগঞ্জ', en:'Kishoreganj', lat:24.4449, lon:90.9887},
+    {bn:'মাদারীপুর', en:'Madaripur', lat:23.1641, lon:90.1897},
+    {bn:'মানিকগঞ্জ', en:'Manikganj', lat:23.8644, lon:89.9992},
+    {bn:'মুন্সিগঞ্জ', en:'Munshiganj', lat:23.5422, lon:90.5305},
+    {bn:'নারায়ণগঞ্জ', en:'Narayanganj', lat:23.6238, lon:90.5000},
+    {bn:'নরসিংদী', en:'Narsingdi', lat:23.9322, lon:90.7150},
+    {bn:'রাজবাড়ী', en:'Rajbari', lat:23.7574, lon:89.6444},
+    {bn:'শরীয়তপুর', en:'Shariatpur', lat:23.2423, lon:90.4348},
+    {bn:'টাঙ্গাইল', en:'Tangail', lat:24.2513, lon:89.9167},
+    {bn:'চট্টগ্রাম', en:'Chattogram', lat:22.3569, lon:91.7832},
+    {bn:'বান্দরবান', en:'Bandarban', lat:22.1953, lon:92.2184},
+    {bn:'ব্রাহ্মণবাড়িয়া', en:'Brahmanbaria', lat:23.9570, lon:91.1119},
+    {bn:'চাঁদপুর', en:'Chandpur', lat:23.2333, lon:90.6714},
+    {bn:'কুমিল্লা', en:'Cumilla', lat:23.4607, lon:91.1809},
+    {bn:"কক্সবাজার", en:"Cox's Bazar", lat:21.4272, lon:92.0058},
+    {bn:'ফেনী', en:'Feni', lat:23.0159, lon:91.3976},
+    {bn:'খাগড়াছড়ি', en:'Khagrachhari', lat:23.1193, lon:91.9847},
+    {bn:'লক্ষ্মীপুর', en:'Lakshmipur', lat:22.9440, lon:90.8282},
+    {bn:'নোয়াখালী', en:'Noakhali', lat:22.8696, lon:91.0995},
+    {bn:'রাঙ্গামাটি', en:'Rangamati', lat:22.7324, lon:92.2985},
+    {bn:'বরিশাল', en:'Barisal', lat:22.7010, lon:90.3535},
+    {bn:'বরগুনা', en:'Barguna', lat:22.0953, lon:90.1121},
+    {bn:'ভোলা', en:'Bhola', lat:22.6859, lon:90.6482},
+    {bn:'ঝালকাঠি', en:'Jhalokati', lat:22.6406, lon:90.1987},
+    {bn:'পটুয়াখালী', en:'Patuakhali', lat:22.3596, lon:90.3298},
+    {bn:'পিরোজপুর', en:'Pirojpur', lat:22.5841, lon:89.9720},
+    {bn:'সিলেট', en:'Sylhet', lat:24.8949, lon:91.8687},
+    {bn:'হবিগঞ্জ', en:'Habiganj', lat:24.3745, lon:91.4155},
+    {bn:'মৌলভীবাজার', en:'Moulvibazar', lat:24.4829, lon:91.7774},
+    {bn:'সুনামগঞ্জ', en:'Sunamganj', lat:25.0658, lon:91.3950},
+    {bn:'রাজশাহী', en:'Rajshahi', lat:24.3745, lon:88.6042},
+    {bn:'বগুড়া', en:'Bogura', lat:24.8465, lon:89.3773},
+    {bn:'জয়পুরহাট', en:'Joypurhat', lat:25.0968, lon:89.0227},
+    {bn:'নওগাঁ', en:'Naogaon', lat:24.7936, lon:88.9318},
+    {bn:'নাটোর', en:'Natore', lat:24.4206, lon:88.9861},
+    {bn:'চাঁপাইনবাবগঞ্জ', en:'Chapainawabganj', lat:24.5965, lon:88.2775},
+    {bn:'পাবনা', en:'Pabna', lat:24.0064, lon:89.2372},
+    {bn:'সিরাজগঞ্জ', en:'Sirajganj', lat:24.4533, lon:89.7006},
+    {bn:'রংপুর', en:'Rangpur', lat:25.7439, lon:89.2752},
+    {bn:'দিনাজপুর', en:'Dinajpur', lat:25.6279, lon:88.6332},
+    {bn:'গাইবান্ধা', en:'Gaibandha', lat:25.3287, lon:89.5281},
+    {bn:'কুড়িগ্রাম', en:'Kurigram', lat:25.8054, lon:89.6362},
+    {bn:'লালমনিরহাট', en:'Lalmonirhat', lat:25.9923, lon:89.2847},
+    {bn:'নীলফামারী', en:'Nilphamari', lat:25.9318, lon:88.8560},
+    {bn:'পঞ্চগড়', en:'Panchagarh', lat:26.3411, lon:88.5542},
+    {bn:'ঠাকুরগাঁও', en:'Thakurgaon', lat:26.0336, lon:88.4616},
+    {bn:'খুলনা', en:'Khulna', lat:22.8456, lon:89.5403},
+    {bn:'বাগেরহাট', en:'Bagerhat', lat:22.6602, lon:89.7895},
+    {bn:'চুয়াডাঙ্গা', en:'Chuadanga', lat:23.6402, lon:88.8410},
+    {bn:'যশোর', en:'Jashore', lat:23.1667, lon:89.2167},
+    {bn:'ঝিনাইদহ', en:'Jhenaidah', lat:23.5448, lon:89.1539},
+    {bn:'কুষ্টিয়া', en:'Kushtia', lat:23.9013, lon:89.1200},
+    {bn:'মাগুরা', en:'Magura', lat:23.4873, lon:89.4198},
+    {bn:'মেহেরপুর', en:'Meherpur', lat:23.7622, lon:88.6318},
+    {bn:'নড়াইল', en:'Narail', lat:23.1725, lon:89.5126},
+    {bn:'সাতক্ষীরা', en:'Satkhira', lat:22.7185, lon:89.0705},
+    {bn:'ময়মনসিংহ', en:'Mymensingh', lat:24.7471, lon:90.4203},
+    {bn:'জামালপুর', en:'Jamalpur', lat:24.9375, lon:89.9370},
+    {bn:'নেত্রকোণা', en:'Netrokona', lat:24.8709, lon:90.7276},
+    {bn:'শেরপুর', en:'Sherpur', lat:25.0189, lon:90.0152}
+  ];
+
+  // বর্তমান নির্বাচিত শহর (ডিফল্ট: ঢাকা)
+  var currentSelection = BD_CITIES[0];
+  var pickerOpen = false;
+
+  function haversineKm(lat1, lon1, lat2, lon2){
+    var R = 6371;
+    var dLat = (lat2 - lat1) * Math.PI / 180;
+    var dLon = (lon2 - lon1) * Math.PI / 180;
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  }
+
+  function findNearestCity(lat, lon){
+    var best = BD_CITIES[0];
+    var bestDist = Infinity;
+    for(var i = 0; i < BD_CITIES.length; i++){
+      var d = haversineKm(lat, lon, BD_CITIES[i].lat, BD_CITIES[i].lon);
+      if(d < bestDist){ bestDist = d; best = BD_CITIES[i]; }
+    }
+    return { city: best, distanceKm: bestDist };
+  }
+
+  function toBnNum(n){
+    var bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+    return String(n).split('').map(function(c){
+      return (c >= '0' && c <= '9') ? bn[+c] : c;
+    }).join('');
+  }
+
+  function applySelectedCity(city){
+    currentSelection = city;
+    if(mapCity) mapCity.textContent = city.en;
+    if(pinLabel) pinLabel.textContent = city.bn;
+    if(citySelectedText) citySelectedText.textContent = city.en + ', Bangladesh';
+  }
+
+  function showGpsStatus(msg, type){
+    if(!gpsStatus) return;
+    gpsStatus.textContent = msg;
+    gpsStatus.className = 'loc-gps-status' + (type ? ' ' + type : '');
+    gpsStatus.style.display = msg ? 'flex' : 'none';
+  }
+
+  function resetGpsButton(){
+    if(!gpsBtn) return;
+    gpsBtn.disabled = false;
+    gpsBtn.classList.remove('loading');
+    gpsBtn.textContent = 'অনুমতি দিন';
+    gpsBtn.style.opacity = '';
+  }
+
+  function openScreen(){
+    screen.classList.add('open');
+    screen.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeScreen(){
+    screen.classList.remove('open');
+    screen.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    if(pickerOpen) showMain();
+  }
+
+  function showPicker(){
+    pickerOpen = true;
+    mainView.style.display = 'none';
+    pickerView.style.display = 'block';
+    if(footer) footer.style.display = 'none';
+    if(locTitle) locTitle.textContent = 'শহর নির্বাচন করুন';
+    renderCityList('');
+    if(searchInput){
+      searchInput.value = '';
+      setTimeout(function(){ searchInput.focus(); }, 320);
+    }
+  }
+  function showMain(){
+    pickerOpen = false;
+    pickerView.style.display = 'none';
+    mainView.style.display = 'block';
+    if(footer) footer.style.display = 'block';
+    if(locTitle) locTitle.textContent = 'অবস্থান';
+  }
+
+  function renderCityList(query){
+    if(!cityListContainer) return;
+    var q = (query || '').trim().toLowerCase();
+    var filtered = BD_CITIES.filter(function(c){
+      if(!q) return true;
+      return c.en.toLowerCase().indexOf(q) !== -1 || c.bn.indexOf(query.trim()) !== -1;
+    });
+    cityListContainer.innerHTML = '';
+    if(filtered.length === 0){
+      var empty = document.createElement('div');
+      empty.className = 'loc-city-empty';
+      empty.textContent = 'কোনো শহর পাওয়া যায়নি';
+      cityListContainer.appendChild(empty);
+      return;
+    }
+    filtered.forEach(function(c){
+      var item = document.createElement('div');
+      item.className = 'loc-city-item' + (c.en === currentSelection.en ? ' selected' : '');
+      var main = document.createElement('div');
+      main.className = 'row-main';
+      var nm = document.createElement('span');
+      nm.className = 'nm';
+      nm.textContent = c.bn;
+      var en = document.createElement('span');
+      en.className = 'en';
+      en.textContent = c.en;
+      main.appendChild(nm);
+      main.appendChild(en);
+      var right = document.createElement('div');
+      right.className = 'row-right';
+      right.innerHTML = '<svg class="check" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 13L9.5 17.5L19 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      item.appendChild(main);
+      item.appendChild(right);
+      item.addEventListener('click', function(){
+        applySelectedCity(c);
+        showMain();
+      });
+      cityListContainer.appendChild(item);
+    });
+  }
+
+  locationRow.addEventListener('click', openScreen);
+  if(backBtn){
+    backBtn.addEventListener('click', function(){
+      if(pickerOpen) showMain();
+      else closeScreen();
+    });
+  }
+  if(cityCard) cityCard.addEventListener('click', showPicker);
+  if(searchInput){
+    searchInput.addEventListener('input', function(){
+      renderCityList(searchInput.value);
+    });
+  }
+
+  // "সংরক্ষণ করুন" — বর্তমান নির্বাচিত শহর হোম স্ক্রিনের পিলে বসিয়ে স্ক্রিন বন্ধ করে
+  if(saveBtn){
+    saveBtn.addEventListener('click', function(){
+      var citySpan = locationRow.querySelector('span');
+      if(citySpan) citySpan.textContent = currentSelection.en;
+      closeScreen();
+    });
+  }
+
+  // GPS বাটন — প্রকৃত Geolocation API ব্যবহার করে অবস্থান সনাক্ত করে
+  // এবং বাংলাদেশের ৬৪ জেলার মধ্যে নিকটতম জেলা বের করে
+  if(gpsBtn){
+    gpsBtn.addEventListener('click', function(){
+      if(!navigator.geolocation){
+        showGpsStatus('আপনার ব্রাউজারে GPS সুবিধা সমর্থিত নয়', 'err');
+        return;
+      }
+      gpsBtn.disabled = true;
+      gpsBtn.classList.add('loading');
+      gpsBtn.innerHTML = '<span class="spin"></span> খোঁজা হচ্ছে...';
+      showGpsStatus('', '');
+
+      navigator.geolocation.getCurrentPosition(
+        function(pos){
+          var lat = pos.coords.latitude;
+          var lon = pos.coords.longitude;
+          var result = findNearestCity(lat, lon);
+          applySelectedCity(result.city);
+          gpsBtn.classList.remove('loading');
+          gpsBtn.textContent = 'সেট হয়েছে ✓';
+          gpsBtn.disabled = true;
+          showGpsStatus('নিকটতম জেলা: ' + result.city.bn + ' (আনুমানিক ' + toBnNum(Math.round(result.distanceKm)) + ' কিমি)', 'ok');
+        },
+        function(err){
+          resetGpsButton();
+          var msg = 'অবস্থান সনাক্ত করা যায়নি, আবার চেষ্টা করুন';
+          if(err.code === err.PERMISSION_DENIED) msg = 'লোকেশন অনুমতি দেওয়া হয়নি — ব্রাউজার সেটিংস থেকে অনুমতি দিন';
+          else if(err.code === err.TIMEOUT) msg = 'অবস্থান সনাক্ত করতে সময় বেশি লাগছে, আবার চেষ্টা করুন';
+          showGpsStatus(msg, 'err');
+        },
+        { enableHighAccuracy:true, timeout:12000, maximumAge:60000 }
+      );
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
