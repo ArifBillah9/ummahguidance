@@ -1032,109 +1032,47 @@
     background:#eae7df;
     border:1px solid rgba(0,0,0,0.08);
   }
-  /* ---- Google Maps style base layers: land / water / parks / roads ---- */
-  .gmap-water{
-    position:absolute;
-    width:62%; height:56%;
-    left:-16%; bottom:-20%;
-    background:#a9d7ef;
-    border-radius:48% 52% 55% 45%/55% 45% 58% 42%;
-  }
-  .gmap-park{
-    position:absolute;
-    width:32%; height:28%;
-    right:5%; top:8%;
-    background:#c7e4bd;
-    border-radius:38% 62% 55% 45%/45% 40% 60% 55%;
-  }
-  .gmap-park.park-2{
-    width:20%; height:18%;
-    left:6%; top:50%;
-    right:auto;
-    border-radius:50% 50% 40% 60%/55% 45% 55% 45%;
-  }
-  .gmap-roads{
+  .loc-map-frame{
     position:absolute;
     inset:0;
     width:100%;
     height:100%;
+    border:0;
     display:block;
   }
-  .gmap-place-label{
+  .loc-map-loading{
     position:absolute;
-    font-size:10.5px;
-    font-weight:700;
-    color:#5f6a66;
-    letter-spacing:0.2px;
-    text-shadow:0 1px 1px rgba(255,255,255,0.75), 0 -1px 1px rgba(255,255,255,0.75);
-    pointer-events:none;
-  }
-  .gmap-place-label.sub{font-size:9px; font-weight:600; color:#7c8781;}
-  .loc-map-tag{
-    position:absolute;
-    background:#fff;
-    border:1px solid rgba(0,0,0,0.12);
-    border-radius:4px;
-    font-size:10px;
-    font-weight:700;
-    color:#3d4249;
-    padding:2px 5px;
-    box-shadow:0 1px 3px rgba(0,0,0,0.12);
-  }
-  /* ---- Classic red teardrop marker, Google Maps style ---- */
-  .loc-map-pin{
-    position:absolute;
-    left:50%; top:44%;
-    transform:translate(-50%,-92%);
+    inset:0;
     display:flex;
-    flex-direction:column;
     align-items:center;
-    gap:0;
+    justify-content:center;
+    gap:8px;
+    font-size:12.5px;
+    font-weight:600;
+    color:#7d8b85;
+    background:#eae7df;
+    pointer-events:none;
+    transition:opacity .3s ease;
   }
-  .loc-map-pin .pin-icon{
-    width:32px;height:32px;
-    border-radius:50% 50% 50% 0;
-    transform:rotate(-45deg);
-    background:#ea4335;
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 3px 8px rgba(0,0,0,0.3);
-    margin-bottom:6px;
-  }
-  .loc-map-pin .pin-icon svg{
-    transform:rotate(45deg);
-    width:14px;height:14px;
-  }
-  .loc-map-pin .pin-shadow{
-    width:13px;height:5px;
-    border-radius:50%;
-    background:rgba(0,0,0,0.28);
-    filter:blur(1px);
-    margin:-2px 0 6px;
-  }
-  .loc-map-pin .pin-label{
-    background:rgba(255,255,255,0.96);
-    padding:3px 10px;
-    border-radius:6px;
-    font-size:11.5px;
-    font-weight:700;
-    color:#2a2f2c;
-    white-space:nowrap;
-    box-shadow:0 1px 4px rgba(0,0,0,0.18);
-  }
+  .loc-map-loading.hide{opacity:0;}
   .loc-map-city{
     position:absolute;
-    left:50%; bottom:11%;
-    transform:translateX(-50%);
-    font-size:20px;
-    font-weight:800;
-    color:rgba(60,65,60,0.5);
-    letter-spacing:0.5px;
+    left:12px; top:10px;
+    background:rgba(255,255,255,0.92);
+    padding:5px 12px;
+    border-radius:999px;
+    font-size:12.5px;
+    font-weight:700;
+    color:#2a2f2c;
+    letter-spacing:0.2px;
+    box-shadow:0 1px 5px rgba(0,0,0,0.18);
+    z-index:2;
     pointer-events:none;
   }
-  /* ---- Map UI chrome: zoom / locate controls, bottom attribution bar ---- */
+  /* ---- Map UI chrome: zoom / locate controls ---- */
   .gmap-controls{
     position:absolute;
-    right:10px; bottom:34px;
+    right:10px; bottom:10px;
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -1154,7 +1092,11 @@
     color:#5f6a66;
     cursor:pointer;
     -webkit-tap-highlight-color:transparent;
+    transition:transform .15s ease;
   }
+  .gmap-locate-btn:active{transform:scale(0.9);}
+  .gmap-locate-btn.loading svg{animation:gmapSpin 0.9s linear infinite;}
+  @keyframes gmapSpin{ to{ transform:rotate(360deg); } }
   .gmap-locate-btn svg{width:16px;height:16px;}
   .gmap-zoom-btns{
     display:flex;
@@ -1176,19 +1118,7 @@
   .gmap-zoom-btns button:first-child{border-bottom:1px solid rgba(0,0,0,0.1);}
   .gmap-zoom-btns button:active,
   .gmap-locate-btn:active{background:#f2f2f2;}
-  .loc-map-attrib{
-    position:absolute;
-    left:0; right:0; bottom:0;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:8px;
-    padding:3px 10px;
-    background:rgba(255,255,255,0.65);
-    font-size:9.5px;
-    font-weight:600;
-    color:#5c625e;
-  }
+  .gmap-zoom-btns button:disabled{opacity:0.4; cursor:not-allowed;}
 
   .loc-gps-card{
     display:flex;
@@ -1476,7 +1406,7 @@
     color:var(--active-green);
   }
   .notif-sub{
-    margin-top:9px;
+    margin-top:2px;
     font-size:12.5px;
     color:#7d8b85;
   }
@@ -2223,53 +2153,18 @@
       <h3>অবস্থান নির্ধারণ করুন</h3>
       <p class="loc-desc">আমরা নামাজ এবং রোজার সঠিক সময় গণনার জন্য আপনার শহর ব্যবহার করব</p>
 
-      <div class="loc-map">
-        <div class="gmap-water"></div>
-        <div class="gmap-park"></div>
-        <div class="gmap-park park-2"></div>
-        <svg class="gmap-roads" viewBox="0 0 682 430" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <g fill="none" stroke-linecap="round">
-            <path d="M-10 118 L692 96" stroke="#cdc8bd" stroke-width="7"/>
-            <path d="M-10 118 L692 96" stroke="#ffffff" stroke-width="4"/>
-            <path d="M46 -10 L64 440" stroke="#cdc8bd" stroke-width="6"/>
-            <path d="M46 -10 L64 440" stroke="#ffffff" stroke-width="3.5"/>
-            <path d="M-10 262 L692 300" stroke="#cdc8bd" stroke-width="6"/>
-            <path d="M-10 262 L692 300" stroke="#ffffff" stroke-width="3.5"/>
-            <path d="M284 -10 L302 440" stroke="#cdc8bd" stroke-width="6"/>
-            <path d="M284 -10 L302 440" stroke="#ffffff" stroke-width="3.5"/>
-            <path d="M504 -10 L472 440" stroke="#cdc8bd" stroke-width="6"/>
-            <path d="M504 -10 L472 440" stroke="#ffffff" stroke-width="3.5"/>
-            <path d="M-10 382 L692 358" stroke="#cdc8bd" stroke-width="6"/>
-            <path d="M-10 382 L692 358" stroke="#ffffff" stroke-width="3.5"/>
-            <path d="M-10 210 C 180 160, 420 262, 692 188" stroke="#f0b552" stroke-width="10"/>
-            <path d="M-10 210 C 180 160, 420 262, 692 188" stroke="#fbd58a" stroke-width="6"/>
-          </g>
-        </svg>
-        <span class="gmap-place-label" style="top:20%; left:12%;">উত্তরা</span>
-        <span class="gmap-place-label sub" style="top:32%; left:62%;">গুলশান</span>
-        <span class="gmap-place-label sub" style="top:70%; left:20%;">ধানমন্ডি</span>
-        <div class="loc-map-pin">
-          <div class="pin-icon">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="12" r="4" fill="#fff"/>
-            </svg>
-          </div>
-          <div class="pin-shadow"></div>
-          <div class="pin-label" id="locPinLabel">Saved Location</div>
-        </div>
+      <div class="loc-map" id="locMap">
+        <iframe class="loc-map-frame" id="locMapFrame" title="মানচিত্র" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+        <div class="loc-map-loading" id="locMapLoading">মানচিত্র লোড হচ্ছে…</div>
         <div class="loc-map-city" id="locMapCity">Dhaka</div>
         <div class="gmap-controls">
-          <button type="button" class="gmap-locate-btn" aria-label="বর্তমান অবস্থান দেখান">
+          <button type="button" class="gmap-locate-btn" id="gmapLocateBtn" aria-label="বর্তমান অবস্থান দেখান">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 2V5M12 19V22M2 12H5M19 12H22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           </button>
           <div class="gmap-zoom-btns">
-            <button type="button" aria-label="জুম ইন">+</button>
-            <button type="button" aria-label="জুম আউট">−</button>
+            <button type="button" id="gmapZoomIn" aria-label="জুম ইন">+</button>
+            <button type="button" id="gmapZoomOut" aria-label="জুম আউট">−</button>
           </div>
-        </div>
-        <div class="loc-map-attrib">
-          <span>মানচিত্র ডেটা</span>
-          <span>আইনি তথ্য</span>
         </div>
       </div>
 
@@ -2808,8 +2703,12 @@
   var footer = document.querySelector('.loc-footer');
   var searchInput = document.getElementById('citySearchInput');
   var cityListContainer = document.getElementById('cityListContainer');
-  var pinLabel = document.getElementById('locPinLabel');
   var mapCity = document.getElementById('locMapCity');
+  var mapFrame = document.getElementById('locMapFrame');
+  var mapLoading = document.getElementById('locMapLoading');
+  var locateBtn = document.getElementById('gmapLocateBtn');
+  var zoomInBtn = document.getElementById('gmapZoomIn');
+  var zoomOutBtn = document.getElementById('gmapZoomOut');
   var citySelectedText = document.getElementById('locCitySelected');
   if(!locationRow || !screen) return;
 
@@ -2885,6 +2784,34 @@
   var currentSelection = BD_CITIES[0];
   var pickerOpen = false;
 
+  // ===== রিফ্রেশের পরও নির্বাচিত লোকেশন মনে রাখা (localStorage) =====
+  var LOC_STORAGE_KEY = 'muslimBangla_selectedCity_v1';
+
+  function saveCityToStorage(city){
+    try{
+      localStorage.setItem(LOC_STORAGE_KEY, JSON.stringify({
+        bn: city.bn, en: city.en, lat: city.lat, lon: city.lon
+      }));
+    }catch(e){ /* localStorage অনুপলব্ধ হলে নিরবে বাদ দেওয়া হলো */ }
+  }
+
+  function loadCityFromStorage(){
+    try{
+      var raw = localStorage.getItem(LOC_STORAGE_KEY);
+      if(!raw) return null;
+      var saved = JSON.parse(raw);
+      if(!saved || !saved.en) return null;
+      // সংরক্ষিত শহরটি ৬৪ জেলার তালিকায় থাকলে সেটাই ব্যবহার করা হবে
+      for(var i = 0; i < BD_CITIES.length; i++){
+        if(BD_CITIES[i].en === saved.en) return BD_CITIES[i];
+      }
+      // তালিকায় না থাকলেও (যেমন GPS দিয়ে পাওয়া কাস্টম নাম) সংরক্ষিত মানই ব্যবহার হবে
+      return saved;
+    }catch(e){
+      return null;
+    }
+  }
+
   function haversineKm(lat1, lon1, lat2, lon2){
     var R = 6371;
     var dLat = (lat2 - lat1) * Math.PI / 180;
@@ -2913,11 +2840,65 @@
     }).join('');
   }
 
+  // ===== প্রকৃত Google Maps (key ছাড়াই কাজ করা এমবেড পদ্ধতি) =====
+  var mapZoom = 12;
+
+  function buildMapUrl(lat, lon, label, zoom){
+    var q = lat + ',' + lon + '(' + encodeURIComponent(label) + ')';
+    return 'https://www.google.com/maps?q=' + q + '&z=' + zoom + '&output=embed';
+  }
+
+  function loadMap(lat, lon, label, zoom){
+    if(!mapFrame) return;
+    mapZoom = zoom || mapZoom;
+    if(mapLoading) mapLoading.classList.remove('hide');
+    mapFrame.src = buildMapUrl(lat, lon, label, mapZoom);
+  }
+
+  function updateMapForCity(city){
+    loadMap(city.lat, city.lon, city.bn + ' (' + city.en + ')', mapZoom);
+  }
+
+  if(mapFrame){
+    mapFrame.addEventListener('load', function(){
+      if(mapLoading) mapLoading.classList.add('hide');
+    });
+  }
+
+  if(zoomInBtn){
+    zoomInBtn.addEventListener('click', function(){
+      mapZoom = Math.min(mapZoom + 1, 18);
+      updateMapForCity(currentSelection);
+    });
+  }
+  if(zoomOutBtn){
+    zoomOutBtn.addEventListener('click', function(){
+      mapZoom = Math.max(mapZoom - 1, 3);
+      updateMapForCity(currentSelection);
+    });
+  }
+  if(locateBtn){
+    locateBtn.addEventListener('click', function(){
+      if(!navigator.geolocation){
+        showGpsStatus('আপনার ব্রাউজারে GPS সুবিধা সমর্থিত নয়', 'err');
+        return;
+      }
+      locateBtn.classList.add('loading');
+      navigator.geolocation.getCurrentPosition(function(pos){
+        locateBtn.classList.remove('loading');
+        loadMap(pos.coords.latitude, pos.coords.longitude, 'আপনার অবস্থান', mapZoom);
+      }, function(){
+        locateBtn.classList.remove('loading');
+        showGpsStatus('আপনার অবস্থান পাওয়া যায়নি, GPS/অনুমতি পরীক্ষা করুন', 'err');
+      }, { enableHighAccuracy:true, timeout:10000 });
+    });
+  }
+
   function applySelectedCity(city){
     currentSelection = city;
     if(mapCity) mapCity.textContent = city.en;
-    if(pinLabel) pinLabel.textContent = city.bn;
     if(citySelectedText) citySelectedText.textContent = city.en + ', Bangladesh';
+    updateMapForCity(city);
   }
 
   function showGpsStatus(msg, type){
@@ -3027,9 +3008,20 @@
     saveBtn.addEventListener('click', function(){
       var citySpan = locationRow.querySelector('span');
       if(citySpan) citySpan.textContent = currentSelection.en;
+      saveCityToStorage(currentSelection);
       closeScreen();
     });
   }
+
+  // পেজ লোড হওয়ার সাথে সাথে আগে সংরক্ষিত (localStorage) লোকেশন থাকলে তা প্রয়োগ করা হচ্ছে,
+  // যাতে পেজ রিফ্রেশ দিলেও সিলেক্ট করা লোকেশন হারিয়ে না যায়; না থাকলে ডিফল্ট শহর দিয়ে ম্যাপ চালু হবে
+  (function restoreSavedCity(){
+    var saved = loadCityFromStorage();
+    var cityToApply = saved || currentSelection;
+    applySelectedCity(cityToApply);
+    var citySpan = locationRow.querySelector('span');
+    if(citySpan) citySpan.textContent = cityToApply.en;
+  })();
 
   // GPS বাটন — প্রকৃত Geolocation API ব্যবহার করে অবস্থান সনাক্ত করে
   // এবং বাংলাদেশের ৬৪ জেলার মধ্যে নিকটতম জেলা বের করে
