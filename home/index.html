@@ -89,6 +89,29 @@
     pointer-events:none;
   }
 
+  /* ===== ওয়াক্তভিত্তিক ব্যাকগ্রাউন্ড ছবি (ফজর/যুহর/আসর/মাগরিব/ইশা) ===== */
+  .waqt-bg{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .waqt-bg-layer{
+    position:absolute;
+    inset:0;
+    background-size:cover;
+    background-position:center;
+    opacity:0;
+    transition:opacity 1s ease;
+  }
+  .waqt-bg-layer.on{opacity:1;}
+  .waqt-bg-scrim{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg, rgba(8,10,26,0.42) 0%, rgba(8,10,26,0.34) 45%, rgba(8,10,26,0.58) 100%);
+  }
+
   .topbar{
     display:flex;
     align-items:center;
@@ -365,6 +388,11 @@
     height:100%;
     object-fit:cover;
     display:block;
+  }
+  .ad-banner .ad-slide a{
+    display:block;
+    width:100%;
+    height:100%;
   }
   .ad-dots{
     display:flex;
@@ -1395,11 +1423,176 @@
     transition:transform .15s ease, opacity .15s ease;
   }
   .loc-save-btn:active{transform:scale(0.98); opacity:0.92;}
+
+  /* ===== Notification screen (full-screen overlay) ===== */
+  .notif-screen{
+    position:fixed;
+    top:0; left:50%;
+    transform:translateX(-50%) translateX(100%);
+    width:100%;
+    max-width:430px;
+    height:100vh;
+    height:100dvh;
+    background:#eef1f0;
+    z-index:100;
+    display:flex;
+    flex-direction:column;
+    opacity:0;
+    visibility:hidden;
+    transition:transform .38s cubic-bezier(.32,.72,.35,1), opacity .3s ease, visibility 0s linear .38s;
+    overflow:hidden;
+  }
+  .notif-screen.open{
+    transform:translateX(-50%) translateX(0);
+    opacity:1;
+    visibility:visible;
+    transition:transform .38s cubic-bezier(.32,.72,.35,1), opacity .3s ease, visibility 0s linear 0s;
+  }
+  .notif-topbar{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:16px 20px 14px;
+    background:#eef1f0;
+    flex-shrink:0;
+  }
+  .notif-back{
+    width:34px;height:34px;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    color:var(--active-green);
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    border-radius:50%;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .notif-back:active{background:rgba(0,0,0,0.06); transform:scale(0.92);}
+  .notif-back svg{width:24px;height:24px;}
+  .notif-headings{display:flex; flex-direction:column;}
+  .notif-topbar h2{
+    margin:0;
+    font-size:21px;
+    font-weight:800;
+    color:var(--active-green);
+  }
+  .notif-sub{
+    margin-top:2px;
+    font-size:12.5px;
+    color:#7d8b85;
+  }
+  .notif-body{
+    flex:1 1 auto;
+    min-height:0;
+    overflow-y:auto;
+    background:#fff;
+    -webkit-overflow-scrolling:touch;
+  }
+  .notif-item{
+    position:relative;
+    display:flex;
+    gap:14px;
+    padding:18px 20px;
+    border-bottom:1px solid rgba(0,0,0,0.07);
+  }
+  .notif-icon{
+    flex-shrink:0;
+    width:42px;height:42px;
+    border-radius:50%;
+    background:var(--active-bg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--active-green);
+  }
+  .notif-icon svg{width:20px;height:20px;}
+  .notif-content{flex:1; min-width:0;}
+  .notif-row1{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .notif-title{
+    margin:0;
+    font-size:15.5px;
+    font-weight:700;
+    color:var(--active-green);
+  }
+  .notif-time{
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    color:#8b9791;
+    white-space:nowrap;
+    padding-top:1px;
+  }
+  .notif-time .dot{
+    width:7px;height:7px;
+    border-radius:50%;
+    background:var(--active-green);
+    flex-shrink:0;
+  }
+  .notif-item.read .notif-time .dot{visibility:hidden;}
+  .notif-snippet{
+    margin:6px 0 0;
+    font-size:13.5px;
+    line-height:1.5;
+    color:var(--active-green);
+    opacity:0.85;
+    display:-webkit-box;
+    -webkit-line-clamp:1;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .notif-actions{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin-top:10px;
+  }
+  .notif-action{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:26px;height:26px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    color:#7d8b85;
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  .notif-action:active{transform:scale(0.88);}
+  .notif-action svg{width:19px;height:19px;}
+  .notif-action.delete{color:#c23b2f;}
+  .notif-item.removing{
+    opacity:0;
+    transform:translateX(30px);
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .notif-empty{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    padding:70px 30px;
+    color:#8b9791;
+    text-align:center;
+  }
+  .notif-empty svg{width:52px;height:52px; opacity:0.5;}
+  .notif-empty p{margin:0; font-size:14.5px;}
 </style>
 
 </head>
 <body>
 <div class="phone">
+
+  <div class="waqt-bg" id="waqtBg" aria-hidden="true">
+    <div class="waqt-bg-layer on" id="waqtBgA"></div>
+    <div class="waqt-bg-layer" id="waqtBgB"></div>
+    <div class="waqt-bg-scrim"></div>
+  </div>
 
   <div class="left-pane">
   <div class="topbar">
@@ -1572,26 +1765,125 @@
 
   <div class="app-menu">
 
-    <div class="ad-banner" id="adBanner">
-      <div class="ad-slide on"><img src="assets/ad-sadaqah.jpg" alt="সদকা বিজ্ঞাপন"></div>
-      <div class="ad-slide"><img src="assets/ad-sadaqah.jpg" alt="সদকা বিজ্ঞাপন"></div>
-      <div class="ad-slide"><img src="assets/ad-sadaqah.jpg" alt="সদকা বিজ্ঞাপন"></div>
-    </div>
-    <div class="ad-dots" id="adDots">
-      <span class="on"></span><span></span><span></span>
-    </div>
+    <div class="ad-banner" id="adBanner"></div>
+    <div class="ad-dots" id="adDots"></div>
     <script>
       (function(){
-        var slides = document.querySelectorAll('#adBanner .ad-slide');
-        var dots = document.querySelectorAll('#adDots span');
+        /* =========================================================
+           ৩৬৫ দিনের ব্যানার সিস্টেম
+           -----------------------------------------------------------
+           নিচের AD_BANNERS তালিকায় যত খুশি ব্যানার যোগ করা যাবে।
+           প্রতিটি ব্যানারের জন্য চাইলে startDate ও endDate (YYYY-MM-DD)
+           দিয়ে দেওয়া যায় — তাহলে শুধু সেই তারিখের মধ্যেই ব্যানারটি
+           ঘুরবে (বছরব্যাপী ক্যাম্পেইন সাজানোর জন্য)। startDate/endDate
+           ফাঁকা রাখলে ব্যানারটি সবসময় (৩৬৫ দিন) সচল থাকবে।
+           href ফাঁকা/'#' রাখলে ব্যানারে ক্লিক করলে কিছু হবে না।
+        ========================================================= */
+        var AD_BANNERS = [
+          {
+            img:  'assets/ad-sadaqah.jpg',
+            alt:  'সদকা বিজ্ঞাপন',
+            href: '#',
+            startDate: '',
+            endDate:   ''
+          }
+          /* নতুন ব্যানার যোগ করতে এখানে আরেকটি অবজেক্ট বসান, যেমন:
+          {
+            img:  'assets/ad-ramadan.jpg',
+            alt:  'রমজান বিজ্ঞাপন',
+            href: 'https://example.com/ramadan-offer',
+            startDate: '2027-03-01',
+            endDate:   '2027-03-30'
+          },
+          */
+        ];
+
+        var AD_INTERVAL_MS = 4000; /* প্রতিটি স্লাইড কতক্ষণ দেখাবে */
+
+        var track = document.getElementById('adBanner');
+        var dotsWrap = document.getElementById('adDots');
+        if(!track || !dotsWrap) return;
+
+        function inActiveWindow(banner){
+          var today = new Date();
+          today.setHours(0,0,0,0);
+          if(banner.startDate){
+            var s = new Date(banner.startDate);
+            if(today < s) return false;
+          }
+          if(banner.endDate){
+            var e = new Date(banner.endDate);
+            e.setHours(23,59,59,999);
+            if(today > e) return false;
+          }
+          return true;
+        }
+
+        var activeBanners = AD_BANNERS.filter(inActiveWindow);
+        if(activeBanners.length === 0) activeBanners = AD_BANNERS; /* ফলব্যাক */
+
+        track.innerHTML = activeBanners.map(function(b, i){
+          var img = '<img src="' + b.img + '" alt="' + (b.alt || '') + '" loading="lazy">';
+          var inner = b.href && b.href !== '#'
+            ? '<a href="' + b.href + '" target="_blank" rel="noopener">' + img + '</a>'
+            : img;
+          return '<div class="ad-slide' + (i === 0 ? ' on' : '') + '">' + inner + '</div>';
+        }).join('');
+
+        dotsWrap.innerHTML = activeBanners.map(function(_, i){
+          return '<span' + (i === 0 ? ' class="on"' : '') + '></span>';
+        }).join('');
+
+        dotsWrap.style.display = activeBanners.length > 1 ? 'flex' : 'none';
+
+        if(activeBanners.length <= 1) return;
+
+        var slides = track.querySelectorAll('.ad-slide');
+        var dots = dotsWrap.querySelectorAll('span');
         var idx = 0;
-        setInterval(function(){
+        var timer = null;
+
+        function goTo(next){
           slides[idx].classList.remove('on');
           dots[idx].classList.remove('on');
-          idx = (idx + 1) % slides.length;
+          idx = (next + slides.length) % slides.length;
           slides[idx].classList.add('on');
           dots[idx].classList.add('on');
-        }, 3000);
+        }
+
+        function start(){
+          stop();
+          timer = setInterval(function(){ goTo(idx + 1); }, AD_INTERVAL_MS);
+        }
+        function stop(){
+          if(timer){ clearInterval(timer); timer = null; }
+        }
+
+        start();
+
+        /* সোয়াইপ সাপোর্ট */
+        var touchStartX = null;
+        track.addEventListener('touchstart', function(e){
+          touchStartX = e.touches[0].clientX;
+          stop();
+        }, { passive:true });
+        track.addEventListener('touchend', function(e){
+          if(touchStartX === null) return;
+          var dx = e.changedTouches[0].clientX - touchStartX;
+          if(Math.abs(dx) > 30){
+            goTo(idx + (dx < 0 ? 1 : -1));
+          }
+          touchStartX = null;
+          start();
+        }, { passive:true });
+
+        dots.forEach(function(dot, i){
+          dot.style.cursor = 'pointer';
+          dot.addEventListener('click', function(){
+            goTo(i);
+            start();
+          });
+        });
       })();
     </script>
 
@@ -2033,6 +2325,147 @@
     </div>
   </div>
 
+  <div class="notif-screen" id="notifScreen" aria-hidden="true">
+    <div class="notif-topbar">
+      <div class="notif-back" id="notifBack" role="button" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 5L8 12L15 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="notif-headings">
+        <h2>নোটিফিকেশন</h2>
+        <div class="notif-sub" id="notifSub"></div>
+      </div>
+    </div>
+    <div class="notif-body" id="notifBody"></div>
+  </div>
+
+  <script>
+    (function(){
+      /* =========================================================
+         নোটিফিকেশন সিস্টেম
+         -----------------------------------------------------------
+         NOTIF_DATA তালিকায় নোটিফিকেশন যোগ/সম্পাদনা করা যাবে।
+         read:false হলে সবুজ ডট (অপঠিত) দেখাবে।
+      ========================================================= */
+      var bellIcon = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M12 2.5C10.6 2.5 9.5 3.6 9.4 5C7.1 5.7 5.4 7.8 5.4 10.4V13.6C5.4 14.6 5 15.5 4.3 16.2L3.6 16.9C3.1 17.4 3.4 18.3 4.1 18.3H19.9C20.6 18.3 20.9 17.4 20.4 16.9L19.7 16.2C19 15.5 18.6 14.6 18.6 13.6V10.4C18.6 7.8 16.9 5.7 14.6 5C14.5 3.6 13.4 2.5 12 2.5Z" fill="currentColor"/>' +
+        '<path d="M9.3 20C9.3 21.1 10.5 22 12 22C13.5 22 14.7 21.1 14.7 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>';
+      var checkIcon = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M3 7H16M3 12H21M3 17H16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
+        '<path d="M17 16L19 18L22.5 13.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      var trashIcon = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M4 7H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
+        '<path d="M9 7V4.8C9 4.4 9.4 4 9.8 4H14.2C14.6 4 15 4.4 15 4.8V7" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>' +
+        '<path d="M6.5 7L7.3 19.2C7.35 20 8 20.6 8.8 20.6H15.2C16 20.6 16.65 20 16.7 19.2L17.5 7" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>' +
+        '<path d="M10 11V16.5M14 11V16.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+      var emptyIcon = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
+        '<path d="M12 2.5C10.6 2.5 9.5 3.6 9.4 5C7.1 5.7 5.4 7.8 5.4 10.4V13.6C5.4 14.6 5 15.5 4.3 16.2L3.6 16.9C3.1 17.4 3.4 18.3 4.1 18.3H19.9C20.6 18.3 20.9 17.4 20.4 16.9L19.7 16.2C19 15.5 18.6 14.6 18.6 13.6V10.4C18.6 7.8 16.9 5.7 14.6 5C14.5 3.6 13.4 2.5 12 2.5Z" fill="currentColor"/>' +
+        '<path d="M9.3 20C9.3 21.1 10.5 22 12 22C13.5 22 14.7 21.1 14.7 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>';
+
+      var NOTIF_DATA = [
+        { id:1, title:'আজকের নোটিফিকেশন', snippet:'পবিত্র কুরআন মাজীদে আল্লাহ তাআলা বলেন,', date:'০৭:০০', read:false },
+        { id:2, title:'আজকের নোটিফিকেশন', snippet:'কুতায়বা ইবনে সাঈদ ও মুহাম্মাদ ইবনে রুমহ (রা...', date:'০১ আগস্ট ২০২৬', read:false },
+        { id:3, title:'যুহর নামাজের সময় - ১২:০৭', snippet:'যুহরের নামাজের ওয়াক্ত শুরু হয়েছে।', date:'০১ আগস্ট ২০২৬', read:false },
+        { id:4, title:'যুহর নামাজের সময় - ১২:০৭', snippet:'যুহরের নামাজের ওয়াক্ত শুরু হয়েছে।', date:'০১ আগস্ট ২০২৬', read:false },
+        { id:5, title:'যুহর নামাজের সময় - ১২:০৭', snippet:'যুহরের নামাজের ওয়াক্ত শুরু হয়েছে।', date:'০১ আগস্ট ২০২৬', read:false },
+        { id:6, title:'যুহর নামাজের সময় - ১২:০৭', snippet:'যুহরের নামাজের ওয়াক্ত শুরু হয়েছে।', date:'০১ আগস্ট ২০২৬', read:false },
+        { id:7, title:'যুহর নামাজের সময় - ১২:০৭', snippet:'যুহরের নামাজের ওয়াক্ত শুরু হয়েছে।', date:'০১ আগস্ট ২০২৬', read:false },
+        { id:8, title:'যুহর নামাজের সময় - ১২:০৭', snippet:'যুহরের নামাজের ওয়াক্ত শুরু হয়েছে।', date:'০১ আগস্ট ২০২৬', read:true }
+      ];
+
+      var bnDigits = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
+      function toBn(n){
+        return String(n).replace(/[0-9]/g, function(d){ return bnDigits[d]; });
+      }
+
+      var screen = document.getElementById('notifScreen');
+      var body = document.getElementById('notifBody');
+      var subEl = document.getElementById('notifSub');
+      var backBtn = document.getElementById('notifBack');
+      var bell = document.getElementById('notifBell');
+      var badge = document.getElementById('notifBadge');
+
+      function updateBadge(){
+        var unread = NOTIF_DATA.filter(function(n){ return !n.read; }).length;
+        if(badge){
+          badge.textContent = toBn(unread);
+          badge.setAttribute('data-count', unread);
+        }
+        if(subEl){
+          subEl.textContent = toBn(unread) + 'টি অপঠিত • মোট ' + toBn(NOTIF_DATA.length) + 'টি';
+        }
+      }
+
+      function render(){
+        if(NOTIF_DATA.length === 0){
+          body.innerHTML = '<div class="notif-empty">' + emptyIcon + '<p>কোনো নোটিফিকেশন নেই</p></div>';
+          updateBadge();
+          return;
+        }
+        body.innerHTML = NOTIF_DATA.map(function(n){
+          return '' +
+            '<div class="notif-item' + (n.read ? ' read' : '') + '" data-id="' + n.id + '">' +
+              '<div class="notif-icon">' + bellIcon + '</div>' +
+              '<div class="notif-content">' +
+                '<div class="notif-row1">' +
+                  '<h3 class="notif-title">' + n.title + '</h3>' +
+                  '<div class="notif-time"><span>' + n.date + '</span><span class="dot"></span></div>' +
+                '</div>' +
+                '<p class="notif-snippet">' + n.snippet + '</p>' +
+                '<div class="notif-actions">' +
+                  '<div class="notif-action mark" role="button" aria-label="পঠিত হিসেবে চিহ্নিত করুন">' + checkIcon + '</div>' +
+                  '<div class="notif-action delete" role="button" aria-label="মুছে ফেলুন">' + trashIcon + '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>';
+        }).join('');
+        updateBadge();
+      }
+
+      body.addEventListener('click', function(e){
+        var item = e.target.closest('.notif-item');
+        if(!item) return;
+        var id = Number(item.getAttribute('data-id'));
+        var n = NOTIF_DATA.find(function(x){ return x.id === id; });
+        if(!n) return;
+
+        if(e.target.closest('.notif-action.delete')){
+          item.classList.add('removing');
+          setTimeout(function(){
+            NOTIF_DATA = NOTIF_DATA.filter(function(x){ return x.id !== id; });
+            render();
+          }, 220);
+          return;
+        }
+        if(e.target.closest('.notif-action.mark')){
+          n.read = true;
+          render();
+          return;
+        }
+        /* সরাসরি নোটিফিকেশনে ক্লিক করলে পঠিত করা হবে */
+        n.read = true;
+        render();
+      });
+
+      function openScreen(){
+        render();
+        screen.classList.add('open');
+        screen.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeScreen(){
+        screen.classList.remove('open');
+        screen.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      if(bell) bell.addEventListener('click', openScreen);
+      if(backBtn) backBtn.addEventListener('click', closeScreen);
+
+      updateBadge();
+    })();
+  </script>
 
   <div class="search-overlay" id="searchOverlay" aria-hidden="true">
     <div class="search-modal">
@@ -2243,10 +2676,49 @@
     root.style.setProperty('--sky-top', t.top);
     root.style.setProperty('--sky-mid', t.mid);
     root.style.setProperty('--sky-bottom', t.bot);
-    root.style.setProperty('--ring-dark', t.ink);
-    root.style.setProperty('--ring-fg', t.ink);
-    root.style.setProperty('--ring-track', t.track);
-    root.style.setProperty('--pill-bg', t.pill);
+    // ব্যাকগ্রাউন্ডে এখন সবসময় একটি ছবি + গাঢ় স্ক্রিম থাকে, তাই লেখা সবসময়
+    // হালকা রঙে রাখা হয়েছে যেন যেকোনো ওয়াক্তের ছবিতেই স্পষ্ট পড়া যায়।
+    root.style.setProperty('--ring-dark', '#ffffff');
+    root.style.setProperty('--ring-fg', '#ffffff');
+    root.style.setProperty('--ring-track', 'rgba(255,255,255,0.28)');
+    root.style.setProperty('--pill-bg', 'rgba(15,16,28,0.4)');
+  }
+
+  /* ===== ওয়াক্তভিত্তিক ব্যাকগ্রাউন্ড ছবি বদলানো ===== */
+  var WAQT_BG_IMAGES = {
+    fajr:    'https://i.pinimg.com/1200x/47/46/6c/47466c2821ec43b5b038eb386dee6d1d.jpg',
+    zuhr:    'https://i.pinimg.com/1200x/17/26/65/172665b53e01e3fddde947bd75f38c30.jpg',
+    asr:     'https://i.pinimg.com/1200x/62/d2/09/62d209b1eb6e3e0fa511f973dece6502.jpg',
+    maghrib: 'https://i.pinimg.com/736x/f4/4a/4a/f44a4aa08d9630d68f5fbd3f2701f727.jpg',
+    isha:    'https://i.pinimg.com/1200x/bb/44/b7/bb44b726aa56c597818395eef51b8be9.jpg'
+  };
+
+  function waqtBgKeyFor(minuteOfDay){
+    var pos = minuteOfDay;
+    if(pos < FAJR_START) pos += DAY;
+    if(pos >= FAJR_START && pos < ZUHR_START) return 'fajr';
+    if(pos >= ZUHR_START && pos < ASR_START) return 'zuhr';
+    if(pos >= ASR_START && pos < MAGHRIB_START) return 'asr';
+    if(pos >= MAGHRIB_START && pos < ISHA_START) return 'maghrib';
+    return 'isha';
+  }
+
+  var bgLayers = [document.getElementById('waqtBgA'), document.getElementById('waqtBgB')];
+  var bgActiveIdx = 0;
+  var currentBgKey = null;
+
+  function applyWaqtBg(key){
+    if(key === currentBgKey || !bgLayers[0] || !bgLayers[1]) return;
+    var url = WAQT_BG_IMAGES[key];
+    if(!url) return;
+    currentBgKey = key;
+    var nextIdx = 1 - bgActiveIdx;
+    var nextLayer = bgLayers[nextIdx];
+    var curLayer = bgLayers[bgActiveIdx];
+    nextLayer.style.backgroundImage = 'url("' + url + '")';
+    nextLayer.classList.add('on');
+    if(curLayer) curLayer.classList.remove('on');
+    bgActiveIdx = nextIdx;
   }
 
   function setActiveRow(rowKey){
@@ -2280,6 +2752,7 @@
 
     // থিম ও লেবেল
     applyTheme(seg.theme);
+    applyWaqtBg(waqtBgKeyFor(minuteOfDay));
     ringLabel.textContent = seg.label;
 
     // কাউন্টডাউন (বাকি সময়)
