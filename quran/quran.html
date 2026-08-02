@@ -136,39 +136,55 @@
   .topic-list{display:flex; flex-direction:column; gap:12px;}
   .topic-item{
     background:var(--paper); border:1px solid var(--line); border-radius:14px;
-    overflow:hidden; transition:border-color .16s;
+    overflow:hidden; transition:border-color .16s, box-shadow .16s;
+    box-shadow:0 2px 10px -6px rgba(14,59,49,.15);
   }
-  .topic-item.open{border-color:var(--leaf-green);}
+  .topic-item.open{border-color:var(--leaf-green); box-shadow:0 10px 24px -14px rgba(14,59,49,.3);}
   .topic-head{
-    width:100%; display:flex; align-items:center; gap:16px;
-    padding:18px 22px; background:none; border:none; cursor:pointer;
+    width:100%; display:flex; align-items:center; gap:14px;
+    padding:16px 20px; background:none; border:none; cursor:pointer;
     text-align:right; font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
   }
   .topic-num{
-    flex:0 0 auto; width:34px; height:34px; border-radius:50%;
-    background:#eef4ee; color:var(--mid-green); display:flex; align-items:center; justify-content:center;
-    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:14px;
+    flex:0 0 auto; width:32px; height:32px; border-radius:50%;
+    background:var(--paper); border:2px solid var(--leaf-green); color:var(--deep-teal);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:13.5px;
   }
   .topic-title{
-    flex:1; text-align:left; font-size:16px; font-weight:600; color:var(--deep-teal);
+    flex:1; text-align:left; font-size:16px; font-weight:700; color:var(--deep-teal);
   }
   .topic-chevron{
-    flex:0 0 auto; width:18px; height:18px; stroke:var(--muted); transition:transform .2s;
+    flex:0 0 auto; width:18px; height:18px; stroke:var(--muted); transition:transform .2s, stroke .2s;
   }
   .topic-item.open .topic-chevron{transform:rotate(180deg); stroke:var(--leaf-green);}
   .topic-panel{
     max-height:0; overflow:hidden; transition:max-height .25s ease;
   }
   .topic-panel-inner{
-    padding:0 22px 20px 72px; display:flex; flex-direction:column; gap:9px;
+    position:relative;
+    margin:0 20px 18px;
+    padding:2px 6px 2px 18px;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  /* Red accent bar — sits close to the card's left edge; the rows start
+     right beside it instead of leaving a wide empty gap. */
+  .topic-panel-inner::before{
+    content:""; position:absolute; left:0; top:3px; bottom:3px;
+    width:4px; border-radius:4px; background:#e0332c;
   }
   .topic-sub{
-    font-size:14.5px; color:var(--ink); text-decoration:none; display:flex; align-items:center; gap:8px;
+    background:#eceeec; border-radius:8px; border:none;
+    padding:11px 14px; margin:0;
+    font-size:14.5px; color:var(--ink); text-decoration:none;
+    display:flex; align-items:center; gap:9px; text-align:right;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    cursor:pointer; transition:background .15s, color .15s;
   }
   .topic-sub::before{
-    content:""; width:5px; height:5px; border-radius:50%; background:var(--leaf-green); flex:0 0 auto;
+    content:""; width:6px; height:6px; border-radius:50%; background:var(--leaf-green); flex:0 0 auto;
   }
-  .topic-sub:hover{color:var(--mid-green);}
+  .topic-sub:hover{background:#e2e7e1; color:var(--mid-green);}
 
   /* ---------- Topic detail (drill-down: verse list for one subject) ---------- */
   .topic-detail-header{

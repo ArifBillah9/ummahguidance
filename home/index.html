@@ -558,8 +558,8 @@
     transform:translateX(-50%) translateX(100%);
     width:100%;
     max-width:430px;
-    height:100dvh;
     height:100vh;
+    height:100dvh;
     background:#f3f5f4;
     z-index:100;
     display:flex;
@@ -603,6 +603,7 @@
   }
   .loc-body{
     flex:1 1 auto;
+    min-height:0;
     overflow-y:auto;
     background:#fff;
     padding:22px 20px 28px;
@@ -627,20 +628,47 @@
     border-radius:18px;
     overflow:hidden;
     margin-bottom:22px;
-    background:
-      radial-gradient(ellipse 60% 45% at 30% 70%, rgba(158,205,222,0.9) 0%, rgba(158,205,222,0) 70%),
-      linear-gradient(120deg, #cfe6b8 0%, #e9edc6 35%, #f2ecc7 60%, #d7e6b3 100%);
-    border:1px solid rgba(0,0,0,0.06);
+    background:#eae7df;
+    border:1px solid rgba(0,0,0,0.08);
   }
-  .loc-map::before{
-    content:"";
+  /* ---- Google Maps style base layers: land / water / parks / roads ---- */
+  .gmap-water{
+    position:absolute;
+    width:62%; height:56%;
+    left:-16%; bottom:-20%;
+    background:#a9d7ef;
+    border-radius:48% 52% 55% 45%/55% 45% 58% 42%;
+  }
+  .gmap-park{
+    position:absolute;
+    width:32%; height:28%;
+    right:5%; top:8%;
+    background:#c7e4bd;
+    border-radius:38% 62% 55% 45%/45% 40% 60% 55%;
+  }
+  .gmap-park.park-2{
+    width:20%; height:18%;
+    left:6%; top:50%;
+    right:auto;
+    border-radius:50% 50% 40% 60%/55% 45% 55% 45%;
+  }
+  .gmap-roads{
     position:absolute;
     inset:0;
-    background-image:
-      repeating-linear-gradient(100deg, rgba(255,255,255,0.55) 0 2px, transparent 2px 46px),
-      repeating-linear-gradient(10deg, rgba(255,255,255,0.4) 0 1.5px, transparent 1.5px 60px);
-    opacity:0.8;
+    width:100%;
+    height:100%;
+    display:block;
   }
+  .gmap-place-label{
+    position:absolute;
+    font-size:10.5px;
+    font-weight:700;
+    color:#5f6a66;
+    letter-spacing:0.2px;
+    text-shadow:0 1px 1px rgba(255,255,255,0.75), 0 -1px 1px rgba(255,255,255,0.75);
+    pointer-events:none;
+  }
+  .gmap-place-label.sub{font-size:9px; font-weight:600; color:#7c8781;}
   .loc-map-tag{
     position:absolute;
     background:#fff;
@@ -652,6 +680,7 @@
     padding:2px 5px;
     box-shadow:0 1px 3px rgba(0,0,0,0.12);
   }
+  /* ---- Classic red teardrop marker, Google Maps style ---- */
   .loc-map-pin{
     position:absolute;
     left:50%; top:44%;
@@ -659,49 +688,105 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap:6px;
+    gap:0;
   }
   .loc-map-pin .pin-icon{
-    width:34px;height:34px;
+    width:32px;height:32px;
     border-radius:50% 50% 50% 0;
     transform:rotate(-45deg);
-    background:var(--badge-pink);
+    background:#ea4335;
     display:flex;align-items:center;justify-content:center;
-    box-shadow:0 4px 10px rgba(0,0,0,0.25);
+    box-shadow:0 3px 8px rgba(0,0,0,0.3);
+    margin-bottom:6px;
   }
   .loc-map-pin .pin-icon svg{
     transform:rotate(45deg);
-    width:15px;height:15px;
+    width:14px;height:14px;
+  }
+  .loc-map-pin .pin-shadow{
+    width:13px;height:5px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.28);
+    filter:blur(1px);
+    margin:-2px 0 6px;
   }
   .loc-map-pin .pin-label{
-    background:rgba(255,255,255,0.92);
-    padding:2px 9px;
+    background:rgba(255,255,255,0.96);
+    padding:3px 10px;
     border-radius:6px;
     font-size:11.5px;
     font-weight:700;
     color:#2a2f2c;
     white-space:nowrap;
-    box-shadow:0 1px 3px rgba(0,0,0,0.15);
+    box-shadow:0 1px 4px rgba(0,0,0,0.18);
   }
   .loc-map-city{
     position:absolute;
-    left:50%; bottom:10%;
+    left:50%; bottom:11%;
     transform:translateX(-50%);
-    font-size:22px;
+    font-size:20px;
     font-weight:800;
-    color:rgba(40,45,42,0.55);
+    color:rgba(60,65,60,0.5);
     letter-spacing:0.5px;
+    pointer-events:none;
   }
-  .loc-map-attrib{
+  /* ---- Map UI chrome: zoom / locate controls, bottom attribution bar ---- */
+  .gmap-controls{
     position:absolute;
-    left:10px; bottom:8px;
+    right:10px; bottom:34px;
     display:flex;
+    flex-direction:column;
     align-items:center;
     gap:8px;
-    font-size:10px;
+    z-index:2;
+  }
+  .gmap-locate-btn,
+  .gmap-zoom-btns{
+    background:#fff;
+    box-shadow:0 1px 4px rgba(0,0,0,0.3);
+    border-radius:3px;
+  }
+  .gmap-locate-btn{
+    width:30px;height:30px;
+    border:none;
+    display:flex;align-items:center;justify-content:center;
+    color:#5f6a66;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .gmap-locate-btn svg{width:16px;height:16px;}
+  .gmap-zoom-btns{
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+  }
+  .gmap-zoom-btns button{
+    width:30px;height:28px;
+    border:none;
+    background:#fff;
+    color:#3d4249;
+    font-size:16px;
     font-weight:600;
-    color:#4a4f4c;
-    opacity:0.85;
+    line-height:1;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    font-family:inherit;
+  }
+  .gmap-zoom-btns button:first-child{border-bottom:1px solid rgba(0,0,0,0.1);}
+  .gmap-zoom-btns button:active,
+  .gmap-locate-btn:active{background:#f2f2f2;}
+  .loc-map-attrib{
+    position:absolute;
+    left:0; right:0; bottom:0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    padding:3px 10px;
+    background:rgba(255,255,255,0.65);
+    font-size:9.5px;
+    font-weight:600;
+    color:#5c625e;
   }
 
   .loc-gps-card{
@@ -1474,18 +1559,53 @@
       <p class="loc-desc">আমরা নামাজ এবং রোজার সঠিক সময় গণনার জন্য আপনার শহর ব্যবহার করব</p>
 
       <div class="loc-map">
-        <span class="loc-map-tag" style="top:20%; right:16%;">AH2</span>
-        <span class="loc-map-tag" style="bottom:22%; right:6%;">R112</span>
+        <div class="gmap-water"></div>
+        <div class="gmap-park"></div>
+        <div class="gmap-park park-2"></div>
+        <svg class="gmap-roads" viewBox="0 0 682 430" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" stroke-linecap="round">
+            <path d="M-10 118 L692 96" stroke="#cdc8bd" stroke-width="7"/>
+            <path d="M-10 118 L692 96" stroke="#ffffff" stroke-width="4"/>
+            <path d="M46 -10 L64 440" stroke="#cdc8bd" stroke-width="6"/>
+            <path d="M46 -10 L64 440" stroke="#ffffff" stroke-width="3.5"/>
+            <path d="M-10 262 L692 300" stroke="#cdc8bd" stroke-width="6"/>
+            <path d="M-10 262 L692 300" stroke="#ffffff" stroke-width="3.5"/>
+            <path d="M284 -10 L302 440" stroke="#cdc8bd" stroke-width="6"/>
+            <path d="M284 -10 L302 440" stroke="#ffffff" stroke-width="3.5"/>
+            <path d="M504 -10 L472 440" stroke="#cdc8bd" stroke-width="6"/>
+            <path d="M504 -10 L472 440" stroke="#ffffff" stroke-width="3.5"/>
+            <path d="M-10 382 L692 358" stroke="#cdc8bd" stroke-width="6"/>
+            <path d="M-10 382 L692 358" stroke="#ffffff" stroke-width="3.5"/>
+            <path d="M-10 210 C 180 160, 420 262, 692 188" stroke="#f0b552" stroke-width="10"/>
+            <path d="M-10 210 C 180 160, 420 262, 692 188" stroke="#fbd58a" stroke-width="6"/>
+          </g>
+        </svg>
+        <span class="gmap-place-label" style="top:20%; left:12%;">উত্তরা</span>
+        <span class="gmap-place-label sub" style="top:32%; left:62%;">গুলশান</span>
+        <span class="gmap-place-label sub" style="top:70%; left:20%;">ধানমন্ডি</span>
         <div class="loc-map-pin">
           <div class="pin-icon">
             <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="12" cy="12" r="4" fill="#fff"/>
             </svg>
           </div>
+          <div class="pin-shadow"></div>
           <div class="pin-label" id="locPinLabel">Saved Location</div>
         </div>
         <div class="loc-map-city" id="locMapCity">Dhaka</div>
-        <div class="loc-map-attrib">ম্যাপ ডেটা · আইনি তথ্য</div>
+        <div class="gmap-controls">
+          <button type="button" class="gmap-locate-btn" aria-label="বর্তমান অবস্থান দেখান">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M12 2V5M12 19V22M2 12H5M19 12H22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </button>
+          <div class="gmap-zoom-btns">
+            <button type="button" aria-label="জুম ইন">+</button>
+            <button type="button" aria-label="জুম আউট">−</button>
+          </div>
+        </div>
+        <div class="loc-map-attrib">
+          <span>মানচিত্র ডেটা</span>
+          <span>আইনি তথ্য</span>
+        </div>
       </div>
 
       <div class="loc-gps-card">

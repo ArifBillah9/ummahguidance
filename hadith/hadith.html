@@ -3257,7 +3257,40 @@ const HADITH_BOOKS = [
   { key:'abudawud-urd',  edition:'urd-abudawud',  lang:'urd', name:'কিতাবুস সুনান - ইমাম আবু দাউদ রহঃ (উর্দু)',   arabicName:'كتاب السنن لأبي داود',   chapters:43, hadiths:5274, short:'সুনানে আবু দাউদ (উর্দু)', author:'ইমাম আবু দাউদ রহঃ', badge:'দা' },
   { key:'nasai-urd',     edition:'urd-nasai',     lang:'urd', name:'কিতাবুস সুনান (আল-মুজতাবা)- ইমাম নাসায়ী রহঃ (উর্দু)', arabicName:'المجتبى من السنن للنسائي', chapters:51, hadiths:5765, short:'সুনানে আন-নাসায়ী (উর্দু)', author:'ইমাম নাসায়ী রহঃ', badge:'না' },
   { key:'ibnmajah-urd',  edition:'urd-ibnmajah',  lang:'urd', name:'কিতাবুস সুনান- ইমাম ইবনে মাজাহ রহঃ (উর্দু)', arabicName:'كتاب السنن لابن ماجه',   chapters:37, hadiths:4343, short:'সুনানে ইবনে মাজাহ (উর্দু)', author:'ইমাম ইবনে মাজাহ রহঃ', badge:'মা' },
-  { key:'malik-urd',     edition:'urd-malik',     lang:'urd', name:'আল মুওয়াত্তা - ইমাম মালিক রহঃ (উর্দু)',      arabicName:'الموطأ للإمام مالك',     chapters:61, hadiths:1889, short:'আল মুওয়াত্তা (উর্দু)', author:'ইমাম মালিক রহঃ',   badge:'মু' }
+  { key:'malik-urd',     edition:'urd-malik',     lang:'urd', name:'আল মুওয়াত্তা - ইমাম মালিক রহঃ (উর্দু)',      arabicName:'الموطأ للإمام مالك',     chapters:61, hadiths:1889, short:'আল মুওয়াত্তা (উর্দু)', author:'ইমাম মালিক রহঃ',   badge:'মু' },
+
+  /* এই ৬টি কিতাবের কোনো ফ্রি বাংলা অনুবাদ কোথাও পাওয়া যায়নি (যাচাই করে দেখা হয়েছে),
+     তাই AhmedBaset/hadith-json (sunnah.com থেকে) থেকে আরবি মূল টেক্সট + ইংরেজি অনুবাদ
+     দেখানো হচ্ছে। source:'ahmedbaset' এন্ট্রিগুলো loadHadithBookData()-তে আলাদাভাবে হ্যান্ডেল হয়। */
+  { key:'riyad-en', source:'ahmedbaset', file:'https://raw.githubusercontent.com/A7med3bdulBaset/hadith-json/v1.2.0/db/by_book/other_books/riyad_assalihin.json',
+    edition:'en-riyadussalihin', lang:'eng', name:'রিয়াযুস সালিহীন (আরবি-ইংরেজি)', arabicName:'رياض الصالحين',
+    chapters:20, hadiths:1896, short:'রিয়াযুস সালিহীন (EN)', author:'ইমাম নববী রহঃ', badge:'রি' },
+  { key:'mishkat-en', source:'ahmedbaset', file:'https://raw.githubusercontent.com/A7med3bdulBaset/hadith-json/v1.2.0/db/by_book/other_books/mishkat_almasabih.json',
+    edition:'en-mishkat', lang:'eng', name:'মিশকাতুল মাসাবীহ (আরবি-ইংরেজি)', arabicName:'مشكاة المصابيح',
+    chapters:25, hadiths:4428, short:'মিশকাতুল মাসাবীহ (EN)', author:'ইমাম খতীব তিবরিযী রহঃ', badge:'মি' },
+  { key:'shamail-en', source:'ahmedbaset', file:'https://raw.githubusercontent.com/A7med3bdulBaset/hadith-json/v1.2.0/db/by_book/other_books/shamail_muhammadiyah.json',
+    edition:'en-shamail', lang:'eng', name:'শামায়েলে তিরমিযী (আরবি-ইংরেজি)', arabicName:'الشمائل المحمدية',
+    chapters:57, hadiths:402, short:'শামায়েলে তিরমিযী (EN)', author:'ইমাম তিরমিযী রহঃ', badge:'শা' },
+  { key:'adabmufrad-en', source:'ahmedbaset', file:'https://raw.githubusercontent.com/A7med3bdulBaset/hadith-json/v1.2.0/db/by_book/other_books/aladab_almufrad.json',
+    edition:'en-adabmufrad', lang:'eng', name:'আল-আদাবুল মুফরাদ (আরবি-ইংরেজি)', arabicName:'الأدب المفرد',
+    chapters:57, hadiths:1326, short:'আল-আদাবুল মুফরাদ (EN)', author:'ইমাম বুখারী রহঃ', badge:'আদ' },
+  { key:'ahmad-en', source:'ahmedbaset', file:'https://raw.githubusercontent.com/A7med3bdulBaset/hadith-json/v1.2.0/db/by_book/the_9_books/ahmed.json',
+    edition:'en-ahmad', lang:'eng', name:'মুসনাদে আহমদ (আরবি-ইংরেজি, আংশিক)', arabicName:'مسند الإمام أحمد بن حنبل',
+    chapters:8, hadiths:1374, short:'মুসনাদে আহমদ (EN, আংশিক)', author:'ইমাম আহমদ ইবনে হাম্বল রহঃ', badge:'আহ' },
+  { key:'qudsi-en', source:'ahmedbaset', file:'https://raw.githubusercontent.com/A7med3bdulBaset/hadith-json/v1.2.0/db/by_book/forties/qudsi40.json',
+    edition:'en-qudsi', lang:'eng', name:'হাদীসে কুদসী - চল্লিশ হাদীস (আরবি-ইংরেজি)', arabicName:'الأربعون القدسية',
+    chapters:1, hadiths:40, short:'হাদীসে কুদসী (EN)', author:'', badge:'কু' },
+
+  /* এই ৮টি কিতাবের কোনো ফ্রি ডেটা সোর্স (এমনকি ইংরেজি/আরবিতেও) খুঁজে পাওয়া যায়নি,
+     তাই শুধু নাম দেখানো হচ্ছে ("শীঘ্রই আসছে") — comingSoon:true থাকলে ক্লিকে কিছু খোলে না। */
+  { key:'soon-tahawi',   comingSoon:true, lang:'ben', name:'শরহু মা\'আনিল আসার', arabicName:'شرح معاني الآثار', chapters:0, hadiths:0, short:'শরহু মা\'আনিল আসার', author:'ইমাম তাহাবী রহঃ', badge:'ত' },
+  { key:'soon-abuhanifa', comingSoon:true, lang:'ben', name:'মুসনাদে ইমাম আযম আবু হানীফা (রহঃ)', arabicName:'مسند الإمام الأعظم أبي حنيفة', chapters:0, hadiths:0, short:'মুসনাদে আবু হানীফা', author:'ইমাম আবু হানীফা রহঃ', badge:'হা' },
+  { key:'soon-muhammad', comingSoon:true, lang:'ben', name:'মুয়াত্তা ইমাম মুহাম্মাদ', arabicName:'موطأ الإمام محمد', chapters:0, hadiths:0, short:'মুয়াত্তা ইমাম মুহাম্মাদ', author:'ইমাম মুহাম্মদ রহঃ', badge:'মু' },
+  { key:'soon-fiqhussunan', comingSoon:true, lang:'ben', name:'ফিকহুস সুনান ওয়াল আসার', arabicName:'فقه السنن والآثار', chapters:0, hadiths:0, short:'ফিকহুস সুনান ওয়াল আসার', author:'', badge:'ফি' },
+  { key:'soon-akhlaq',   comingSoon:true, lang:'ben', name:'আখলাকুন্নবী (ﷺ)', arabicName:'أخلاق النبي', chapters:0, hadiths:0, short:'আখলাকুন্নবী (ﷺ)', author:'ইমাম আবুশ শায়খ রহঃ', badge:'আখ' },
+  { key:'soon-maarif',   comingSoon:true, lang:'ben', name:'মা\'আরিফুল হাদীস', arabicName:'معارف الحديث', chapters:0, hadiths:0, short:'মা\'আরিফুল হাদীস', author:'মাওলানা মনযূর নোমানী রহঃ', badge:'মা' },
+  { key:'soon-targhib',  comingSoon:true, lang:'ben', name:'আত-তারগীব ওয়াত-তারহীব', arabicName:'الترغيب والترهيب', chapters:0, hadiths:0, short:'আত-তারগীব ওয়াত-তারহীব', author:'ইমাম মুনযিরী রহঃ', badge:'তা' },
+  { key:'soon-hammam',   comingSoon:true, lang:'ben', name:'সহীফায়ে হাম্মাম ইবনে মুনাব্বিহ', arabicName:'صحيفة همام بن منبه', chapters:0, hadiths:0, short:'সহীফায়ে হাম্মাম', author:'হাম্মাম ইবনে মুনাব্বিহ রহঃ', badge:'স' }
 ];
 const HADITH_BADGE_COLORS = ['#3fae5a','#2f7cc9','#1fa6a0','#c9772e','#8b5fbf','#d1495b','#4a6fd1','#a07a2e'];
 
@@ -4094,8 +4127,42 @@ function digitsFor(lang, n){
   return lang === 'ben' ? toBnDigits(n) : String(n);
 }
 
+/* Books sourced from AhmedBaset/hadith-json (scraped from sunnah.com) use a
+   completely different JSON shape than the fawazahmed0 editions above —
+   { chapters:[{id,english,arabic}], hadiths:[{idInBook,chapterId,arabic,english:{narrator,text}}] }
+   instead of { metadata:{sections}, hadiths:[{hadithnumber,reference,text,grades}] }.
+   This adapts that shape into the same { metadata:{sections}, hadithsByChapter, baseBook }
+   object the rest of the hadith-reading code already expects, so no other function
+   needs to know these books came from a different source. No grading data is available
+   here, so hadithGradeLabel() simply won't show a grade pill for these books. */
+async function loadHadithBookDataFromAhmedBaset(entry){
+  const res = await fetch(entry.file);
+  if(!res.ok) throw new Error('network');
+  const json = await res.json();
+
+  const sections = {};
+  (json.chapters || []).forEach(ch=>{
+    sections[String(ch.id)] = ch.english || ch.arabic || `অধ্যায় ${ch.id}`;
+  });
+
+  const hadithsByChapter = new Map();
+  (json.hadiths || []).forEach(h=>{
+    const chNum = h.chapterId;
+    const narrator = (h.english && h.english.narrator) ? h.english.narrator + ' ' : '';
+    const text = narrator + ((h.english && h.english.text) || '');
+    const item = { hadithnumber: h.idInBook, text, arabicText: h.arabic, grades: [] };
+    if(!hadithsByChapter.has(chNum)) hadithsByChapter.set(chNum, []);
+    hadithsByChapter.get(chNum).push(item);
+  });
+
+  const data = { metadata:{ sections }, hadithsByChapter, baseBook: hadithBaseBook(entry) };
+  hadithBookDataCache[entry.edition] = data;
+  return data;
+}
+
 async function loadHadithBookData(entry){
   if(hadithBookDataCache[entry.edition]) return hadithBookDataCache[entry.edition];
+  if(entry.source === 'ahmedbaset') return loadHadithBookDataFromAhmedBaset(entry);
   const baseBook = hadithBaseBook(entry);
   const arabicEdition = `ara-${baseBook}`;
 
