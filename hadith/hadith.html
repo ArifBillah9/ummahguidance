@@ -765,19 +765,15 @@
     .recitation-flow .ayah-end{width:26px; height:26px; font-size:11px; margin:0 5px;}
   }
 
-  @media (max-width:900px){
-    .reader-shell{flex-direction:column;}
-    .reader-sidebar{width:100%; position:relative; max-height:340px;}
-    .reader-content{padding:20px 16px 40px;}
-    .content-tabs{margin:-20px -16px 20px;}
-  }
+  .reader-shell{flex-direction:column;}
+  .reader-sidebar{width:100%; position:relative; max-height:340px;}
+  .reader-content{padding:20px 16px 40px;}
+  .content-tabs{margin:-20px -16px 20px;}
 
   /* =======================================================================
      MOBILE APP UI — mimics the native "মুসলিম বাংলা" Quran app screen
      ======================================================================= */
-  .m-appbar, .m-panel{ display:none; }
 
-  @media (max-width:680px){
 
     /* Hide the desktop chrome, show the app-style chrome instead */
     #filterBar{ display:none !important; }
@@ -905,7 +901,6 @@
       font-family:'Amiri',serif; font-size:21px; color:var(--deep-teal); direction:rtl;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
-  }
 
   /* =======================================================================
      READER SETTINGS PANEL — slide-in sheet matching the native app's
@@ -1029,7 +1024,6 @@
   /* =======================================================================
      MOBILE READER (SURAH SCREEN) — mimics the native app's ayah-by-ayah page
      ======================================================================= */
-  .r-appbar, .r-bottomnav, .hr-appbar{ display:none; }
 
   /* Ornate ayah-number badge, reuses the same scalloped gold ring artwork as
      the surah-list medallions but recoloured per-ayah via CSS mask */
@@ -1070,7 +1064,6 @@
     font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
   }
 
-  @media (max-width:680px){
 
     #readerView{ padding-bottom:70px; }
 
@@ -1137,7 +1130,6 @@
     }
     .r-bn-ic{ width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
     .r-bn-ic img{ width:100%; height:100%; object-fit:contain; display:block; }
-  }
 
   /* =======================================================================
      AUDIO RANGE MODAL
