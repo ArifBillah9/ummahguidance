@@ -414,6 +414,90 @@
   }
   .search-btn svg{width:18px;height:18px;}
 
+
+  /* ===== Search overlay (centered modal) ===== */
+  .search-overlay{
+    position:fixed;
+    top:0; left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:430px;
+    height:100vh;
+    height:100dvh;
+    background:rgba(15,20,18,0.6);
+    z-index:120;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:26px;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .25s ease, visibility 0s linear .25s;
+  }
+  .search-overlay.open{
+    opacity:1;
+    visibility:visible;
+    transition:opacity .25s ease, visibility 0s linear 0s;
+  }
+  .search-modal{
+    background:#fff;
+    border-radius:22px;
+    padding:30px 24px 24px;
+    width:100%;
+    max-width:340px;
+    text-align:center;
+    box-shadow:0 20px 50px rgba(0,0,0,0.35);
+    transform:scale(0.9);
+    transition:transform .3s cubic-bezier(.32,.72,.35,1);
+  }
+  .search-overlay.open .search-modal{
+    transform:scale(1);
+  }
+  .search-modal-title{
+    margin:0 0 22px;
+    font-size:18.5px;
+    font-weight:700;
+    color:var(--menu-text-green);
+    line-height:1.5;
+  }
+  .search-modal-inputwrap{
+    margin-bottom:18px;
+  }
+  .search-modal-input{
+    width:100%;
+    border:1.5px solid var(--active-green);
+    border-radius:999px;
+    padding:12px 18px;
+    font-size:13px;
+    font-family:inherit;
+    color:var(--text-dark);
+    outline:none;
+    background:#fff;
+    box-sizing:border-box;
+    text-align:center;
+  }
+  .search-modal-input::placeholder{
+    color:#8b909a;
+    opacity:0.9;
+  }
+  .search-modal-btn{
+    width:100%;
+    border:none;
+    border-radius:999px;
+    padding:13px 18px;
+    background:var(--ring-dark);
+    color:#fff;
+    font-size:15px;
+    font-weight:700;
+    font-family:inherit;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  .search-modal-btn:active{transform:scale(0.97); opacity:0.9;}
+  .search-btn{cursor:pointer; -webkit-tap-highlight-color:transparent; transition:transform .15s ease;}
+  .search-btn:active{transform:scale(0.92);}
+
   .menu-grid{
     display:grid;
     grid-template-columns:repeat(4, 1fr);
@@ -1227,7 +1311,7 @@
         <div class="bar"></div>
         <h3>ইলম</h3>
       </div>
-      <div class="search-btn">
+      <div class="search-btn" id="searchBtn" role="button" aria-label="অনুসন্ধান করুন">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="11" cy="11" r="6.5" stroke="white" stroke-width="2"/>
           <path d="M20 20L15.8 15.8" stroke="white" stroke-width="2" stroke-linecap="round"/>
@@ -1660,6 +1744,16 @@
     </div>
   </div>
 
+
+  <div class="search-overlay" id="searchOverlay" aria-hidden="true">
+    <div class="search-modal">
+      <h3 class="search-modal-title">কি খুঁজছেন? আরবী বা বাংলায় বাক্যটি লিখুন</h3>
+      <div class="search-modal-inputwrap">
+        <input type="text" id="searchModalInput" class="search-modal-input" placeholder="মুসলিম বাংলার সকল সেকশনে অনুসন্ধান করুন">
+      </div>
+      <button type="button" class="search-modal-btn" id="searchModalBtn">অনুসন্ধান</button>
+    </div>
+  </div>
 
 </div>
 
@@ -2146,6 +2240,50 @@
         },
         { enableHighAccuracy:true, timeout:12000, maximumAge:60000 }
       );
+    });
+  }
+
+  // ===== অনুসন্ধান (Search) মোডাল =====
+  var searchBtn = document.getElementById('searchBtn');
+  var searchOverlay = document.getElementById('searchOverlay');
+  var searchModalInput = document.getElementById('searchModalInput');
+  var searchModalBtn = document.getElementById('searchModalBtn');
+
+  function openSearchOverlay(){
+    if(!searchOverlay) return;
+    searchOverlay.classList.add('open');
+    searchOverlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function(){
+      if(searchModalInput) searchModalInput.focus();
+    }, 300);
+  }
+  function closeSearchOverlay(){
+    if(!searchOverlay) return;
+    searchOverlay.classList.remove('open');
+    searchOverlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  if(searchBtn){
+    searchBtn.addEventListener('click', openSearchOverlay);
+  }
+  if(searchOverlay){
+    searchOverlay.addEventListener('click', function(e){
+      if(e.target === searchOverlay) closeSearchOverlay();
+    });
+  }
+  if(searchModalBtn){
+    searchModalBtn.addEventListener('click', function(){
+      closeSearchOverlay();
+    });
+  }
+  if(searchModalInput){
+    searchModalInput.addEventListener('keydown', function(e){
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        if(searchModalBtn) searchModalBtn.click();
+      }
     });
   }
 })();
