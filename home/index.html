@@ -625,6 +625,47 @@
   }
   .sr-mic-btn:active{transform:scale(0.92);}
   .sr-mic-btn svg{width:16px;height:16px;}
+  .sr-mic-btn.listening{
+    background:#e5484d;
+    animation:srMicPulse 1.1s ease-in-out infinite;
+  }
+  .sr-mic-btn.unsupported{
+    animation:srMicShake .4s ease;
+  }
+  @keyframes srMicPulse{
+    0%{box-shadow:0 0 0 0 rgba(229,72,77,0.55);}
+    70%{box-shadow:0 0 0 12px rgba(229,72,77,0);}
+    100%{box-shadow:0 0 0 0 rgba(229,72,77,0);}
+  }
+  @keyframes srMicShake{
+    0%,100%{transform:translateX(0);}
+    25%{transform:translateX(-4px);}
+    75%{transform:translateX(4px);}
+  }
+  .sr-voice-status{
+    margin-top:10px;
+    font-size:12.5px;
+    font-weight:600;
+    color:#fff;
+    text-shadow:0 1px 4px rgba(0,0,0,0.5);
+    text-align:center;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+  }
+  .sr-voice-status.show{display:flex;}
+  .sr-voice-status .dot{
+    width:6px;height:6px;
+    border-radius:50%;
+    background:#ff6b6b;
+    flex-shrink:0;
+    animation:srDotBlink 1s ease-in-out infinite;
+  }
+  @keyframes srDotBlink{
+    0%,100%{opacity:0.3;}
+    50%{opacity:1;}
+  }
   .sr-lang-select{
     display:flex;
     align-items:center;
@@ -2031,6 +2072,7 @@
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 8L12 15L19 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
           </div>
+          <div class="sr-voice-status" id="srVoiceStatus"><span class="dot"></span><span id="srVoiceStatusText"></span></div>
         </div>
       </div>
 
@@ -2610,6 +2652,8 @@
   var srMicBtn = document.getElementById('srMicBtn');
   var srLangSelect = document.getElementById('srLangSelect');
   var srLangLabel = document.getElementById('srLangLabel');
+  var srVoiceStatus = document.getElementById('srVoiceStatus');
+  var srVoiceStatusText = document.getElementById('srVoiceStatusText');
   var srPrevBtn = document.getElementById('srPrevBtn');
   var srNextBtn = document.getElementById('srNextBtn');
   var srRefreshBtn = document.getElementById('srRefreshBtn');
@@ -2733,23 +2777,91 @@
       if(e.key === 'Enter'){ e.preventDefault(); srRenderResults(); }
     });
   }
+  var srRecognition = null;
+  var srIsListening = false;
+
+  function srShowVoiceStatus(text){
+    if(!srVoiceStatus || !srVoiceStatusText) return;
+    srVoiceStatusText.textContent = text;
+    srVoiceStatus.classList.add('show');
+  }
+  function srHideVoiceStatus(delay){
+    if(!srVoiceStatus) return;
+    setTimeout(function(){ srVoiceStatus.classList.remove('show'); }, delay || 0);
+  }
+
   if(srMicBtn){
     srMicBtn.addEventListener('click', function(){
       var SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+
       if(!SpeechRec){
-        srMicBtn.classList.add('loading');
-        setTimeout(function(){ srMicBtn.classList.remove('loading'); }, 400);
+        srMicBtn.classList.add('unsupported');
+        srShowVoiceStatus('আপনার ব্রাউজার ভয়েস সার্চ সমর্থন করে না');
+        srHideVoiceStatus(2600);
+        setTimeout(function(){ srMicBtn.classList.remove('unsupported'); }, 450);
         return;
       }
+
+      // ইতিমধ্যে শোনা চলছে থাকলে বন্ধ করে দিন (টগল)
+      if(srIsListening && srRecognition){
+        srRecognition.stop();
+        return;
+      }
+
       try{
         var rec = new SpeechRec();
-        rec.lang = 'bn-BD';
-        rec.onresult = function(ev){
-          var text = ev.results[0][0].transcript;
-          if(srInput){ srInput.value = text; srRenderResults(); }
+        srRecognition = rec;
+        rec.lang = (srLangLabel && srLangLabel.textContent === 'আরবি') ? 'ar-SA' : 'bn-BD';
+        rec.interimResults = true;
+        rec.maxAlternatives = 1;
+        rec.continuous = false;
+
+        rec.onstart = function(){
+          srIsListening = true;
+          srMicBtn.classList.add('listening');
+          srShowVoiceStatus('শুনছি... কিছু বলুন');
         };
+
+        rec.onresult = function(ev){
+          var transcript = '';
+          for(var i = 0; i < ev.results.length; i++){
+            transcript += ev.results[i][0].transcript;
+          }
+          if(srInput){
+            srInput.value = transcript;
+          }
+          if(ev.results[0] && ev.results[0].isFinal){
+            srShowVoiceStatus('শোনা গেছে: ' + transcript);
+            srRenderResults();
+          }
+        };
+
+        rec.onerror = function(ev){
+          var msg = 'ভয়েস সনাক্ত করা যায়নি, আবার চেষ্টা করুন';
+          if(ev.error === 'not-allowed' || ev.error === 'permission-denied'){
+            msg = 'মাইক্রোফোন ব্যবহারের অনুমতি দেওয়া হয়নি';
+          }else if(ev.error === 'no-speech'){
+            msg = 'কোনো কথা শোনা যায়নি, আবার চেষ্টা করুন';
+          }else if(ev.error === 'network'){
+            msg = 'ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন';
+          }
+          srShowVoiceStatus(msg);
+          srHideVoiceStatus(2600);
+        };
+
+        rec.onend = function(){
+          srIsListening = false;
+          srMicBtn.classList.remove('listening');
+          srHideVoiceStatus(1400);
+        };
+
         rec.start();
-      }catch(err){}
+      }catch(err){
+        srIsListening = false;
+        srMicBtn.classList.remove('listening');
+        srShowVoiceStatus('ভয়েস সার্চ চালু করা যায়নি');
+        srHideVoiceStatus(2200);
+      }
     });
   }
   if(srLangSelect){
