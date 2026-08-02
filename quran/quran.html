@@ -10,7 +10,7 @@
 
   @font-face{
     font-family:'Kalpurush';
-    src:url('/fonts/Kalpurush.woff2') format('woff2');
+    src:url('icons/fonts/Kalpurush.woff2') format('woff2');
     font-weight:normal;
     font-style:normal;
     font-display:swap;
@@ -1060,6 +1060,86 @@
   .tp-source{ font-size:12px; color:var(--muted); margin-bottom:18px; }
 
   /* =======================================================================
+     TAFSIR SELECTION PAGE ("তাফসীর নির্বাচন")
+     ======================================================================= */
+  #tafsirSelectPageView{ min-height:100vh; background:#f0f4f8; }
+  .tsel-body{ padding:6px 20px 60px; }
+  .tsel-heading{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700;
+    font-size:19px; color:var(--leaf-green); margin-bottom:4px;
+  }
+  .tsel-sub{ font-size:13px; color:var(--muted); margin-bottom:22px; }
+  .tsel-lang-label{
+    font-family:'Amiri','Kalpurush',serif; font-style:italic; font-weight:700; font-size:20px;
+    color:var(--leaf-green); margin:22px 0 12px;
+  }
+  .tsel-lang-label:first-of-type{ margin-top:0; }
+  .tsel-card{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background:#fff; border-radius:12px; padding:16px 18px; margin-bottom:14px;
+    box-shadow:0 3px 10px -6px rgba(14,59,49,.25); cursor:pointer; border:1px solid transparent;
+    transition:border-color .15s;
+  }
+  .tsel-card:hover{ border-color:var(--line); }
+  .tsel-card.selected{ border-color:var(--leaf-green); }
+  .tsel-card-info{ display:flex; flex-direction:column; gap:4px; }
+  .tsel-card-name{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700;
+    font-size:15.5px; color:var(--ink);
+  }
+  .tsel-card-lang{ font-size:12.5px; color:var(--muted); }
+  .tsel-dl-btn{
+    flex:0 0 auto; width:34px; height:34px; border-radius:50%; border:none; background:none;
+    color:var(--mid-green); display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .tsel-dl-btn svg{ width:20px; height:20px; }
+  .tsel-dl-btn.done{ color:var(--leaf-green); }
+
+  /* =======================================================================
+     SAVED VERSES PAGE ("সংরক্ষিত আয়াতসমূহ")
+     ======================================================================= */
+  #bookmarksPageView{ min-height:100vh; background:#f0f4f8; }
+  .bm-body{ padding:6px 20px 60px; }
+  .bm-empty{ text-align:center; padding-top:60px; color:var(--muted); }
+  .bm-empty-icon{
+    width:64px; height:64px; margin:0 auto 20px; border-radius:14px; border:2.5px solid var(--mid-green);
+    display:flex; align-items:center; justify-content:center; color:var(--mid-green);
+  }
+  .bm-empty-icon svg{ width:30px; height:30px; }
+  .bm-empty-title{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:16px;
+    color:var(--mid-green); margin-bottom:6px;
+  }
+  .bm-empty-sub{ font-size:13.5px; color:var(--muted); }
+  .bm-card{
+    background:#fff; border-radius:14px; padding:18px 18px 16px; margin-bottom:16px;
+    box-shadow:0 4px 14px -8px rgba(14,59,49,.3);
+  }
+  .bm-tags{ display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .bm-tag-btn{
+    border:1.4px solid var(--leaf-green); background:#fff; color:var(--mid-green);
+    border-radius:999px; padding:7px 18px; font-size:13px; font-weight:700; cursor:pointer;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+  }
+  .bm-tag-btn:hover{ background:var(--cream); }
+  .bm-arabic{
+    font-family:'Amiri Quran','Amiri',serif; font-size:23px; color:var(--deep-teal); text-align:right;
+    direction:rtl; line-height:2; margin-bottom:14px;
+  }
+  .bm-icon-row{ display:flex; align-items:center; justify-content:center; gap:22px; margin-bottom:16px; }
+  .bm-ic-btn{
+    width:42px; height:42px; border-radius:50%; border:1.6px solid var(--leaf-green); background:#fff;
+    color:var(--mid-green); display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .bm-ic-btn svg{ width:18px; height:18px; }
+  .bm-ic-btn.active{ background:var(--mid-green); border-color:var(--mid-green); color:#fff; }
+  .bm-ref{ text-align:center; font-size:13.5px; color:var(--muted); margin-bottom:10px; }
+  .bm-translation{ border-top:1px solid var(--line); padding-top:12px; }
+  .bm-translation-source{ font-size:12.5px; color:var(--muted); margin-bottom:4px; display:block; }
+  .bm-translation-text{ font-size:14.5px; color:var(--ink); line-height:1.85; }
+  .bm-translation-loading{ font-size:13px; color:var(--muted); }
+
+  /* =======================================================================
      'MORE' BOTTOM SHEET
      ======================================================================= */
   .ms-overlay{
@@ -1163,7 +1243,7 @@
   </button>
   <h1 class="m-title" id="mTitle">কুরআন</h1>
   <div class="m-appbar-actions">
-    <button class="m-icon-btn" aria-label="বুকমার্ক">
+    <button class="m-icon-btn" id="mBookmarkBtn" aria-label="বুকমার্ক">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
     </button>
     <button class="m-icon-btn" id="mSearchIconBtn" aria-label="অনুসন্ধান">
@@ -1485,6 +1565,34 @@
   <div class="tp-body" id="tpBody"></div>
 </div>
 
+<!-- ============ TAFSIR SELECTION PAGE ============ -->
+<div id="tafsirSelectPageView" style="display:none;">
+  <div class="tp-appbar">
+    <button class="m-back" id="tselBackBtn" title="ফিরে যান">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <h1 class="m-title">তাফসীর</h1>
+    <span style="width:32px;"></span>
+  </div>
+  <div class="tsel-body">
+    <div class="tsel-heading">কুরআনের তাফসীরসমূহ</div>
+    <div class="tsel-sub">তাফসীর পড়তে ডাউনলোড করুন</div>
+    <div id="tselList"></div>
+  </div>
+</div>
+
+<!-- ============ SAVED VERSES PAGE ("সংরক্ষিত আয়াতসমূহ") ============ -->
+<div id="bookmarksPageView" style="display:none;">
+  <div class="tp-appbar">
+    <button class="m-back" id="bmBackBtn" title="ফিরে যান">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <h1 class="m-title">সংরক্ষিত আয়াতসমূহ</h1>
+    <span style="width:32px;"></span>
+  </div>
+  <div class="bm-body" id="bmBody"></div>
+</div>
+
 <!-- ============ 'MORE' BOTTOM SHEET (mimics native app screenshot) ============ -->
 <div class="ms-overlay" id="moreSheetOverlay">
   <div class="ms-sheet">
@@ -1582,7 +1690,7 @@
     <div class="tafsir-modal-head">
       <div>
         <div class="tafsir-modal-title" id="tafsirModalTitle">তাফসীর</div>
-        <div class="tafsir-modal-source">আল-মুখতাসার ফী তাফসীরিল কুরআন (বাংলা)</div>
+        <div class="tafsir-modal-source" id="tafsirModalSource">আল-মুখতাসার ফী তাফসীরিল কুরআন (বাংলা)</div>
       </div>
       <button class="tafsir-close" id="tafsirCloseBtn" title="বন্ধ করুন">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -2131,7 +2239,7 @@ async function toggleTopicVerseCard(card, entry){
           <span class="tv-ayah-num">${entry.name} : ${toBnDigits(nums[idx])}</span>
           <p class="tv-ayah-arabic ar">${r.arabic}</p>
           ${r.translation ? `
-            <div class="tv-ayah-source">আল-মুখতাসার ফী তাফসীরিল কুরআন (বাংলা)</div>
+            <div class="tv-ayah-source">${currentTafsirSourceLabel()}</div>
             <p class="tv-ayah-translation">${r.translation}</p>
           ` : `<p class="tv-ayah-translation" style="color:var(--muted);">অনুবাদ লোড করা যায়নি।</p>`}
         </div>`).join('');
@@ -3018,23 +3126,71 @@ function selectHadithChapter(chNum){
   hadithReaderBody.scrollTo && hadithReaderBody.scrollTo(0,0);
 }
 
-/* ================= TAFSIR MODAL (quranenc.com — Al-Mukhtasar, Bengali) ================= */
-const TAFSIR_KEY = 'bengali_mokhtasar';
+/* ================= TAFSIR MODAL + MULTI-SOURCE TAFSIR LIBRARY ================= */
+/* Real, publicly available tafsir editions.
+   - kind:'quranenc'  -> quranenc.com API (translation_key based)
+   - kind:'tafsirapi' -> spa5k/tafsir_api (served via jsDelivr from the GitHub repo), slug based */
+const TAFSIR_SOURCES = [
+  { key:'bengali_mokhtasar',   name:'আল-মুখতাসার ফী তাফসীরিল কুরআন', lang:'Bangla',  langBn:'বাংলা',  kind:'quranenc',  apiKey:'bengali_mokhtasar' },
+  { key:'bn_ahsanul_bayaan',   name:'তাফসীর আহসানুল বায়ান',          lang:'Bangla',  langBn:'বাংলা',  kind:'tafsirapi', slug:'bn-tafsir-ahsanul-bayaan' },
+  { key:'bn_ibn_kathir',       name:'তাফসীর ইবনে কাছীর',              lang:'Bangla',  langBn:'বাংলা',  kind:'tafsirapi', slug:'bn-tafseer-ibn-e-kaseer' },
+  { key:'bn_fathul_majid',     name:'তাফসীর ফাতহুল মাজীদ',            lang:'Bangla',  langBn:'বাংলা',  kind:'tafsirapi', slug:'tafisr-fathul-majid-bn' },
+  { key:'bn_abu_bakr_zakaria', name:'তাফসীর আবু বকর মুহাম্মাদ যাকারিয়া', lang:'Bangla', langBn:'বাংলা', kind:'tafsirapi', slug:'bn-tafsir-abu-bakr-zakaria' },
+  { key:'en_ibn_kathir',       name:'Tafsir Ibn Kathir',              lang:'English', langBn:'ইংরেজি', kind:'tafsirapi', slug:'en-tafisr-ibn-kathir' },
+  { key:'en_jalalayn',         name:'Tafsir Jalalayn',                lang:'English', langBn:'ইংরেজি', kind:'tafsirapi', slug:'en-al-jalalayn' },
+  { key:'en_maarif',           name:'Maarif-ul-Quran',                lang:'English', langBn:'ইংরেজি', kind:'tafsirapi', slug:'en-tafsir-maarif-ul-quran' },
+  { key:'en_mukhtasar',        name:'English Al-Mukhtasar',           lang:'English', langBn:'ইংরেজি', kind:'tafsirapi', slug:'en-tafsir-al-mukhtasar' }
+];
+
+function getTafsirSource(key){
+  return TAFSIR_SOURCES.find(s=>s.key===key) || TAFSIR_SOURCES[0];
+}
+function currentTafsirSourceLabel(){
+  const s = getTafsirSource(selectedTafsirSource);
+  return `${s.name} (${s.langBn})`;
+}
+
+// Which book is currently active, and which ones the user has already "downloaded" (fetched once).
+let selectedTafsirSource = localStorage.getItem('bn_quran_tafsir_source') || 'bengali_mokhtasar';
+let tafsirSourceChosenByUser = localStorage.getItem('bn_quran_tafsir_chosen') === '1';
+let downloadedTafsirSources = new Set(JSON.parse(localStorage.getItem('bn_quran_tafsir_downloaded') || '[]'));
+downloadedTafsirSources.add(selectedTafsirSource);
+
+function persistTafsirSourceState(){
+  localStorage.setItem('bn_quran_tafsir_source', selectedTafsirSource);
+  localStorage.setItem('bn_quran_tafsir_chosen', tafsirSourceChosenByUser ? '1' : '0');
+  localStorage.setItem('bn_quran_tafsir_downloaded', JSON.stringify(Array.from(downloadedTafsirSources)));
+}
+
+async function fetchTafsirFromSource(source, surah, ayah){
+  if(source.kind === 'quranenc'){
+    const res = await fetch(`https://quranenc.com/api/v1/translation/aya/${source.apiKey}/${surah}/${ayah}`);
+    if(!res.ok) throw new Error('network');
+    const json = await res.json();
+    let data = json.result !== undefined ? json.result : json;
+    if(Array.isArray(data)) data = data[0];
+    if(!data || !data.translation) throw new Error('empty');
+    return { translation: data.translation, footnotes: data.footnotes || null };
+  }
+  const res = await fetch(`https://cdn.jsdelivr.net/gh/spa5k/tafsir_api@main/tafsir/${source.slug}/${surah}/${ayah}.json`);
+  if(!res.ok) throw new Error('network');
+  const json = await res.json();
+  if(!json || !json.text) throw new Error('empty');
+  return { translation: json.text, footnotes: null };
+}
+
 const tafsirOverlay = document.getElementById('tafsirOverlay');
 const tafsirModalBody = document.getElementById('tafsirModalBody');
 const tafsirModalTitle = document.getElementById('tafsirModalTitle');
+const tafsirModalSource = document.getElementById('tafsirModalSource');
 const tafsirCloseBtn = document.getElementById('tafsirCloseBtn');
-const tafsirCache = {}; // "surah:ayah" -> data
+const tafsirCache = {}; // "sourceKey:surah:ayah" -> data
 
 async function fetchTafsir(surah, ayah){
-  const key = `${surah}:${ayah}`;
+  const key = `${selectedTafsirSource}:${surah}:${ayah}`;
   if(tafsirCache[key]) return tafsirCache[key];
-  const res = await fetch(`https://quranenc.com/api/v1/translation/aya/${TAFSIR_KEY}/${surah}/${ayah}`);
-  if(!res.ok) throw new Error('network');
-  const json = await res.json();
-  let data = json.result !== undefined ? json.result : json;
-  if(Array.isArray(data)) data = data[0];
-  if(!data || !data.translation) throw new Error('empty');
+  const source = getTafsirSource(selectedTafsirSource);
+  const data = await fetchTafsirFromSource(source, surah, ayah);
   tafsirCache[key] = data;
   return data;
 }
@@ -3043,6 +3199,7 @@ function openTafsirModal(surah, ayah){
   const bnEntry = surahs.find(s=>s[0]===Number(surah));
   const surahName = bnEntry ? bnEntry[1] : '';
   tafsirModalTitle.textContent = `তাফসীর — ${surahName} : ${toBnDigits(ayah)}`;
+  if(tafsirModalSource) tafsirModalSource.textContent = currentTafsirSourceLabel();
   tafsirModalBody.innerHTML = '<div class="tafsir-loading">লোড হচ্ছে...</div>';
   tafsirOverlay.classList.add('open');
 
@@ -3272,14 +3429,26 @@ function tpUpdateHeader(){
 function tpShowEmpty(){
   tpBody.innerHTML = tpEmptyStateHTML();
   const btn = document.getElementById('tpSelectTafsirBtn');
-  if(btn) btn.addEventListener('click', tpLoadTafsir);
+  if(btn) btn.addEventListener('click', ()=>{
+    openTafsirSelectPage(
+      ()=>{ tafsirPageView.style.display = 'block'; tpLoadTafsir(); },
+      ()=>{ tafsirPageView.style.display = 'block'; }
+    );
+  });
+}
+
+// Decides whether to show the ayah's tafsir straight away (a book has already been
+// chosen at least once) or ask the user to pick one first, exactly like the reference app.
+function tpRenderCurrent(){
+  if(tafsirSourceChosenByUser) tpLoadTafsir();
+  else tpShowEmpty();
 }
 
 async function tpLoadTafsir(){
   tpBody.innerHTML = '<div class="tp-loading">লোড হচ্ছে...</div>';
   try{
     const data = await fetchTafsir(currentSurahNum, tpAyahNum);
-    let html = `<div class="tp-content"><div class="tp-source">আল-মুখতাসার ফী তাফসীরিল কুরআন (বাংলা)</div><p>${data.translation}</p>`;
+    let html = `<div class="tp-content"><div class="tp-source">${currentTafsirSourceLabel()}</div><p>${data.translation}</p>`;
     if(data.footnotes){
       html += `<div class="tafsir-footnote">${data.footnotes}</div>`;
     }
@@ -3308,7 +3477,7 @@ function buildTpAyahDropdown(){
       tpAyahNum = Number(opt.dataset.ayah);
       tpAyahDropdown.classList.remove('open');
       tpUpdateHeader();
-      tpShowEmpty();
+      tpRenderCurrent();
     });
   });
 }
@@ -3325,7 +3494,7 @@ function openTafsirPage(){
   tpAyahNum = currentAyahIndex || 1;
   tpUpdateHeader();
   buildTpAyahDropdown();
-  tpShowEmpty();
+  tpRenderCurrent();
   tafsirPageView.style.display = 'block';
 }
 function closeTafsirPage(){
@@ -3340,7 +3509,7 @@ tpNextBtn.addEventListener('click', ()=>{
   if(tpAyahNum < total){
     tpAyahNum += 1;
     tpUpdateHeader();
-    tpShowEmpty();
+    tpRenderCurrent();
   }
 });
 
