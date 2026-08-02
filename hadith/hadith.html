@@ -1630,8 +1630,8 @@
   <div class="hh-shell">
     <header class="hh-header">
       <div class="hh-topbar">
-        <button class="hh-icon-btn" id="hhMenuBtn" aria-label="মেনু">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <button class="hh-icon-btn" id="hhBackBtn" aria-label="ফিরে যান">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
         </button>
         <h1 class="hh-title">আল হাদিস</h1>
         <button class="hh-icon-btn" id="hhSearchBtn" aria-label="অনুসন্ধান">
@@ -4067,7 +4067,9 @@ document.getElementById('hhSearchBtn').addEventListener('click', ()=>{
   hhSearchSection.style.display = nowOpen ? '' : 'none';
   if(nowOpen) hadithSearchInput.focus();
 });
-document.getElementById('hhMenuBtn').addEventListener('click', ()=> openMoreSheet());
+document.getElementById('hhBackBtn').addEventListener('click', ()=>{
+  window.location.href = 'https://ummahguidance.vercel.app/';
+});
 document.getElementById('hhLatestBtn').addEventListener('click', ()=>{
   if(HADITH_BOOKS.length) openHadithChapterList(HADITH_BOOKS[0]);
 });

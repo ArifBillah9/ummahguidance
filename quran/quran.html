@@ -794,7 +794,8 @@
   /* =======================================================================
      MOBILE READER (SURAH SCREEN) — mimics the native app's ayah-by-ayah page
      ======================================================================= */
-  .r-appbar, .r-bottomnav, .r-mode-pills{ display:none; }
+  .audio-player-bar{ display:none; }
+  .r-mode-pills{ display:none !important; } /* not part of the target design */
 
   /* Ornate ayah-number badge, reuses the same scalloped gold ring artwork as
      the surah-list medallions but recoloured per-ayah via CSS mask */
@@ -836,16 +837,27 @@
     font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
   }
 
-  @media (max-width:680px){
+  /* ---- The block below used to be gated behind @media (max-width:680px).
+     It is now applied unconditionally so the app-style design from the
+     reference screenshot is used for the reader at every screen size,
+     replacing the old two-column desktop reader design entirely. ---- */
 
-    #readerView{ padding-bottom:70px; }
+    #readerView{ padding-bottom:70px; background:var(--paper); }
 
     .r-appbar{
       display:flex; align-items:center; gap:6px; position:sticky; top:0; z-index:60;
-      background:linear-gradient(180deg,var(--deep-teal) 0%, var(--mid-green) 100%);
-      color:#fff; padding:9px 10px; box-shadow:0 6px 14px -8px rgba(14,59,49,.35);
+      background:var(--deep-teal);
+      color:#fff; padding:12px 14px; box-shadow:0 4px 10px -6px rgba(0,0,0,.35);
     }
-    .r-appbar .m-title{ margin:0; }
+    .r-appbar .m-title{ margin:0; font-size:19px; font-weight:700; }
+    .r-appbar .m-back{
+      width:34px; height:34px; border-radius:50%; border:1.5px solid rgba(255,255,255,.7);
+      background:transparent; color:#fff; display:flex; align-items:center; justify-content:center;
+      cursor:pointer; flex:0 0 auto;
+    }
+    .r-appbar .m-back svg{ width:18px; height:18px; }
+    .r-appbar #rSearchToggleBtn{ background:none; border:none; color:#fff; cursor:pointer; padding:6px; }
+    .r-appbar #rSearchToggleBtn svg{ width:22px; height:22px; }
 
     .r-mode-pills{
       display:flex; justify-content:center; gap:10px; position:sticky; top:44px; z-index:55;
@@ -891,14 +903,18 @@
     .content-tabs{ display:none; }
     .reader-content{ padding:14px 14px 20px; }
 
-    .surah-head{ text-align:center; }
+    .surah-head{ display:none; }
     .surah-head h2{ font-size:20px; }
     .surah-head-badges{ justify-content:center; }
 
-    .bismillah-box{ background:none; padding:10px 10px 22px; }
-    .bismillah-box .ar{ font-size:34px; }
+    .bismillah-box{ background:none; padding:22px 10px 26px; text-align:center; }
+    .bismillah-box .ar{
+      font-family:'Amiri Quran','Amiri',serif; font-size:38px; color:var(--deep-teal);
+      display:block; line-height:1.4;
+    }
+    .bismillah-box .translit{ display:block; margin-top:6px; font-style:italic; color:var(--muted); }
 
-    .ayah-block{ padding:16px 14px; border-bottom:1px solid var(--line); background:var(--paper); border-radius:10px; margin-bottom:10px; }
+    .ayah-block{ padding:18px 16px; border-bottom:1px solid var(--line); background:var(--paper); }
     .ayah-top-row{ display:flex; }
     .ayah-num-circle, .ayah-actions{ display:none; }
     .ayah-arabic{ font-size:24px; line-height:2.1; }
@@ -919,7 +935,48 @@
     }
     .r-bn-ic{ width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
     .r-bn-ic img{ width:100%; height:100%; object-fit:contain; display:block; }
-  }
+
+    /* Ayah currently being recited: flat grey card, mirrors the native app while audio is playing */
+    .ayah-block.now-playing{ background:#dcdcdc !important; }
+
+    /* Bottom "now playing" audio bar — replaces the bottom nav while audio is active */
+    .audio-player-bar{
+      display:none; position:fixed; left:0; right:0; bottom:0; z-index:71;
+      background:linear-gradient(180deg,var(--deep-teal) 0%, var(--mid-green) 100%);
+      color:#fff; padding:10px 16px calc(env(safe-area-inset-bottom, 0px) + 10px);
+      box-shadow:0 -6px 14px -10px rgba(0,0,0,.35);
+    }
+    .audio-player-bar.open{ display:block; }
+    .apb-label{
+      font-size:12.5px; font-weight:600; color:rgba(255,255,255,.92);
+      text-align:center; margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .apb-progress-row{
+      display:flex; align-items:center; gap:10px; margin-bottom:8px;
+    }
+    .apb-time{ font-size:12.5px; color:rgba(255,255,255,.85); min-width:38px; font-variant-numeric:tabular-nums; }
+    .apb-time:last-child{ text-align:right; }
+    .apb-slider{
+      flex:1; -webkit-appearance:none; appearance:none; height:4px; border-radius:999px;
+      background:rgba(255,255,255,.3); accent-color:#fff; cursor:pointer;
+    }
+    .apb-slider::-webkit-slider-thumb{
+      -webkit-appearance:none; appearance:none; width:16px; height:16px; border-radius:50%;
+      background:#fff; box-shadow:0 1px 3px rgba(0,0,0,.4); cursor:pointer;
+    }
+    .apb-slider::-moz-range-thumb{
+      width:16px; height:16px; border-radius:50%; background:#fff; border:none; box-shadow:0 1px 3px rgba(0,0,0,.4); cursor:pointer;
+    }
+    .apb-controls-row{
+      display:flex; align-items:center; justify-content:space-between; padding:2px 12px 0;
+    }
+    .apb-btn{
+      background:none; border:none; color:#fff; cursor:pointer; padding:6px;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .apb-btn svg{ width:22px; height:22px; }
+    .apb-play svg{ width:30px; height:30px; }
+    .apb-btn.disabled{ opacity:.35; pointer-events:none; }
 
   /* =======================================================================
      AUDIO RANGE MODAL
@@ -950,6 +1007,7 @@
   .ar-btn:last-child{ border-bottom:none; }
   .ar-btn:hover{ background:var(--cream); }
   .ar-btn-cancel{ color:#c0392b; }
+  .ar-btn.audio-lang-selected{ background:#eef4ee; box-shadow:inset 3px 0 0 var(--leaf-green); }
 
   /* =======================================================================
      SURAH AUDIO DOWNLOAD PROGRESS MODAL
@@ -1447,6 +1505,31 @@
       <span>অন্যান্য</span>
     </button>
   </nav>
+
+  <!-- Mobile app-style bottom audio player (replaces the bottom nav while an ayah is playing) -->
+  <div class="audio-player-bar" id="audioPlayerBar">
+    <div class="apb-label" id="apbLabel"></div>
+    <div class="apb-progress-row">
+      <span class="apb-time" id="apbCurrentTime">00:00</span>
+      <input type="range" id="apbSlider" class="apb-slider" min="0" max="1000" value="0" step="1">
+      <span class="apb-time" id="apbTotalTime">00:00</span>
+    </div>
+    <div class="apb-controls-row">
+      <button class="apb-btn" id="apbCollapseBtn" title="বন্ধ করুন">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <button class="apb-btn" id="apbPrevBtn" title="আগের আয়াত">
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="5" width="2.6" height="14"/><path d="M20 5L9.5 12L20 19V5Z"/></svg>
+      </button>
+      <button class="apb-btn apb-play" id="apbPlayPauseBtn" title="প্লে/পজ">
+        <svg id="apbPlayIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4l14 8-14 8V4z"/></svg>
+        <svg id="apbPauseIcon" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4.5" height="16"/><rect x="13.5" y="4" width="4.5" height="16"/></svg>
+      </button>
+      <button class="apb-btn" id="apbNextBtn" title="পরের আয়াত">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 5L14.5 12L4 19V5Z"/><rect x="17.4" y="5" width="2.6" height="14"/></svg>
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- ============ HADITH LISTING VIEW ============ -->
@@ -1532,6 +1615,21 @@
     <button class="ar-btn ar-btn-cancel" id="audioRangeCancelBtn">বাতিল করুন</button>
   </div>
 </div>
+
+<!-- "অডিও: বাংলা" — choose how the Bangla translation is voiced during "অনুবাদসহ প্লে করুন" -->
+<div class="ar-overlay" id="audioLangOverlay">
+  <div class="ar-modal">
+    <div class="ar-title">অনুবাদ অডিও উৎস নির্বাচন করুন</div>
+    <button class="ar-btn" id="audioLangApiBtn" data-mode="api">
+      Quran API <span style="color:var(--muted); font-weight:400;">(তৈরি/রেকর্ডকৃত অডিও — বাংলায় এখনো উপলব্ধ নয়)</span>
+    </button>
+    <button class="ar-btn" id="audioLangTtsBtn" data-mode="tts">
+      TTS <span style="color:var(--muted); font-weight:400;">(Text To Speech — বাংলা অর্থ পড়ে শোনানো হয়)</span>
+    </button>
+    <button class="ar-btn ar-btn-cancel" id="audioLangCancelBtn">বাতিল করুন</button>
+  </div>
+</div>
+
 
 <!-- ============ SHOBDE SHOBDE (word-by-word) DOWNLOAD CONFIRM MODAL ============ -->
 <div class="wc-overlay" id="wordConfirmOverlay">
@@ -2333,6 +2431,31 @@ const TRANSLATIONS = [
 
 // Which translations are currently checked — default to all three, like the reference screenshot.
 let selectedTranslations = TRANSLATIONS.map(t => t.id);
+
+/* How "অনুবাদসহ প্লে করুন" voices the Bangla meaning:
+   'tts' -> read the Bangla translation aloud via Text-To-Speech (Google TTS, falls back to
+            the browser's speechSynthesis) — this is the only option that actually works today.
+   'api' -> use a pre-recorded/human-voiced Bangla translation audio track from a Quran audio
+            API, the same way Arabic recitation audio is fetched. No free/open API currently
+            publishes recorded Bangla translation audio (only English, French, Chinese, etc. —
+            see quranenc.com/audio), so choosing this falls back to Arabic-only playback with
+            a notice, until such a source becomes available. */
+let translationAudioMode = localStorage.getItem('bn_quran_translation_audio_mode') || 'tts';
+function setTranslationAudioMode(mode){
+  translationAudioMode = mode;
+  localStorage.setItem('bn_quran_translation_audio_mode', mode);
+  updateAudioLangLabel();
+}
+function updateAudioLangLabel(){
+  const labelEl = document.querySelector('.ms-item[data-ms="audiolang"] span:last-child');
+  const iconEl = document.querySelector('.ms-item[data-ms="audiolang"] img');
+  if(labelEl){
+    labelEl.textContent = translationAudioMode === 'api' ? 'অডিও: Quran API' : 'অডিও: বাংলা (TTS)';
+  }
+  if(iconEl){
+    iconEl.alt = translationAudioMode === 'api' ? 'অডিও: Quran API' : 'অডিও: বাংলা (TTS)';
+  }
+}
 // id -> Map("chapter-verse" -> text), populated lazily the first time a translation is needed.
 const translationDataCache = {};
 // id -> in-flight promise, so we never fetch the same translation twice.
@@ -2389,6 +2512,7 @@ const wordByWordSurahs = new Set(); // surah numbers that have "downloaded" word
 const WORD_API_BASE = 'https://api.quran.com/api/v4';
 
 function showListing(){
+  if(typeof stopAyahAudioPlayback === 'function') stopAyahAudioPlayback();
   readerView.style.display = 'none';
   hideHadithViews();
   heroSection.style.display = '';
@@ -2802,6 +2926,7 @@ async function renderJuzBody(num){
 }
 
 function selectSurah(num){
+  if(typeof stopAyahAudioPlayback === 'function') stopAyahAudioPlayback();
   currentSurahNum = num;
   currentAyahIndex = 1;
   currentBodyView = 'surah';
@@ -2824,11 +2949,12 @@ function wireAyahActions(){
   readerBody.querySelectorAll('[data-action="audio"]').forEach(btn=>{
     btn.addEventListener('click', (e)=>{
       e.stopPropagation();
-      const g = btn.dataset.g;
+      const g = Number(btn.dataset.g);
       readerBody.querySelectorAll('.ayah-action.playing').forEach(b=>b.classList.remove('playing'));
-      ayahAudio.src = `https://cdn.islamic.network/quran/audio/128/${RECITER}/${g}.mp3`;
-      ayahAudio.play().catch(()=>{});
       btn.classList.add('playing');
+      const block = btn.closest('.ayah-block');
+      const numberInSurah = block ? Number(block.dataset.ayahIndex) : null;
+      startBarPlayback([{ g, numberInSurah, surahNum: currentSurahNum }], { mode:'single' });
     });
   });
   readerBody.querySelectorAll('[data-action="bookmark"]').forEach(btn=>{
@@ -2853,9 +2979,9 @@ function wireAyahActions(){
   readerBody.querySelectorAll('[data-surah-audio]').forEach(btn=>{
     btn.addEventListener('click', (e)=>{
       e.stopPropagation();
-      const num = btn.dataset.surahAudio;
-      ayahAudio.src = `https://cdn.islamic.network/quran/audio-surah/128/${RECITER}/${num}.mp3`;
-      ayahAudio.play().catch(()=>{});
+      const num = Number(btn.dataset.surahAudio);
+      const url = `https://cdn.islamic.network/quran/audio-surah/128/${RECITER}/${num}.mp3`;
+      startBarPlayback([{ surahNum: num, url }], { mode:'surah' });
     });
   });
   readerBody.querySelectorAll('.wbw-item').forEach(btn=>{
@@ -3277,9 +3403,6 @@ const audioRangeTo = document.getElementById('audioRangeTo');
 const audioPlayOnceBtn = document.getElementById('audioPlayOnceBtn');
 const audioPlayLoopBtn = document.getElementById('audioPlayLoopBtn');
 const audioRangeCancelBtn = document.getElementById('audioRangeCancelBtn');
-let audioRangeQueue = [];
-let audioRangeLoop = false;
-
 function currentSurahAyahCount(){
   const entry = surahs.find(s=>s[0]===currentSurahNum);
   return entry ? entry[3] : 7;
@@ -3300,9 +3423,209 @@ function closeAudioRange(){
   audioRangeOverlay.classList.remove('open');
 }
 
+/* Range playback now shares the same bottom "now playing" bar/queue as everything else,
+   so it is counted ayah-by-ayah just like normal chained playback. */
 async function playAyahRange(from, to, loop){
-  ayahAudio.pause();
-  audioRangeLoop = loop;
+  const surahNum = currentSurahNum;
+  let data;
+  try{
+    data = await fetchSurah(surahNum);
+  } catch(e){
+    alert('দুঃখিত, অডিওর তথ্য লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।');
+    return;
+  }
+  const ayahs = (data.arabic && data.arabic.ayahs) ? data.arabic.ayahs : [];
+  const queue = ayahs
+    .filter(a => a.numberInSurah >= from && a.numberInSurah <= to)
+    .map(a => ({ g: a.number, numberInSurah: a.numberInSurah, surahNum }));
+  if(!queue.length) return;
+  closeAudioRange();
+  startBarPlayback(queue, { mode:'chain', loop:!!loop });
+}
+
+/* ================= BOTTOM "NOW PLAYING" AUDIO BAR ================= */
+const audioPlayerBar = document.getElementById('audioPlayerBar');
+const apbSlider = document.getElementById('apbSlider');
+const apbCurrentTime = document.getElementById('apbCurrentTime');
+const apbTotalTime = document.getElementById('apbTotalTime');
+const apbCollapseBtn = document.getElementById('apbCollapseBtn');
+const apbPrevBtn = document.getElementById('apbPrevBtn');
+const apbNextBtn = document.getElementById('apbNextBtn');
+const apbPlayPauseBtn = document.getElementById('apbPlayPauseBtn');
+const apbPlayIcon = document.getElementById('apbPlayIcon');
+const apbPauseIcon = document.getElementById('apbPauseIcon');
+
+const apbLabel = document.getElementById('apbLabel');
+
+/* barPlaybackQueue items look like:
+     { g, numberInSurah, surahNum }              -- a single ayah (from the per-ayah mp3 endpoint)
+     { surahNum, url }                            -- one complete-surah mp3 file (no numberInSurah)
+   barMode tells the UI/label how to describe what's counting:
+     'single' -> exactly one ayah, counted as "1টি আয়াত"
+     'chain'  -> multiple ayahs in sequence, counted "চলতি/মোট আয়াত"
+     'surah'  -> one full-surah audio file, counted as a whole surah, not per-ayah          */
+let barPlaybackQueue = [];
+let barPlaybackIndex = -1;
+let barLoop = false;
+let barMode = 'single';
+let barPhase = 'recite'; // 'recite' | 'translate' -- only meaningful in 'chainTrans' mode
+let barIsSliderDragging = false;
+
+/* Bengali translation is read aloud using Google Translate's public text-to-speech
+   endpoint (translate.google.com/translate_tts) — this is a real hosted TTS "API"
+   (no key needed, played as a normal <audio> resource) and sounds far more natural
+   and reliable across devices than relying on a Bangla voice being installed
+   locally. If it fails for any reason (offline, blocked, etc.) we automatically
+   fall back to the browser's built-in Web Speech API (window.speechSynthesis),
+   and if neither works we just skip straight to the next ayah. */
+const translationAudio = new Audio();
+
+/* Google's translate_tts endpoint only accepts fairly short strings per request,
+   so long ayah translations are split into pieces (breaking on spaces where
+   possible) and played back-to-back as one continuous "sentence". */
+function chunkTextForTTS(text, maxLen){
+  maxLen = maxLen || 190;
+  const clean = String(text).replace(/\s+/g, ' ').trim();
+  if(!clean) return [];
+  const chunks = [];
+  let start = 0;
+  while(start < clean.length){
+    let end = Math.min(start + maxLen, clean.length);
+    if(end < clean.length){
+      const lastBreak = Math.max(clean.lastIndexOf('।', end), clean.lastIndexOf(' ', end));
+      if(lastBreak > start) end = lastBreak + 1;
+    }
+    const piece = clean.slice(start, end).trim();
+    if(piece) chunks.push(piece);
+    start = end;
+  }
+  return chunks;
+}
+
+function speakBengaliBrowserFallback(text, onDone){
+  if(!('speechSynthesis' in window) || !text){
+    onDone && onDone();
+    return;
+  }
+  try{
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.lang = 'bn-BD';
+    utter.rate = 0.92;
+    const voices = window.speechSynthesis.getVoices();
+    const bnVoice = voices.find(v => /^bn/i.test(v.lang));
+    if(bnVoice) utter.voice = bnVoice;
+    let done = false;
+    const finish = ()=>{ if(done) return; done = true; onDone && onDone(); };
+    utter.onend = finish;
+    utter.onerror = finish;
+    window.speechSynthesis.speak(utter);
+  } catch(e){
+    onDone && onDone();
+  }
+}
+
+function speakBengaliViaGoogleTTS(text, onDone){
+  const chunks = chunkTextForTTS(text);
+  if(!chunks.length){ onDone && onDone(); return; }
+  let i = 0;
+  let usedFallback = false;
+  const finish = ()=>{
+    translationAudio.onended = null;
+    translationAudio.onerror = null;
+    onDone && onDone();
+  };
+  const playNext = ()=>{
+    if(i >= chunks.length){ finish(); return; }
+    const q = encodeURIComponent(chunks[i]);
+    i += 1;
+    translationAudio.src = `https://translate.google.com/translate_tts?ie=UTF-8&tl=bn&client=tw-ob&q=${q}`;
+    translationAudio.play().catch(()=>{
+      if(usedFallback){ finish(); return; }
+      usedFallback = true;
+      speakBengaliBrowserFallback(text, finish);
+    });
+  };
+  translationAudio.onended = playNext;
+  translationAudio.onerror = ()=>{
+    if(usedFallback){ finish(); return; }
+    usedFallback = true;
+    speakBengaliBrowserFallback(text, finish);
+  };
+  playNext();
+}
+
+function speakBengali(text, onDone){
+  if(!text){ onDone && onDone(); return; }
+  try{
+    speakBengaliViaGoogleTTS(text, onDone);
+  } catch(e){
+    speakBengaliBrowserFallback(text, onDone);
+  }
+}
+
+function stopBengaliSpeech(){
+  try{ translationAudio.pause(); translationAudio.removeAttribute('src'); translationAudio.onended = null; translationAudio.onerror = null; } catch(e){}
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+}
+
+function fmtTime(sec){
+  if(!isFinite(sec) || sec < 0) sec = 0;
+  const m = Math.floor(sec/60);
+  const s = Math.floor(sec%60);
+  return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+}
+
+function markNowPlayingAyah(surahNum, numberInSurah){
+  readerBody.querySelectorAll('.ayah-block.now-playing').forEach(b=>b.classList.remove('now-playing'));
+  if(!numberInSurah) return;
+  const block = readerBody.querySelector(`.ayah-block[data-surah="${surahNum}"][data-ayah-index="${numberInSurah}"]`);
+  if(block){
+    block.classList.add('now-playing');
+    block.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+}
+
+function updateApbLabel(){
+  if(!apbLabel) return;
+  const item = barPlaybackQueue[barPlaybackIndex];
+  if(!item){ apbLabel.textContent = ''; return; }
+  const entry = surahs.find(s=>s[0]===item.surahNum);
+  const surahName = entry ? entry[1] : '';
+  if(barMode === 'surah'){
+    apbLabel.textContent = surahName ? `${surahName} — সম্পূর্ণ সূরা` : 'সম্পূর্ণ সূরা';
+  } else if(barMode === 'single'){
+    apbLabel.textContent = surahName ? `${surahName} • আয়াত ${toBnDigits(item.numberInSurah)}` : `আয়াত ${toBnDigits(item.numberInSurah)}`;
+  } else if(barMode === 'chainTrans'){
+    const phaseText = barPhase === 'translate' ? 'অনুবাদ শোনানো হচ্ছে' : 'তেলাওয়াত হচ্ছে';
+    apbLabel.textContent = `${surahName ? surahName+' • ' : ''}আয়াত ${toBnDigits(barPlaybackIndex+1)}/${toBnDigits(barPlaybackQueue.length)} — ${phaseText}`;
+  } else {
+    apbLabel.textContent = `${surahName ? surahName+' • ' : ''}আয়াত ${toBnDigits(barPlaybackIndex+1)}/${toBnDigits(barPlaybackQueue.length)}`;
+  }
+}
+
+function updateApbNavButtons(){
+  const disablePrevNext = barMode === 'surah' || barPlaybackQueue.length <= 1;
+  if(apbPrevBtn) apbPrevBtn.classList.toggle('disabled', disablePrevNext);
+  if(apbNextBtn) apbNextBtn.classList.toggle('disabled', disablePrevNext);
+}
+
+/* Single entry point used by every "play" trigger in the app (single ayah button,
+   ayah action-sheet, bookmark card, full-surah button, chained/from-here playback,
+   and the ayah-range modal) so the bottom bar always opens and counts correctly. */
+function startBarPlayback(queue, opts={}){
+  if(!queue || !queue.length) return;
+  barPlaybackQueue = queue;
+  barPlaybackIndex = 0;
+  barLoop = !!opts.loop;
+  barMode = opts.mode || (queue.length > 1 ? 'chain' : 'single');
+  audioPlayerBar.classList.add('open');
+  rBottomNav.style.display = 'none';
+  updateApbNavButtons();
+  playBarCurrent();
+}
+
+async function startAyahAudioPlayback(fromAyahNum){
   let data;
   try{
     data = await fetchSurah(currentSurahNum);
@@ -3311,26 +3634,180 @@ async function playAyahRange(from, to, loop){
     return;
   }
   const ayahs = (data.arabic && data.arabic.ayahs) ? data.arabic.ayahs : [];
-  audioRangeQueue = ayahs
-    .filter(a=> a.numberInSurah >= from && a.numberInSurah <= to)
-    .map(a=> a.number);
-  if(!audioRangeQueue.length) return;
-  closeAudioRange();
-  playNextInAudioRange();
+  const surahNum = currentSurahNum;
+  const queue = ayahs
+    .filter(a => a.numberInSurah >= (fromAyahNum || 1))
+    .map(a => ({ g: a.number, numberInSurah: a.numberInSurah, surahNum }));
+  startBarPlayback(queue, { mode:'chain' });
 }
-function playNextInAudioRange(){
-  if(!audioRangeQueue.length){
-    if(audioRangeLoop){
-      playAyahRange(Number(audioRangeFrom.value)||1, Number(audioRangeTo.value)||1, true);
+
+/* "অনুবাদসহ প্লে করুন" -- recite each ayah, then read its Bangla translation aloud, then move on. */
+let apiModeNoticeShown = false;
+async function startTranslationPlayback(fromAyahNum){
+  if(translationAudioMode === 'api'){
+    if(!apiModeNoticeShown){
+      apiModeNoticeShown = true;
+      alert('দুঃখিত, বাংলা ভাষায় তৈরি/রেকর্ডকৃত অনুবাদ অডিও এই মুহূর্তে কোনো ফ্রি/উন্মুক্ত Quran API-তে পাওয়া যায় না (ইংরেজি, ফরাসি, চীনা ইত্যাদি কিছু ভাষায় আছে, বাংলা এখনো নেই)। তাই শুধু আরবি তেলাওয়াত চলবে। বাংলা অর্থ শুনতে চাইলে এই মেনু থেকে "অডিও: বাংলা" থেকে "TTS" নির্বাচন করুন।');
     }
+    startAyahAudioPlayback(fromAyahNum || 1);
     return;
   }
-  const g = audioRangeQueue.shift();
-  ayahAudio.src = `https://cdn.islamic.network/quran/audio/128/${RECITER}/${g}.mp3`;
+  let data;
+  try{
+    data = await fetchSurah(currentSurahNum);
+  } catch(e){
+    alert('দুঃখিত, তথ্য লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।');
+    return;
+  }
+  const translationId = selectedTranslations[0] || TRANSLATIONS[0].id;
+  let transMap = null;
+  try{
+    transMap = await ensureTranslationLoaded(translationId);
+  } catch(e){
+    transMap = null; // fall back to recitation-only if translation text can't be fetched
+  }
+  const ayahs = (data.arabic && data.arabic.ayahs) ? data.arabic.ayahs : [];
+  const surahNum = currentSurahNum;
+  const queue = ayahs
+    .filter(a => a.numberInSurah >= (fromAyahNum || 1))
+    .map(a => ({
+      g: a.number,
+      numberInSurah: a.numberInSurah,
+      surahNum,
+      translation: transMap ? (transMap.get(`${surahNum}-${a.numberInSurah}`) || '') : ''
+    }));
+  if(!transMap && !('speechSynthesis' in window)){
+    alert('দুঃখিত, অনুবাদ পড়ে শোনানোর সুবিধা এই ব্রাউজারে পাওয়া যায়নি, শুধু তেলাওয়াত চলবে।');
+  }
+  startBarPlayback(queue, { mode:'chainTrans' });
+}
+
+function playBarCurrent(){
+  if(barPlaybackIndex < 0 || barPlaybackIndex >= barPlaybackQueue.length){
+    if(barLoop && barPlaybackQueue.length){
+      barPlaybackIndex = 0;
+    } else {
+      stopAyahAudioPlayback();
+      return;
+    }
+  }
+  const item = barPlaybackQueue[barPlaybackIndex];
+  barPhase = 'recite';
+  if(item.numberInSurah){
+    currentAyahIndex = item.numberInSurah;
+    markNowPlayingAyah(item.surahNum, item.numberInSurah);
+  } else {
+    markNowPlayingAyah(item.surahNum, null);
+  }
+  updateApbLabel();
+  ayahAudio.src = item.url || `https://cdn.islamic.network/quran/audio/128/${RECITER}/${item.g}.mp3`;
   ayahAudio.play().catch(()=>{});
 }
+
+function stopAyahAudioPlayback(){
+  ayahAudio.pause();
+  stopBengaliSpeech();
+  barPlaybackQueue = [];
+  barPlaybackIndex = -1;
+  barLoop = false;
+  barPhase = 'recite';
+  audioPlayerBar.classList.remove('open');
+  rBottomNav.style.display = '';
+  readerBody.querySelectorAll('.ayah-block.now-playing').forEach(b=>b.classList.remove('now-playing'));
+  readerBody.querySelectorAll('.ayah-action.playing').forEach(b=>b.classList.remove('playing'));
+}
+
+if(apbCollapseBtn) apbCollapseBtn.addEventListener('click', stopAyahAudioPlayback);
+if(apbPrevBtn) apbPrevBtn.addEventListener('click', ()=>{
+  if(barPlaybackIndex <= 0) return;
+  stopBengaliSpeech();
+  barPlaybackIndex -= 1;
+  playBarCurrent();
+});
+if(apbNextBtn) apbNextBtn.addEventListener('click', ()=>{
+  if(barPlaybackIndex < 0 || barPlaybackIndex >= barPlaybackQueue.length - 1) return;
+  stopBengaliSpeech();
+  barPlaybackIndex += 1;
+  playBarCurrent();
+});
+if(apbPlayPauseBtn) apbPlayPauseBtn.addEventListener('click', ()=>{
+  if(barPlaybackIndex < 0) return; // bar not active, ignore
+  if(barPhase === 'translate'){
+    if(!translationAudio.paused && !translationAudio.ended && translationAudio.src){
+      translationAudio.pause();
+      return;
+    }
+    if(translationAudio.src && translationAudio.paused){
+      translationAudio.play().catch(()=>{});
+      return;
+    }
+    if('speechSynthesis' in window && window.speechSynthesis.speaking){
+      if(window.speechSynthesis.paused) window.speechSynthesis.resume();
+      else window.speechSynthesis.pause();
+      return;
+    }
+  }
+  if(ayahAudio.paused) ayahAudio.play().catch(()=>{});
+  else ayahAudio.pause();
+});
+if(apbSlider){
+  apbSlider.addEventListener('input', ()=>{
+    barIsSliderDragging = true;
+    if(ayahAudio.duration) ayahAudio.currentTime = (apbSlider.value/1000) * ayahAudio.duration;
+  });
+  apbSlider.addEventListener('change', ()=>{ barIsSliderDragging = false; });
+}
+
+ayahAudio.addEventListener('timeupdate', ()=>{
+  if(barPlaybackIndex < 0) return;
+  apbCurrentTime.textContent = fmtTime(ayahAudio.currentTime);
+  if(ayahAudio.duration && !barIsSliderDragging){
+    apbSlider.value = (ayahAudio.currentTime / ayahAudio.duration) * 1000;
+  }
+});
+ayahAudio.addEventListener('loadedmetadata', ()=>{
+  if(barPlaybackIndex < 0) return;
+  apbTotalTime.textContent = fmtTime(ayahAudio.duration);
+  apbSlider.value = 0;
+});
+ayahAudio.addEventListener('play', ()=>{
+  if(barPlaybackIndex < 0) return;
+  apbPlayIcon.style.display = 'none';
+  apbPauseIcon.style.display = '';
+});
+ayahAudio.addEventListener('pause', ()=>{
+  if(barPlaybackIndex < 0) return;
+  apbPlayIcon.style.display = '';
+  apbPauseIcon.style.display = 'none';
+});
+translationAudio.addEventListener('play', ()=>{
+  if(barPlaybackIndex < 0) return;
+  apbPlayIcon.style.display = 'none';
+  apbPauseIcon.style.display = '';
+});
+translationAudio.addEventListener('pause', ()=>{
+  if(barPlaybackIndex < 0) return;
+  apbPlayIcon.style.display = '';
+  apbPauseIcon.style.display = 'none';
+});
+
 ayahAudio.addEventListener('ended', ()=>{
-  if(audioRangeQueue.length || audioRangeLoop) playNextInAudioRange();
+  if(barPlaybackIndex < 0) return;
+  if(barMode === 'chainTrans'){
+    const item = barPlaybackQueue[barPlaybackIndex];
+    if(item && item.translation){
+      barPhase = 'translate';
+      updateApbLabel();
+      speakBengali(item.translation, ()=>{
+        if(barPlaybackIndex < 0) return; // playback was stopped while speaking
+        barPlaybackIndex += 1;
+        playBarCurrent();
+      });
+      return;
+    }
+  }
+  barPlaybackIndex += 1;
+  playBarCurrent();
 });
 
 audioPlayOnceBtn.addEventListener('click', ()=>{
@@ -3347,6 +3824,34 @@ audioRangeCancelBtn.addEventListener('click', closeAudioRange);
 audioRangeOverlay.addEventListener('click', (e)=>{
   if(e.target === audioRangeOverlay) closeAudioRange();
 });
+
+/* ================= "অডিও: বাংলা" — TRANSLATION AUDIO SOURCE MODAL ================= */
+const audioLangOverlay = document.getElementById('audioLangOverlay');
+const audioLangApiBtn = document.getElementById('audioLangApiBtn');
+const audioLangTtsBtn = document.getElementById('audioLangTtsBtn');
+const audioLangCancelBtn = document.getElementById('audioLangCancelBtn');
+
+function openAudioLangOverlay(){
+  audioLangApiBtn.classList.toggle('audio-lang-selected', translationAudioMode === 'api');
+  audioLangTtsBtn.classList.toggle('audio-lang-selected', translationAudioMode === 'tts');
+  audioLangOverlay.classList.add('open');
+}
+function closeAudioLangOverlay(){
+  audioLangOverlay.classList.remove('open');
+}
+audioLangApiBtn.addEventListener('click', ()=>{
+  setTranslationAudioMode('api');
+  closeAudioLangOverlay();
+});
+audioLangTtsBtn.addEventListener('click', ()=>{
+  setTranslationAudioMode('tts');
+  closeAudioLangOverlay();
+});
+audioLangCancelBtn.addEventListener('click', closeAudioLangOverlay);
+audioLangOverlay.addEventListener('click', (e)=>{
+  if(e.target === audioLangOverlay) closeAudioLangOverlay();
+});
+updateAudioLangLabel();
 
 /* ================= "শব্দে শব্দে" DOWNLOAD CONFIRM MODAL ================= */
 const wordConfirmOverlay = document.getElementById('wordConfirmOverlay');
@@ -3534,9 +4039,10 @@ moreSheetOverlay.querySelectorAll('.ms-item').forEach(item=>{
     closeMoreSheet();
     if(action === 'playtrans'){
       openReader('surah', currentSurahNum);
-      document.querySelector('.content-tab[data-mode="recitation"]')?.click();
-      const firstAyahAudioBtn = readerBody.querySelector('[data-action="audio"]');
-      if(firstAyahAudioBtn) firstAyahAudioBtn.click();
+      document.querySelector('.content-tab[data-mode="translation"]')?.click();
+      startTranslationPlayback(1);
+    } else if(action === 'audiolang'){
+      openAudioLangOverlay();
     } else if(action === 'translator'){
       openTransPanel();
     } else if(action === 'explain'){
@@ -3591,8 +4097,9 @@ ayahSheetOverlay.querySelectorAll('.ay-sheet-item').forEach(item=>{
       closeAyahSheet();
     } else if(action === 'play'){
       readerBody.querySelectorAll('.ayah-action.playing').forEach(b=>b.classList.remove('playing'));
-      ayahAudio.src = `https://cdn.islamic.network/quran/audio/128/${RECITER}/${g}.mp3`;
-      ayahAudio.play().catch(()=>{});
+      const playBtn = readerBody.querySelector(`.ayah-action[data-action="audio"][data-g="${g}"]`);
+      if(playBtn) playBtn.classList.add('playing');
+      startBarPlayback([{ g: Number(g), numberInSurah: Number(ayah), surahNum: Number(surah) }], { mode:'single' });
       closeAyahSheet();
     } else if(action === 'bookmark'){
       item.classList.toggle('active');
@@ -3848,8 +4355,7 @@ function wireBmCardActions(){
           currentAyahIndex = ayah;
           openTafsirPage();
         } else if(action === 'play'){
-          ayahAudio.src = `https://cdn.islamic.network/quran/audio/128/${RECITER}/${g}.mp3`;
-          ayahAudio.play().catch(()=>{});
+          startBarPlayback([{ g, numberInSurah: ayah, surahNum: surah }], { mode:'single' });
         } else if(action === 'share'){
           const url = window.location.href;
           if(navigator.share){ navigator.share({ title:'কুরআনের আয়াত', url }); }

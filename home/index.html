@@ -1206,7 +1206,7 @@
         </div>
         <div class="lbl">কিতাব</div>
       </div>
-      <div class="menu-card">
+      <div class="menu-card" id="hadithMenuCard" style="cursor:pointer;">
         <div class="icon-box">
           <img src="assets/hadith.png" alt="হাদীস">
         </div>
@@ -1592,6 +1592,15 @@
     if(quranCard){
       quranCard.addEventListener('click', function(){
         window.location.href = 'https://ummahguidance-w5us.vercel.app/';
+      });
+    }
+  })();
+
+  (function(){
+    var hadithCard = document.getElementById('hadithMenuCard');
+    if(hadithCard){
+      hadithCard.addEventListener('click', function(){
+        window.location.href = 'https://ummahguidance-xsz3.vercel.app/';
       });
     }
   })();
