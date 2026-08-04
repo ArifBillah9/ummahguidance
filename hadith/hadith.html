@@ -621,15 +621,20 @@
   .hh-quote-wrap{
     position:relative; z-index:2; padding:22px 30px 8px; text-align:center;
   }
-  .hh-quote-text{
+  /* The quote and its "[সহিহ বুখারী]"-style citation now live in the SAME
+     paragraph and flow together, so the citation reads right after the
+     closing quote mark instead of floating separately underneath. */
+  .hh-quote-line{
     font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:15px;
-    line-height:1.9; color:rgba(255,255,255,.94);
-    min-height:3.8em; transition:opacity .28s ease, transform .28s ease;
+    line-height:1.9; min-height:3.8em; transition:opacity .28s ease, transform .28s ease;
   }
-  .hh-quote-text.hh-quote-fade{ opacity:0; transform:translateY(5px); }
+  .hh-quote-line.hh-quote-fade{ opacity:0; transform:translateY(5px); }
+  .hh-quote-text{ color:rgba(255,255,255,.94); }
   .hh-quote-cite{
-    margin-top:14px; font-size:14px; color:var(--gold); font-weight:600;
-    transition:opacity .28s ease;
+    color:var(--gold); font-weight:700; white-space:nowrap; margin-inline-start:6px;
+  }
+  .hh-quote-moon{
+    margin:14px 0 4px; font-size:18px; color:rgba(255,255,255,.5); text-align:center;
   }
   .hh-quote-dots{
     display:flex; justify-content:center; gap:6px; margin-top:14px; position:relative; z-index:2;
@@ -638,9 +643,6 @@
     width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.3); transition:background .2s ease, transform .2s ease;
   }
   .hh-quote-dots span.active{ background:var(--gold); transform:scale(1.2); }
-  .hh-quote-moon{
-    margin:16px 0 4px; font-size:20px; color:rgba(255,255,255,.5); text-align:center;
-  }
   .hh-mosque-silhouette{
     position:absolute; left:0; right:0; bottom:0; height:64px; opacity:.16; z-index:1; pointer-events:none;
   }
@@ -1737,11 +1739,11 @@
       </div>
 
       <div class="hh-quote-wrap" id="hhQuoteWrap">
-        <p class="hh-quote-text" id="hhQuoteText">
-          "আল্লাহর রসূল (ﷺ) ইরশাদ করেন, ‘‘সে-ই মুসলিম যার জিহ্বা ও হাত হতে সকল মুসলিম নিরাপদ এবং সে-ই প্রকৃত মুহাজির, আল্লাহ যা নিষেধ করেছেন তা ত্যাগ করে।’’"
+        <p class="hh-quote-line">
+          <span class="hh-quote-text" id="hhQuoteText">"আল্লাহর রসূল (ﷺ) ইরশাদ করেন, ‘‘সে-ই মুসলিম যার জিহ্বা ও হাত হতে সকল মুসলিম নিরাপদ এবং সে-ই প্রকৃত মুহাজির, আল্লাহ যা নিষেধ করেছেন তা ত্যাগ করে।’’"</span>
+          <span class="hh-quote-cite" id="hhQuoteCite">[সহিহ বুখারী]</span>
         </p>
         <div class="hh-quote-moon">☾</div>
-        <div class="hh-quote-cite" id="hhQuoteCite">[সহিহ বুখারী]</div>
         <div class="hh-quote-dots" id="hhQuoteDots"></div>
       </div>
 
@@ -5013,6 +5015,7 @@ const HH_FEATURED_HADITHS = [
   { text:'"রসূলুল্লাহ (ﷺ) বলেছেন, ‘‘হাসিমুখে ভাইয়ের সাথে সাক্ষাৎ করাও একটি সাদাকাহ।’’"', cite:'[জামে তিরমিযী]', bg:'linear-gradient(180deg,#3c1220 0%,#7c2f4f 100%)' },
 ];
 const hhHeaderEl = document.querySelector('#hadithView .hh-header');
+const hhQuoteLine = document.querySelector('#hadithView .hh-quote-line');
 const hhQuoteText = document.getElementById('hhQuoteText');
 const hhQuoteCite = document.getElementById('hhQuoteCite');
 const hhQuoteDots = document.getElementById('hhQuoteDots');
@@ -5033,14 +5036,12 @@ function hhBuildDots(){
 function hhShowHeaderQuote(idx){
   if(!hhHeaderEl || !hhQuoteText || !hhQuoteCite) return;
   const q = HH_FEATURED_HADITHS[idx % HH_FEATURED_HADITHS.length];
-  hhQuoteText.classList.add('hh-quote-fade');
-  hhQuoteCite.style.opacity = 0;
+  if(hhQuoteLine) hhQuoteLine.classList.add('hh-quote-fade');
   setTimeout(()=>{
     hhQuoteText.textContent = q.text;
     hhQuoteCite.textContent = q.cite;
     hhHeaderEl.style.background = q.bg;
-    hhQuoteText.classList.remove('hh-quote-fade');
-    hhQuoteCite.style.opacity = 1;
+    if(hhQuoteLine) hhQuoteLine.classList.remove('hh-quote-fade');
   }, 260);
   if(hhQuoteDots){
     hhQuoteDots.querySelectorAll('span').forEach((dot,i)=> dot.classList.toggle('active', i === (idx % HH_FEATURED_HADITHS.length)));

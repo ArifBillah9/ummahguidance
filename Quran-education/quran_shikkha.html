@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>কুরআন শিক্ষা</title>
+<style>
+    @font-face{
+    font-family:'Kalpurush';
+    src:url('icons/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+  :root{
+    --header-green:#1e3d2b;
+    --header-green-dark:#16301f;
+    --item-title:#2f6b3c;
+    --item-sub:#6b6f6e;
+    --bg:#eceeec;
+    --card-bg:#ffffff;
+    --shadow: 0 2px 6px rgba(0,0,0,0.10);
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;padding:0;
+    height:100%;
+    font-family:"Noto Sans Bengali","SolaimanLipi","Kalpurush",sans-serif;
+    background:var(--bg);
+    -webkit-tap-highlight-color: transparent;
+  }
+    body{
+    background:#f0f4f8;
+    color:#222;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  #app{
+    max-width:480px;
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--bg);
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 0 24px rgba(0,0,0,0.12);
+  }
+  .page{
+    position:absolute;
+    top:0;left:0;right:0;
+    min-height:100vh;
+    background:var(--bg);
+    display:flex;
+    flex-direction:column;
+    opacity:0;
+    transform:scale(0.94);
+    visibility:hidden;
+    transition:opacity .32s cubic-bezier(.25,.8,.25,1), transform .32s cubic-bezier(.25,.8,.25,1);
+    pointer-events:none;
+  }
+  .page.active{
+    position:relative;
+    opacity:1;
+    transform:scale(1);
+    visibility:visible;
+    z-index:2;
+    pointer-events:auto;
+  }
+
+  /* staggered entrance for cards inside the active page */
+  .page.active .card{
+    animation:card-pop .38s cubic-bezier(.25,.8,.25,1) backwards;
+  }
+  .page.active .list .card:nth-child(1){animation-delay:.05s;}
+  .page.active .list .card:nth-child(2){animation-delay:.10s;}
+  .page.active .list .card:nth-child(3){animation-delay:.15s;}
+  .page.active .list .card:nth-child(4){animation-delay:.20s;}
+  .page.active .grid .card{animation-delay:.05s;}
+  .page.active .grid .card:nth-child(n+3){animation-delay:.09s;}
+  .page.active .grid .card:nth-child(n+5){animation-delay:.13s;}
+  .page.active .grid .card:nth-child(n+7){animation-delay:.17s;}
+  .page.active .grid .card:nth-child(n+9){animation-delay:.21s;}
+  .page.active .grid .card:nth-child(n+11){animation-delay:.25s;}
+
+  @keyframes card-pop{
+    from{
+      opacity:0;
+      transform:translateY(14px) scale(0.96);
+    }
+    to{
+      opacity:1;
+      transform:translateY(0) scale(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .page, .page.active .card{
+      animation:none !important;
+      transition:none !important;
+    }
+  }
+
+  header{
+    background:linear-gradient(180deg,var(--header-green),var(--header-green-dark));
+    color:#fff;
+    display:flex;
+    align-items:center;
+    padding:14px 10px;
+    position:sticky;
+    top:0;
+    z-index:5;
+  }
+  .back-btn{
+    width:38px;height:38px;
+    border:2px solid rgba(255,255,255,0.85);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:transparent;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .back-btn svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.4;}
+  header h1{
+    flex:1;
+    text-align:center;
+    font-size:1.25rem;
+    font-weight:600;
+    margin:0;
+    padding-right:38px; /* balance back button */
+  }
+
+  .list{
+    padding:14px 12px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .card{
+    background:var(--card-bg);
+    border-radius:6px;
+    box-shadow:var(--shadow);
+    padding:20px 18px;
+    cursor:pointer;
+    min-height:58px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:6px;
+    transition:transform .12s ease, box-shadow .12s ease;
+    border:1px solid rgba(0,0,0,0.03);
+  }
+  .card:active{
+    transform:scale(0.98);
+    box-shadow:0 1px 3px rgba(0,0,0,0.15);
+  }
+  .card-title{
+    color:var(--item-title);
+    font-size:1.15rem;
+    font-weight:600;
+  }
+  .card-sub{
+    color:var(--item-sub);
+    font-size:0.92rem;
+    line-height:1.4;
+  }
+
+  .grid{
+    padding:14px 12px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+  .grid .card{
+    padding:16px 14px;
+    min-height:82px;
+    justify-content:flex-start;
+  }
+  .grid .card-title{
+    font-size:1.02rem;
+    line-height:1.4;
+  }
+
+  .empty-note{
+    text-align:center;
+    color:#8a8f8d;
+    padding:40px 20px;
+    font-size:0.95rem;
+  }
+
+  @media (min-width:481px){
+    body{background:#d7d9d7;}
+  }
+</style>
+</head>
+<body>
+
+<div id="app">
+
+  <!-- Page 1: কুরআন শিক্ষা (main list) -->
+  <section class="page active" data-page="page1">
+    <header>
+      <button class="back-btn" onclick="goHome()" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <h1>কুরআন শিক্ষা</h1>
+    </header>
+    <div class="list">
+      <div class="card" onclick="goTo('page2')">
+        <div class="card-title">কুরআন শিক্ষা</div>
+        <div class="card-sub">মাওলানা শামসুল আলম</div>
+      </div>
+      <div class="card" onclick="goTo('empty')">
+        <div class="card-title">বিশুদ্ধ কুরআন শিক্ষা (তাজভিদ)</div>
+        <div class="card-sub">উস্তায ফজলে রাব্বি মাদানী</div>
+      </div>
+      <div class="card" onclick="goTo('empty')">
+        <div class="card-title">নূরানী কুরআন শিক্ষা</div>
+        <div class="card-sub">নূরানী তা'লিমুল কুরআন বোর্ড</div>
+      </div>
+      <div class="card" onclick="goTo('empty')" style="min-height:80px;">
+        <div class="card-title">নূরানী কায়দা</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Page 2: অডিও ক্লাস / সচিত্র ভিডিও ক্লাস / প্রশিক্ষক পরিচিতি -->
+  <section class="page" data-page="page2">
+    <header>
+      <button class="back-btn" onclick="goBack()" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <h1>কুরআন শিক্ষা</h1>
+    </header>
+    <div class="list">
+      <div class="card" onclick="goTo('page3')" style="min-height:80px;">
+        <div class="card-title">অডিও ক্লাস</div>
+      </div>
+      <div class="card" onclick="goTo('empty')" style="min-height:80px;">
+        <div class="card-title">সচিত্র ভিডিও ক্লাস</div>
+      </div>
+      <div class="card" onclick="goTo('empty')" style="min-height:80px;">
+        <div class="card-title">প্রশিক্ষক পরিচিতি</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Page 3: অধ্যায় সমূহ -->
+  <section class="page" data-page="page3">
+    <header>
+      <button class="back-btn" onclick="goBack()" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <h1>কুরআন শিক্ষা</h1>
+    </header>
+    <div class="list">
+      <div class="card" onclick="goTo('page4')">
+        <div class="card-title">১ম অধ্যায়</div>
+        <div class="card-sub">অক্ষর-জ্ঞান, তামিজে হরফ, হরকত (যবর, যের, পেশ)</div>
+      </div>
+      <div class="card" onclick="goTo('empty')">
+        <div class="card-title">২য় অধ্যায়</div>
+        <div class="card-sub">জযম, কলকলাহ্, তাশদীদ, ওয়াজিব গুন্নাহ্</div>
+      </div>
+      <div class="card" onclick="goTo('empty')">
+        <div class="card-title">৩য় অধ্যায়</div>
+        <div class="card-sub">মাদ্দ, নূন সাকিন, মীম সাকিন, আল্লাহ শব্দের উচ্চারণ, র উচ্চারণ</div>
+      </div>
+      <div class="card" onclick="goTo('empty')" style="min-height:80px;">
+        <div class="card-title">অনুশীলন</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Page 4: হরফ শিক্ষা (grid) -->
+  <section class="page" data-page="page4">
+    <header>
+      <button class="back-btn" onclick="goBack()" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <h1>হরফ শিক্ষা</h1>
+    </header>
+    <div class="grid">
+      <div class="card" onclick="goTo('empty')"><div class="card-title">সূচনা</div></div>
+      <div class="card" onclick="goTo('empty')"><div class="card-title">১. অক্ষরসমূহ</div></div>
+      <div class="card" onclick="goTo('empty')"><div class="card-title">২. তামিজে হরফ</div></div>
+      <div class="card" onclick="goTo('empty')"><div class="card-title">৩. যবরের উচ্চারণ</div></div>
+      <div class="card" onclick="goTo('empty')"><div class="card-title">৪. যবরের উচ্চারণের পার্থক্য</div></div>
+      <div class="card" onclick="goTo('empty')"><div class="card-title">৫. যবর যুক্ত শব্দের মাশক্</div></div>
+      <div class="card" onclick="goTo('empty')"><div class="card-title">৬. যেরের উচ্চারণ</div></div>
+      <div class="card" onclick="goTo('empty')"><div class="card-title">৭. যেরের উচ্চারণের পার্থক্য</div></div>
+      <div class="card" onclick="goTo('empty')"><div class="card-title">৮. যের যুক্ত শব্দের মাশক্</div></div>
+      <div class="card" onclick="goTo('empty')"><div class="card-title">৯. পেশের উচ্চারণ</div></div>
+      <div class="card" onclick="goTo('empty')"><div class="card-title">১০. পেশের উচ্চারণের পার্থক্য</div></div>
+      <div class="card" onclick="goTo('empty')"><div class="card-title">১১. পেশ বিশিষ্ট শব্দের মাশক্</div></div>
+    </div>
+  </section>
+
+  <!-- Placeholder page for items not yet built out -->
+  <section class="page" data-page="empty">
+    <header>
+      <button class="back-btn" onclick="goBack()" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <h1>বিস্তারিত</h1>
+    </header>
+    <div class="empty-note">এই অংশের বিস্তারিত কনটেন্ট শীঘ্রই যুক্ত করা হবে।</div>
+  </section>
+
+</div>
+
+<script>
+  var stack = ['page1'];
+
+  function showPage(name){
+    document.querySelectorAll('.page').forEach(function(p){
+      p.classList.remove('active');
+    });
+    var target = document.querySelector('[data-page="' + name + '"]');
+    if(target){ target.classList.add('active'); }
+  }
+
+  function goTo(name){
+    stack.push(name);
+    showPage(name);
+  }
+
+  function goBack(){
+    if(stack.length > 1){
+      stack.pop();
+      showPage(stack[stack.length - 1]);
+    }
+  }
+
+  function goHome(){
+    stack = ['page1'];
+    showPage('page1');
+  }
+</script>
+
+</body>
+</html>

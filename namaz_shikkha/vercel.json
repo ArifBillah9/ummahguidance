@@ -1,0 +1,5 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/namaz_shikkha.html" }
+  ]
+}

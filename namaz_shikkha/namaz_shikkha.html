@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>নামায শিক্ষা</title>
+<style>
+      @font-face{
+    font-family:'Kalpurush';
+    src:url('icons/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+  :root{
+    --green-dark:#1c4e34;
+    --green:#1f5d3f;
+    --green-light:#2e7d52;
+    --bg:#f2f3f1;
+    --card:#ffffff;
+    --text:#222222;
+    --muted:#666666;
+    --border:#e7e7e5;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;padding:0;height:100%;
+    font-family:"Noto Sans Bengali","Segoe UI",system-ui,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-tap-highlight-color:transparent;
+  }
+    html,body{margin:0;padding:0;}
+  body{
+    background:#f0f4f8;
+    color:#222;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  #app{
+    max-width:480px;
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--bg);
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    box-shadow:0 0 24px rgba(0,0,0,0.08);
+  }
+  svg.ic{
+    display:block;
+    stroke:currentColor;
+    fill:none;
+    stroke-width:1.7;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+
+  /* ---- Top App Bar ---- */
+  .appbar{
+    background:var(--green-dark);
+    color:#fff;
+    padding:16px 14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    position:sticky;
+    top:0;
+    z-index:20;
+  }
+  .appbar .back-btn{
+    width:34px;height:34px;
+    border:1.5px solid rgba(255,255,255,0.85);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:transparent;
+    color:#fff;
+    cursor:pointer;
+    flex:none;
+    visibility:hidden;
+  }
+  .appbar .back-btn svg{width:16px;height:16px;}
+  .appbar .back-btn.show{visibility:visible;}
+  .appbar h1{
+    flex:1;
+    text-align:center;
+    font-size:19px;
+    font-weight:700;
+    margin:0;
+    padding-right:34px;
+  }
+
+  /* ---- Sub header (page title bar) ---- */
+  .subbar{
+    display:none;
+    align-items:center;
+    gap:10px;
+    background:#fff;
+    padding:14px 14px;
+    border-bottom:1px solid var(--border);
+  }
+  .subbar.show{display:flex;}
+  .subbar .sub-back{
+    background:none;border:none;color:var(--green-dark);
+    cursor:pointer;line-height:1;flex:none;
+    padding:2px 4px;display:flex;align-items:center;
+  }
+  .subbar .sub-back svg{width:19px;height:19px;}
+  .subbar h2{
+    flex:1;
+    text-align:center;
+    font-size:17px;
+    margin:0;
+    font-weight:700;
+    color:#1a1a1a;
+    padding-right:24px;
+  }
+
+  /* ---- Screens ---- */
+  .screen{display:none;flex:1;flex-direction:column;padding-bottom:24px;}
+  .screen.active{display:flex;}
+
+  /* ---- Home banner ---- */
+  .hero{
+    position:relative;
+    color:#fff;
+    padding:22px 18px 26px;
+    text-align:center;
+    background-image:
+      linear-gradient(180deg,rgba(10,25,18,0.45),rgba(8,20,14,0.8)),
+      url('https://i.pinimg.com/736x/c7/b9/e2/c7b9e2e60eddc32acfd9fc682495b5fd.jpg');
+    background-size:cover;
+    background-position:center;
+    min-height:300px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-end;
+  }
+
+  .hero .logo svg{width:26px;height:26px;}
+  .hero .location{
+    font-size:15px;
+    margin-bottom:10px;
+    opacity:.95;
+  }
+  .hero .date-g{font-size:22px;font-weight:700;margin-bottom:6px;}
+  .hero .date-h{font-size:15px;margin-bottom:18px;opacity:.9;}
+  .hero .times{
+    display:flex;justify-content:space-between;
+    width:100%;
+    font-size:15px;font-weight:600;
+    padding-top:6px;
+  }
+
+  /* ---- Grid menu ---- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    padding:18px 16px;
+  }
+  .tile{
+    background:var(--card);
+    border-radius:10px;
+    padding:18px 8px 14px;
+    text-align:center;
+    box-shadow:0 1px 3px rgba(0,0,0,0.06);
+    cursor:pointer;
+    border:1px solid var(--border);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .tile:active{transform:scale(0.96);}
+  .tile .icon{margin-bottom:8px;color:var(--green);display:flex;align-items:center;justify-content:center;}
+  .tile .icon svg{width:30px;height:30px;}
+  .tile .label{font-size:14.5px;font-weight:600;color:#1a1a1a;}
+
+  /* ---- List screens ---- */
+  .list{padding:14px;}
+  .list-item{
+    background:#fff;
+    border-radius:10px;
+    padding:16px 16px;
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    box-shadow:0 1px 2px rgba(0,0,0,0.05);
+    cursor:pointer;
+    border:1px solid var(--border);
+  }
+  .list-item:active{background:#f7f7f6;}
+  .list-item .icn{
+    flex:none;width:32px;height:32px;border-radius:8px;
+    background:#eef6f1;color:var(--green);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .list-item .icn svg{width:18px;height:18px;}
+  .list-item .info{flex:1;}
+  .list-item .info .txt{font-size:15.5px;font-weight:500;color:#222;}
+  .list-item .info .count{font-size:12.5px;color:var(--muted);margin-top:2px;}
+  .list-item .arrow{color:#999;flex:none;display:flex;align-items:center;}
+  .list-item .arrow svg{width:16px;height:16px;}
+
+  /* accordion (azan-iqamat) */
+  .acc-item{
+    background:#fff;
+    border-radius:10px;
+    margin-bottom:10px;
+    border:1px solid var(--border);
+    overflow:hidden;
+  }
+  .acc-head{
+    padding:17px 16px;
+    display:flex;justify-content:space-between;align-items:center;
+    cursor:pointer;
+    font-weight:500;font-size:15.5px;
+  }
+  .acc-head .chev{transition:transform .18s ease;color:#777;display:flex;align-items:center;}
+  .acc-head .chev svg{width:16px;height:16px;}
+  .acc-item.open .acc-head .chev{transform:rotate(180deg);}
+  .acc-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .2s ease;
+    padding:0 16px;
+    font-size:14.5px;
+    line-height:1.9;
+    color:#444;
+  }
+  .acc-item.open .acc-body{
+    max-height:600px;
+    padding:0 16px 18px;
+    border-top:1px solid var(--border);
+    padding-top:12px;
+  }
+
+  /* detail screen */
+  .detail-body{padding:18px 16px;}
+  .detail-card{
+    background:#fff;
+    border-radius:10px;
+    border:1px solid var(--border);
+    padding:20px 18px;
+    line-height:2;
+    font-size:15px;
+    color:#333;
+  }
+  .detail-card h3{margin-top:0;color:var(--green-dark);font-size:17px;}
+
+  /* hadith screen */
+  .hadith-card{
+    background:#fff;
+    border-radius:10px;
+    border:1px solid var(--border);
+    padding:18px 16px;
+    margin:0 14px 14px;
+  }
+  .hadith-card h4{
+    margin:0 0 12px;
+    color:var(--green-dark);
+    font-size:16px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:8px;
+  }
+  .arabic{
+    font-size:19px;
+    line-height:2.4;
+    text-align:right;
+    direction:rtl;
+    color:#111;
+    margin-bottom:14px;
+  }
+  .bangla-trans{font-size:14.5px;line-height:1.95;color:#333;margin-bottom:8px;}
+  .source{font-size:13px;color:var(--muted);text-align:right;}
+
+  /* kitab list */
+  .book-item{
+    display:flex;align-items:center;gap:12px;
+    background:#fff;border:1px solid var(--border);
+    border-radius:12px;padding:12px;margin:0 14px 12px;
+    box-shadow:0 1px 2px rgba(0,0,0,.05);
+  }
+  .book-cover{
+    width:46px;height:58px;border-radius:6px;flex:none;
+    background:linear-gradient(135deg,#2e7d52,#1c4e34);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+  }
+  .book-cover svg{width:22px;height:22px;}
+  .book-info{flex:1;}
+  .book-title{font-size:14.5px;font-weight:600;color:#1a1a1a;margin-bottom:3px;}
+  .book-author{font-size:12.5px;color:var(--muted);}
+  .book-dl{
+    background:#eef6f1;border:none;color:var(--green);
+    cursor:pointer;flex:none;padding:8px;
+    border-radius:8px;display:flex;align-items:center;justify-content:center;
+  }
+  .book-dl svg{width:18px;height:18px;}
+
+  /* toast */
+  #toast{
+    position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);
+    background:#222;color:#fff;padding:10px 18px;border-radius:20px;
+    font-size:13.5px;opacity:0;pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+    max-width:80%;text-align:center;z-index:100;
+  }
+  #toast.show{opacity:1;transform:translate(-50%,0);}
+
+  @media (min-width:481px){
+    #app{border-left:1px solid #ddd;border-right:1px solid #ddd;}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="appbar">
+    <button class="back-btn" id="topBack" onclick="goBack()"></button>
+    <h1>নামায শিক্ষা</h1>
+  </div>
+
+  <div class="subbar" id="subbar">
+    <button class="sub-back" onclick="goBack()"></button>
+    <h2 id="subbarTitle"></h2>
+  </div>
+
+  <!-- ============ HOME ============ -->
+  <div class="screen active" id="screen-home">
+    <div class="hero">
+      <div class="logo" id="heroLogo"></div>
+      <div class="location">ঢাকা, বাংলাদেশ ▾</div>
+      <div class="date-g" id="gregDate">৪ আগস্ট, ২০২৬</div>
+      <div class="date-h">২১ শাওয়াল, ১৪৪৭ হিজরী</div>
+      <div class="times">
+        <span>আসর ৪:৩০</span>
+        <span>মাগরিব ৬:২০</span>
+      </div>
+    </div>
+
+    <div class="grid" id="homeGrid"></div>
+  </div>
+
+  <!-- ============ PAK-POBITROTA ============ -->
+  <div class="screen" id="screen-pak">
+    <div class="list" id="pak-list"></div>
+  </div>
+
+  <!-- ============ NAMAZ SHIKKHA 1 ============ -->
+  <div class="screen" id="screen-shikkha1">
+    <div class="list" id="shikkha1-list"></div>
+  </div>
+
+  <!-- ============ NAMAZ SHIKKHA 2 ============ -->
+  <div class="screen" id="screen-shikkha2">
+    <div class="list" id="shikkha2-list"></div>
+  </div>
+
+  <!-- ============ AZAN-IQAMAT (accordion) ============ -->
+  <div class="screen" id="screen-azan">
+    <div class="list" id="azan-list"></div>
+  </div>
+
+  <!-- ============ DUA ============ -->
+  <div class="screen" id="screen-dua">
+    <div class="list" id="dua-list"></div>
+  </div>
+
+  <!-- ============ HADITH ============ -->
+  <div class="screen" id="screen-hadith">
+    <div id="hadith-list" style="padding-top:14px;"></div>
+  </div>
+
+  <!-- ============ MASAYIL ============ -->
+  <div class="screen" id="screen-masayil">
+    <div class="list" id="masayil-list"></div>
+  </div>
+
+  <!-- ============ KITAB ============ -->
+  <div class="screen" id="screen-kitab">
+    <div id="kitab-list" style="padding-top:14px;"></div>
+  </div>
+
+  <!-- ============ GENERIC DETAIL ============ -->
+  <div class="screen" id="screen-detail">
+    <div class="detail-body">
+      <div class="detail-card" id="detail-body"></div>
+    </div>
+  </div>
+
+</div>
+<div id="toast"></div>
+
+<script>
+/* ------------------ Icon library (all inline SVG, no emoji) ------------------ */
+const ICONS = {
+  mosque:`<svg class="ic" viewBox="0 0 24 24"><path d="M12 2v2"/><path d="M9 4a3 3 0 0 0 6 0"/><path d="M4 21V12c0-2.2 1.3-4 3.5-4.6"/><path d="M20 21V12c0-2.2-1.3-4-3.5-4.6"/><path d="M8 21v-6a4 4 0 0 1 8 0v6"/><path d="M2 21h20"/><path d="M4 12V9m16 3V9"/></svg>`,
+  person:`<svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="7" r="3.2"/><path d="M5.5 21c0-4.2 2.9-7 6.5-7s6.5 2.8 6.5 7"/></svg>`,
+  bookOpen:`<svg class="ic" viewBox="0 0 24 24"><path d="M12 6.5c-1.8-1.3-4.3-1.7-7-1.2v13c2.7-.5 5.2-.1 7 1.2 1.8-1.3 4.3-1.7 7-1.2v-13c-2.7-.5-5.2-.1-7 1.2z"/><path d="M12 6.5v13"/></svg>`,
+  bookStack:`<svg class="ic" viewBox="0 0 24 24"><rect x="4" y="4.5" width="16" height="4" rx="1"/><rect x="4" y="10" width="16" height="4" rx="1"/><rect x="4" y="15.5" width="16" height="4" rx="1"/></svg>`,
+  duaHands:`<svg class="ic" viewBox="0 0 24 24"><path d="M6 20c-.6-3.6 0-7.3 2.4-11"/><path d="M8.4 9c.5-1 1.2-1.7 1.6-1.4.5.3.1 1.5-.4 2.4"/><path d="M18 20c.6-3.6 0-7.3-2.4-11"/><path d="M15.6 9c-.5-1-1.2-1.7-1.6-1.4-.5.3-.1 1.5.4 2.4"/><path d="M4 20h16"/></svg>`,
+  hadithBook:`<svg class="ic" viewBox="0 0 24 24"><path d="M5 4.5h11a2 2 0 0 1 2 2V19a2 2 0 0 0-2-2H5z"/><path d="M5 4.5V17a2 2 0 0 0 2 2h11"/><path d="M9 8.5h5M9 11.5h5"/></svg>`,
+  chat:`<svg class="ic" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-4 4v-4H4z"/><path d="M9 10h.01M12 10h.01M15 10h.01"/></svg>`,
+  library:`<svg class="ic" viewBox="0 0 24 24"><path d="M4 4v16"/><path d="M8 4v16"/><path d="M12 4.5l3.5-1 3 15.5-3.5 1z"/><path d="M4 20h4M4 8h4"/></svg>`,
+  droplet:`<svg class="ic" viewBox="0 0 24 24"><path d="M12 3c3.4 4.2 6 7.6 6 11a6 6 0 0 1-12 0c0-3.4 2.6-6.8 6-11z"/></svg>`,
+  shower:`<svg class="ic" viewBox="0 0 24 24"><path d="M6 3l1.5 1.5"/><rect x="6" y="6" width="12" height="4" rx="2"/><path d="M8 14v.01M12 14v.01M16 14v.01M9 17.5v.01M13 17.5v.01M17 17.5v.01"/></svg>`,
+  handDust:`<svg class="ic" viewBox="0 0 24 24"><path d="M8 13V6.5a1.5 1.5 0 0 1 3 0V12"/><path d="M11 12V5.5a1.5 1.5 0 0 1 3 0V12"/><path d="M14 12V6.5a1.5 1.5 0 0 1 3 0V13"/><path d="M6 13c0-1 .8-1.8 1.8-1.8h9.4c1.7 0 3 1.5 2.6 3.2l-.7 3a4 4 0 0 1-3.9 3.1h-3.4A4 4 0 0 1 8 17.6z"/><path d="M4 4l1.2 1.2M20 4l-1.2 1.2M3 9h1.6M20.4 9H22"/></svg>`,
+  roll:`<svg class="ic" viewBox="0 0 24 24"><path d="M9 4h9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9"/><ellipse cx="9" cy="12" rx="4" ry="8"/><ellipse cx="9" cy="12" rx="1.6" ry="3.2"/></svg>`,
+  download:`<svg class="ic" viewBox="0 0 24 24"><path d="M12 3v11"/><path d="M7.5 10.5L12 15l4.5-4.5"/><path d="M5 19h14"/></svg>`,
+  star:`<svg class="ic" viewBox="0 0 24 24"><path d="M12 3l2.2 5.3 5.8.5-4.4 3.8 1.4 5.6L12 15.8 6.9 18.2l1.4-5.6-4.4-3.8 5.8-.5z"/></svg>`,
+  sujud:`<svg class="ic" viewBox="0 0 24 24"><circle cx="6" cy="8" r="1.6"/><path d="M6 9.6v3.4l4 1.4M10 14.4l3.5 1.6H21M6 13l-2.5 4"/></svg>`,
+  qaidah:`<svg class="ic" viewBox="0 0 24 24"><circle cx="9" cy="6" r="1.7"/><path d="M9 7.7v4.3l4 2v6M9 12l-3.5 2v6M13 20h5"/></svg>`,
+  chevronLeft:`<svg class="ic" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>`,
+  chevronRight:`<svg class="ic" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>`,
+  chevronDown:`<svg class="ic" viewBox="0 0 24 24"><path d="M5 9l7 7 7-7"/></svg>`
+};
+
+/* ------------------ Navigation core ------------------ */
+const stack = ['screen-home'];
+
+document.getElementById('topBack').innerHTML = ICONS.chevronLeft;
+document.querySelector('.sub-back').innerHTML = ICONS.chevronLeft;
+
+function showScreen(id, title){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  const isHome = id === 'screen-home';
+  document.getElementById('topBack').classList.toggle('show', !isHome);
+  const subbar = document.getElementById('subbar');
+  if(isHome){
+    subbar.classList.remove('show');
+  } else {
+    subbar.classList.add('show');
+    document.getElementById('subbarTitle').textContent = title || '';
+  }
+  window.scrollTo(0,0);
+}
+
+function nav(id, title){
+  stack.push({id, title});
+  showScreen(id, title);
+}
+
+function goBack(){
+  if(stack.length <= 1) return;
+  stack.pop();
+  const prev = stack[stack.length-1];
+  if(prev === 'screen-home'){
+    showScreen('screen-home');
+  } else {
+    showScreen(prev.id, prev.title);
+  }
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._tm);
+  showToast._tm = setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+/* ------------------ Home grid ------------------ */
+const homeTiles = [
+  {icon:'person', label:'পাক-পবিত্রতা', to:'screen-pak', title:'পাক-পবিত্রতা'},
+  {icon:'bookOpen', label:'নামায শিক্ষা-১', to:'screen-shikkha1', title:'নামায শিক্ষা (পর্ব - ১)'},
+  {icon:'bookStack', label:'নামায শিক্ষা-২', to:'screen-shikkha2', title:'নামায শিক্ষা (পর্ব - ২)'},
+  {icon:'mosque', label:'আযান-ইকামত', to:'screen-azan', title:'আযান-ইকামত'},
+  {icon:'duaHands', label:"দু'আ", to:'screen-dua', title:"নামায সম্পর্কিত দু'আ"},
+  {icon:'hadithBook', label:'হাদিস', to:'screen-hadith', title:'নামায সম্পর্কিত হাদিস'},
+  {icon:'chat', label:'মাসাইল', to:'screen-masayil', title:'নামায সম্পর্কিত মাসাইল'},
+  {icon:'library', label:'কিতাব', to:'screen-kitab', title:'ইবাদাহ সম্পর্কিত কিতাব'}
+];
+document.getElementById('homeGrid').innerHTML = homeTiles.map(t=>`
+  <div class="tile" onclick="nav('${t.to}','${t.title}')">
+    <div class="icon">${ICONS[t.icon]}</div>
+    <div class="label">${t.label}</div>
+  </div>
+`).join('');
+
+/* ------------------ Content data ------------------ */
+const CONTENT = {
+  istinja: {t:"ইস্তিঞ্জা", b:"পেশাব-পায়খানার পর পানি বা ঢিলা দ্বারা নাপাকী দূর করাকে ইস্তিঞ্জা বলা হয়। ইস্তিঞ্জার সময় ডান হাত ব্যবহার না করে বাম হাত ব্যবহার করা সুন্নাত। কিবলামুখী বা কিবলার দিকে পিঠ দিয়ে বসা মাকরূহ। ইস্তিঞ্জার স্থানে প্রবেশের আগে বাম পা দিয়ে প্রবেশ করা এবং দোয়া পড়া সুন্নাত।"},
+  wudu: {t:"উযু", b:"নামাযের পূর্বশর্ত হলো উযু। উযুর ফরয চারটি— মুখমণ্ডল ধোয়া, উভয় হাত কনুইসহ ধোয়া, মাথা মাসেহ করা এবং উভয় পা টাখনুসহ ধোয়া। এছাড়া বিসমিল্লাহ বলে শুরু করা, মিসওয়াক করা, তিনবার করে অঙ্গ ধোয়া, কান-ঘাড় মাসেহ করা ইত্যাদি সুন্নাত। উযু ছাড়া নামায শুদ্ধ হয় না।"},
+  ghusl: {t:"গোসল", b:"সহবাস, স্বপ্নদোষ বা হায়েয-নেফাস শেষে সম্পূর্ণ শরীর পানি দ্বারা পরিষ্কার করাকে গোসল বলে। গোসলের ফরয তিনটি— কুলি করা, নাকে পানি দেওয়া এবং সমস্ত শরীরে পানি পৌঁছানো। গোসলের নিয়ত করে প্রথমে উভয় হাত ধুয়ে, লজ্জাস্থান পরিষ্কার করে, উযুর মতো উযু করে পুরো শরীরে পানি ঢালা সুন্নাত পদ্ধতি।"},
+  tayammum: {t:"তায়াম্মুম", b:"পানি না পাওয়া গেলে বা পানি ব্যবহারে ক্ষতির আশঙ্কা থাকলে পবিত্র মাটি বা মাটিজাতীয় বস্তু দ্বারা তায়াম্মুম করা যায়। পদ্ধতি: নিয়ত করে উভয় হাত মাটিতে মেরে মুখমণ্ডল মাসেহ করা, পুনরায় হাত মেরে উভয় হাত কনুইসহ মাসেহ করা। তায়াম্মুম উযু ও গোসল উভয়ের বিকল্প হতে পারে।"},
+
+  s1_time:{t:"সময়সীমা ও ফযায়েল", b:"প্রতিদিন পাঁচ ওয়াক্ত নামায নির্দিষ্ট সময়ে আদায় করা ফরয— ফজর, যোহর, আসর, মাগরিব ও এশা। নির্দিষ্ট সময়ে নামায আদায়ের ফযীলত অনেক; হাদীসে একে আল্লাহর নিকট সর্বোত্তম আমল বলা হয়েছে। মাকরূহ সময় বাদে যেকোনো সময় নফল নামায পড়া যায়।"},
+  s1_sitting:{t:"বসার আদব", b:"নামাযের জন্য বসার সময় বিনয়ী ও ধীরস্থিরভাবে বসা উচিত। তাশাহহুদে বসার নিয়ম অনুযায়ী বাম পা বিছিয়ে তার উপর বসা এবং ডান পা খাড়া রাখা সুন্নাত (পুরুষদের জন্য)। দুই সিজদার মাঝে ও শেষ বৈঠকে বসার পদ্ধতিতে পার্থক্য রয়েছে।"},
+  s1_istinja_adob:{t:"ইস্তিঞ্জার আদব", b:"ইস্তিঞ্জাস্থলে প্রবেশের সময় মাথা ঢেকে রাখা, কথা না বলা, কিবলামুখী না হওয়া এবং কাজ শেষে বাম হাতে ঢিলা বা পানি ব্যবহার করা সুন্নাতী আদবের অন্তর্ভুক্ত। পবিত্রতা অর্জনের ক্ষেত্রে যত্নশীল হওয়া নামায কবুল হওয়ার পূর্বশর্ত।"},
+  s1_wudu:{t:"উযু", b:"নামাযের পূর্বশর্ত হলো উযু। উযুর ফরয চারটি— মুখমণ্ডল ধোয়া, উভয় হাত কনুইসহ ধোয়া, মাথা মাসেহ করা এবং উভয় পা টাখনুসহ ধোয়া। বিসমিল্লাহ বলে শুরু করা ও ধারাবাহিকভাবে অঙ্গ-প্রত্যঙ্গ ধোয়া সুন্নাত।"},
+  s1_ghusl:{t:"গোসল", b:"অপবিত্রতা থেকে পবিত্র হওয়ার জন্য সম্পূর্ণ শরীর ধৌত করাকে গোসল বলা হয়। ফরয গোসলের তিনটি রুকন— কুলি, নাকে পানি দেওয়া ও সমস্ত শরীর ভেজানো। সুন্নাত পদ্ধতিতে গোসল করলে সওয়াব বৃদ্ধি পায়।"},
+  s1_tayammum:{t:"তায়ামুম", b:"পানি অনুপস্থিত বা ব্যবহারে অক্ষম হলে পবিত্র মাটি দ্বারা তায়াম্মুম করে নামায আদায় করা জায়েয। এটি ইসলামের সহজীকরণের একটি সুন্দর দৃষ্টান্ত।"},
+  s1_foroz:{t:"নামাযের ফরয ওয়াজিব", b:"নামাযের ফরযসমূহের মধ্যে রয়েছে শর্ত (তাহারাত, সতর ঢাকা, কিবলামুখী হওয়া, ওয়াক্ত হওয়া, নিয়ত করা) এবং রুকন (তাকবীরে তাহরীমা, কিয়াম, কিরাআত, রুকু, সিজদা, শেষ বৈঠক)। ওয়াজিব হলো সূরা ফাতিহা পড়া, রুকু-সিজদায় স্থির থাকা, তাশাহহুদ পড়া ইত্যাদি। ফরয ছুটে গেলে নামায বাতিল হয়, ওয়াজিব ছুটে গেলে সাহু সিজদা দিতে হয়।"},
+  s1_mens:{t:"পুরুষদের নামায", b:"পুরুষদের নামাযে হাত কাঁধ বা কান পর্যন্ত উঠিয়ে তাকবীর বলা, নাভির নিচে হাত বাঁধা, রুকু-সিজদায় শরীর থেকে বাহু ফাঁকা রাখা এবং জোরে/আস্তে কিরাআত পড়ার নিয়ম রয়েছে। জামাআতে নামায আদায় করা পুরুষদের জন্য অধিক ফযীলতপূর্ণ।"},
+  s1_womens:{t:"মহিলাদের নামায", b:"মহিলাদের নামাযের পদ্ধতিতে কিছু ভিন্নতা আছে— হাত কাঁধ পর্যন্ত উঠানো, বুকের উপর হাত বাঁধা, রুকুতে কম ঝোঁকা এবং সিজদায় শরীর গুটিয়ে রাখা। মহিলাদের জন্য ঘরে নামায পড়া উত্তম বলে বিবেচিত।"},
+  s1_appendix:{t:"পরিশিষ্ট", b:"নামায শিক্ষা পর্ব-১ এর অতিরিক্ত তথ্য, প্রয়োজনীয় দোয়া ও সংক্ষিপ্ত মাসআলাসমূহ এই পরিশিষ্টে সংকলিত করা হয়েছে, যা শিক্ষার্থীদের পুনরালোচনায় সহায়ক।"},
+
+  s2_pesh:{t:"পেশ লফয", b:"প্রতিটি ফরয নামাযের রাকাত সংখ্যা ও পঠিতব্য শব্দসমূহের একটি সংক্ষিপ্ত তালিকা এখানে উপস্থাপন করা হয়েছে, যা নামায মুখস্থ রাখতে সহায়তা করে।"},
+  s2_nobi:{t:"নবীজী (সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম)-এর ফরয নামায", b:"রাসূলুল্লাহ (সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম) যেভাবে নামায আদায় করতেন, সেই সুন্নাতী তরীকা অনুসরণ করাই মুমিনের কর্তব্য। তিনি বলেছেন, তোমরা আমাকে যেভাবে নামায পড়তে দেখেছ, সেভাবেই নামায পড়ো।"},
+  s2_wajib_sunnat:{t:"ওয়াজিব ও সুন্নাত নামায", b:"ফরযের পাশাপাশি ওয়াজিব (যেমন বিতর, ঈদের নামায) ও সুন্নাতে মুয়াক্কাদা-গায়ের মুয়াক্কাদা নামাযগুলোরও গুরুত্ব রয়েছে। এগুলো ফরযকে পূর্ণতা দেয় এবং অতিরিক্ত সওয়াব অর্জনের মাধ্যম।"},
+  s2_bibidh:{t:"নামাযের বিবিধ মাসআলা", b:"সফরের নামায, অসুস্থ ব্যক্তির নামায, ভুলে যাওয়া নামায কাযা আদায়, সাহু সিজদা ইত্যাদি সংক্রান্ত প্রয়োজনীয় বিধিবিধান এই অংশে আলোচিত হয়েছে।"},
+  s2_nofol:{t:"নফল নামায", b:"ফরয ও ওয়াজিবের বাইরে অতিরিক্ত সওয়াবের আশায় আদায়কৃত নামাযকে নফল বলে। তাহাজ্জুদ, ইশরাক, চাশত, আওয়াবিন ইত্যাদি নফল নামাযের অন্তর্ভুক্ত, যা বান্দাকে আল্লাহর নৈকট্য দান করে।"},
+
+  m_nofol:{t:"নফল নামায-আমল", b:"নফল নামাযসমূহ আদায়ের সঠিক সময়, রাকাত সংখ্যা ও ফযীলত সম্পর্কিত বিস্তারিত মাসআলা এখানে আলোচনা করা হয়েছে।"},
+  m_jumma:{t:"জুমু'আর নামায", b:"প্রাপ্তবয়স্ক, সুস্থ ও মুকীম পুরুষদের জন্য জুমু'আর নামায ফরযে আইন। জুমু'আর পূর্বে গোসল করা, সুগন্ধি ব্যবহার করা এবং খুতবা মনোযোগ দিয়ে শোনা সুন্নাত।"},
+  m_shomoy:{t:"নামাযের সময়সূচী", b:"পাঁচ ওয়াক্ত নামাযের শুরু ও শেষ সময়, মাকরূহ সময়সমূহ এবং প্রতিটি ওয়াক্তের উত্তম সময় সম্পর্কে বিস্তারিত আলোচনা।"},
+  m_masayel:{t:"নামাযের মাসায়েল", b:"নামায বাতিলকারী বিষয়সমূহ, নামাযে সন্দেহ হলে করণীয়, সাহু সিজদার নিয়ম-কানুন ইত্যাদি গুরুত্বপূর্ণ মাসআলা এখানে সংকলিত।"},
+  m_kiraat:{t:"কিরাআত - তিলাওয়াত", b:"নামাযে কুরআন তিলাওয়াতের সঠিক নিয়ম, তাজবীদের গুরুত্ব এবং ইমাম-মুক্তাদির কিরাআত সংক্রান্ত বিধান আলোচিত হয়েছে।"},
+  m_wajib_sunnat_adob:{t:"নামাযের ওয়াজীব সুন্নাত আদব", b:"নামাযের ওয়াজিব, সুন্নাত ও আদবসমূহ পৃথকভাবে চিহ্নিত করে শেখানো হয়েছে, যাতে নামায সুন্দর ও পরিপূর্ণভাবে আদায় করা যায়।"},
+  m_kibla:{t:"কিবলা সংক্রান্ত", b:"কিবলামুখী হয়ে নামায পড়া ফরয শর্তের অন্তর্ভুক্ত। কিবলা নির্ণয় করা সম্ভব না হলে অনুমানের ভিত্তিতে নামায পড়ার বিধান এখানে আলোচিত।"},
+  m_women:{t:"মহিলাদের নামায", b:"মহিলাদের নামাযের ভিন্নতা, পর্দা রক্ষা করে নামায আদায় এবং ঘরে জামাআতবিহীন নামায পড়ার ফযীলত সম্পর্কে আলোচনা।"},
+  m_foyilot:{t:"নামাযের ফযীলত ও তত্ত্ব", b:"নামায দ্বীনের খুঁটি এবং কিয়ামতের দিন সর্বপ্রথম হিসাব নেওয়া হবে নামাযের। নামাযের আধ্যাত্মিক তাৎপর্য ও ফযীলত সম্পর্কে হাদীসের আলোকে আলোচনা।"},
+  m_jamaat:{t:"জামাআত", b:"জামাআতে নামায আদায় করলে একাকী নামাযের চেয়ে ২৭ গুণ বেশি সওয়াব পাওয়া যায়। জামাআতে দাঁড়ানোর নিয়ম, ইমামের অনুসরণ ও কাতার সোজা করার গুরুত্ব আলোচিত হয়েছে।"}
+};
+
+/* Pak-Pobitrota list */
+const pakItems = [
+  {icon:'roll', key:'istinja'},
+  {icon:'droplet', key:'wudu'},
+  {icon:'shower', key:'ghusl'},
+  {icon:'handDust', key:'tayammum'}
+];
+renderSimpleList('pak-list', pakItems);
+
+/* Shikkha-1 list */
+const s1Items = [
+  {icon:'bookOpen', key:'s1_time'}, {icon:'bookOpen', key:'s1_sitting'}, {icon:'bookOpen', key:'s1_istinja_adob'}, {icon:'droplet', key:'s1_wudu'},
+  {icon:'shower', key:'s1_ghusl'}, {icon:'handDust', key:'s1_tayammum'}, {icon:'bookOpen', key:'s1_foroz'}, {icon:'person', key:'s1_mens'},
+  {icon:'person', key:'s1_womens'}, {icon:'bookOpen', key:'s1_appendix'}
+];
+renderSimpleList('shikkha1-list', s1Items);
+
+/* Shikkha-2 list */
+const s2Items = [
+  {icon:'bookStack', key:'s2_pesh'}, {icon:'bookStack', key:'s2_nobi'}, {icon:'bookStack', key:'s2_wajib_sunnat'}, {icon:'bookStack', key:'s2_bibidh'}, {icon:'star', key:'s2_nofol'}
+];
+renderSimpleList('shikkha2-list', s2Items);
+
+/* Masayil list */
+const mItems = [
+  {icon:'star', key:'m_nofol'}, {icon:'mosque', key:'m_jumma'}, {icon:'bookOpen', key:'m_shomoy'}, {icon:'chat', key:'m_masayel'}, {icon:'bookStack', key:'m_kiraat'},
+  {icon:'chat', key:'m_wajib_sunnat_adob'}, {icon:'mosque', key:'m_kibla'}, {icon:'person', key:'m_women'}, {icon:'bookOpen', key:'m_foyilot'}, {icon:'mosque', key:'m_jamaat'}
+];
+renderSimpleList('masayil-list', mItems);
+
+function renderSimpleList(containerId, items){
+  const el = document.getElementById(containerId);
+  el.innerHTML = items.map(it=>{
+    const c = CONTENT[it.key];
+    return `<div class="list-item" onclick="openDetail('${it.key}')">
+      <span class="icn">${ICONS[it.icon]}</span>
+      <span class="info"><div class="txt">${c.t}</div></span>
+      <span class="arrow">${ICONS.chevronRight}</span>
+    </div>`;
+  }).join('');
+}
+
+function openDetail(key){
+  const c = CONTENT[key];
+  document.getElementById('detail-body').innerHTML = `<h3>${c.t}</h3><p>${c.b}</p>`;
+  nav('screen-detail', c.t);
+}
+
+/* ------------------ Azan-Iqamat accordion ------------------ */
+const azanItems = [
+  {t:"আযানের সূচনা", b:"হিজরতের পর মদীনায় নামাযের জন্য মানুষকে সমবেত করার প্রয়োজনে আযানের প্রচলন হয়। সাহাবী হযরত আব্দুল্লাহ ইবনে যায়েদ (রাযিঃ) স্বপ্নে আযানের বাক্যসমূহ দেখেন এবং রাসূলুল্লাহ (সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম) তা অনুমোদন করেন।"},
+  {t:"আযানের বাক্য ১৫টি", b:"আযানে মোট পনেরোটি বাক্য রয়েছে— আল্লাহু আকবার (৪ বার), আশহাদু আল্লা ইলাহা ইল্লাল্লাহ, আশহাদু আন্না মুহাম্মাদার রাসূলুল্লাহ, হাইয়া আলাস সলাহ, হাইয়া আলাল ফালাহ (প্রতিটি ২ বার) এবং সর্বশেষে লা ইলাহা ইল্লাল্লাহ।"},
+  {t:"আযানে তারজী না করা উত্তম", b:"হানাফী মাযহাব অনুযায়ী আযানে শাহাদাতের বাক্য দুইবার নিচু স্বরে পুনরাবৃত্তি (তারজী) না করে সরাসরি উচ্চস্বরে বলা উত্তম পদ্ধতি হিসেবে বিবেচিত।"},
+  {t:"ইকামতের বাক্য ১৭টি", b:"ইকামতে আযানের বাক্যগুলোর সাথে অতিরিক্ত 'কাদ কামাতিস সলাহ' (২ বার) যুক্ত হয়ে মোট সতেরোটি বাক্য হয়। ইকামত সাধারণত দ্রুত ও নিচু স্বরে বলা হয়।"},
+  {t:"আযানের সুন্নাতসমূহ", b:"অজু অবস্থায় আযান দেওয়া, কিবলামুখী হয়ে দাঁড়ানো, উচ্চস্বরে ও সুন্দর সুরে আযান দেওয়া, 'হাইয়া আলাস সলাহ' ও 'হাইয়া আলাল ফালাহ' বলার সময় ডানে-বামে মুখ ফেরানো আযানের সুন্নাতের অন্তর্ভুক্ত।"},
+  {t:"ইকামতের সুন্নাতসমূহ", b:"ইকামত মুয়াজ্জিন কর্তৃক দাঁড়িয়ে দেওয়া, নামাযের কাতার সোজা হওয়ার পর শুরু করা এবং আযানের চেয়ে দ্রুত গতিতে বলা ইকামতের সুন্নাতের অন্তর্ভুক্ত।"}
+];
+
+const azanEl = document.getElementById('azan-list');
+azanEl.innerHTML = azanItems.map((it,i)=>`
+  <div class="acc-item" id="acc-${i}">
+    <div class="acc-head" onclick="toggleAcc(${i})">
+      <span>${it.t}</span><span class="chev">${ICONS.chevronDown}</span>
+    </div>
+    <div class="acc-body"><p>${it.b}</p></div>
+  </div>
+`).join('');
+
+function toggleAcc(i){
+  document.getElementById('acc-'+i).classList.toggle('open');
+}
+
+/* ------------------ Dua list ------------------ */
+const duaItems = [
+  {icon:'droplet', t:"পাক পবিত্রতা", n:2, key:'dua_pak'},
+  {icon:'mosque', t:"আজান - ইকামাত", n:3, key:'dua_azan'},
+  {icon:'droplet', t:"ওজু", n:6, key:'dua_wudu'},
+  {icon:'mosque', t:"মসজিদ", n:4, key:'dua_mosjid'},
+  {icon:'sujud', t:"নামাজের মধ্যে", n:19, key:'dua_in'},
+  {icon:'qaidah', t:"নামাজের শেষে", n:9, key:'dua_end'},
+  {icon:'star', t:"নফল নামায - আমল", n:null, key:'dua_nofol'}
+];
+const duaEl = document.getElementById('dua-list');
+duaEl.innerHTML = duaItems.map(it=>`
+  <div class="list-item" onclick="openDuaDetail('${it.key}','${it.t}',${it.n})">
+    <span class="icn">${ICONS[it.icon]}</span>
+    <span class="info">
+      <div class="txt">${it.t}</div>
+      ${it.n?`<div class="count">মোট দু'আ - ${it.n} টি</div>`:''}
+    </span>
+    <span class="arrow">${ICONS.chevronRight}</span>
+  </div>
+`).join('');
+
+function openDuaDetail(key, title, n){
+  const body = n
+    ? `<h3>${title}</h3><p>এই অংশে "${title}" সম্পর্কিত মোট ${n} টি দু'আ সংকলিত করা হয়েছে, প্রতিটি দু'আর আরবি উচ্চারণ, বাংলা অর্থ ও পঠিতব্য সময় উল্লেখসহ।</p>`
+    : `<h3>${title}</h3><p>"${title}" সংক্রান্ত প্রয়োজনীয় দু'আ ও আমলসমূহ এই অংশে সংকলিত করা হয়েছে।</p>`;
+  document.getElementById('detail-body').innerHTML = body;
+  nav('screen-detail', title);
+}
+
+/* ------------------ Hadith direct content ------------------ */
+const hadiths = [
+  {
+    n:"১",
+    ar:"عَنْ عُمَرَ بْنِ الْخَطَّابِ رَضِيَ اللّٰهُ عَنْهُ عَنِ النَّبِيِّ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ قَالَ: بُنِيَ الْإِسْلَامُ عَلَى خَمْسٍ، وَإِقَامِ الصَّلَاةِ فِيْهَا.",
+    bn:"হযরত উমর (রাযিঃ) হতে বর্ণিত, নবী করীম (সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম) বলেছেন, ইসলাম পাঁচটি স্তম্ভের উপর প্রতিষ্ঠিত, তার মধ্যে নামায কায়েম করা অন্যতম।",
+    src:"সহিহ মুসলিম"
+  },
+  {
+    n:"২",
+    ar:"عَنْ أَبِي هُرَيْرَةَ رَضِيَ اللّٰهُ عَنْهُ أَنَّ رَسُولَ اللّٰهِ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ قَالَ: أَوَّلُ مَا يُحَاسَبُ بِهِ الْعَبْدُ يَوْمَ الْقِيَامَةِ صَلَاتُهُ.",
+    bn:"হযরত আবু হুরায়রা (রাযিঃ) হতে বর্ণিত, রাসূলুল্লাহ (সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম) বলেছেন, কিয়ামতের দিন বান্দার আমলসমূহের মধ্যে সর্বপ্রথম যে বিষয়ে হিসাব নেওয়া হবে তা হলো তার নামায।",
+    src:"তিরমিযী"
+  },
+  {
+    n:"৩",
+    ar:"عَنْ جَابِرٍ رَضِيَ اللّٰهُ عَنْهُ قَالَ: قَالَ رَسُولُ اللّٰهِ صَلَّى اللّٰهُ عَلَيْهِ وَسَلَّمَ: الصَّلَاةُ نُورٌ.",
+    bn:"হযরত জাবির (রাযিঃ) হতে বর্ণিত, রাসূলুল্লাহ (সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম) বলেছেন, নামায হলো নূর (আলো)।",
+    src:"সহিহ মুসলিম"
+  }
+];
+document.getElementById('hadith-list').innerHTML = hadiths.map(h=>`
+  <div class="hadith-card">
+    <h4>${h.n} নং হাদিস</h4>
+    <div class="arabic">${h.ar}</div>
+    <div class="bangla-trans">${h.bn}</div>
+    <div class="source">- ${h.src}</div>
+  </div>
+`).join('');
+
+/* ------------------ Kitab list ------------------ */
+const books = [
+  {t:"দলিলসহ নামাযের মাসায়েল (বর্ধিত সংস্করণ)", a:"আল্লামা আব্দুল মতীন"},
+  {t:"রমযানুল মুবারকের সওগাত", a:"হাকীমুল উম্মত হযরত আশরাফ আলী থানভী রহ."},
+  {t:"নামাযের ভুলত্রুটি", a:"—"},
+  {t:"কুরআন হাদীসের আলোকে চোখে দেখা কবরের আযাব", a:"মাওলানা তারিক জামিল"},
+  {t:"বিতর নামায ও রাকাত সংখ্যা", a:"মুফতী অকিল উদ্দিন যশোরী"},
+  {t:"রাফউল ইয়াদাইন না করার বিধান", a:"মুফতী অকিল উদ্দিন যশোরী"},
+  {t:"নবীজীর (সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম) নামায", a:"—"}
+];
+document.getElementById('kitab-list').innerHTML = books.map(b=>`
+  <div class="book-item">
+    <div class="book-cover">${ICONS.bookOpen}</div>
+    <div class="book-info">
+      <div class="book-title">${b.t}</div>
+      <div class="book-author">লেখক: ${b.a}</div>
+    </div>
+    <button class="book-dl" onclick="showToast('ডাউনলোড শীঘ্রই যুক্ত করা হবে ইনশাআল্লাহ')">${ICONS.download}</button>
+  </div>
+`).join('');
+</script>
+</body>
+</html>

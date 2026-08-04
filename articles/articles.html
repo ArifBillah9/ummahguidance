@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>প্রবন্ধ</title>
+<style>
+      @font-face{
+    font-family:'Kalpurush';
+    src:url('/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+  :root{
+    --deep-green: #1f4d3a;
+    --deep-green-2: #16392b;
+    --mint-bg: #e9f3ec;
+    --card-bg: #ffffff;
+    --text-dark: #1c2b24;
+    --text-muted: #6b7b73;
+    --accent-link: #2f8a52;
+    --gold: #c9a24b;
+    --border: #e4ece6;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    font-family: 'Noto Sans Bengali','Hind Siliguri', Arial, sans-serif;
+    background: var(--mint-bg);
+    min-height:100vh;
+  }
+    html{scroll-behavior:smooth;}
+  html,body{
+    margin:0;padding:0;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    background:#111;
+  }
+  .phone{
+    width:100%;
+    max-width:600px;
+    margin:0 auto;
+    background: var(--mint-bg);
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    position:relative;
+  }
+
+  /* Header */
+  .app-header{
+    background: linear-gradient(180deg, var(--deep-green), var(--deep-green-2));
+    color:#fff;
+    padding:16px 18px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-shrink:0;
+    position:sticky;
+    top:0;
+    z-index:20;
+  }
+  .app-header .back{
+    width:34px;height:34px;
+    border:1.5px solid rgba(255,255,255,0.6);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;
+  }
+  .app-header h1{
+    font-size:18px;
+    margin:0;
+    flex:1;
+    text-align:center;
+    font-weight:700;
+    letter-spacing:.5px;
+    padding-right:34px;
+  }
+
+  /* scroll area */
+  .scroll-area{
+    flex:1;
+  }
+
+  /* Hero */
+  .hero{
+    position:relative;
+    height:230px;
+    background:
+      radial-gradient(circle at 15% 20%, rgba(255,255,255,0.05), transparent 40%),
+      linear-gradient(135deg, #3a2b1e 0%, #1f1710 55%, #2b2016 100%);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    padding-top:38px;
+    color:#fff;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.03) 0 2px, transparent 2px 26px),
+      repeating-linear-gradient(25deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 30px);
+    opacity:0.6;
+  }
+  .hero .glow-icon{
+    width:60px;height:60px;
+    border-radius:50%;
+    background:rgba(0,0,0,0.35);
+    border:1px solid rgba(255,255,255,0.25);
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;
+    margin-bottom:10px;
+    z-index:1;
+  }
+  .hero h2{
+    font-size:22px;
+    margin:0 0 16px 0;
+    z-index:1;
+    font-weight:800;
+    text-shadow:0 2px 6px rgba(0,0,0,0.4);
+  }
+  .hero .count-pill{
+    z-index:1;
+    background:rgba(20,20,20,0.55);
+    border:1px solid rgba(255,255,255,0.2);
+    padding:8px 22px;
+    border-radius:22px;
+    font-size:14px;
+    margin-bottom:16px;
+  }
+  .hero .count-pill b{ color: var(--gold); font-weight:800; }
+  .hero .dots{
+    z-index:1;
+    display:flex;
+    gap:6px;
+  }
+  .hero .dots span{
+    width:20px;height:3px;border-radius:2px;
+    background:rgba(255,255,255,0.35);
+  }
+  .hero .dots span.active{ background:#7ed99a; width:26px;}
+
+  .search-wrap{
+    margin:-26px 18px 18px 18px;
+    z-index:2;
+    position:relative;
+  }
+  .search-wrap input{
+    width:100%;
+    border:none;
+    outline:none;
+    border-radius:26px;
+    padding:15px 20px;
+    font-size:14px;
+    background:#fff;
+    box-shadow:0 8px 20px rgba(0,0,0,0.12);
+    font-family:inherit;
+    color:var(--text-dark);
+  }
+  .search-wrap input::placeholder{ color:#9aa8a1;}
+
+  .content{
+    padding:0 16px 20px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  /* Article / Blog card */
+  .card{
+    background:var(--card-bg);
+    border-radius:16px;
+    padding:18px 18px 14px 18px;
+    box-shadow:0 2px 10px rgba(20,50,35,0.06);
+    border:1px solid var(--border);
+  }
+  .card h3{
+    font-size:17px;
+    line-height:1.5;
+    margin:0 0 8px 0;
+    color:var(--text-dark);
+    font-weight:800;
+  }
+  .card .author{
+    font-size:13.5px;
+    margin:0 0 10px 0;
+    color:var(--text-muted);
+  }
+  .card .author a{ color:var(--accent-link); text-decoration:none; font-weight:600;}
+  .card p.excerpt{
+    font-size:14px;
+    line-height:1.7;
+    color:#3d4a44;
+    margin:0 0 14px 0;
+  }
+  .card .meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:12.5px;
+    color:var(--text-muted);
+    border-top:1px solid var(--border);
+    padding-top:12px;
+    gap:10px;
+  }
+  .card .meta span{ display:flex; align-items:center; gap:6px; }
+
+  /* Topic / list-row card */
+  .row-card{
+    background:var(--card-bg);
+    border-radius:14px;
+    padding:16px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    box-shadow:0 2px 10px rgba(20,50,35,0.06);
+    border:1px solid var(--border);
+  }
+  .row-card .hash{
+    width:38px;height:38px;
+    flex-shrink:0;
+    border-radius:10px;
+    background:#e5f3ea;
+    color:var(--accent-link);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;
+    font-size:16px;
+  }
+  .row-card .info{ flex:1; min-width:0; }
+  .row-card .info .title{
+    font-size:15px; font-weight:700; color:var(--text-dark);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .row-card .info .count{
+    font-size:12.5px; color:var(--text-muted); margin-top:4px;
+    display:flex; align-items:center; gap:5px;
+  }
+  .btn-pill{
+    flex-shrink:0;
+    background:#eef2ef;
+    color:#48584f;
+    font-size:12.5px;
+    padding:8px 16px;
+    border-radius:16px;
+    border:1px solid var(--border);
+    white-space:nowrap;
+  }
+
+  /* Author card */
+  .author-card{
+    background:var(--card-bg);
+    border-radius:16px;
+    padding:26px 18px 16px;
+    text-align:center;
+    box-shadow:0 2px 10px rgba(20,50,35,0.06);
+    border:1px solid var(--border);
+  }
+  .author-card .avatar{
+    width:70px;height:70px;
+    border-radius:50%;
+    background:#e5f3ea;
+    color:var(--accent-link);
+    font-weight:800;
+    font-size:26px;
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 14px auto;
+  }
+  .author-card h3{ font-size:16px; margin:0 0 8px 0; color:var(--text-dark); }
+  .author-card .count{ font-size:13px; color:var(--text-muted); margin-bottom:14px; }
+  .author-card .footer-row{
+    border-top:1px solid var(--border);
+    padding-top:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13.5px;
+    color:#3d4a44;
+  }
+  .icon-circle{
+    width:26px;height:26px;
+    border-radius:50%;
+    background:#e5f3ea;
+    color:var(--accent-link);
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;
+  }
+
+  /* Bookmarks page header */
+  .sub-header{
+    background:#dff0e4;
+    padding:16px 18px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .sub-header .back-flat{
+    font-size:18px;
+    color:var(--text-dark);
+  }
+  .sub-header h2{
+    font-size:16px;
+    margin:0;
+    color:var(--text-dark);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .backup-card{
+    background:var(--card-bg);
+    border-radius:16px;
+    padding:20px;
+    box-shadow:0 2px 10px rgba(20,50,35,0.06);
+    border:1px solid var(--border);
+    margin:16px;
+  }
+  .backup-card .heading{
+    display:flex; align-items:center; gap:8px;
+    font-size:16px; font-weight:800; color:var(--text-dark);
+    margin-bottom:10px;
+  }
+  .backup-card p{
+    font-size:13.5px; color:var(--text-muted); line-height:1.6; margin:0 0 18px 0;
+  }
+  .backup-card button{
+    width:100%;
+    border:none;
+    padding:14px;
+    border-radius:12px;
+    font-size:14.5px;
+    font-weight:700;
+    color:#fff;
+    margin-bottom:12px;
+    font-family:inherit;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    cursor:pointer;
+  }
+  .backup-card button:last-of-type{ margin-bottom:0; }
+  .btn-blue{ background:#2f7fe0; }
+  .btn-green{ background:#2fa35a; }
+  .readlater-row{
+    margin:0 16px 16px 16px;
+    background:var(--card-bg);
+    border-radius:14px;
+    padding:16px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    box-shadow:0 2px 10px rgba(20,50,35,0.06);
+    border:1px solid var(--border);
+  }
+  .readlater-row .hash{
+    width:38px;height:38px;
+    flex-shrink:0;
+    border-radius:10px;
+    background:#e5f3ea;
+    color:var(--accent-link);
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;
+  }
+
+  /* Bottom nav */
+  .bottom-nav{
+    position:sticky;
+    bottom:0;
+    flex-shrink:0;
+    background:linear-gradient(180deg, var(--deep-green-2), #12281f);
+    display:flex;
+    justify-content:space-around;
+    padding:10px 4px 14px 4px;
+    z-index:10;
+  }
+  .nav-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+    color:#a9c2b4;
+    font-size:11px;
+    cursor:pointer;
+    flex:1;
+    background:none;
+    border:none;
+    font-family:inherit;
+  }
+  .nav-item .icon{ display:flex; }
+  .nav-item .icon .ic{ width:21px; height:21px; }
+  .nav-item.active{ color:#7ed99a; }
+
+  .tab-section{ display:none; }
+  .tab-section.active{ display:block; }
+
+  .ic{
+    width:1em;
+    height:1em;
+    display:inline-block;
+    vertical-align:-0.15em;
+    flex-shrink:0;
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="ic-doc" viewBox="0 0 24 24"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3v5h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="ic-tag" viewBox="0 0 24 24"><path d="M20.59 13.41 12 21.99 2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="7.5" cy="7.5" r="1.3" fill="currentColor"/></symbol>
+    <symbol id="ic-pen" viewBox="0 0 24 24"><path d="M12 20h9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="ic-users" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M23 21v-2a4 4 0 0 0-3-3.87" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M16 3.13a4 4 0 0 1 0 7.75" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="ic-bookmark" viewBox="0 0 24 24"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="ic-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 2v4M8 2v4M3 10h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="ic-eye" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/></symbol>
+    <symbol id="ic-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 16v-4.5M12 8h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="ic-warning" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9v4M12 17h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="ic-cloud" viewBox="0 0 24 24"><path d="M17.5 19H6a4 4 0 1 1 .74-7.93A6 6 0 0 1 18 9.5a4.5 4.5 0 0 1-.5 9.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="ic-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="ic-chevron-left" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="phone">
+  <div class="app-header">
+    <div class="back"><svg class="ic" style="width:16px;height:16px"><use href="#ic-chevron-left"/></svg></div>
+    <h1>প্রবন্ধ</h1>
+  </div>
+
+  <div class="scroll-area">
+
+    <!-- TAB 1: প্রবন্ধ -->
+    <section class="tab-section active" id="tab-articles">
+      <div class="hero">
+        <div class="glow-icon"><svg class="ic" style="width:26px;height:26px"><use href="#ic-doc"/></svg></div>
+        <h2>প্রবন্ধ</h2>
+        <div class="count-pill">মোট প্রবন্ধ - <b>৮৮৫</b> টি</div>
+        <div class="dots"><span class="active"></span><span></span></div>
+      </div>
+      <div class="search-wrap">
+        <input type="text" placeholder="প্রবন্ধ অনুসন্ধান">
+      </div>
+      <div class="content">
+        <div class="card">
+          <h3>যুবসমাজকে গড়ে তুলতে রাসূলুল্লাহ ﷺ-এর প্রজ্ঞাপূর্ণ পদ্ধতি</h3>
+          <p class="author">লেখক: <a href="#">মুফতী শাহাদাত হুসাইন ফরায়েজী</a></p>
+          <p class="excerpt">ভূমিকা: যুবসমাজ একটি জাতির প্রাণশক্তি, ভবিষ্যতের নির্মাতা এবং সভ্যতার অগ্রযাত্রার প্রধান চালিকাশক্তি।</p>
+          <div class="meta">
+            <span><svg class="ic"><use href="#ic-calendar"/></svg> ৩০ জুলাই, ২০২৬</span>
+            <span><svg class="ic"><use href="#ic-doc"/></svg> ৭৬০ বার পড়া হয়েছে</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>ঈমান তাজা রাখার আমল ও উপায়সমূহ</h3>
+          <p class="author">লেখক: <a href="#">মাওলানা আব্দুল কাইয়ূম</a></p>
+          <p class="excerpt">ঈমান হলো একজন মুমিনের সবচেয়ে বড় সম্পদ। এটি সময়ের সাথে সাথে দুর্বল হয়ে যেতে পারে, তাই একে সতেজ রাখা জরুরি।</p>
+          <div class="meta">
+            <span><svg class="ic"><use href="#ic-calendar"/></svg> ২৭ জুলাই, ২০২৬</span>
+            <span><svg class="ic"><use href="#ic-doc"/></svg> ৪৩২ বার পড়া হয়েছে</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: বিষয়াদি -->
+    <section class="tab-section" id="tab-topics">
+      <div class="hero">
+        <div class="glow-icon"><svg class="ic" style="width:26px;height:26px"><use href="#ic-tag"/></svg></div>
+        <h2>প্রবন্ধের বিষয়াদি</h2>
+        <div class="count-pill">মোট প্রবন্ধের বিষয়াদি - <b>৯৫</b> টি</div>
+        <div class="dots"><span class="active"></span><span></span></div>
+      </div>
+      <div class="search-wrap">
+        <input type="text" placeholder="বিষয় অনুসন্ধান">
+      </div>
+      <div class="content">
+        <div class="row-card">
+          <div class="hash">#</div>
+          <div class="info">
+            <div class="title">অপসংস্কৃতি | নীতি-নৈতিকতা | কালচার</div>
+            <div class="count"><svg class="ic"><use href="#ic-doc"/></svg> ৫১ টি প্রবন্ধ</div>
+          </div>
+          <div class="btn-pill">দেখুন</div>
+        </div>
+        <div class="row-card">
+          <div class="hash">#</div>
+          <div class="info">
+            <div class="title">অমুসলিম প্রসঙ্গ</div>
+            <div class="count"><svg class="ic"><use href="#ic-doc"/></svg> ৯ টি প্রবন্ধ</div>
+          </div>
+          <div class="btn-pill">দেখুন</div>
+        </div>
+        <div class="row-card">
+          <div class="hash">#</div>
+          <div class="info">
+            <div class="title">আকিদা- বিশ্বাস</div>
+            <div class="count"><svg class="ic"><use href="#ic-doc"/></svg> ১৮৬ টি প্রবন্ধ</div>
+          </div>
+          <div class="btn-pill">দেখুন</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: ব্লগ -->
+    <section class="tab-section" id="tab-blog">
+      <div class="hero">
+        <div class="glow-icon"><svg class="ic" style="width:26px;height:26px"><use href="#ic-pen"/></svg></div>
+        <h2>ব্লগ</h2>
+        <div class="count-pill">মোট ব্লগ - <b>২৫৩</b> টি</div>
+        <div class="dots"><span class="active"></span><span></span></div>
+      </div>
+      <div class="search-wrap">
+        <input type="text" placeholder="ব্লগ অনুসন্ধান">
+      </div>
+      <div class="content">
+        <div class="card">
+          <h3>ফকিরি — আল্লাহর দান লাভের পূর্বশর্ত</h3>
+          <p class="author">লেখক: <a href="#">প্রফেসর হযরত মুশফিক আহমদ রহ.</a></p>
+          <p class="excerpt">আল্লাহর বিশেষ দান, সাহায্য ও নৈকট্য লাভের পূর্বশর্ত হলো 'ফকিরি'—অর্থাৎ দুনিয়ার দৃষ্টিতে অসহায়, অভাবী থাকা সত্ত্বেও অন্তরে সন্তুষ্ট থাকা।</p>
+          <div class="meta">
+            <span><svg class="ic"><use href="#ic-calendar"/></svg> ১৬ এপ্রিল, ২০২৬</span>
+            <span><svg class="ic"><use href="#ic-eye"/></svg> ১৮.৫ হাজার বার পড়া হয়েছে</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>নিজস্ব পরিকল্পনা ছেড়ে আল্লাহর পরিকল্পনায় ভরসা রাখা</h3>
+          <p class="author">লেখক: <a href="#">প্রফেসর হযরত মুশফিক আহমদ রহ.</a></p>
+          <p class="excerpt">বান্দার জন্য সবচেয়ে বড় প্রশান্তি হলো নিজের সীমিত পরিকল্পনার বদলে মহান আল্লাহর অসীম জ্ঞানের উপর ভরসা করা।</p>
+          <div class="meta">
+            <span><svg class="ic"><use href="#ic-calendar"/></svg> ৯ এপ্রিল, ২০২৬</span>
+            <span><svg class="ic"><use href="#ic-eye"/></svg> ১২.১ হাজার বার পড়া হয়েছে</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: লেখকবৃন্দ -->
+    <section class="tab-section" id="tab-authors">
+      <div class="hero">
+        <div class="glow-icon"><svg class="ic" style="width:26px;height:26px"><use href="#ic-users"/></svg></div>
+        <h2>প্রবন্ধের লেখকবৃন্দ</h2>
+        <div class="count-pill">মোট লেখক - <b>১৯৮</b> টি</div>
+        <div class="dots"><span class="active"></span><span></span></div>
+      </div>
+      <div class="search-wrap">
+        <input type="text" placeholder="লেখক অনুসন্ধান">
+      </div>
+      <div class="content">
+        <div class="author-card">
+          <div class="avatar">শ</div>
+          <h3>শাহ ওয়ালিউল্লাহ মুহাদ্দিসে দেহলভী রহ.</h3>
+          <div class="count"><svg class="ic"><use href="#ic-pen"/></svg> ২ টি প্রবন্ধ</div>
+          <div class="footer-row">
+            <span>লেখক পরিচিতি</span>
+            <span class="icon-circle"><svg class="ic" style="width:14px;height:14px"><use href="#ic-info"/></svg></span>
+          </div>
+        </div>
+
+        <div class="author-card">
+          <div class="avatar">ম</div>
+          <h3>মুফতী শাহাদাত হুসাইন ফরায়েজী</h3>
+          <div class="count"><svg class="ic"><use href="#ic-pen"/></svg> ১৪ টি প্রবন্ধ</div>
+          <div class="footer-row">
+            <span>লেখক পরিচিতি</span>
+            <span class="icon-circle"><svg class="ic" style="width:14px;height:14px"><use href="#ic-info"/></svg></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: বুকমার্ক -->
+    <section class="tab-section" id="tab-bookmarks">
+      <div class="sub-header">
+        <span class="back-flat"><svg class="ic" style="width:18px;height:18px"><use href="#ic-chevron-left"/></svg></span>
+        <h2><svg class="ic" style="width:18px;height:18px"><use href="#ic-book"/></svg> আমার বুকমার্কসমূহ</h2>
+      </div>
+
+      <div class="backup-card">
+        <div class="heading"><svg class="ic" style="width:18px;height:18px"><use href="#ic-warning"/></svg> বুকমার্ক ব্যাকআপ</div>
+        <p>আপনার বুকমার্ক ক্লাউডে সংরক্ষণ করুন অথবা পূর্বের ব্যাকআপ থেকে রিস্টোর করুন</p>
+        <button class="btn-blue"><svg class="ic"><use href="#ic-cloud"/></svg> ব্যাকআপ থেকে রিস্টোর করুন</button>
+        <button class="btn-green"><svg class="ic"><use href="#ic-cloud"/></svg> ক্লাউডে ব্যাকআপ করুন</button>
+      </div>
+
+      <div class="readlater-row">
+        <div class="hash"><svg class="ic" style="width:18px;height:18px"><use href="#ic-bookmark"/></svg></div>
+        <div class="info">
+          <div class="title">পরে পড়ব</div>
+          <div class="count">#  ০ টি আইটেম</div>
+        </div>
+        <div class="btn-pill">দেখুন</div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-item active" data-tab="tab-articles">
+      <span class="icon"><svg class="ic"><use href="#ic-doc"/></svg></span><span>প্রবন্ধ</span>
+    </button>
+    <button class="nav-item" data-tab="tab-topics">
+      <span class="icon"><svg class="ic"><use href="#ic-tag"/></svg></span><span>বিষয়াদি</span>
+    </button>
+    <button class="nav-item" data-tab="tab-blog">
+      <span class="icon"><svg class="ic"><use href="#ic-pen"/></svg></span><span>ব্লগ</span>
+    </button>
+    <button class="nav-item" data-tab="tab-authors">
+      <span class="icon"><svg class="ic"><use href="#ic-users"/></svg></span><span>লেখকবৃন্দ</span>
+    </button>
+    <button class="nav-item" data-tab="tab-bookmarks">
+      <span class="icon"><svg class="ic"><use href="#ic-bookmark"/></svg></span><span>বুকমার্ক</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  const navItems = document.querySelectorAll('.nav-item');
+  const sections = document.querySelectorAll('.tab-section');
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      navItems.forEach(n => n.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+      item.classList.add('active');
+      document.getElementById(item.dataset.tab).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    });
+  });
+</script>
+
+</body>
+</html>

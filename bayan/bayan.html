@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>বয়ান</title>
+<style>
+
+      @font-face{
+    font-family:'Kalpurush';
+    src:url('/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+  :root{
+    --header-green:#16473a;
+    --accent-green:#1e7a52;
+    --text-dark:#1c1c1c;
+    --text-muted:#7a7a7a;
+    --border:#ececec;
+    --bg:#ffffff;
+    --live-red:#e0342c;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Noto Sans Bengali','Hind Siliguri',system-ui,-apple-system,sans-serif;
+    background:var(--bg);
+    color:var(--text-dark);
+    overscroll-behavior-y:contain;
+  }
+
+    html,body{
+    margin:0;padding:0;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    background:#111;
+  }
+  .app{
+    max-width:520px;
+    margin:0 auto;
+    min-height:100vh;
+    background:var(--bg);
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* Header */
+  .header{
+    background:var(--header-green);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    padding:14px 14px;
+    position:sticky;
+    top:0;
+    z-index:20;
+    gap:10px;
+  }
+  .back-btn{
+    width:36px;height:36px;
+    border:1.5px solid rgba(255,255,255,.85);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:transparent;
+    color:#fff;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .back-btn svg{width:16px;height:16px;}
+  .header-title{
+    flex:1;
+    text-align:center;
+    font-size:19px;
+    font-weight:700;
+    margin-right:36px;
+    letter-spacing:.5px;
+  }
+
+  /* List page */
+  .list-page{display:flex;flex-direction:column;flex:1;}
+  .subtitle{
+    text-align:center;
+    font-size:18px;
+    font-weight:700;
+    padding:16px 12px 12px;
+  }
+  .search-wrap{padding:0 16px 14px;}
+  .search-box{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:#fff;
+    border:1px solid #d9d9d9;
+    border-radius:10px;
+    padding:10px 14px;
+  }
+  .search-box svg{width:17px;height:17px;color:#9a9a9a;flex-shrink:0;}
+  .search-box input{
+    border:none;outline:none;flex:1;
+    font-size:15px;font-family:inherit;color:var(--text-dark);
+    background:transparent;
+  }
+  .search-box input::placeholder{color:#a8a8a8;}
+
+  .tabs{
+    display:flex;
+    border-bottom:1px solid var(--border);
+    padding:0 4px;
+  }
+  .tab{
+    flex:1;
+    text-align:center;
+    padding:10px 4px 12px;
+    font-size:14.5px;
+    font-weight:700;
+    color:var(--text-dark);
+    background:none;
+    border:none;
+    font-family:inherit;
+    cursor:pointer;
+    position:relative;
+    white-space:nowrap;
+  }
+  .tab.active{color:var(--accent-green);}
+  .tab.active::after{
+    content:'';
+    position:absolute;
+    left:14%;right:14%;bottom:0;
+    height:3px;
+    background:var(--accent-green);
+    border-radius:3px 3px 0 0;
+  }
+
+  /* List */
+  .list{
+    flex:1;
+    overflow-y:auto;
+    padding-bottom:24px;
+  }
+  .item{
+    display:flex;
+    gap:12px;
+    padding:12px 16px;
+    cursor:pointer;
+    border-bottom:1px solid #f5f5f5;
+  }
+  .item:active{background:#fafafa;}
+  .thumb{
+    width:112px;
+    height:74px;
+    border-radius:8px;
+    overflow:hidden;
+    flex-shrink:0;
+    position:relative;
+    background:#e9e9e9;
+  }
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+  .live-badge{
+    position:absolute;
+    top:5px;left:5px;
+    background:var(--live-red);
+    color:#fff;
+    font-size:10px;
+    font-weight:700;
+    padding:1.5px 6px;
+    border-radius:3px;
+    letter-spacing:.3px;
+  }
+  .item-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px;}
+  .item-title{
+    font-size:14.5px;
+    font-weight:600;
+    line-height:1.35;
+    color:var(--text-dark);
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+  }
+  .item-sub{font-size:12.5px;color:var(--text-muted);}
+  .item-views{font-size:12px;color:var(--text-muted);}
+
+  .empty-state{
+    text-align:center;
+    color:var(--text-dark);
+    font-size:15px;
+    padding:80px 20px;
+  }
+
+  /* Video / detail page */
+  .video-page{display:none;flex-direction:column;flex:1;}
+  .video-page.active{display:flex;}
+  .list-page.hidden{display:none;}
+  .video-header{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:16px 14px;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    background:#fff;
+    z-index:10;
+  }
+  .video-back{
+    background:none;border:none;cursor:pointer;
+    color:var(--text-dark);
+    display:flex;align-items:center;justify-content:center;
+    padding:4px;flex-shrink:0;
+  }
+  .video-back svg{width:22px;height:22px;}
+  .video-header-title{
+    font-size:16.5px;
+    font-weight:700;
+    text-align:center;
+    flex:1;
+    margin-right:30px;
+  }
+  .player-wrap{
+    width:100%;
+    aspect-ratio:16/9;
+    background:#000;
+  }
+  .player-wrap iframe{width:100%;height:100%;border:0;display:block;}
+  .video-meta{padding:16px;}
+  .video-meta h2{font-size:17px;margin:0 0 6px;line-height:1.4;}
+  .video-meta p{font-size:13.5px;color:var(--text-muted);margin:0;}
+
+  ::-webkit-scrollbar{width:0;height:0;}
+
+  @media (min-width:521px){
+    .app{
+      box-shadow:0 0 0 1px #eee;
+      min-height:100vh;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== LIST PAGE ===== -->
+  <div class="list-page" id="listPage">
+    <div class="header">
+      <button class="back-btn" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="header-title">বয়ান</div>
+    </div>
+
+    <div class="subtitle">বক্তাদের তালিকা</div>
+
+    <div class="search-wrap">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="searchInput" placeholder="বক্তা অনুসন্ধান">
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="all">সকল বক্তা</button>
+      <button class="tab" data-tab="bookmark">বুকমার্ক</button>
+      <button class="tab" data-tab="popular">জনপ্রিয়</button>
+      <button class="tab" data-tab="recent">সাম্প্রতিক</button>
+    </div>
+
+    <div class="list" id="listContainer"></div>
+  </div>
+
+  <!-- ===== VIDEO DETAIL PAGE ===== -->
+  <div class="video-page" id="videoPage">
+    <div class="video-header">
+      <button class="video-back" id="videoBackBtn" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="video-header-title" id="videoHeaderTitle"></div>
+    </div>
+    <div class="player-wrap">
+      <iframe id="videoIframe" src="" title="video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <div class="video-meta">
+      <h2 id="videoMetaTitle"></h2>
+      <p id="videoMetaSub"></p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ---------- Lecture data (from muslimbangla.com) ----------
+  function ytThumb(id){ return `https://img.youtube.com/vi/${id}/hqdefault.jpg`; }
+
+  const items = [
+    {
+      id: 664, live:true, popular:true, recent:true,
+      title:"বাইতুল্লাহ লাইভ", sub:"মক্কা-মদিনা লাইভ", views:"",
+      youtube: "yxIgMCOUS1g",
+      source: "https://muslimbangla.com/lecture/664"
+    },
+    {
+      id: 3568, live:false, popular:false, recent:true,
+      title:"জুমু'আর বয়ান ৯ জানুয়ারি ২০২৬ | আল্লাহর হক, আল্লাহর আইন, আল্লাহর বিধান || Habibullah Mahmud Quasemi",
+      sub:"মুফতী হাবিবুল্লাহ মাহমুদ কাসেমী", views:"",
+      youtube: "t_PdaSKqa74",
+      source: "https://muslimbangla.com/lecture/3568"
+    },
+    {
+      id: 3165, live:false, popular:false, recent:true,
+      title:"মুরুব্বি চাচার চিন্তা আমি মরে গেলে আমার পরিবারের কি হবে?",
+      sub:"মাওলানা আনিসুর রহমান আশরাফী", views:"",
+      youtube: "moGxud7dBSQ",
+      source: "https://muslimbangla.com/lecture/3165"
+    },
+    {
+      id: 3166, live:false, popular:false, recent:true,
+      title:"আল্লাহ আমাদের কে ৪টি শ্রেষ্ঠ নেয়ামত দিয়েছেন",
+      sub:"মাওলানা আনিসুর রহমান আশরাফী", views:"",
+      youtube: "trkp1xbwFsM",
+      source: "https://muslimbangla.com/lecture/3166"
+    },
+    {
+      id: 1266, live:false, popular:false, recent:true,
+      title:"ছাত্রদের উদ্দেশ্যে নসীহা",
+      sub:"শাইখ আব্দুর রহমান আস সুদাইস", views:"",
+      youtube: "-SYp45OiFOc",
+      source: "https://muslimbangla.com/lecture/1266"
+    }
+  ];
+
+  // Assign real YouTube thumbnails
+  items.forEach(i => { i.img = ytThumb(i.youtube); });
+
+  let currentTab = "all";
+  let currentQuery = "";
+
+  const listContainer = document.getElementById("listContainer");
+  const searchInput = document.getElementById("searchInput");
+  const tabs = document.querySelectorAll(".tab");
+
+  function renderList(){
+    let data = items.slice();
+
+    if(currentTab === "bookmark"){
+      data = []; // no bookmarks saved, matches reference screen
+    } else if(currentTab === "popular"){
+      data = data.filter(i => i.popular);
+    } else if(currentTab === "recent"){
+      data = data.filter(i => i.recent);
+    }
+
+    if(currentQuery.trim()){
+      const q = currentQuery.trim().toLowerCase();
+      data = data.filter(i =>
+        i.title.toLowerCase().includes(q) || i.sub.toLowerCase().includes(q)
+      );
+    }
+
+    listContainer.innerHTML = "";
+
+    if(data.length === 0){
+      const emptyMsg = currentTab === "bookmark"
+        ? "কোনো পছন্দনীয় বক্তার তালিকা সংরক্ষিত নেই"
+        : "কোনো ফলাফল পাওয়া যায়নি";
+      const el = document.createElement("div");
+      el.className = "empty-state";
+      el.textContent = emptyMsg;
+      listContainer.appendChild(el);
+      return;
+    }
+
+    data.forEach(item => {
+      const row = document.createElement("div");
+      row.className = "item";
+      row.innerHTML = `
+        <div class="thumb">
+          <img src="${item.img}" alt="${item.title}">
+          ${item.live ? '<span class="live-badge">LIVE</span>' : ''}
+        </div>
+        <div class="item-info">
+          <div class="item-title">${item.title}</div>
+          <div class="item-sub">${item.sub}</div>
+          ${item.views ? `<div class="item-views">দেখেছেন: ${item.views} জন</div>` : ''}
+        </div>
+      `;
+      row.addEventListener("click", () => openVideo(item));
+      listContainer.appendChild(row);
+    });
+  }
+
+  tabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      tabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      currentTab = tab.dataset.tab;
+      renderList();
+    });
+  });
+
+  searchInput.addEventListener("input", (e) => {
+    currentQuery = e.target.value;
+    renderList();
+  });
+
+  // ---------- Video detail page ----------
+  const listPage = document.getElementById("listPage");
+  const videoPage = document.getElementById("videoPage");
+  const videoIframe = document.getElementById("videoIframe");
+  const videoHeaderTitle = document.getElementById("videoHeaderTitle");
+  const videoMetaTitle = document.getElementById("videoMetaTitle");
+  const videoMetaSub = document.getElementById("videoMetaSub");
+  const videoBackBtn = document.getElementById("videoBackBtn");
+
+  function openVideo(item){
+    videoHeaderTitle.textContent = item.title.length > 28 ? item.sub : item.title;
+    videoMetaTitle.textContent = item.title;
+    videoMetaSub.textContent = item.sub;
+    videoIframe.src = `https://www.youtube.com/embed/${item.youtube}?autoplay=1&rel=0`;
+
+    listPage.classList.add("hidden");
+    videoPage.classList.add("active");
+    window.scrollTo(0,0);
+  }
+
+  function closeVideo(){
+    videoIframe.src = ""; // stop playback
+    videoPage.classList.remove("active");
+    listPage.classList.remove("hidden");
+  }
+
+  videoBackBtn.addEventListener("click", closeVideo);
+
+  // Header back button (top-level) — no-op destination in this standalone page
+  document.querySelector(".back-btn").addEventListener("click", () => {
+    history.back();
+  });
+
+  renderList();
+</script>
+</body>
+</html>
