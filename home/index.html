@@ -1879,7 +1879,7 @@
         </div>
         <div class="lbl">কুরআন শিক্ষা</div>
       </div>
-      <div class="menu-card">
+      <div class="menu-card" id="namazshikkhaMenuCard" style="cursor:pointer;">
         <div class="icon-box">
           <img src="assets/namaz-shikkha.png" alt="নামায শিক্ষা">
           <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -2454,6 +2454,16 @@
       });
     }
   })();
+
+   (function(){
+    var namazshikkhaMenuCard = document.getElementById('namazshikkhaMenuCard');
+    if(namazshikkhaMenuCard){
+      namazshikkhaMenuCard.addEventListener('click', function(){
+        window.location.href = 'https://ummahguidance-ipuv.vercel.app/';
+      });
+    }
+  })();
+
 
   (function(){
     var navItems = Array.prototype.slice.call(document.querySelectorAll('#bottomNav .nav-item'));
