@@ -431,9 +431,9 @@
 
   videoBackBtn.addEventListener("click", closeVideo);
 
-  // Header back button (top-level) — no-op destination in this standalone page
+  // Header back button (top-level)
   document.querySelector(".back-btn").addEventListener("click", () => {
-    history.back();
+    window.location.href = "https://ummahguidance.vercel.app/";
   });
 
   renderList();

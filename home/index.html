@@ -1939,7 +1939,7 @@
         </div>
         <div class="lbl">প্রবন্ধ</div>
       </div>
-      <div class="menu-card">
+      <div class="menu-card" id="bayanMenuCard" style="cursor:pointer;">
         <div class="icon-box">
           <img src="assets/bayan.png" alt="বয়ান">
           <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -2552,6 +2552,15 @@
     if(articlesMenuCard){
       articlesMenuCard.addEventListener('click', function(){
         window.location.href = 'https://ummahguidance-z461.vercel.app/';
+      });
+    }
+  })();
+
+    (function(){
+    var bayanMenuCard = document.getElementById('bayanMenuCard');
+    if(bayanMenuCard){
+      bayanMenuCard.addEventListener('click', function(){
+        window.location.href = 'https://ummahguidance-arrl.vercel.app/';
       });
     }
   })();
