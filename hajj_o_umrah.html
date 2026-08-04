@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>হজ্ব ও উমরা</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --deep:#173C31;
+    --deep-2:#1F4A3C;
+    --accent:#1E9E5A;
+    --accent-dark:#167A47;
+    --accent-soft:#E5F6EC;
+    --bg:#F4F8F6;
+    --card:#FFFFFF;
+    --text:#16241E;
+    --muted:#6B8079;
+    --line:#E4ECE8;
+    --pill-blue:#EAF2FE;
+    --pill-blue-text:#2563C8;
+    --pill-pink:#FDEBF1;
+    --pill-pink-text:#C23570;
+    --radius-lg:20px;
+    --radius-md:14px;
+    --radius-sm:10px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Hind Siliguri', sans-serif;
+    background:#DCE4E1;
+    color:var(--text);
+    display:flex;
+    justify-content:center;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .phone{
+    width:100%;
+    max-width:430px;
+    min-height:100dvh;
+    background:var(--bg);
+    position:relative;
+    overflow-x:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* ---------- Top App Bar ---------- */
+  .appbar{
+    background:var(--deep);
+    color:#fff;
+    padding:16px 14px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    position:sticky;
+    top:0;
+    z-index:30;
+  }
+  .icon-btn{
+    width:38px;height:38px;
+    border-radius:50%;
+    border:1.5px solid rgba(255,255,255,0.35);
+    background:transparent;
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    flex:none;
+    cursor:pointer;
+  }
+  .icon-btn svg{width:18px;height:18px;}
+  .appbar h1{
+    flex:1;
+    text-align:center;
+    font-size:19px;
+    font-weight:700;
+    margin:0;
+    margin-right:38px;
+  }
+  .appbar-sub{
+    display:flex;
+    flex-direction:column;
+    flex:1;
+    line-height:1.15;
+  }
+  .appbar-sub .title{font-size:17px;font-weight:700;}
+  .appbar-sub .subtitle{font-size:12px;color:#B9CFC5;margin-top:2px;}
+
+  .dropdown-pill{
+    background:rgba(255,255,255,0.12);
+    color:#fff;
+    border:1px solid rgba(255,255,255,0.25);
+    border-radius:20px;
+    padding:8px 12px;
+    font-size:13px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .dropdown-pill svg{width:12px;height:12px;}
+
+  /* ---------- Screen management ---------- */
+  .screen{display:none;flex-direction:column;flex:1;min-height:0;}
+  .screen.active{display:flex;}
+
+  /* ================= SCREEN 1: MAIN ================= */
+  .hero{
+    position:relative;
+    background:linear-gradient(180deg, rgba(10,20,17,0.15) 0%, rgba(8,16,13,0.75) 78%), url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?q=80&w=1200&auto=format&fit=crop') center/cover no-repeat;
+    padding:18px 14px 20px;
+    color:#fff;
+  }
+  .guide-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:16px;
+  }
+  .guide-icon{
+    width:44px;height:44px;
+    border-radius:12px;
+    background:var(--accent);
+    display:flex;align-items:center;justify-content:center;
+    flex:none;
+  }
+  .guide-icon svg{width:24px;height:24px;color:#fff;}
+  .guide-row .name{font-weight:700;font-size:15px;}
+  .guide-row .brand{font-size:12px;color:#CFE3DA;margin-top:2px;}
+
+  .clock-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:16px;
+  }
+  .clock-card{
+    flex:1;
+    background:rgba(20,32,27,0.55);
+    backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:var(--radius-md);
+    padding:12px 14px;
+  }
+  .clock-card .loc{
+    display:flex;align-items:center;gap:6px;
+    font-size:12.5px;color:#DCEAE3;margin-bottom:6px;
+  }
+  .clock-card .time{font-size:20px;font-weight:700;letter-spacing:0.3px;}
+  .clock-card .date{font-size:11.5px;color:#B9CFC5;margin-top:3px;}
+
+  .prayer-card{
+    background:rgba(20,32,27,0.6);
+    backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:var(--radius-md);
+    padding:14px 10px 16px;
+  }
+  .prayer-card h3{
+    text-align:center;
+    font-size:14.5px;
+    font-weight:600;
+    margin:0 0 12px;
+    color:#F1F6F3;
+  }
+  .prayer-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+  }
+  .prayer-item{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:8px 2px;
+    border-radius:12px;
+    text-align:center;
+  }
+  .prayer-item.active{background:var(--accent);}
+  .prayer-item .pname{font-size:12.5px;color:#DCEAE3;margin-bottom:6px;}
+  .prayer-item.active .pname{color:#fff;}
+  .prayer-item .pemoji{font-size:16px;margin-bottom:6px;}
+  .prayer-item .ptime{font-size:12.5px;font-weight:700;}
+  .prayer-item .ptime2{font-size:11px;color:#CFE3DA;margin-top:2px;}
+  .prayer-item.active .ptime2{color:#EAF7EF;}
+
+  .section-title{
+    font-size:15px;
+    font-weight:700;
+    padding:18px 16px 10px;
+  }
+  .cards-list{
+    padding:0 14px 24px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .list-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius-md);
+    padding:14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    text-align:left;
+    box-shadow:0 1px 2px rgba(20,40,30,0.04);
+  }
+  .list-card:active{background:#F1F7F4;}
+  .list-icon{
+    width:42px;height:42px;
+    border-radius:11px;
+    background:var(--accent-soft);
+    display:flex;align-items:center;justify-content:center;
+    flex:none;
+    color:var(--accent-dark);
+  }
+  .list-icon svg{width:21px;height:21px;}
+  .list-body{flex:1;min-width:0;}
+  .list-body .row1{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .list-body .lc-title{font-size:14.5px;font-weight:700;}
+  .badge{
+    font-size:11px;
+    font-weight:700;
+    padding:2px 8px;
+    border-radius:20px;
+  }
+  .badge.green{background:var(--accent-soft);color:var(--accent-dark);}
+  .badge.live{background:#FDECEC;color:#D6304A;}
+  .list-body .lc-sub{font-size:12.5px;color:var(--muted);margin-top:3px;}
+  .chev{color:#B9C4BF;flex:none;}
+  .chev svg{width:18px;height:18px;}
+
+  /* ================= BOTTOM SHEET (screen 2) ================= */
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(10,18,15,0.5);
+    z-index:40;
+    display:none;
+    justify-content:center;
+  }
+  .overlay.active{display:flex;}
+  .overlay-inner{
+    width:100%;max-width:430px;
+    position:relative;
+  }
+  .sheet{
+    position:absolute;
+    bottom:0;left:0;right:0;
+    background:var(--bg);
+    border-radius:22px 22px 0 0;
+    max-height:88vh;
+    overflow-y:auto;
+    animation:slideUp .25s ease-out;
+    padding-bottom:18px;
+  }
+  @keyframes slideUp{
+    from{transform:translateY(30px);opacity:0;}
+    to{transform:translateY(0);opacity:1;}
+  }
+  .sheet-handle{
+    width:44px;height:5px;
+    background:#D3DBD7;
+    border-radius:10px;
+    margin:10px auto 4px;
+  }
+  .sheet-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    padding:10px 18px 14px;
+    border-bottom:1px solid var(--line);
+  }
+  .sheet-head h2{font-size:17px;margin:0 0 4px;font-weight:700;}
+  .sheet-head p{font-size:13px;color:var(--muted);margin:0;}
+  .sheet-close{
+    width:30px;height:30px;
+    border-radius:50%;
+    background:var(--accent-soft);
+    color:var(--accent-dark);
+    border:none;
+    display:flex;align-items:center;justify-content:center;
+    flex:none;
+    cursor:pointer;
+  }
+  .sheet-close svg{width:15px;height:15px;}
+
+  .type-list{padding:14px;display:flex;flex-direction:column;gap:12px;}
+  .type-card{
+    background:var(--card);
+    border:1.5px solid var(--line);
+    border-radius:var(--radius-md);
+    padding:14px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    cursor:pointer;
+  }
+  .type-card:active{border-color:var(--accent);}
+  .type-badge{
+    width:52px;height:52px;
+    border-radius:12px;
+    background:var(--accent-soft);
+    color:var(--accent-dark);
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;
+    flex:none;
+    font-weight:700;
+  }
+  .type-body{flex:1;}
+  .type-body .row1{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:3px;}
+  .type-body .t-title{font-size:14.5px;font-weight:700;}
+  .type-body .t-tag{
+    font-size:10.5px;font-weight:700;
+    background:var(--accent-soft);color:var(--accent-dark);
+    padding:2px 8px;border-radius:20px;
+  }
+  .type-body .t-sub{font-size:12.5px;color:var(--muted);}
+  .radio{
+    width:21px;height:21px;
+    border-radius:50%;
+    border:2px solid #C7D2CD;
+    flex:none;
+    position:relative;
+  }
+
+  /* ================= SCREEN 3: STEP GUIDE ================= */
+  .guide-topbar{
+    background:var(--card);
+    border-bottom:1px solid var(--line);
+    padding:12px 14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    position:sticky;
+    top:0;
+    z-index:20;
+  }
+  .guide-topbar .g-back{
+    width:34px;height:34px;
+    border-radius:50%;
+    background:var(--accent-soft);
+    color:var(--accent-dark);
+    display:flex;align-items:center;justify-content:center;
+    flex:none;
+    border:none;
+    cursor:pointer;
+  }
+  .guide-topbar .g-back svg{width:16px;height:16px;}
+  .guide-topbar .g-title{flex:1;}
+  .guide-topbar .g-title .t{font-size:15px;font-weight:700;}
+  .guide-topbar .g-title .s{font-size:12px;color:var(--muted);margin-top:1px;}
+  .type-pill{
+    background:var(--accent-soft);
+    color:var(--accent-dark);
+    border:1px solid #CDE9D9;
+    border-radius:20px;
+    padding:7px 10px;
+    font-size:12.5px;
+    font-weight:700;
+    display:flex;align-items:center;gap:5px;
+    white-space:nowrap;
+  }
+  .type-pill svg{width:11px;height:11px;}
+
+  .active-type-banner{
+    margin:12px 14px 0;
+    background:var(--accent);
+    color:#fff;
+    border-radius:var(--radius-md);
+    padding:12px 14px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .active-type-banner .glyph{
+    width:34px;height:34px;
+    border-radius:9px;
+    background:rgba(255,255,255,0.18);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;
+    flex:none;
+  }
+  .active-type-banner .name{font-size:14px;font-weight:700;}
+  .active-type-banner .desc{font-size:11.5px;color:#E4F5EB;margin-top:1px;}
+  .active-type-banner .arrow{margin-left:auto;color:#fff;}
+  .active-type-banner .arrow svg{width:16px;height:16px;}
+
+  .progress-card{
+    margin:12px 14px 0;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius-md);
+    padding:14px;
+  }
+  .progress-head{
+    display:flex;align-items:center;justify-content:space-between;
+    margin-bottom:8px;
+  }
+  .progress-head .left{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;}
+  .progress-head .left svg{width:16px;height:16px;color:var(--accent-dark);}
+  .progress-head .count{font-size:14px;font-weight:700;color:var(--accent-dark);}
+  .progress-track{
+    height:7px;background:var(--line);border-radius:10px;overflow:hidden;margin-bottom:6px;
+  }
+  .progress-fill{
+    height:100%;background:var(--accent);width:0%;
+    transition:width .3s ease;
+  }
+  .progress-foot{font-size:11.5px;color:var(--muted);display:flex;justify-content:space-between;}
+
+  .tabs-wrap{
+    margin-top:14px;
+    padding:0 14px;
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .tabs-wrap::-webkit-scrollbar{display:none;}
+  .tab-btn{
+    flex:none;
+    display:flex;align-items:center;gap:6px;
+    padding:9px 14px;
+    border-radius:20px;
+    background:var(--card);
+    border:1px solid var(--line);
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--text);
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .tab-btn.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+  .guide-body{padding:14px 14px 30px;flex:1;}
+  .category-block{margin-bottom:18px;}
+  .category-block:last-child{margin-bottom:0;}
+  .category-head{
+    display:flex;align-items:center;gap:10px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius-md) var(--radius-md) 0 0;
+    padding:12px 14px;
+  }
+  .category-head .cemoji{
+    width:34px;height:34px;border-radius:9px;
+    background:var(--accent-soft);
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;flex:none;
+  }
+  .category-head .ctitle{font-size:14px;font-weight:700;}
+  .category-head .csub{font-size:11.5px;color:var(--muted);margin-top:1px;}
+  .category-head .cprog{margin-left:auto;font-size:12.5px;font-weight:700;color:var(--accent-dark);}
+
+  .item-list{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-top:none;
+    border-radius:0 0 var(--radius-md) var(--radius-md);
+  }
+  .task-item{
+    display:flex;align-items:center;gap:12px;
+    padding:13px 14px;
+    border-top:1px solid var(--line);
+    cursor:pointer;
+  }
+  .checkbox{
+    width:21px;height:21px;
+    border-radius:6px;
+    border:2px solid #C7D2CD;
+    flex:none;
+    display:flex;align-items:center;justify-content:center;
+    transition:.15s;
+  }
+  .checkbox svg{width:12px;height:12px;color:#fff;opacity:0;transition:.15s;}
+  .task-item.done .checkbox{background:var(--accent);border-color:var(--accent);}
+  .task-item.done .checkbox svg{opacity:1;}
+  .task-item.done .t-label{color:var(--muted);text-decoration:line-through;text-decoration-color:#B9C4BF;}
+  .t-label{flex:1;font-size:13.5px;font-weight:500;}
+  .gender-badge{
+    font-size:10.5px;font-weight:700;
+    padding:3px 8px;border-radius:20px;
+    flex:none;
+  }
+  .gender-badge.male{background:var(--pill-blue);color:var(--pill-blue-text);}
+  .gender-badge.female{background:var(--pill-pink);color:var(--pill-pink-text);}
+  .item-chev{color:#C3CCC8;flex:none;}
+  .item-chev svg{width:15px;height:15px;}
+
+  /* small screens */
+  @media (max-width:360px){
+    .prayer-item .pname{font-size:11px;}
+    .prayer-item .ptime{font-size:11.5px;}
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- ============ SCREEN 1: MAIN ============ -->
+  <div class="screen active" id="screen-main">
+    <div class="appbar">
+      <button class="icon-btn" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <h1>হজ্ব ও উমরা</h1>
+    </div>
+
+    <div class="hero">
+      <div class="guide-row">
+        <div class="guide-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2z"></path><path d="M22 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"></path></svg>
+        </div>
+        <div>
+          <div class="name">হজ্ব ও উমরা গাইড</div>
+          <div class="brand">মুসলিম বাংলা</div>
+        </div>
+      </div>
+
+      <div class="clock-row">
+        <div class="clock-card">
+          <div class="loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg> ঢাকা</div>
+          <div class="time" id="dhaka-time">১১:৪৪:১৯ PM</div>
+          <div class="date">মঙ্গল, ৪ আগস্ট</div>
+        </div>
+        <div class="clock-card">
+          <div class="loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><rect x="5" y="5" width="14" height="14" rx="1"></rect><path d="M5 9h14"></path></svg> মক্কা</div>
+          <div class="time" id="makkah-time">০৮:৪৪:১৯ PM</div>
+          <div class="date">মঙ্গল, ৪ আগস্ট</div>
+        </div>
+      </div>
+
+      <div class="prayer-card">
+        <h3>মক্কার নামাজের সময়সূচী</h3>
+        <div class="prayer-grid">
+          <div class="prayer-item">
+            <div class="pname">ফজর</div>
+            <div class="pemoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg></div>
+            <div class="ptime">০৪:৩৫</div>
+            <div class="ptime2">০৫:৫৪</div>
+          </div>
+          <div class="prayer-item">
+            <div class="pname">যুহর</div>
+            <div class="pemoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="4.2" y1="4.2" x2="5.6" y2="5.6"></line><line x1="18.4" y1="18.4" x2="19.8" y2="19.8"></line><line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line><line x1="4.2" y1="19.8" x2="5.6" y2="18.4"></line><line x1="18.4" y1="5.6" x2="19.8" y2="4.2"></line></svg></div>
+            <div class="ptime">১২:২৮</div>
+            <div class="ptime2">০৫:০০</div>
+          </div>
+          <div class="prayer-item active">
+            <div class="pname">আসর</div>
+            <div class="pemoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M17.5 19a4.5 4.5 0 0 0 0-9 6 6 0 0 0-11.4-1.5A4.5 4.5 0 0 0 6.5 19h11z"></path><line x1="12" y1="2" x2="12" y2="4"></line><line x1="5" y1="5" x2="6.4" y2="6.4"></line></svg></div>
+            <div class="ptime">০৫:০১</div>
+            <div class="ptime2">০৬:৫৭</div>
+          </div>
+          <div class="prayer-item">
+            <div class="pname">মাগরিব</div>
+            <div class="pemoji"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M17 18a5 5 0 0 0-10 0"></path><line x1="12" y1="9" x2="12" y2="2"></line><line x1="4.2" y1="10.2" x2="5.6" y2="11.6"></line><line x1="19.8" y1="10.2" x2="18.4" y2="11.6"></line><line x1="1" y1="18" x2="23" y2="18"></line><line x1="8" y1="22" x2="16" y2="22"></line></svg></div>
+            <div class="ptime">০৬:৫৯</div>
+            <div class="ptime2">০৮:১৭</div>
+          </div>
+          <div class="prayer-item">
+            <div class="pname">ইশা</div>
+            <div class="pemoji">🕌</div>
+            <div class="ptime">০৮:১৮</div>
+            <div class="ptime2">০৪:৩০</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">সকল বিভাগ</div>
+    <div class="cards-list">
+
+      <button class="list-card" id="open-type-sheet">
+        <div class="list-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+        </div>
+        <div class="list-body">
+          <div class="row1">
+            <span class="lc-title">ধাপে ধাপে হজ্ব গাইড</span>
+            <span class="badge green">চেকলিস্ট</span>
+          </div>
+          <div class="lc-sub">আমলের ধারাবাহিক তালিকা ও চেকলিস্ট</div>
+        </div>
+        <div class="chev">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+      </button>
+
+      <button class="list-card">
+        <div class="list-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        </div>
+        <div class="list-body">
+          <div class="row1"><span class="lc-title">বিধিমালা</span></div>
+          <div class="lc-sub">অনুমোদিত, অননুমোদিত, দম ও সদকার বিধান</div>
+        </div>
+        <div class="chev">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+      </button>
+
+      <button class="list-card">
+        <div class="list-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </div>
+        <div class="list-body">
+          <div class="row1"><span class="lc-title">হজ্ব গ্রুপ</span><span class="badge live">লাইভ</span></div>
+          <div class="lc-sub">মুফতি ও হাজ্বীদের সাথে সরাসরি কথা বলুন</div>
+        </div>
+        <div class="chev">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </div>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ============ SCREEN 3: STEP-BY-STEP GUIDE ============ -->
+  <div class="screen" id="screen-guide">
+    <div class="guide-topbar">
+      <button class="g-back" id="guide-back" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <div class="g-title">
+        <div class="t">ধাপে ধাপে হজ্ব গাইড</div>
+        <div class="s" id="guide-subtitle">হজ্বে তামাত্তু</div>
+      </div>
+      <div class="type-pill" id="open-type-sheet-2">
+        <span id="pill-label">হজ্বে তামাত্তু</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+    </div>
+
+    <div class="active-type-banner">
+      <div class="glyph">تَ</div>
+      <div>
+        <div class="name">হজ্বে তামাত্তু</div>
+        <div class="desc">আলাদা উমরা, তারপর হজ্ব</div>
+      </div>
+      <div class="arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </div>
+    </div>
+
+    <div class="progress-card">
+      <div class="progress-head">
+        <div class="left">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          অগ্রগতি
+        </div>
+        <div class="count"><span id="done-count">0</span> / <span id="total-count">37</span></div>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-foot">
+        <span id="remaining-text">৩৭ টি বাকি</span>
+        <span id="percent-text">0%</span>
+      </div>
+    </div>
+
+    <div class="tabs-wrap" id="tabs-wrap">
+      <button class="tab-btn active" data-cat="all">📋 সব</button>
+      <button class="tab-btn" data-cat="prep">🧴 ইহরামের প্রস্তুতি</button>
+      <button class="tab-btn" data-cat="talbiyah">🕊️ ইহরাম ও তালবিয়া</button>
+      <button class="tab-btn" data-cat="makkah">🕋 মক্কায় প্রবেশ</button>
+      <button class="tab-btn" data-cat="tawaf">🚶 তাওয়াফ ও সাঈ</button>
+      <button class="tab-btn" data-cat="mina">⛺ মিনা ও আরাফা</button>
+      <button class="tab-btn" data-cat="jamarat">🪨 জামারা ও কুরবানি</button>
+      <button class="tab-btn" data-cat="farewell">🕌 বিদায়ী তাওয়াফ</button>
+    </div>
+
+    <div class="guide-body" id="guide-body"></div>
+  </div>
+
+  <!-- ============ BOTTOM SHEET: HAJJ TYPE SELECT ============ -->
+  <div class="overlay" id="type-overlay">
+    <div class="overlay-inner">
+      <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-head">
+          <div>
+            <h2>হজ্বের ধরন নির্বাচন</h2>
+            <p>আপনি কোন হজ্ব বা উমরা করছেন?</p>
+          </div>
+          <button class="sheet-close" id="close-type-sheet">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+        <div class="type-list">
+
+          <div class="type-card" data-type="তামাত্তু" data-glyph="تَ" data-name="হজ্বে তামাত্তু" data-desc="আলাদা উমরা, তারপর হজ্ব">
+            <div class="type-badge">تَمتُّع</div>
+            <div class="type-body">
+              <div class="row1"><span class="t-title">হজ্বে তামাত্তু</span><span class="t-tag">সবচেয়ে প্রচলিত</span></div>
+              <div class="t-sub">আলাদা উমরা, তারপর হজ্ব</div>
+            </div>
+            <div class="radio"></div>
+          </div>
+
+          <div class="type-card" data-type="কেরান" data-glyph="قِ" data-name="হজ্বে কেরান" data-desc="একই ইহরামে উমরা + হজ্ব">
+            <div class="type-badge">قِرَان</div>
+            <div class="type-body">
+              <div class="row1"><span class="t-title">হজ্বে কেরান</span><span class="t-tag">সবচেয়ে উত্তম</span></div>
+              <div class="t-sub">একই ইহরামে উমরা + হজ্ব</div>
+            </div>
+            <div class="radio"></div>
+          </div>
+
+          <div class="type-card" data-type="ইফরাদ" data-glyph="إِ" data-name="হজ্বে ইফরাদ" data-desc="শুধু হজ্ব, উমরা ছাড়া">
+            <div class="type-badge">إِفْرَاد</div>
+            <div class="type-body">
+              <div class="row1"><span class="t-title">হজ্বে ইফরাদ</span></div>
+              <div class="t-sub">শুধু হজ্ব, উমরা ছাড়া</div>
+            </div>
+            <div class="radio"></div>
+          </div>
+
+          <div class="type-card" data-type="উমরাহ" data-glyph="عُ" data-name="উমরাহ" data-desc="শুধু উমরা পালন">
+            <div class="type-badge">عُمْرَة</div>
+            <div class="type-body">
+              <div class="row1"><span class="t-title">উমরাহ</span><span class="t-tag">যেকোনো সময়</span></div>
+              <div class="t-sub">শুধু উমরা পালন</div>
+            </div>
+            <div class="radio"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+
+  // ---------- Data for the step-by-step guide ----------
+  const categories = [
+    { id:'prep', emoji:'🧴', title:'ইহরামের প্রস্তুতি', sub:'সফরের আগে', items:[
+        { label:'নখ, চুল ও অবাঞ্ছিত পশম পরিষ্কার' },
+        { label:'গোসল করা' },
+        { label:'শরীরে আতর লাগানো' },
+        { label:'ইহরামের কাপড় পরিধান', gender:'male' },
+        { label:'মহিলাদের পোশাক প্রস্তুতি', gender:'female' },
+        { label:'দুই রাকাত ইহরামের নামাজ আদায়' },
+        { label:'মিকাত থেকে ইহরামের নিয়ত করা' },
+        { label:'প্রয়োজনীয় কাগজপত্র ও ওষুধ গুছানো' },
+      ]},
+    { id:'talbiyah', emoji:'🕊️', title:'ইহরাম ও তালবিয়া', sub:'মিকাত থেকে মক্কা পর্যন্ত', items:[
+        { label:'নিয়ত করে তালবিয়া পাঠ শুরু করা' },
+        { label:'বার বার তালবিয়া পাঠ করা' },
+        { label:'ইহরামের নিষিদ্ধ কাজ থেকে বিরত থাকা' },
+        { label:'দোয়া-দরুদ ও ইস্তিগফার করা' },
+      ]},
+    { id:'makkah', emoji:'🕋', title:'মক্কায় প্রবেশ', sub:'হারাম শরীফে প্রবেশের আদব', items:[
+        { label:'ডান পা দিয়ে মসজিদে প্রবেশ করা' },
+        { label:'প্রবেশের দোয়া পড়া' },
+        { label:'কাবা শরীফ দেখে দোয়া করা' },
+        { label:'ইহরাম বাঁধা কাঁধ (ইদতিবা) ঠিক করা', gender:'male' },
+      ]},
+    { id:'tawaf', emoji:'🚶', title:'তাওয়াফ ও সাঈ', sub:'উমরার মূল আমল', items:[
+        { label:'হাজরে আসওয়াদ থেকে তাওয়াফ শুরু' },
+        { label:'সাত চক্করে তাওয়াফ সম্পন্ন করা' },
+        { label:'মাকামে ইব্রাহিমে দুই রাকাত নামাজ' },
+        { label:'জমজমের পানি পান করা' },
+        { label:'সাফা পাহাড় থেকে সাঈ শুরু করা' },
+        { label:'সাত চক্করে সাঈ সম্পন্ন করা' },
+        { label:'চুল ছাঁটা বা মাথা মুণ্ডন করে হালাল হওয়া', gender:'male' },
+        { label:'চুলের অগ্রভাগ কাটা', gender:'female' },
+      ]},
+    { id:'mina', emoji:'⛺', title:'মিনা ও আরাফা', sub:'৮ থেকে ৯ জিলহজ্ব', items:[
+        { label:'৮ জিলহজ্ব ইহরাম বেঁধে মিনায় গমন' },
+        { label:'মিনায় পাঁচ ওয়াক্ত নামাজ আদায়' },
+        { label:'৯ জিলহজ্ব ফজরের পর আরাফায় গমন' },
+        { label:'আরাফার ময়দানে অবস্থান (রুকনে হজ্ব)' },
+        { label:'যোহর ও আসর একসাথে আদায়' },
+        { label:'দোয়া, ইস্তিগফার ও তালবিয়া পাঠ' },
+        { label:'সূর্যাস্তের পর মুযদালিফার উদ্দেশ্যে রওনা' },
+      ]},
+    { id:'jamarat', emoji:'🪨', title:'জামারা ও কুরবানি', sub:'১০ থেকে ১২ জিলহজ্ব', items:[
+        { label:'মুযদালিফায় মাগরিব ও ইশা একসাথে আদায়' },
+        { label:'কংকর সংগ্রহ করা' },
+        { label:'১০ জিলহজ্ব জামারায়ে আকাবায় রামি' },
+        { label:'কুরবানি সম্পন্ন করা' },
+        { label:'মাথা মুণ্ডন বা চুল ছাঁটা', gender:'male' },
+        { label:'ইহরাম খুলে সেলাই করা কাপড় পরিধান' },
+        { label:'তাওয়াফে জিয়ারত সম্পন্ন করা' },
+        { label:'১১-১২ জিলহজ্ব তিন জামারায় রামি' },
+      ]},
+    { id:'farewell', emoji:'🕌', title:'বিদায়ী তাওয়াফ', sub:'মক্কা ত্যাগের আগে', items:[
+        { label:'সর্বশেষ কাজ হিসেবে তাওয়াফে বিদা করা' },
+        { label:'বিদায়ী দোয়া পাঠ করা' },
+      ]},
+  ];
+
+  // Flatten with unique ids
+  let uid = 0;
+  categories.forEach(cat => {
+    cat.items.forEach(it => { it.id = 'item-' + (uid++); it.done = false; });
+  });
+  const totalCount = categories.reduce((s,c)=>s+c.items.length,0);
+  document.getElementById('total-count').textContent = totalCount;
+
+  let activeCat = 'all';
+
+  function updateProgress(){
+    let done = 0;
+    categories.forEach(c => c.items.forEach(it => { if(it.done) done++; }));
+    document.getElementById('done-count').textContent = done;
+    const pct = totalCount ? Math.round((done/totalCount)*100) : 0;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('percent-text').textContent = pct + '%';
+    document.getElementById('remaining-text').textContent = (totalCount - done) + ' টি বাকি';
+
+    // per-category counts
+    categories.forEach(c => {
+      const el = document.getElementById('cprog-' + c.id);
+      if(el){
+        const d = c.items.filter(i=>i.done).length;
+        el.textContent = d + '/' + c.items.length;
+      }
+    });
+  }
+
+  function checkSvg(){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+  }
+
+  function renderGuide(){
+    const body = document.getElementById('guide-body');
+    body.innerHTML = '';
+    const catsToRender = activeCat === 'all' ? categories : categories.filter(c => c.id === activeCat);
+
+    catsToRender.forEach(cat => {
+      const doneInCat = cat.items.filter(i=>i.done).length;
+      const block = document.createElement('div');
+      block.className = 'category-block';
+      block.innerHTML = `
+        <div class="category-head">
+          <div class="cemoji">${cat.emoji}</div>
+          <div>
+            <div class="ctitle">${cat.title}</div>
+            <div class="csub">${cat.sub}</div>
+          </div>
+          <div class="cprog" id="cprog-${cat.id}">${doneInCat}/${cat.items.length}</div>
+        </div>
+        <div class="item-list"></div>
+      `;
+      const list = block.querySelector('.item-list');
+      cat.items.forEach(it => {
+        const row = document.createElement('div');
+        row.className = 'task-item' + (it.done ? ' done' : '');
+        row.dataset.id = it.id;
+        row.innerHTML = `
+          <div class="checkbox">${checkSvg()}</div>
+          <div class="t-label">${it.label}</div>
+          ${it.gender === 'male' ? '<span class="gender-badge male">পুরুষ</span>' : ''}
+          ${it.gender === 'female' ? '<span class="gender-badge female">মহিলা</span>' : ''}
+        `;
+        row.addEventListener('click', () => {
+          it.done = !it.done;
+          row.classList.toggle('done', it.done);
+          updateProgress();
+        });
+        list.appendChild(row);
+      });
+      body.appendChild(block);
+    });
+  }
+
+  // Tabs
+  document.getElementById('tabs-wrap').addEventListener('click', (e) => {
+    const btn = e.target.closest('.tab-btn');
+    if(!btn) return;
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCat = btn.dataset.cat;
+    renderGuide();
+  });
+
+  // ---------- Screen navigation ----------
+  const screenMain = document.getElementById('screen-main');
+  const screenGuide = document.getElementById('screen-guide');
+  const typeOverlay = document.getElementById('type-overlay');
+
+  function openSheet(){ typeOverlay.classList.add('active'); }
+  function closeSheet(){ typeOverlay.classList.remove('active'); }
+
+  document.getElementById('open-type-sheet').addEventListener('click', openSheet);
+  document.getElementById('open-type-sheet-2').addEventListener('click', openSheet);
+  document.getElementById('close-type-sheet').addEventListener('click', closeSheet);
+  typeOverlay.addEventListener('click', (e) => { if(e.target === typeOverlay) closeSheet(); });
+
+  document.querySelectorAll('.type-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const name = card.dataset.name;
+      const desc = card.dataset.desc;
+      const glyph = card.dataset.glyph;
+
+      document.getElementById('guide-subtitle').textContent = name;
+      document.getElementById('pill-label').textContent = name;
+      document.querySelector('.active-type-banner .name').textContent = name;
+      document.querySelector('.active-type-banner .desc').textContent = desc;
+      document.querySelector('.active-type-banner .glyph').textContent = glyph;
+
+      closeSheet();
+      screenMain.classList.remove('active');
+      screenGuide.classList.add('active');
+      renderGuide();
+      updateProgress();
+    });
+  });
+
+  document.getElementById('guide-back').addEventListener('click', () => {
+    screenGuide.classList.remove('active');
+    screenMain.classList.add('active');
+  });
+
+  // ---------- Live clocks ----------
+  const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+  function toBn(str){
+    return str.replace(/[0-9]/g, d => bnDigits[d]);
+  }
+  function fmtTime(date, offsetHours){
+    const d = new Date(date.getTime() + offsetHours*3600*1000 - date.getTimezoneOffset()*60000);
+    let h = d.getUTCHours();
+    const m = d.getUTCMinutes();
+    const s = d.getUTCSeconds();
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12; if(h === 0) h = 12;
+    const pad = n => n.toString().padStart(2,'0');
+    return toBn(`${pad(h)}:${pad(m)}:${pad(s)}`) + ' ' + ampm;
+  }
+  function tick(){
+    const now = new Date();
+    document.getElementById('dhaka-time').textContent = fmtTime(now, 6);
+    document.getElementById('makkah-time').textContent = fmtTime(now, 3);
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  updateProgress();
+})();
+</script>
+</body>
+</html>
