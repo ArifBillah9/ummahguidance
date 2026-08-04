@@ -109,7 +109,77 @@
   .waqt-bg-scrim{
     position:absolute;
     inset:0;
-    background:linear-gradient(180deg, rgba(8,10,26,0.42) 0%, rgba(8,10,26,0.34) 45%, rgba(8,10,26,0.58) 100%);
+    background:linear-gradient(180deg, rgba(8,10,26,0.16) 0%, rgba(8,10,26,0.06) 45%, rgba(8,10,26,0.30) 100%);
+    pointer-events:none;
+  }
+
+  /* ===== রিয়েল-টাইম আকাশ: সূর্য/চাঁদ/তারা/মেঘ (স্ট্যাটিক ছবির বদলে) ===== */
+  .sky-sun{
+    position:absolute;
+    width:64px; height:64px;
+    border-radius:50%;
+    left:0; top:0;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle, #fff8dd 0%, #ffd873 34%, #ffb347 62%, rgba(255,179,71,0) 72%);
+    box-shadow:0 0 46px 18px rgba(255,196,90,0.55);
+    opacity:0;
+    transition:opacity 1.4s ease;
+    pointer-events:none;
+  }
+  .sky-moon{
+    position:absolute;
+    width:54px; height:54px;
+    left:0; top:0;
+    transform:translate(-50%,-50%);
+    opacity:0;
+    transition:opacity 1.4s ease;
+    filter:drop-shadow(0 0 10px rgba(240,240,255,0.45));
+    pointer-events:none;
+  }
+  .sky-stars{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    transition:opacity 1.4s ease;
+    pointer-events:none;
+  }
+  .sky-stars .star{
+    position:absolute;
+    width:2.4px; height:2.4px;
+    border-radius:50%;
+    background:#fff;
+    animation:starTwinkle 3.2s ease-in-out infinite;
+  }
+  @keyframes starTwinkle{
+    0%,100%{opacity:.25;}
+    50%{opacity:1;}
+  }
+  .sky-cloud{
+    position:absolute;
+    top:14%;
+    width:150px; height:46px;
+    border-radius:50px;
+    background:rgba(255,255,255,0.55);
+    filter:blur(2px);
+    opacity:0;
+    transition:opacity 1.4s ease;
+    animation:cloudDrift linear infinite;
+    pointer-events:none;
+  }
+  .sky-cloud::before, .sky-cloud::after{
+    content:"";
+    position:absolute;
+    background:inherit;
+    border-radius:50%;
+  }
+  .sky-cloud::before{ width:60px; height:60px; top:-26px; left:14px; }
+  .sky-cloud::after{ width:44px; height:44px; top:-18px; left:74px; }
+  .sky-cloud-1{ top:12%; width:130px; height:38px; animation-duration:70s; }
+  .sky-cloud-2{ top:22%; width:100px; height:30px; animation-duration:95s; animation-delay:-30s; }
+  .sky-cloud-3{ top:8%; width:150px; height:42px; animation-duration:120s; animation-delay:-60s; }
+  @keyframes cloudDrift{
+    0%{ transform:translateX(-20%); }
+    100%{ transform:translateX(120%); }
   }
 
   .topbar{
@@ -247,7 +317,6 @@
     gap:9px;
     background:var(--pill-bg);
     padding:5px 13px;
-    border-radius:999px;
     color:var(--ring-dark);
     font-size:11.5px;
     font-weight:600;
@@ -1519,8 +1588,23 @@
 <div class="phone">
 
   <div class="waqt-bg" id="waqtBg" aria-hidden="true">
-    <div class="waqt-bg-layer on" id="waqtBgA"></div>
-    <div class="waqt-bg-layer" id="waqtBgB"></div>
+    <div class="sky-cloud sky-cloud-1" id="skyCloud1"></div>
+    <div class="sky-cloud sky-cloud-2" id="skyCloud2"></div>
+    <div class="sky-cloud sky-cloud-3" id="skyCloud3"></div>
+    <div class="sky-stars" id="skyStars"></div>
+    <div class="sky-moon" id="skyMoon">
+      <svg viewBox="0 0 60 60" width="100%" height="100%">
+        <defs>
+          <radialGradient id="moonGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#eef2ff" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#eef2ff" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle cx="30" cy="30" r="28" fill="url(#moonGlow)"/>
+        <path d="M35 10 A18 18 0 1 0 35 50 A14 14 0 1 1 35 10 Z" fill="#f6f3ea"/>
+      </svg>
+    </div>
+    <div class="sky-sun" id="skySun"></div>
     <div class="waqt-bg-scrim"></div>
   </div>
 
@@ -1837,7 +1921,7 @@
         </div>
         <div class="lbl">কুরআন</div>
       </div>
-      <div class="menu-card">
+      <div class="menu-card" id="booksMenuCard" style="cursor:pointer;">
         <div class="icon-box">
           <img src="assets/books.png" alt="মাসায়েল">
         </div>
@@ -2436,12 +2520,20 @@
 
 </div>
 
-<script>
+<script> 
   (function(){
     var quranCard = document.getElementById('quranMenuCard');
     if(quranCard){
       quranCard.addEventListener('click', function(){
         window.location.href = 'https://ummahguidance-w5us.vercel.app/';
+      });
+    }
+  })();
+  (function(){
+    var booksMenuCard = document.getElementById('booksMenuCard');
+    if(booksMenuCard){
+      booksMenuCard.addEventListener('click', function(){
+        window.location.href = 'https://ummahguidance-75sz.vercel.app/';
       });
     }
   })();
@@ -2589,41 +2681,83 @@
     root.style.setProperty('--pill-bg', 'rgba(15,16,28,0.4)');
   }
 
-  /* ===== ওয়াক্তভিত্তিক ব্যাকগ্রাউন্ড ছবি বদলানো ===== */
-  var WAQT_BG_IMAGES = {
-    fajr:    'https://i.pinimg.com/1200x/47/46/6c/47466c2821ec43b5b038eb386dee6d1d.jpg',
-    zuhr:    'https://i.pinimg.com/1200x/17/26/65/172665b53e01e3fddde947bd75f38c30.jpg',
-    asr:     'https://i.pinimg.com/1200x/62/d2/09/62d209b1eb6e3e0fa511f973dece6502.jpg',
-    maghrib: 'https://i.pinimg.com/736x/f4/4a/4a/f44a4aa08d9630d68f5fbd3f2701f727.jpg',
-    isha:    'https://i.pinimg.com/1200x/bb/44/b7/bb44b726aa56c597818395eef51b8be9.jpg'
-  };
+  /* ===== রিয়েল-টাইম আকাশ (স্ট্যাটিক ছবির বদলে) =====
+     সূর্য সূর্যোদয়-সূর্যাস্তের মধ্যে আসল সময় অনুযায়ী চলে; সূর্যাস্তের
+     পর চাঁদ+তারা ওঠে, পরদিন সূর্যোদয় পর্যন্ত। সূর্যোদয়/সূর্যাস্তের
+     আশেপাশে (গোধূলি) দুটোই আলতোভাবে ক্রস-ফেড হয়ে বাস্তব আকাশের মতো
+     লাগে। SUNRISE ও MAGHRIB_START আগে থেকেই ওপরে ডিফাইন করা আছে। */
 
-  function waqtBgKeyFor(minuteOfDay){
-    var pos = minuteOfDay;
-    if(pos < FAJR_START) pos += DAY;
-    if(pos >= FAJR_START && pos < ZUHR_START) return 'fajr';
-    if(pos >= ZUHR_START && pos < ASR_START) return 'zuhr';
-    if(pos >= ASR_START && pos < MAGHRIB_START) return 'asr';
-    if(pos >= MAGHRIB_START && pos < ISHA_START) return 'maghrib';
-    return 'isha';
+  var skySun    = document.getElementById('skySun');
+  var skyMoon   = document.getElementById('skyMoon');
+  var skyStars  = document.getElementById('skyStars');
+  var skyClouds = [document.getElementById('skyCloud1'), document.getElementById('skyCloud2'), document.getElementById('skyCloud3')];
+
+  // তারা একবারই র‍্যান্ডম পজিশনে বসিয়ে দেওয়া হচ্ছে
+  (function seedStars(){
+    if(!skyStars) return;
+    var n = 46;
+    var html = '';
+    for(var i=0;i<n;i++){
+      var top = (Math.random()*62).toFixed(1);       // ওপরের ৬২% অংশে
+      var left = (Math.random()*100).toFixed(1);
+      var size = (Math.random()*1.6 + 1.2).toFixed(1);
+      var delay = (Math.random()*3.2).toFixed(2);
+      var dur = (2.6 + Math.random()*2.4).toFixed(2);
+      html += '<span class="star" style="top:'+top+'%; left:'+left+'%; width:'+size+'px; height:'+size+'px; animation-delay:'+delay+'s; animation-duration:'+dur+'s;"></span>';
+    }
+    skyStars.innerHTML = html;
+  })();
+
+  // আকাশ জুড়ে বাঁকা পথে (আর্ক) সূর্য/চাঁদের অবস্থান — উদয়/অস্তের সময়
+  // দিগন্তের কাছে, মধ্যাহ্নে সবচেয়ে ওপরে
+  function arcPos(frac){
+    frac = Math.min(Math.max(frac,0),1);
+    var x = 6 + frac*88;                         // ৬%–৯৪% বাম-ডান
+    var y = 60 - 46*Math.sin(frac*Math.PI);       // দিগন্তে ৬০%, চূড়ায় ~১৪%
+    return { x:x, y:y };
   }
 
-  var bgLayers = [document.getElementById('waqtBgA'), document.getElementById('waqtBgB')];
-  var bgActiveIdx = 0;
-  var currentBgKey = null;
+  // দিগন্তের একদম কাছে মসৃণভাবে fade-in/out করার জন্য
+  function smoothEdge(frac, edge){
+    var v = Math.min(frac, 1-frac) / edge;
+    return Math.min(Math.max(v,0),1);
+  }
 
-  function applyWaqtBg(key){
-    if(key === currentBgKey || !bgLayers[0] || !bgLayers[1]) return;
-    var url = WAQT_BG_IMAGES[key];
-    if(!url) return;
-    currentBgKey = key;
-    var nextIdx = 1 - bgActiveIdx;
-    var nextLayer = bgLayers[nextIdx];
-    var curLayer = bgLayers[bgActiveIdx];
-    nextLayer.style.backgroundImage = 'url("' + url + '")';
-    nextLayer.classList.add('on');
-    if(curLayer) curLayer.classList.remove('on');
-    bgActiveIdx = nextIdx;
+  function updateSky(minuteOfDay){
+    var sunriseM = SUNRISE;                 // দিনের শুরু
+    var sunsetM  = MAGHRIB_START;           // দিনের শেষ (সূর্যাস্ত ধরা হচ্ছে মাগরিবের সময়)
+    var dayLen   = sunsetM - sunriseM;
+    var nightLen = (sunriseM + DAY) - sunsetM;
+
+    var pos = minuteOfDay;
+    var isDay = pos >= sunriseM && pos < sunsetM;
+
+    if(isDay){
+      var dFrac = (pos - sunriseM) / dayLen;
+      var p = arcPos(dFrac);
+      var edgeFade = smoothEdge(dFrac, 0.035); // উদয়/অস্তের মুহূর্তে আলতো fade
+      if(skySun){
+        skySun.style.left = p.x+'%';
+        skySun.style.top  = p.y+'%';
+        skySun.style.opacity = (0.35 + 0.65*edgeFade).toFixed(2);
+      }
+      if(skyMoon) skyMoon.style.opacity = (1-edgeFade < 0.5 ? (1-edgeFade)*0.4 : 0);
+      if(skyStars) skyStars.style.opacity = 0;
+      skyClouds.forEach(function(c){ if(c) c.style.opacity = (0.5+0.5*edgeFade).toFixed(2); });
+    } else {
+      var pos2 = pos < sunriseM ? pos + DAY : pos; // মধ্যরাত পার হলে
+      var nFrac = (pos2 - sunsetM) / nightLen;
+      var p2 = arcPos(nFrac);
+      var edgeFade2 = smoothEdge(nFrac, 0.035);
+      if(skyMoon){
+        skyMoon.style.left = p2.x+'%';
+        skyMoon.style.top  = p2.y+'%';
+        skyMoon.style.opacity = (0.35 + 0.65*edgeFade2).toFixed(2);
+      }
+      if(skyStars) skyStars.style.opacity = (0.25 + 0.75*edgeFade2).toFixed(2);
+      if(skySun) skySun.style.opacity = 0;
+      skyClouds.forEach(function(c){ if(c) c.style.opacity = (0.18*edgeFade2).toFixed(2); });
+    }
   }
 
   function setActiveRow(rowKey){
@@ -2657,7 +2791,7 @@
 
     // থিম ও লেবেল
     applyTheme(seg.theme);
-    applyWaqtBg(waqtBgKeyFor(minuteOfDay));
+    updateSky(minuteOfDay);
     ringLabel.textContent = seg.label;
 
     // কাউন্টডাউন (বাকি সময়)
