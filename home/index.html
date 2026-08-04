@@ -1933,7 +1933,7 @@
         </div>
         <div class="lbl">হাদীস</div>
       </div>
-      <div class="menu-card">
+      <div class="menu-card" id="articlesMenuCard" style="cursor:pointer;">
         <div class="icon-box">
           <img src="assets/probondho.png" alt="প্রবন্ধ">
         </div>
@@ -2543,6 +2543,15 @@
     if(hadithCard){
       hadithCard.addEventListener('click', function(){
         window.location.href = 'https://ummahguidance-xsz3.vercel.app/';
+      });
+    }
+  })();
+
+   (function(){
+    var articlesMenuCard = document.getElementById('articlesMenuCard');
+    if(articlesMenuCard){
+      articlesMenuCard.addEventListener('click', function(){
+        window.location.href = 'https://ummahguidance-z461.vercel.app/';
       });
     }
   })();
