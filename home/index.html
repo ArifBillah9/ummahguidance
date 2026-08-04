@@ -1951,7 +1951,7 @@
         </div>
         <div class="lbl">বয়ান</div>
       </div>
-      <div class="menu-card">
+      <div class="menu-card" id="quranShikkhaMenuCard" style="cursor:pointer;">
         <div class="icon-box">
           <img src="assets/quran-shikkha.png" alt="কুরআন শিক্ষা">
           <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -2561,6 +2561,15 @@
     if(bayanMenuCard){
       bayanMenuCard.addEventListener('click', function(){
         window.location.href = 'https://ummahguidance-arrl.vercel.app/';
+      });
+    }
+  })();
+
+      (function(){
+    var quranShikkhaMenuCard = document.getElementById('quranShikkhaMenuCard');
+    if(quranShikkhaMenuCard){
+      quranShikkhaMenuCard.addEventListener('click', function(){
+        window.location.href = 'https://ummahguidance-f381.vercel.app/';
       });
     }
   })();
