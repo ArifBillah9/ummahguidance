@@ -212,6 +212,12 @@
     opacity:0.8;
     line-height:1.35;
   }
+  .date-text .bangla{
+    font-size:13px;
+    font-weight:400;
+    opacity:0.8;
+    line-height:1.35;
+  }
   .top-icons{
     display:flex;
     gap:18px;
@@ -298,6 +304,29 @@
     opacity:0;
     transition:opacity 0.8s ease;
   }
+
+  /* ===== প্রথমবার প্রবেশের এনিমেশন: সূর্য/চাঁদ আর্ক বরাবর তার আসল অবস্থানে উঠে আসে ===== */
+  #celestialBody{
+    transition:transform 1.4s cubic-bezier(0.34, 1.2, 0.4, 1);
+  }
+  #celestialBody.arc-entrance{
+    animation:arcEntranceScale 1.4s cubic-bezier(0.34, 1.2, 0.4, 1);
+  }
+  @keyframes arcEntranceScale{
+    0%{ opacity:0; transform-box:fill-box; transform-origin:center; }
+    100%{ opacity:1; }
+  }
+  #sunIcon, #moonIcon{
+    transition:opacity 0.6s ease;
+  }
+  .celestial-glow.glow-entrance{
+    animation:glowPulseIn 1.6s ease-out;
+  }
+  @keyframes glowPulseIn{
+    0%{ opacity:0; transform:scale(0.7); }
+    60%{ opacity:0.7; transform:scale(1.08); }
+    100%{ transform:scale(1); }
+  }
   
   /* Arc path styling */
   .sun-arc-path{
@@ -341,6 +370,16 @@
     fill:var(--ring-dark);
     text-anchor:middle;
     opacity:0.85;
+    font-family:inherit;
+  }
+  
+  /* Small time labels inside arc */
+  .arc-time-label-small{
+    font-size:10px;
+    font-weight:400;
+    fill:var(--ring-dark);
+    text-anchor:middle;
+    opacity:0.65;
     font-family:inherit;
   }
   
@@ -544,10 +583,46 @@
     font-variant-numeric:tabular-nums;
     word-break:break-word;
   }
+  .prayer-time-wrapper{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    flex:1;
+    min-width:0;
+  }
+  .prayer-progress-container{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+  .prayer-progress-bar{
+    width:100%;
+    height:5px;
+    background:var(--ring-track);
+    border-radius:2.5px;
+    overflow:hidden;
+    position:relative;
+    box-shadow:inset 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .prayer-progress-fill{
+    height:100%;
+    background:linear-gradient(90deg, #1f8a5f, #2fa76a);
+    border-radius:2.5px;
+    transition:width 1s linear;
+    position:relative;
+    box-shadow:0 0 6px rgba(31,138,95,0.35);
+  }
+  .prayer-time-remaining{
+    font-size:10px;
+    color:var(--text-mute);
+    font-weight:400;
+    letter-spacing:0.2px;
+  }
   .prayer-right{
     display:flex;
     align-items:center;
-    gap:14px;
+    gap:12px;
     flex-shrink:0;
   }
   .radio{
@@ -1788,8 +1863,9 @@
         <path d="M16 3V6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
       </svg>
       <div class="date-text">
-        <div class="hijri">Saturday, 17 Safar</div>
-        <div class="gregorian">01 August, 17 Shravan</div>
+        <div class="gregorian" id="gregorianDate">01 August 2026</div>
+        <div class="hijri" id="hijriDate">Saturday, 17 Safar 1448</div>
+        <div class="bangla" id="banglaDate">17 Shravan 1433</div>
       </div>
     </div>
     <div class="top-icons">
@@ -1865,8 +1941,18 @@
             </g>
           </g>
           
-          <!-- Time labels -->
-          <text class="arc-time-label" x="180" y="18" font-weight="600" id="midTimeLabel">09:00</text>
+          <!-- Time labels inside the arc -->
+          <!-- সূর্যোদয় লেবেল (Arc এর বাম দিকে) -->
+          <text class="arc-time-label" x="50" y="140" font-weight="600" font-size="12" id="sunriseTimeLabel" text-anchor="middle">05:27</text>
+          
+          <!-- বর্তমান সময় লেবেল (Arc এর শীর্ষে) -->
+          <text class="arc-time-label" x="180" y="25" font-weight="700" font-size="14" id="midTimeLabel" text-anchor="middle">09:00</text>
+          
+          <!-- সূর্যাস্ত লেবেল (Arc এর ডান দিকে) -->
+          <text class="arc-time-label" x="310" y="140" font-weight="600" font-size="12" id="sunsetTimeLabel" text-anchor="middle">18:42</text>
+          
+          <!-- Arc এর নিচে সময় পরিসীমা -->
+          <text class="arc-time-label-small" x="180" y="175" font-weight="400" font-size="11" text-anchor="middle" opacity="0.7">দিনের সময়</text>
         </svg>
         
         <!-- Sunrise indicator -->
@@ -1951,7 +2037,15 @@
         <div class="prayer-name">ফজর</div>
       </div>
       <div class="prayer-right">
-        <div class="prayer-time">০৪:০৪ - ০৫:২৬</div>
+        <div class="prayer-time-wrapper">
+          <div class="prayer-time">০৪:০৪ - ০৫:২৬</div>
+          <div class="prayer-progress-container">
+            <div class="prayer-progress-bar">
+              <div class="prayer-progress-fill" style="width: 0%;" data-waqt="fajr"></div>
+            </div>
+            <div class="prayer-time-remaining" data-remaining="fajr">—</div>
+          </div>
+        </div>
         <div class="radio"></div>
       </div>
     </div>
@@ -1967,7 +2061,15 @@
         <div class="prayer-name">যুহর</div>
       </div>
       <div class="prayer-right">
-        <div class="prayer-time">১২:০৭ - ০৪:৪২</div>
+        <div class="prayer-time-wrapper">
+          <div class="prayer-time">১২:০৭ - ০৪:৪২</div>
+          <div class="prayer-progress-container">
+            <div class="prayer-progress-bar">
+              <div class="prayer-progress-fill" style="width: 0%;" data-waqt="zuhr"></div>
+            </div>
+            <div class="prayer-time-remaining" data-remaining="zuhr">—</div>
+          </div>
+        </div>
         <div class="radio"></div>
       </div>
     </div>
@@ -1983,7 +2085,15 @@
         <div class="prayer-name">আসর</div>
       </div>
       <div class="prayer-right">
-        <div class="prayer-time">০৪:৪৩ - ০৬:৪১</div>
+        <div class="prayer-time-wrapper">
+          <div class="prayer-time">০৪:৪৩ - ০৬:৪১</div>
+          <div class="prayer-progress-container">
+            <div class="prayer-progress-bar">
+              <div class="prayer-progress-fill" style="width: 0%;" data-waqt="asr"></div>
+            </div>
+            <div class="prayer-time-remaining" data-remaining="asr">—</div>
+          </div>
+        </div>
         <div class="radio"></div>
       </div>
     </div>
@@ -1999,7 +2109,15 @@
         <div class="prayer-name">মাগরিব</div>
       </div>
       <div class="prayer-right">
-        <div class="prayer-time">০৬:৪২ - ০৮:০৪</div>
+        <div class="prayer-time-wrapper">
+          <div class="prayer-time">০৬:৪২ - ০৮:০৪</div>
+          <div class="prayer-progress-container">
+            <div class="prayer-progress-bar">
+              <div class="prayer-progress-fill" style="width: 0%;" data-waqt="maghrib"></div>
+            </div>
+            <div class="prayer-time-remaining" data-remaining="maghrib">—</div>
+          </div>
+        </div>
         <div class="radio"></div>
       </div>
     </div>
@@ -2016,7 +2134,15 @@
         <div class="prayer-name">ইশা</div>
       </div>
       <div class="prayer-right">
-        <div class="prayer-time">০৮:০৫ - ০৪:০৫</div>
+        <div class="prayer-time-wrapper">
+          <div class="prayer-time">০৮:০৫ - ০৪:০৫</div>
+          <div class="prayer-progress-container">
+            <div class="prayer-progress-bar">
+              <div class="prayer-progress-fill" style="width: 0%;" data-waqt="isha"></div>
+            </div>
+            <div class="prayer-time-remaining" data-remaining="isha">—</div>
+          </div>
+        </div>
         <div class="radio"></div>
       </div>
     </div>
@@ -2042,21 +2168,26 @@
         ========================================================= */
         var AD_BANNERS = [
           {
-            img:  'assets/ad-sadaqah.jpg',
+            img:  'assets/ad-sadaqah.png',
             alt:  'সদকা বিজ্ঞাপন',
             href: '#',
             startDate: '',
             endDate:   ''
-          }
-          /* নতুন ব্যানার যোগ করতে এখানে আরেকটি অবজেক্ট বসান, যেমন:
-          {
-            img:  'assets/ad-ramadan.jpg',
-            alt:  'রমজান বিজ্ঞাপন',
-            href: 'https://example.com/ramadan-offer',
-            startDate: '2027-03-01',
-            endDate:   '2027-03-30'
           },
-          */
+          {
+            img:  'assets/ad-sadaqah01.png',
+            alt:  'রমজান বিজ্ঞাপন',
+            href: 'https://example.com/ramadan',
+            startDate: '',
+            endDate:   ''
+          },
+          {
+            img:  'assets/ad-sadaqah.png',
+            alt:  'বিশেষ অফার',
+            href: '#',
+            startDate: '',
+            endDate:   ''
+          }
         ];
 
         var AD_INTERVAL_MS = 4000; /* প্রতিটি স্লাইড কতক্ষণ দেখাবে */
@@ -3915,6 +4046,71 @@
     return (h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m + ' ' + ampm;
   }
   
+  // === আর্কের বাস্তব বাঁকা পথ অনুযায়ী অবস্থান গণনা ===
+  // sun-arc-path: M 30 160 Q 180 30, 330 160  (কোয়াড্রেটিক বেজিয়ার কার্ভ)
+  var ARC_P0 = {x:30, y:160};
+  var ARC_CTRL = {x:180, y:30};
+  var ARC_P2 = {x:330, y:160};
+
+  function getPointOnArc(t){
+    // t: 0 থেকে 1 (কোয়াড্রেটিক বেজিয়ার সূত্র)
+    var oneMinusT = 1 - t;
+    var x = oneMinusT*oneMinusT*ARC_P0.x + 2*oneMinusT*t*ARC_CTRL.x + t*t*ARC_P2.x;
+    var y = oneMinusT*oneMinusT*ARC_P0.y + 2*oneMinusT*t*ARC_CTRL.y + t*t*ARC_P2.y;
+    return {x:x, y:y};
+  }
+
+  // প্রথমবার প্রবেশের এনিমেশন: আর্কের বাঁকা পথ ধরেই শুরুর বিন্দু থেকে আসল অবস্থানে চলবে
+  var isFirstLoad = true;
+  var entranceAnimFrame = null;
+
+  function playEntranceAnimation(finalPercent){
+    if(!celestialBody) return;
+    if(entranceAnimFrame) cancelAnimationFrame(entranceAnimFrame);
+
+    var startPoint = getPointOnArc(0);
+    celestialBody.setAttribute('transform', 'translate(' + startPoint.x + ', ' + startPoint.y + ') scale(0.4)');
+    celestialBody.style.opacity = '0';
+    if(celestialGlow) celestialGlow.style.opacity = '0';
+
+    var duration = 1600; // ms
+    var startTime = null;
+
+    function easeOutBack(x){
+      var c1 = 1.4, c3 = c1 + 1;
+      return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
+    }
+
+    function step(timestamp){
+      if(startTime === null) startTime = timestamp;
+      var elapsed = timestamp - startTime;
+      var rawProgress = Math.min(elapsed / duration, 1);
+      var eased = easeOutBack(rawProgress);
+
+      // আর্কের বাঁকা পথ ধরেই t=0 থেকে t=finalPercent পর্যন্ত এগিয়ে যান
+      var currentT = eased * finalPercent;
+      var pt = getPointOnArc(Math.max(0, Math.min(1, currentT)));
+      var scale = 0.4 + Math.min(rawProgress / 0.5, 1) * 0.6;
+
+      celestialBody.setAttribute('transform', 'translate(' + pt.x + ', ' + pt.y + ') scale(' + scale + ')');
+      celestialBody.style.opacity = Math.min(rawProgress / 0.3, 1).toString();
+
+      if(rawProgress < 1){
+        entranceAnimFrame = requestAnimationFrame(step);
+      } else {
+        var finalPt = getPointOnArc(finalPercent);
+        celestialBody.setAttribute('transform', 'translate(' + finalPt.x + ', ' + finalPt.y + ') scale(1)');
+        celestialBody.style.opacity = '1';
+        if(celestialGlow) celestialGlow.classList.add('glow-entrance');
+        setTimeout(function(){
+          if(celestialGlow) celestialGlow.classList.remove('glow-entrance');
+        }, 900);
+      }
+    }
+
+    entranceAnimFrame = requestAnimationFrame(step);
+  }
+
   // সূর্য/চাঁদ অবস্থান আপডেট করুন
   function updateCelestialBody(){
     var currentMin = getCurrentMinutes();
@@ -3925,11 +4121,14 @@
       sunIcon.style.opacity = '1';
       moonIcon.style.opacity = '0';
       
-      // সূর্যের অবস্থান গণনা করুন (30 থেকে 330 ডিগ্রি, arc path অনুযায়ী)
-      var xPos = 30 + posPercent * 300;
-      var yPos = 160 - Math.sin(posPercent * Math.PI) * 130;
+      // সূর্যের অবস্থান arc path অনুযায়ী গণনা করুন (বাঁকা লাইন অনুসরণ করে)
+      var arcPoint = getPointOnArc(posPercent);
       
-      celestialBody.setAttribute('transform', 'translate(' + xPos + ', ' + yPos + ')');
+      if(isFirstLoad){
+        playEntranceAnimation(posPercent);
+      } else {
+        celestialBody.setAttribute('transform', 'translate(' + arcPoint.x + ', ' + arcPoint.y + ')');
+      }
       
       // গ্লো ইফেক্ট আপডেট করুন
       updateGlowEffect(posPercent, true);
@@ -3939,7 +4138,7 @@
       sunIcon.style.opacity = '0';
       moonIcon.style.opacity = '1';
       
-      // চাঁদের অবস্থান (সূর্যের মতোই arc অনুসরণ করে)
+      // চাঁদের অবস্থান (arc path অনুসরণ করে)
       var moonPhase = getMoonPhase();
       
       // রাত সময় সামঞ্জস্য করুন
@@ -3950,10 +4149,14 @@
         nightPercent = (24*60 - SUNSET_TIME + currentMin) / (24*60 - SUNSET_TIME + SUNRISE_TIME);
       }
       
-      var xPos = 30 + nightPercent * 300;
-      var yPos = 160 - Math.sin(nightPercent * Math.PI) * 130;
+      // চাঁদের অবস্থান arc path অনুযায়ী গণনা করুন (বাঁকা লাইন অনুসরণ করে)
+      var arcPoint = getPointOnArc(nightPercent);
       
-      celestialBody.setAttribute('transform', 'translate(' + xPos + ', ' + yPos + ')');
+      if(isFirstLoad){
+        playEntranceAnimation(nightPercent);
+      } else {
+        celestialBody.setAttribute('transform', 'translate(' + arcPoint.x + ', ' + arcPoint.y + ')');
+      }
       
       // চাঁদের ফেজ ঘূর্ণন
       moonIcon.style.transform = 'rotateZ(' + (moonPhase * 360) + 'deg)';
@@ -3989,9 +4192,230 @@
   
   // প্রাথমিক আপডেট
   updateCelestialBody();
+  isFirstLoad = false;
   
   // প্রতি সেকেন্ডে আপডেট করুন (মসৃণ গতির জন্য)
   setInterval(updateCelestialBody, 1000);
+})();
+</script>
+
+<!-- ইংরেজি, আরবি (হিজরি) ও বাংলা তারিখ গণনা এবং প্রদর্শন -->
+<script>
+(function(){
+  var gregorianEl = document.getElementById('gregorianDate');
+  var hijriEl = document.getElementById('hijriDate');
+  var banglaEl = document.getElementById('banglaDate');
+
+  var gregWeekdays = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var gregMonths = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  var hijriMonths = ['Muharram','Safar','Rabi al-Awwal','Rabi al-Thani','Jumada al-Awwal','Jumada al-Thani','Rajab','Shaban','Ramadan','Shawwal','Dhu al-Qadah','Dhu al-Hijjah'];
+
+  var banglaMonths = ['বৈশাখ','জ্যৈষ্ঠ','আষাঢ়','শ্রাবণ','ভাদ্র','আশ্বিন','কার্তিক','অগ্রহায়ণ','পৌষ','মাঘ','ফাল্গুন','চৈত্র'];
+  var banglaDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+
+  function toBanglaNumber(n){
+    return String(n).split('').map(function(d){
+      return /[0-9]/.test(d) ? banglaDigits[parseInt(d,10)] : d;
+    }).join('');
+  }
+
+  function formatGregorian(date){
+    var weekday = gregWeekdays[date.getDay()];
+    var day = date.getDate();
+    var month = gregMonths[date.getMonth()];
+    var year = date.getFullYear();
+    return weekday + ', ' + day + ' ' + month + ' ' + year;
+  }
+
+  function getHijriParts(date){
+    try{
+      var fmt = new Intl.DateTimeFormat('en-TN-u-ca-islamic', {day:'numeric', month:'numeric', year:'numeric'});
+      var parts = fmt.formatToParts(date);
+      var day, month, year;
+      parts.forEach(function(p){
+        if(p.type === 'day') day = parseInt(p.value, 10);
+        if(p.type === 'month') month = parseInt(p.value, 10);
+        if(p.type === 'year') year = parseInt(p.value, 10);
+      });
+      if(day && month && year){
+        return {day: day, month: hijriMonths[month-1], year: year};
+      }
+    }catch(e){}
+    return null;
+  }
+
+  function formatHijri(date){
+    var weekday = gregWeekdays[date.getDay()];
+    var h = getHijriParts(date);
+    if(!h) return weekday + ', —';
+    return weekday + ', ' + h.day + ' ' + h.month + ' ' + h.year;
+  }
+
+  function getBanglaDate(date){
+    var d = new Date(date);
+    var y = d.getFullYear();
+    var m = d.getMonth();
+    var day = d.getDate();
+
+    function isGregLeap(yr){
+      return (yr % 4 === 0 && yr % 100 !== 0) || (yr % 400 === 0);
+    }
+
+    var bengaliYearStartGregYear = (m < 3 || (m === 3 && day < 14)) ? y - 1 : y;
+    var poilaBoishakh = new Date(bengaliYearStartGregYear, 3, isGregLeap(bengaliYearStartGregYear + 1) ? 13 : 14);
+
+    var diffMs = d - poilaBoishakh;
+    var dayOfBanglaYear = Math.floor(diffMs / (1000*60*60*24));
+
+    if(dayOfBanglaYear < 0){
+      poilaBoishakh = new Date(bengaliYearStartGregYear - 1, 3, 14);
+      dayOfBanglaYear = Math.floor((d - poilaBoishakh) / (1000*60*60*24));
+    }
+
+    var banglaYear = bengaliYearStartGregYear - 593;
+
+    var nextGregYear = bengaliYearStartGregYear + 1;
+    var chaitroLength = isGregLeap(nextGregYear) ? 31 : 30;
+    var monthLengths = [31,31,31,31,31,30,30,30,30,30,30,chaitroLength];
+
+    var remaining = dayOfBanglaYear;
+    var monthIndex = 0;
+    for(var i=0;i<12;i++){
+      if(remaining < monthLengths[i]){
+        monthIndex = i;
+        break;
+      }
+      remaining -= monthLengths[i];
+    }
+    var banglaDay = remaining + 1;
+
+    return {day: banglaDay, month: banglaMonths[monthIndex], year: banglaYear};
+  }
+
+  function formatBangla(date){
+    var b = getBanglaDate(date);
+    return toBanglaNumber(b.day) + ' ' + b.month + ' ' + toBanglaNumber(b.year);
+  }
+
+  function updateAllDates(){
+    var now = new Date();
+    if(gregorianEl) gregorianEl.textContent = formatGregorian(now);
+    if(hijriEl) hijriEl.textContent = formatHijri(now);
+    if(banglaEl) banglaEl.textContent = formatBangla(now);
+  }
+
+  updateAllDates();
+  setInterval(updateAllDates, 60000);
+})();
+</script>
+
+<!-- প্রার্থনার সময়ের অগ্রগতি বার আপডেট করার স্ক্রিপ্ট -->
+<script>
+(function(){
+  // নামাজের সময় ডেটা (বাংলা সংখ্যা থেকে সংখ্যায় রূপান্তরিত)
+  var banglaDigits = {'०': '0', '१': '1', '२': '2', '३': '3', '४': '4', '५': '5', '६': '6', '७': '7', '८': '8', '९': '9'};
+  
+  function convertBanglaTime(timeStr) {
+    // "०४:०४ - ०५:२६" এর মতো বাংলা সংখ্যা থেকে সাধারণ সংখ্যায় রূপান্তরিত করুন
+    var converted = timeStr.split('').map(function(char) {
+      return banglaDigits[char] || char;
+    }).join('');
+    return converted;
+  }
+
+  function timeToMinutes(timeStr) {
+    // "04:04" থেকে মিনিট (সকাল থেকে সময়েরদ্বয় * 60 + মিনিট) রূপান্তরিত করুন
+    var parts = timeStr.trim().split(':');
+    if (parts.length !== 2) return 0;
+    return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+  }
+
+  function getCurrentMinutes() {
+    // বর্তমান সময় মিনিটে রূপান্তরিত করুন (রাত ০:০ থেকে)
+    var now = new Date();
+    return now.getHours() * 60 + now.getMinutes();
+  }
+
+  function updateProgressBars() {
+    var now = new Date();
+    var currentMinutes = getCurrentMinutes();
+    
+    // প্রার্থনা সময় ডেটা
+    var prayerTimes = {
+      'fajr': { start: 4 * 60 + 4, end: 5 * 60 + 26 },     // 04:04 - 05:26
+      'zuhr': { start: 12 * 60 + 7, end: 16 * 60 + 42 },   // 12:07 - 16:42
+      'asr': { start: 16 * 60 + 43, end: 18 * 60 + 41 },   // 16:43 - 18:41
+      'maghrib': { start: 18 * 60 + 42, end: 20 * 60 + 4 }, // 18:42 - 20:04
+      'isha': { start: 20 * 60 + 5, end: 4 * 60 + 5 }      // 20:05 - 04:05 (পরের দিন)
+    };
+
+    // প্রতিটি নামাজের জন্য অগ্রগতি আপডেট করুন
+    Object.keys(prayerTimes).forEach(function(waqtName) {
+      var time = prayerTimes[waqtName];
+      var startTime = time.start;
+      var endTime = time.end;
+      
+      // ইশা নামাজের জন্য বিশেষ পরিচালনা (পরের দিনে শেষ হয়)
+      if (waqtName === 'isha' && endTime < startTime) {
+        endTime += 24 * 60;
+        if (currentMinutes < startTime) {
+          currentMinutes += 24 * 60;
+        }
+      }
+      
+      var duration = endTime - startTime;
+      var elapsed = Math.max(0, currentMinutes - startTime);
+      var remaining = Math.max(0, endTime - currentMinutes);
+      
+      var progress = 0;
+      if (duration > 0) {
+        progress = Math.min(100, (elapsed / duration) * 100);
+      }
+      
+      // প্রগতি বার আপডেট করুন
+      var fillElement = document.querySelector('.prayer-progress-fill[data-waqt="' + waqtName + '"]');
+      if (fillElement) {
+        fillElement.style.width = progress + '%';
+      }
+      
+      // বাকি সময় আপডেট করুন
+      var remainingElement = document.querySelector('.prayer-time-remaining[data-remaining="' + waqtName + '"]');
+      if (remainingElement) {
+        if (remaining <= 0 && elapsed <= duration) {
+          remainingElement.textContent = 'এখন পড়ুন';
+          remainingElement.style.color = '#1f8a5f';
+          remainingElement.style.fontWeight = '500';
+        } else if (remaining > 0) {
+          var hours = Math.floor(remaining / 60);
+          var minutes = remaining % 60;
+          var timeText = '';
+          
+          if (hours > 0) {
+            timeText = hours + ' ঘন্টা ' + minutes + ' মিনিট বাকি';
+          } else {
+            timeText = minutes + ' মিনিট বাকি';
+          }
+          
+          remainingElement.textContent = timeText;
+          remainingElement.style.color = '';
+          remainingElement.style.fontWeight = '';
+        } else {
+          remainingElement.textContent = 'শেষ হয়েছে';
+          remainingElement.style.color = '#8b909a';
+        }
+      }
+    });
+  }
+  
+  // প্রাথমিক আপডেট
+  updateProgressBars();
+  
+  // প্রতি মিনিটে আপডেট করুন
+  setInterval(updateProgressBars, 60000);
+  
+  // প্রতি সেকেন্ডেও দ্রুত আপডেটের জন্য (মসৃণতার জন্য)
+  setInterval(updateProgressBars, 1000);
 })();
 </script>
 
