@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>ডিজিটাল তাসবিহ কাউন্টার</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#2c2f37;
+    --bg-1:#33363f;
+    --bg-2:#3c3f49;
+    --panel:#40434e;
+    --line:#4b4f5b;
+    --text-hi:#f2f3f5;
+    --text-lo:#c7cad2;
+    --text-dim:#9aa0ac;
+    --accent:#3fa9dc;
+    --accent-2:#57c8e6;
+    --accent-glow:rgba(87,200,230,.55);
+    --danger:#e2685f;
+    --safe-top:env(safe-area-inset-top,0px);
+    --safe-bottom:env(safe-area-inset-bottom,0px);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{
+    margin:0; padding:0; height:100%;
+    background:radial-gradient(120% 90% at 50% -10%, var(--bg-1) 0%, var(--bg-0) 60%);
+    color:var(--text-hi);
+    font-family:'Noto Sans Bengali','Noto Naskh Arabic',sans-serif;
+    overscroll-behavior:none;
+    user-select:none;
+    -webkit-user-select:none;
+  }
+  .app{
+    min-height:100vh;
+    min-height:100dvh;
+    max-width:480px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    padding:calc(14px + var(--safe-top)) 18px calc(18px + var(--safe-bottom));
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:18px;
+  }
+  .icon-btn{
+    width:42px; height:42px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:var(--text-hi);
+    cursor:pointer;
+  }
+  .icon-btn:active{ transform:scale(.92); }
+  .app-title{
+    font-size:16px; font-weight:600; color:var(--text-lo); letter-spacing:.3px;
+  }
+  .spacer{ width:42px; }
+
+  /* ---------- Kalima card ---------- */
+  .kalima-card{
+    background:linear-gradient(160deg, #4bb1e0, #2f8dc4);
+    border-radius:26px;
+    padding:22px 18px;
+    box-shadow:0 10px 24px rgba(47,141,196,.35), inset 0 1px 0 rgba(255,255,255,.25);
+    text-align:center;
+    cursor:pointer;
+  }
+  .kalima-card .arabic{
+    font-family:'Noto Naskh Arabic', serif;
+    font-size:clamp(20px, 6.4vw, 30px);
+    line-height:1.7;
+    color:#fff;
+    direction:rtl;
+    font-weight:700;
+    text-shadow:0 1px 2px rgba(0,0,0,.15);
+  }
+  .translation{
+    text-align:center;
+    color:var(--text-lo);
+    font-size:14px;
+    line-height:1.8;
+    margin:14px 4px 20px;
+  }
+
+  /* ---------- Control row ---------- */
+  .controls-row{
+    display:flex; justify-content:space-between;
+    max-width:340px; margin:0 auto 26px;
+    width:100%;
+  }
+  .circle-btn{
+    width:58px; height:58px; border-radius:50%;
+    background:var(--panel);
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--text-hi);
+    box-shadow:0 4px 10px rgba(0,0,0,.25);
+    cursor:pointer;
+  }
+  .circle-btn svg{ width:24px; height:24px; }
+  .circle-btn:active{ transform:scale(.92); }
+  .circle-btn.muted{ color:var(--text-dim); }
+  .circle-btn.on{ color:var(--accent-2); border-color:var(--accent); }
+
+  /* ---------- Counter ---------- */
+  .counter-wrap{
+    position:relative;
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:280px;
+    margin-top:10px;
+  }
+  .progress-ring-wrap{
+    position:relative;
+    width:min(78vw, 320px);
+    height:min(78vw, 320px);
+  }
+  .progress-ring-wrap svg{
+    width:100%; height:100%;
+    transform:rotate(-90deg);
+    filter:drop-shadow(0 0 6px rgba(0,0,0,.25));
+  }
+  .progress-ring-wrap svg .track{
+    fill:none; stroke:var(--bg-2); stroke-width:10;
+  }
+  .progress-ring-wrap svg .bar{
+    fill:none; stroke:url(#grad); stroke-width:10;
+    stroke-linecap:round;
+    transition:stroke-dashoffset .25s ease;
+  }
+  .dot{
+    position:absolute;
+    top:6px; left:50%;
+    width:20px; height:20px;
+    margin-left:-10px;
+    border-radius:50%;
+    background:var(--accent-2);
+    box-shadow:0 0 14px 4px var(--accent-glow);
+    transition:transform .25s ease;
+    transform-origin:50% 154px;
+  }
+  .counter-circle{
+    position:absolute;
+    inset:16px;
+    border-radius:50%;
+    border:none;
+    background:radial-gradient(120% 120% at 30% 20%, var(--panel) 0%, var(--bg-1) 70%);
+    box-shadow:
+      inset 0 2px 4px rgba(255,255,255,.06),
+      inset 0 -10px 20px rgba(0,0,0,.35),
+      0 12px 30px rgba(0,0,0,.35);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    color:var(--text-hi);
+  }
+  .counter-circle:active{ transform:scale(.97); }
+  #countDisplay{
+    font-family:'Share Tech Mono', monospace;
+    font-size:clamp(56px, 18vw, 84px);
+    letter-spacing:2px;
+    color:#fff;
+    text-shadow:0 0 18px rgba(255,255,255,.18);
+  }
+
+  .stats-row{
+    display:flex; justify-content:space-between;
+    max-width:320px; margin:22px auto 4px;
+    width:100%;
+    font-size:13px;
+    color:var(--text-dim);
+  }
+  .stats-row b{ color:var(--text-lo); font-weight:600; }
+
+  .hint{
+    text-align:center;
+    color:var(--text-dim);
+    font-size:12px;
+    margin-top:10px;
+  }
+
+  /* ---------- Modal ---------- */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(10,11,14,.55);
+    backdrop-filter:blur(2px);
+    display:flex; align-items:flex-end; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .2s ease;
+    z-index:20;
+  }
+  .overlay.open{ opacity:1; pointer-events:auto; }
+  .sheet{
+    width:100%; max-width:480px;
+    background:var(--bg-1);
+    border:1px solid var(--line);
+    border-bottom:none;
+    border-radius:22px 22px 0 0;
+    padding:18px 20px calc(22px + var(--safe-bottom));
+    transform:translateY(16px);
+    transition:transform .2s ease;
+    max-height:78vh;
+    overflow-y:auto;
+  }
+  .overlay.open .sheet{ transform:translateY(0); }
+  .sheet h3{
+    margin:2px 0 16px;
+    font-size:16px; color:var(--text-hi);
+  }
+  .field{ margin-bottom:14px; }
+  .field label{ display:block; font-size:12px; color:var(--text-dim); margin-bottom:6px; }
+  .field input{
+    width:100%;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px 14px;
+    color:var(--text-hi);
+    font-size:15px;
+    font-family:inherit;
+  }
+  .field input[dir="rtl"]{ font-family:'Noto Naskh Arabic',serif; text-align:right; }
+  .row-btns{ display:flex; gap:10px; margin-top:6px; }
+  .btn{
+    flex:1;
+    padding:13px;
+    border-radius:14px;
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:var(--text-hi);
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    text-align:center;
+  }
+  .btn.primary{
+    background:linear-gradient(160deg, #4bb1e0, #2f8dc4);
+    border-color:transparent;
+    color:#fff;
+  }
+  .btn.danger{ color:var(--danger); border-color:rgba(226,104,95,.4); }
+  .btn:active{ transform:scale(.97); }
+
+  .list-item{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 14px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    margin-bottom:10px;
+  }
+  .list-item .li-text{ flex:1; min-width:0; margin-right:10px; }
+  .list-item .li-arabic{
+    font-family:'Noto Naskh Arabic',serif; direction:rtl;
+    font-size:16px; color:var(--text-hi);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .list-item .li-count{ font-size:12px; color:var(--text-dim); margin-top:3px; }
+  .list-item.active{ border-color:var(--accent); }
+  .li-del{
+    width:32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--text-dim); background:transparent; border:none;
+  }
+
+  .toast{
+    position:fixed;
+    left:50%; bottom:calc(30px + var(--safe-bottom));
+    transform:translate(-50%, 20px);
+    background:var(--panel);
+    border:1px solid var(--line);
+    color:var(--text-hi);
+    padding:10px 18px;
+    border-radius:30px;
+    font-size:13px;
+    opacity:0;
+    transition:all .25s ease;
+    z-index:30;
+    pointer-events:none;
+  }
+  .toast.show{ opacity:1; transform:translate(-50%, 0); }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <button class="icon-btn" id="homeBtn" aria-label="তালিকা">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+        <path d="M3 11l9-8 9 8"></path><path d="M5 10v10h14V10"></path>
+      </svg>
+    </button>
+    <div class="app-title">তাসবিহ কাউন্টার</div>
+    <div class="spacer"></div>
+  </header>
+
+  <div class="kalima-card" id="kalimaCard">
+    <div class="arabic" id="arabicText" dir="rtl"></div>
+  </div>
+  <p class="translation" id="translationText"></p>
+
+  <div class="controls-row">
+    <button class="circle-btn" id="settingsBtn" aria-label="সেটিংস">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 11-4 0v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 110-4h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 114 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 110 4h-.09a1.65 1.65 0 00-1.51 1z"></path></svg>
+    </button>
+    <button class="circle-btn" id="resetBtn" aria-label="রিসেট">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 102.13-9.36L1 10"></path></svg>
+    </button>
+    <button class="circle-btn on" id="soundBtn" aria-label="সাউন্ড">
+      <svg id="soundIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07"></path><path d="M19.07 4.93a10 10 0 010 14.14"></path></svg>
+    </button>
+    <button class="circle-btn" id="addBtn" aria-label="নতুন যোগ করুন">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    </button>
+  </div>
+
+  <div class="counter-wrap">
+    <div class="progress-ring-wrap">
+      <svg viewBox="0 0 320 320">
+        <defs>
+          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#7de8f0"/>
+            <stop offset="100%" stop-color="#3fa9dc"/>
+          </linearGradient>
+        </defs>
+        <circle class="track" cx="160" cy="160" r="150"></circle>
+        <circle class="bar" id="progressBar" cx="160" cy="160" r="150"></circle>
+      </svg>
+      <div class="dot" id="progressDot"></div>
+      <button class="counter-circle" id="counterCircle" aria-label="তাসবিহ গণনা">
+        <span id="countDisplay">0</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div>রাউন্ড সম্পন্ন: <b id="roundsDisplay">0</b></div>
+    <div>লক্ষ্য: <b id="targetDisplay">33</b></div>
+  </div>
+  <p class="hint">গণনা করতে বৃত্তে স্পর্শ করুন</p>
+</div>
+
+<!-- Settings sheet -->
+<div class="overlay" id="settingsOverlay">
+  <div class="sheet">
+    <h3>সেটিংস</h3>
+    <div class="field">
+      <label>লক্ষ্য সংখ্যা (এক রাউন্ড)</label>
+      <input type="number" id="targetInput" min="1" inputmode="numeric">
+    </div>
+    <div class="field">
+      <label>আরবি বাক্য</label>
+      <input type="text" id="arabicInput" dir="rtl">
+    </div>
+    <div class="field">
+      <label>অনুবাদ</label>
+      <input type="text" id="translationInput">
+    </div>
+    <div class="row-btns">
+      <button class="btn" id="settingsCancel">বাতিল</button>
+      <button class="btn primary" id="settingsSave">সংরক্ষণ করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add new tasbih sheet -->
+<div class="overlay" id="addOverlay">
+  <div class="sheet">
+    <h3>নতুন তাসবিহ যোগ করুন</h3>
+    <div class="field">
+      <label>আরবি বাক্য</label>
+      <input type="text" id="newArabic" dir="rtl" placeholder="سُبْحَانَ اللّٰه">
+    </div>
+    <div class="field">
+      <label>অনুবাদ</label>
+      <input type="text" id="newTranslation" placeholder="আল্লাহ পবিত্র">
+    </div>
+    <div class="field">
+      <label>লক্ষ্য সংখ্যা</label>
+      <input type="number" id="newTarget" min="1" value="33" inputmode="numeric">
+    </div>
+    <div class="row-btns">
+      <button class="btn" id="addCancel">বাতিল</button>
+      <button class="btn primary" id="addSave">যোগ করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- List / switch sheet -->
+<div class="overlay" id="listOverlay">
+  <div class="sheet">
+    <h3>আপনার তাসবিহসমূহ</h3>
+    <div id="listContainer"></div>
+    <div class="row-btns">
+      <button class="btn" id="listClose">বন্ধ করুন</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  // ---------- In-memory state (no persistent storage) ----------
+  let tasbihs = [
+    {
+      arabic: "لَا إِلَٰهَ إِلَّا اللّٰهُ مُحَمَّدٌ رَسُولُ اللّٰهِ",
+      translation: "আল্লাহ্‌ ভিন্ন ইবাদাত বন্দিগীর উপযুক্ত আর কেহই নাই। হজরত মুহাম্মাদ সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম আল্লাহ্‌ তায়ালার রাসুল",
+      count: 0,
+      target: 33,
+      rounds: 0
+    },
+    { arabic: "سُبْحَانَ اللّٰهِ", translation: "আল্লাহ পবিত্র ও মহান", count: 0, target: 33, rounds: 0 },
+    { arabic: "اَلْحَمْدُ لِلّٰهِ", translation: "সমস্ত প্রশংসা আল্লাহর জন্য", count: 0, target: 33, rounds: 0 },
+    { arabic: "اَللّٰهُ أَكْبَرُ", translation: "আল্লাহ সবচেয়ে মহান", count: 0, target: 34, rounds: 0 }
+  ];
+  let activeIndex = 0;
+  let soundOn = true;
+
+  const $ = (id) => document.getElementById(id);
+  const arabicText = $('arabicText');
+  const translationText = $('translationText');
+  const countDisplay = $('countDisplay');
+  const roundsDisplay = $('roundsDisplay');
+  const targetDisplay = $('targetDisplay');
+  const progressDot = $('progressDot');
+  const progressBar = $('progressBar');
+  const counterCircle = $('counterCircle');
+  const soundIcon = $('soundIcon');
+  const soundBtn = $('soundBtn');
+  const toast = $('toast');
+
+  const RADIUS = 150;
+  const CIRC = 2 * Math.PI * RADIUS;
+  progressBar.style.strokeDasharray = CIRC;
+
+  function showToast(msg){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=> toast.classList.remove('show'), 1400);
+  }
+
+  function current(){ return tasbihs[activeIndex]; }
+
+  function render(){
+    const t = current();
+    arabicText.textContent = t.arabic;
+    translationText.textContent = t.translation;
+    countDisplay.textContent = t.count;
+    roundsDisplay.textContent = t.rounds;
+    targetDisplay.textContent = t.target;
+
+    const progress = Math.min(t.count / t.target, 1);
+    const offset = CIRC * (1 - progress);
+    progressBar.style.strokeDashoffset = offset;
+
+    const angle = progress * 360;
+    progressDot.style.transform = `rotate(${angle}deg)`;
+  }
+
+  // ---------- Simple beep via WebAudio (no external files) ----------
+  let audioCtx;
+  function beep(){
+    if(!soundOn) return;
+    try{
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 720;
+      gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+      osc.connect(gain).connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.12);
+    }catch(e){}
+  }
+
+  function vibrate(ms){
+    if(navigator.vibrate) navigator.vibrate(ms);
+  }
+
+  // ---------- Tap to count ----------
+  function tap(){
+    const t = current();
+    t.count++;
+    beep();
+    vibrate(15);
+    if(t.count >= t.target){
+      t.rounds++;
+      t.count = 0;
+      vibrate([20,40,20]);
+      showToast('এক রাউন্ড সম্পন্ন হয়েছে 🎉');
+    }
+    render();
+  }
+  counterCircle.addEventListener('click', tap);
+
+  // ---------- Sound toggle ----------
+  soundBtn.addEventListener('click', () => {
+    soundOn = !soundOn;
+    soundBtn.classList.toggle('on', soundOn);
+    soundBtn.classList.toggle('muted', !soundOn);
+    if(soundOn){
+      soundIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 010 7.07"></path><path d="M19.07 4.93a10 10 0 010 14.14"></path>';
+    } else {
+      soundIcon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>';
+    }
+    showToast(soundOn ? 'সাউন্ড চালু' : 'সাউন্ড বন্ধ');
+  });
+
+  // ---------- Reset ----------
+  $('resetBtn').addEventListener('click', () => {
+    const t = current();
+    t.count = 0;
+    t.rounds = 0;
+    render();
+    showToast('গণনা রিসেট হয়েছে');
+  });
+
+  // ---------- Settings ----------
+  const settingsOverlay = $('settingsOverlay');
+  $('settingsBtn').addEventListener('click', () => {
+    const t = current();
+    $('targetInput').value = t.target;
+    $('arabicInput').value = t.arabic;
+    $('translationInput').value = t.translation;
+    settingsOverlay.classList.add('open');
+  });
+  $('settingsCancel').addEventListener('click', () => settingsOverlay.classList.remove('open'));
+  settingsOverlay.addEventListener('click', (e) => { if(e.target === settingsOverlay) settingsOverlay.classList.remove('open'); });
+  $('settingsSave').addEventListener('click', () => {
+    const t = current();
+    const newTarget = parseInt($('targetInput').value, 10);
+    t.target = (newTarget && newTarget > 0) ? newTarget : t.target;
+    t.arabic = $('arabicInput').value.trim() || t.arabic;
+    t.translation = $('translationInput').value.trim() || t.translation;
+    settingsOverlay.classList.remove('open');
+    render();
+    showToast('সংরক্ষণ হয়েছে');
+  });
+
+  // ---------- Kalima card tap also opens settings ----------
+  $('kalimaCard').addEventListener('click', () => $('settingsBtn').click());
+
+  // ---------- Add new tasbih ----------
+  const addOverlay = $('addOverlay');
+  $('addBtn').addEventListener('click', () => {
+    $('newArabic').value = '';
+    $('newTranslation').value = '';
+    $('newTarget').value = 33;
+    addOverlay.classList.add('open');
+  });
+  $('addCancel').addEventListener('click', () => addOverlay.classList.remove('open'));
+  addOverlay.addEventListener('click', (e) => { if(e.target === addOverlay) addOverlay.classList.remove('open'); });
+  $('addSave').addEventListener('click', () => {
+    const arabic = $('newArabic').value.trim();
+    const translation = $('newTranslation').value.trim();
+    const target = parseInt($('newTarget').value, 10) || 33;
+    if(!arabic){ showToast('আরবি বাক্য লিখুন'); return; }
+    tasbihs.push({ arabic, translation, count:0, target, rounds:0 });
+    activeIndex = tasbihs.length - 1;
+    addOverlay.classList.remove('open');
+    render();
+    showToast('নতুন তাসবিহ যোগ হয়েছে');
+  });
+
+  // ---------- List / switch ----------
+  const listOverlay = $('listOverlay');
+  const listContainer = $('listContainer');
+  function renderList(){
+    listContainer.innerHTML = '';
+    tasbihs.forEach((t, i) => {
+      const item = document.createElement('div');
+      item.className = 'list-item' + (i === activeIndex ? ' active' : '');
+      item.innerHTML = `
+        <div class="li-text">
+          <div class="li-arabic">${t.arabic}</div>
+          <div class="li-count">${t.count} / ${t.target} &middot; রাউন্ড ${t.rounds}</div>
+        </div>
+        <button class="li-del" data-i="${i}" aria-label="মুছুন">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path><path d="M9 6V4a2 2 0 012-2h2a2 2 0 012 2v2"></path></svg>
+        </button>`;
+      item.querySelector('.li-text').addEventListener('click', () => {
+        activeIndex = i;
+        render();
+        listOverlay.classList.remove('open');
+      });
+      item.querySelector('.li-del').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if(tasbihs.length === 1){ showToast('অন্তত একটি তাসবিহ থাকা প্রয়োজন'); return; }
+        tasbihs.splice(i, 1);
+        if(activeIndex >= tasbihs.length) activeIndex = tasbihs.length - 1;
+        renderList();
+        render();
+      });
+      listContainer.appendChild(item);
+    });
+  }
+  $('homeBtn').addEventListener('click', () => { renderList(); listOverlay.classList.add('open'); });
+  $('listClose').addEventListener('click', () => listOverlay.classList.remove('open'));
+  listOverlay.addEventListener('click', (e) => { if(e.target === listOverlay) listOverlay.classList.remove('open'); });
+
+  // ---------- Prevent double-tap zoom on mobile ----------
+  let lastTouch = 0;
+  document.addEventListener('touchend', (e) => {
+    const now = Date.now();
+    if(now - lastTouch <= 300) e.preventDefault();
+    lastTouch = now;
+  }, { passive:false });
+
+  render();
+})();
+</script>
+</body>
+</html>

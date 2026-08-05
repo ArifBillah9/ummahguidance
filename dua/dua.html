@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>দু'আ দুরুদ</title>
+<style>
+  :root{
+    --green-dark:#123524;
+    --green:#1c4b32;
+    --green-mid:#e8f0ea;
+    --card-bg:#f2f4f2;
+    --card-bg-hover:#e6ebe6;
+    --text-dark:#1a1a1a;
+    --text-muted:#5c6b62;
+    --border:#e0e5e1;
+    --white:#ffffff;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:"Noto Sans Bengali","Hind Siliguri",-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--white);
+    color:var(--text-dark);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .app{
+    max-width:520px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    background:var(--white);
+  }
+
+  /* Header */
+  .header{
+    background:var(--green-dark);
+    color:var(--white);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 16px;
+    position:sticky;
+    top:0;
+    z-index:20;
+  }
+  .icon-btn{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:1.5px solid rgba(255,255,255,0.55);
+    background:transparent;
+    color:var(--white);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .icon-btn:active{ transform:scale(0.92); background:rgba(255,255,255,0.12); }
+  .icon-btn svg{ width:18px; height:18px; }
+  .header h1{
+    font-size:1.15rem;
+    font-weight:700;
+    letter-spacing:.2px;
+  }
+  .refresh-icon.spin{ animation: spin .6s ease; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  /* Search */
+  .search-wrap{
+    padding:14px 16px 10px;
+  }
+  .search-box{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--white);
+    border:1.5px solid var(--border);
+    border-radius:10px;
+    padding:11px 14px;
+    box-shadow:0 1px 2px rgba(0,0,0,0.03);
+  }
+  .search-box svg{ width:18px; height:18px; color:var(--text-muted); flex-shrink:0; }
+  .search-box input{
+    border:none;
+    outline:none;
+    width:100%;
+    font-size:0.98rem;
+    font-family:inherit;
+    color:var(--text-dark);
+    background:transparent;
+  }
+  .search-box input::placeholder{ color:#9aa39c; }
+
+  /* Tabs */
+  .tabs{
+    display:flex;
+    margin:2px 16px 12px;
+    background:var(--white);
+    border:1.5px solid var(--border);
+    border-radius:10px;
+    overflow:hidden;
+  }
+  .tab{
+    flex:1;
+    text-align:center;
+    padding:10px 6px;
+    font-size:0.92rem;
+    font-weight:600;
+    color:var(--text-dark);
+    background:var(--white);
+    border:none;
+    cursor:pointer;
+    font-family:inherit;
+    transition:background .15s ease, color .15s ease;
+    white-space:nowrap;
+  }
+  .tab + .tab{ border-left:1.5px solid var(--border); }
+  .tab.active{
+    background:var(--green-dark);
+    color:var(--white);
+  }
+
+  /* Content */
+  .content{
+    flex:1;
+    padding:0 16px 24px;
+    overflow-y:auto;
+  }
+
+  /* List (সকল view) */
+  .list{ display:flex; flex-direction:column; gap:10px; }
+  .list-item{
+    background:var(--card-bg);
+    border-radius:10px;
+    padding:16px;
+    font-size:0.98rem;
+    font-weight:500;
+    line-height:1.5;
+    color:var(--text-dark);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .list-item:active{ transform:scale(0.99); background:var(--card-bg-hover); }
+  .list-item .bookmark-btn{
+    flex-shrink:0;
+    width:30px;
+    height:30px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:none;
+    border:none;
+    cursor:pointer;
+    color:#b7c1ba;
+  }
+  .list-item .bookmark-btn.active{ color:var(--green-dark); }
+  .list-item .bookmark-btn svg{ width:19px; height:19px; }
+
+  /* Subject (বিষয় অনুযায়ী) view */
+  .subject-list{ display:flex; flex-direction:column; gap:10px; }
+  .subject-item{
+    background:var(--card-bg);
+    border-radius:10px;
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    cursor:pointer;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .subject-item:active{ transform:scale(0.99); background:var(--card-bg-hover); }
+  .subject-item .emoji{ width:34px; height:34px; flex-shrink:0; display:flex; align-items:center; justify-content:center; background:var(--green-mid); border-radius:8px; color:var(--green-dark); }
+  .subject-item .emoji svg{ width:18px; height:18px; }
+  .subject-header h2{ display:flex; align-items:center; gap:8px; }
+  .subject-header .head-icon{ width:26px; height:26px; display:flex; align-items:center; justify-content:center; background:var(--green-mid); border-radius:7px; color:var(--green-dark); flex-shrink:0; }
+  .subject-header .head-icon svg{ width:15px; height:15px; }
+  .subject-item .subj-name{ flex:1; font-size:0.98rem; font-weight:600; }
+  .subject-item .subj-count{ font-size:0.9rem; color:var(--text-muted); font-weight:600; margin-right:2px; }
+  .subject-item .chev{ color:var(--text-muted); flex-shrink:0; }
+  .subject-item .chev svg{ width:16px; height:16px; }
+
+  /* Subject detail (drill-down) */
+  .subject-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:2px 2px 12px;
+  }
+  .back-inline{
+    width:32px; height:32px;
+    border-radius:50%;
+    border:1.5px solid var(--border);
+    background:var(--white);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    flex-shrink:0;
+    color:var(--green-dark);
+  }
+  .back-inline svg{ width:16px; height:16px; }
+  .subject-header h2{ font-size:1.05rem; font-weight:700; color:var(--green-dark); }
+
+  /* Empty state */
+  .empty-state{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:70px 20px;
+    color:var(--text-muted);
+  }
+  .empty-state svg{ width:52px; height:52px; color:#c7d0ca; margin-bottom:14px; }
+  .empty-state p{ font-size:0.95rem; line-height:1.6; }
+  .empty-state .sub{ font-size:0.85rem; color:#9aa39c; margin-top:4px; }
+
+  ::-webkit-scrollbar{ width:0; height:0; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <div class="header">
+    <button class="icon-btn" id="backBtn" aria-label="ফিরে যান">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+    </button>
+    <h1>দু'আ দুরুদ</h1>
+    <button class="icon-btn" id="refreshBtn" aria-label="রিফ্রেশ">
+      <svg class="refresh-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+    </button>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <input type="text" id="searchInput" placeholder="অনুসন্ধান">
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" data-tab="all">সকল</button>
+    <button class="tab" data-tab="subject">বিষয় অনুযায়ী</button>
+    <button class="tab" data-tab="bookmark">বুকমার্ক</button>
+  </div>
+
+  <!-- Content -->
+  <div class="content" id="content"></div>
+
+</div>
+
+<script>
+// ---------- Chapter icons (SVG, no emoji) ----------
+const icons = {
+  heart: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"></path></svg>`,
+  droplet: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5s7 7.6 7 12.3a7 7 0 0 1-14 0c0-4.7 7-12.3 7-12.3z"></path></svg>`,
+  hand: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12V5.5a1.5 1.5 0 0 1 3 0V11"></path><path d="M11 11.5V4a1.5 1.5 0 0 1 3 0v7.5"></path><path d="M14 11.5V5a1.5 1.5 0 0 1 3 0v9"></path><path d="M17 11.5V9a1.5 1.5 0 0 1 3 0v6c0 4-2.5 7-6.5 7h-1c-3 0-4.5-1-6-3l-3-4.5c-.6-1 .3-2.2 1.5-1.8L8 14"></path></svg>`,
+  speaker: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10v4h4l5 4V6l-5 4H4z"></path><path d="M17 8a5 5 0 0 1 0 8"></path><path d="M19.5 5.5a9 9 0 0 1 0 13"></path></svg>`,
+  mosque: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21v-7"></path><path d="M19 21v-7"></path><path d="M5 14a7 7 0 0 1 14 0"></path><path d="M12 14V9"></path><circle cx="12" cy="6" r="1.6"></circle><path d="M9 21v-4a3 3 0 0 1 6 0v4"></path></svg>`,
+  prayer: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="1.6"></circle><path d="M12 6.5v5"></path><path d="M8 9.5h8"></path><path d="M9 21l3-9 3 9"></path><path d="M6 21h12"></path></svg>`
+};
+
+// ---------- Data ----------
+const chapters = [
+  { icon: icons.heart, name:"ঈমান অধ্যায়", items:[
+    "ঈমানের প্রতি ভালোবাসা ও এর প্রতিকার থেকে মুক্তি চাওয়া",
+    "ঈমান কি?",
+    "১. ঈমান আনয়নের দু‘আ, কালিমায়ে তাইয়্যিবাহ পাঠ করা",
+    "২. ঈমান রক্ষার দু‘আ-১",
+    "৩. ঈমান রক্ষার দু‘আ-২",
+    "৪. ঈমান নবায়নের দু‘আ",
+    "৫. দ্বীনের উপর অবিচল থাকার দু‘আ",
+    "৬. হকের উপর অবিচল থাকার দু‘আ",
+    "৭. ঈমান সম্বলিত দু‘আ-১",
+    "৮. ঈমান সম্বলিত দু‘আ-২"
+  ]},
+  { icon: icons.droplet, name:"তাহারাত (পাক-পবিত্রতা) অধ্যায়", items:[
+    "১. টয়লেটে প্রবেশের দু‘আ",
+    "২. টয়লেট থেকে বের হওয়ার দু‘আ",
+    "৩. পবিত্রতা অর্জনের ফযীলত"
+  ]},
+  { icon: icons.hand, name:"উযূ অধ্যায়", items:[
+    "১. উযূর শুরুতে বিসমিল্লাহ পাঠ",
+    "২. উযূ শেষে দু‘আ",
+    "৩. উযূর ফযীলত-১",
+    "৪. উযূর ফযীলত-২",
+    "৫. উযূর সুন্নাত সমূহ",
+    "৬. উযূ ভঙ্গের কারণ"
+  ]},
+  { icon: icons.speaker, name:"আযান-ইকামাত অধ্যায়", items:[
+    "১. আযান শোনার দু‘আ",
+    "২. আযানের পর দু‘আ",
+    "৩. ইকামাতের বিধান"
+  ]},
+  { icon: icons.mosque, name:"মসজিদ অধ্যায়", items:[
+    "১. মসজিদে প্রবেশের দু‘আ",
+    "২. মসজিদ থেকে বের হওয়ার দু‘আ",
+    "৩. মসজিদে যাওয়ার ফযীলত",
+    "৪. মসজিদের আদব"
+  ]},
+  { icon: icons.prayer, name:"নামাযের মধ্যে দু‘আ অধ্যায়", items:[
+    "১. নামাযের নিয়ত",
+    "২. তাকবীরে তাহরীমা",
+    "৩. সানা পাঠ",
+    "৪. রুকুর দু‘আ",
+    "৫. সিজদার দু‘আ",
+    "৬. তাশাহহুদ",
+    "৭. দরূদ শরীফ",
+    "৮. দু‘আয়ে মাসূরা",
+    "৯. সালাম ফেরানো",
+    "১০. সাহু সিজদা",
+    "১১. বিতর নামাযের দু‘আ",
+    "১২. তারাবীহর দু‘আ",
+    "১৩. জানাযার দু‘আ",
+    "১৪. ঈদের নামাযের তাকবীর",
+    "১৫. ইস্তিখারার দু‘আ",
+    "১৬. তাহাজ্জুদের দু‘আ",
+    "১৭. সিজদায়ে তিলাওয়াত",
+    "১৮. নামায শেষের তাসবীহ"
+  ]}
+];
+
+let bookmarks = new Set();
+let currentTab = "all";
+let openSubject = null; // index into chapters, or null
+
+const content = document.getElementById("content");
+const searchInput = document.getElementById("searchInput");
+
+// ---------- Icons ----------
+const chevronSvg = `<span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></span>`;
+const bookmarkSvg = (active) => `<svg viewBox="0 0 24 24" fill="${active ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>`;
+const emptyBookmarkSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>`;
+const emptySearchSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>`;
+
+// ---------- Helpers ----------
+function allItemsFlat(){
+  const out = [];
+  chapters.forEach((ch, ci) => {
+    ch.items.forEach((text, ii) => out.push({ text, key: ci+"-"+ii, chapter: ch.name }));
+  });
+  return out;
+}
+
+function itemRow(item){
+  const isBm = bookmarks.has(item.key);
+  return `
+    <div class="list-item" data-key="${item.key}">
+      <span>${item.text}</span>
+      <button class="bookmark-btn ${isBm ? 'active' : ''}" data-key="${item.key}" aria-label="বুকমার্ক">
+        ${bookmarkSvg(isBm)}
+      </button>
+    </div>`;
+}
+
+// ---------- Renderers ----------
+function renderAll(){
+  const q = searchInput.value.trim();
+  let items = allItemsFlat();
+  if(q) items = items.filter(it => it.text.includes(q));
+
+  if(items.length === 0){
+    content.innerHTML = `
+      <div class="empty-state">
+        ${emptySearchSvg}
+        <p>কোনো ফলাফল পাওয়া যায়নি</p>
+        <div class="sub">অন্য কোনো শব্দ দিয়ে খুঁজে দেখুন</div>
+      </div>`;
+    return;
+  }
+  content.innerHTML = `<div class="list">${items.map(itemRow).join("")}</div>`;
+  bindItemEvents();
+}
+
+function renderSubjectList(){
+  const q = searchInput.value.trim();
+  let list = chapters;
+  if(q) list = chapters.filter(ch => ch.name.includes(q));
+
+  if(list.length === 0){
+    content.innerHTML = `
+      <div class="empty-state">
+        ${emptySearchSvg}
+        <p>কোনো অধ্যায় পাওয়া যায়নি</p>
+        <div class="sub">অন্য কোনো শব্দ দিয়ে খুঁজে দেখুন</div>
+      </div>`;
+    return;
+  }
+
+  content.innerHTML = `
+    <div class="subject-list">
+      ${list.map(ch => {
+        const realIndex = chapters.indexOf(ch);
+        const num = ch.items.length.toLocaleString('bn')
+        return `
+        <div class="subject-item" data-index="${realIndex}">
+          <span class="emoji">${ch.icon}</span>
+          <span class="subj-name">${ch.name}</span>
+          <span class="subj-count">${toBnNum(ch.items.length)}টি</span>
+          ${chevronSvg}
+        </div>`;
+      }).join("")}
+    </div>`;
+
+  content.querySelectorAll(".subject-item").forEach(el => {
+    el.addEventListener("click", () => {
+      openSubject = parseInt(el.dataset.index, 10);
+      renderSubjectDetail();
+    });
+  });
+}
+
+function renderSubjectDetail(){
+  const ch = chapters[openSubject];
+  const items = ch.items.map((text, ii) => ({ text, key: openSubject+"-"+ii }));
+
+  content.innerHTML = `
+    <div class="subject-header">
+      <button class="back-inline" id="subjBack" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <h2><span class="head-icon">${ch.icon}</span>${ch.name}</h2>
+    </div>
+    <div class="list">${items.map(itemRow).join("")}</div>
+  `;
+
+  document.getElementById("subjBack").addEventListener("click", () => {
+    openSubject = null;
+    renderSubjectList();
+  });
+  bindItemEvents();
+}
+
+function renderBookmarks(){
+  const items = allItemsFlat().filter(it => bookmarks.has(it.key));
+  if(items.length === 0){
+    content.innerHTML = `
+      <div class="empty-state">
+        ${emptyBookmarkSvg}
+        <p>এখনো কোনো বুকমার্ক যোগ করা হয়নি</p>
+        <div class="sub">পছন্দের দু‘আয় বুকমার্ক আইকনে চাপ দিন</div>
+      </div>`;
+    return;
+  }
+  content.innerHTML = `<div class="list">${items.map(itemRow).join("")}</div>`;
+  bindItemEvents();
+}
+
+function bindItemEvents(){
+  content.querySelectorAll(".bookmark-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const key = btn.dataset.key;
+      if(bookmarks.has(key)) bookmarks.delete(key);
+      else bookmarks.add(key);
+      render();
+    });
+  });
+}
+
+function toBnNum(n){
+  const map = {'0':'০','1':'১','2':'২','3':'৩','4':'৪','5':'৫','6':'৬','7':'৭','8':'৮','9':'৯'};
+  return String(n).split('').map(c => map[c] ?? c).join('');
+}
+
+// ---------- Main render dispatch ----------
+function render(){
+  if(currentTab === "all") renderAll();
+  else if(currentTab === "subject"){
+    if(openSubject !== null) renderSubjectDetail();
+    else renderSubjectList();
+  }
+  else if(currentTab === "bookmark") renderBookmarks();
+}
+
+// ---------- Events ----------
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+    tab.classList.add("active");
+    currentTab = tab.dataset.tab;
+    openSubject = null;
+    searchInput.value = "";
+    render();
+  });
+});
+
+searchInput.addEventListener("input", () => {
+  if(currentTab === "bookmark") return;
+  render();
+});
+
+document.getElementById("refreshBtn").addEventListener("click", (e) => {
+  const icon = e.currentTarget.querySelector(".refresh-icon");
+  icon.classList.remove("spin");
+  void icon.offsetWidth;
+  icon.classList.add("spin");
+  searchInput.value = "";
+  openSubject = null;
+  render();
+});
+
+document.getElementById("backBtn").addEventListener("click", () => {
+  if(currentTab === "subject" && openSubject !== null){
+    openSubject = null;
+    renderSubjectList();
+  }
+  // otherwise: would normally navigate back in app history
+});
+
+// ---------- Init ----------
+render();
+</script>
+</body>
+</html>
