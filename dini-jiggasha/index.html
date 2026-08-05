@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>দ্বীনি জিজ্ঞাসা</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --green-deep:#1c3a2e;
+    --green-mid:#2a4a3a;
+    --bg:#f3f4f2;
+    --card:#ffffff;
+    --line:#e7e8e5;
+    --text-dark:#16221c;
+    --text-mid:#6b756f;
+    --icon-bg:#eef0ed;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Noto Sans Bengali','Segoe UI',sans-serif;
+    background:var(--bg);
+    display:flex;
+    justify-content:center;
+  }
+  .phone{
+    width:100%;
+    max-width:420px;
+    min-height:100vh;
+    background:var(--bg);
+    position:relative;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* header */
+  .header{
+    background:linear-gradient(180deg,var(--green-deep),var(--green-mid));
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 18px 22px;
+    flex-shrink:0;
+  }
+  .header .icon-btn{
+    width:38px;height:38px;
+    border-radius:50%;
+    border:1.5px solid rgba(255,255,255,0.55);
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    cursor:pointer;
+    background:rgba(255,255,255,0.1);
+    transition:background 0.3s;
+  }
+  .header .icon-btn:hover{
+    background:rgba(255,255,255,0.2);
+  }
+  .header h1{
+    font-size:21px;
+    font-weight:700;
+    margin:0;
+    letter-spacing:0.2px;
+  }
+
+  .content{
+    padding:16px 16px 30px;
+    overflow-y:auto;
+    flex:1;
+  }
+
+  /* Screen visibility */
+  .screen{
+    display:none;
+  }
+  .screen.active{
+    display:block;
+  }
+
+  /* top card grid */
+  .grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px;
+    position:relative;
+    box-shadow:0 1px 2px rgba(20,30,25,0.03);
+    cursor:pointer;
+    transition:transform 0.2s, box-shadow 0.2s;
+  }
+  .card:active{
+    transform:scale(0.98);
+    box-shadow:0 2px 4px rgba(20,30,25,0.1);
+  }
+  .card .chevron{
+    position:absolute;
+    top:16px;
+    right:14px;
+    color:#b9beb8;
+  }
+  .card .icon-circle{
+    width:38px;height:38px;
+    border-radius:50%;
+    border:1.6px solid var(--text-dark);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:22px;
+    color:var(--text-dark);
+  }
+  .card .title{
+    font-size:16px;
+    font-weight:700;
+    color:var(--text-dark);
+    margin:0 0 4px;
+  }
+  .card .subtitle{
+    font-size:13px;
+    color:var(--text-mid);
+    margin:0;
+  }
+
+  /* section heading */
+  .section-heading{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:26px 0 12px;
+  }
+  .section-heading .bullet{
+    width:16px;height:16px;
+    background:var(--text-dark);
+    border-radius:0 50% 50% 50%;
+    transform:rotate(45deg);
+    flex-shrink:0;
+  }
+  .section-heading span{
+    font-size:16px;
+    font-weight:700;
+    color:var(--text-dark);
+  }
+
+  /* list rows */
+  .list-card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:12px;
+    box-shadow:0 1px 2px rgba(20,30,25,0.03);
+    cursor:pointer;
+    transition:background 0.2s;
+  }
+  .list-card:active{
+    background:#f9f9f9;
+  }
+  .list-card .icon-square{
+    width:44px;height:44px;
+    border-radius:12px;
+    background:var(--icon-bg);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text-dark);
+    flex-shrink:0;
+  }
+  .list-card .row-text{
+    flex:1;
+    min-width:0;
+  }
+  .list-card .row-text .title{
+    font-size:15.5px;
+    font-weight:700;
+    color:var(--text-dark);
+    margin:0 0 2px;
+  }
+  .list-card .row-text .subtitle{
+    font-size:13px;
+    color:var(--text-mid);
+    margin:0;
+  }
+  .list-card .chevron{
+    color:#b9beb8;
+    flex-shrink:0;
+  }
+  .list-card .badge{
+    color:var(--green-deep);
+    font-weight:700;
+    font-size:15px;
+    flex-shrink:0;
+  }
+
+  /* Dialog styles */
+  .dialog-overlay{
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:rgba(0,0,0,0.4);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+  }
+  .dialog-overlay.active{
+    display:flex;
+  }
+  .dialog{
+    background:white;
+    border-radius:16px;
+    padding:32px 28px;
+    text-align:center;
+    max-width:90%;
+  }
+  .dialog-title{
+    font-size:18px;
+    font-weight:700;
+    color:var(--text-dark);
+    margin:0 0 24px;
+  }
+  .dialog-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:24px;
+  }
+  .dialog-btn{
+    padding:12px 16px;
+    border:none;
+    border-radius:8px;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:'Noto Sans Bengali','Segoe UI',sans-serif;
+  }
+  .dialog-btn.secondary{
+    background:#e7e8e5;
+    color:var(--text-dark);
+  }
+  .dialog-btn.primary{
+    background:var(--green-deep);
+    color:white;
+  }
+
+  /* Checkboxes in question form */
+  .checkbox-group{
+    text-align:left;
+    margin:20px 0;
+  }
+  .checkbox-item{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin:12px 0;
+    font-size:15px;
+    color:var(--text-dark);
+  }
+  .checkbox-item input[type="checkbox"]{
+    width:20px;
+    height:20px;
+    cursor:pointer;
+  }
+
+  /* Question form */
+  .question-form{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px;
+    margin:16px 0;
+  }
+  .question-form .form-section{
+    margin-bottom:24px;
+  }
+  .question-form label{
+    display:block;
+    font-weight:700;
+    margin-bottom:8px;
+    color:var(--text-dark);
+    font-size:15px;
+  }
+  .question-form textarea, .question-form input{
+    width:100%;
+    padding:12px;
+    border:1px solid var(--line);
+    border-radius:8px;
+    font-family:inherit;
+    font-size:14px;
+    color:var(--text-dark);
+  }
+  .question-form textarea{
+    resize:vertical;
+    min-height:80px;
+  }
+
+  /* Expandable list item */
+  .expandable-item{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:12px;
+    box-shadow:0 1px 2px rgba(20,30,25,0.03);
+  }
+  .expandable-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    cursor:pointer;
+    padding:4px 0;
+  }
+  .expandable-header .title{
+    font-weight:700;
+    color:var(--text-dark);
+    font-size:15px;
+    flex:1;
+  }
+  .expandable-header .badge{
+    color:var(--green-deep);
+    font-weight:700;
+    font-size:15px;
+    margin-right:12px;
+  }
+  .expandable-header .toggle{
+    color:#b9beb8;
+    transition:transform 0.3s;
+  }
+  .expandable-header.expanded .toggle{
+    transform:rotate(180deg);
+  }
+  .expandable-content{
+    display:none;
+    margin-top:12px;
+    padding-top:12px;
+    border-top:1px solid var(--line);
+  }
+  .expandable-content.show{
+    display:block;
+  }
+  .expandable-content .sub-item{
+    padding:8px 0;
+    font-size:14px;
+    color:var(--text-dark);
+    line-height:1.5;
+  }
+
+  /* Answer display */
+  .answer-box{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:20px;
+    margin:16px 0;
+  }
+  .answer-meta{
+    display:flex;
+    gap:16px;
+    margin-bottom:16px;
+    font-size:13px;
+    color:var(--text-mid);
+  }
+  .answer-meta span{
+    display:flex;
+    align-items:center;
+    gap:4px;
+  }
+  .answer-question{
+    font-weight:700;
+    font-size:15px;
+    color:var(--text-dark);
+    margin:16px 0;
+  }
+  .answer-text{
+    font-size:14px;
+    color:var(--text-dark);
+    line-height:1.7;
+  }
+  .arabic-text{
+    direction:rtl;
+    text-align:right;
+    font-size:15px;
+    margin:12px 0;
+    color:var(--text-dark);
+  }
+
+  /* Back button in header */
+  .back-btn{
+    cursor:pointer;
+  }
+
+  /* Empty state */
+  .empty-state{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--text-mid);
+  }
+  .empty-state-text{
+    font-size:15px;
+    margin-bottom:20px;
+  }
+
+  svg{stroke:currentColor;}
+
+  /* Buttons */
+  .form-buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:20px;
+  }
+  .btn{
+    padding:12px 16px;
+    border:none;
+    border-radius:8px;
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    font-family:'Noto Sans Bengali','Segoe UI',sans-serif;
+  }
+  .btn.secondary{
+    background:#e7e8e5;
+    color:var(--text-dark);
+  }
+  .btn.primary{
+    background:var(--green-deep);
+    color:white;
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <!-- header -->
+  <div class="header">
+    <div class="icon-btn back-btn" onclick="goHome()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:none;" id="backIcon"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" id="homeIcon"><circle cx="12" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+    </div>
+    <h1 id="headerTitle">দ্বীনি জিজ্ঞাসা</h1>
+    <div class="icon-btn">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    </div>
+  </div>
+
+  <div class="content" id="content">
+
+    <!-- HOME SCREEN -->
+    <div class="screen active" id="homeScreen">
+      <!-- top 2 cards -->
+      <div class="grid-2">
+        <div class="card" onclick="showScreen('yourQuestionsScreen')">
+          <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          <div class="icon-circle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9a2.5 2.5 0 0 1 4.9.8c0 1.7-2.4 2-2.4 3.4"></path><line x1="12" y1="17" x2="12" y2="17"></line></svg>
+          </div>
+          <p class="title">সকল মাস'আলা</p>
+          <p class="subtitle">১,৫০,০০০+ প্রশ্নের উত্তর</p>
+        </div>
+
+        <div class="card" onclick="showScreen('yourQuestionsScreen')">
+          <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          <div class="icon-circle">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          </div>
+          <p class="title">আপনার প্রশ্ন</p>
+          <p class="subtitle">আপনার জিজ্ঞাসা সমূহ</p>
+        </div>
+      </div>
+
+      <!-- section: প্রশ্ন করুন -->
+      <div class="section-heading">
+        <div class="bullet"></div>
+        <span>প্রশ্ন করুন</span>
+      </div>
+
+      <div class="grid-2">
+        <div class="card" onclick="showScreen('askPhoneScreen')">
+          <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          <div class="icon-circle">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </div>
+          <p class="title">সরাসরি কল করুন</p>
+          <p class="subtitle">মুফতি হযরতের সাথে কথা বলুন</p>
+        </div>
+
+        <div class="card" onclick="showScreen('askWriteScreen')">
+          <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          <div class="icon-circle">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 3h13l3 3v15H4z"></path><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="12" y2="17"></line></svg>
+          </div>
+          <p class="title">আমাদের লিখুন</p>
+          <p class="subtitle">লিখিত প্রশ্ন করুন</p>
+        </div>
+      </div>
+
+      <!-- section: অন্যান্য -->
+      <div class="section-heading">
+        <div class="bullet"></div>
+        <span>অন্যান্য</span>
+      </div>
+
+      <div class="list-card" onclick="showScreen('categoryScreen')">
+        <div class="icon-square">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="14"></line><line x1="9" y1="11" x2="15" y2="11"></line></svg>
+        </div>
+        <div class="row-text">
+          <p class="title">বিষয়ভিত্তিক মাস'আলা</p>
+          <p class="subtitle">বিষয় অনুযায়ী</p>
+        </div>
+        <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </div>
+
+      <div class="list-card" onclick="showScreen('bookmarkedScreen')">
+        <div class="icon-square">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        </div>
+        <div class="row-text">
+          <p class="title">বুকমার্ক করা মাস'আলা</p>
+          <p class="subtitle">সংরক্ষিত</p>
+        </div>
+        <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </div>
+
+      <div class="list-card" onclick="showScreen('recentScreen')">
+        <div class="icon-square">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        </div>
+        <div class="row-text">
+          <p class="title">সর্বশেষ পঠিত মাস'আলা</p>
+          <p class="subtitle">ইতিহাস</p>
+        </div>
+        <svg class="chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </div>
+    </div>
+
+    <!-- YOUR QUESTIONS SCREEN -->
+    <div class="screen" id="yourQuestionsScreen">
+      <div style="text-align:center;padding:60px 20px;">
+        <div style="margin-bottom:20px;">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--text-mid)" stroke-width="1.5"><circle cx="12" cy="12" r="10"></circle><path d="M9.5 9a2.5 2.5 0 0 1 4.9.8c0 1.7-2.4 2-2.4 3.4"></path><line x1="12" y1="17" x2="12" y2="17"></line></svg>
+        </div>
+        <p class="subtitle">এখানে আপনার প্রশ্নগুলি প্রদর্শিত হবে</p>
+      </div>
+    </div>
+
+    <!-- ASK BY PHONE SCREEN -->
+    <div class="screen" id="askPhoneScreen">
+      <div style="text-align:center;padding:40px 20px;">
+        <div style="background:var(--card);border-radius:14px;padding:24px;border:1px solid var(--line);">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--green-deep)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:16px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          <p class="title" style="margin:16px 0;">সরাসরি কল করুন</p>
+          <p class="subtitle">মুফতি হযরতের সাথে সরাসরি যোগাযোগ করুন</p>
+          <div style="margin-top:20px;">
+            <p style="font-size:14px;color:var(--text-mid);">যোগাযোগের জন্য প্রস্তুত</p>
+            <a href="tel:+8801234567890" style="display:inline-block;margin-top:12px;padding:12px 24px;background:var(--green-deep);color:white;text-decoration:none;border-radius:8px;font-weight:700;">কল করুন</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASK BY WRITING SCREEN -->
+    <div class="screen" id="askWriteScreen">
+      <div class="section-heading">
+        <div class="bullet"></div>
+        <span>প্রশ্ন করুন</span>
+      </div>
+
+      <div class="dialog" style="margin:16px 0;background:var(--card);">
+        <p class="dialog-title">প্রশ্ন করার শর্তাবলী:-</p>
+        
+        <div class="checkbox-group">
+          <div class="checkbox-item">
+            <input type="checkbox" id="c1">
+            <label for="c1" style="margin:0;">সম্ভবত শক্ত দিয়ে মামায়েল লেকশনে সার্ট করে পাবিন, তাই নতুন প্রশ্ন করবেন।</label>
+          </div>
+          
+          <div class="checkbox-item">
+            <input type="checkbox" id="c2">
+            <label for="c2" style="margin:0;">এমন "অপ্রয়োজনীয় বিষয়" জানতে চাইচ্ছি না যার সাথে আমার উম্মান, আমালের সম্পর্ক নেই।</label>
+          </div>
+          
+          <div class="checkbox-item">
+            <input type="checkbox" id="c3">
+            <label for="c3" style="margin:0;">একাধিক প্রশ্ন এক সাথে করবে না।</label>
+          </div>
+        </div>
+
+        <p style="font-size:13px;color:var(--text-mid);text-align:left;line-height:1.6;">উপরের শর্ত মেনে প্রশ্ন না করলে আপনার প্রশ্নটি ডিলিট করে দেওয়া হবে। আমাদের লোকবালের ভুলনায় প্রশ্নের সংখ্যা অনেক বেশি হওয়ায়, উত্তর পেতে কয়েকটা মাস সময় লাগতে পারে। তাই অনুধাব করে ধৈর্য করুন। তবে যদি আপনার প্রশ্নের উত্তর প্রয়োজন হয়, তাভালে আপনে যোগাণে লিখিত "প্রশ্ন জমা দিতে করুন" অপশনটি ব্যবহার করুন।</p>
+
+        <div class="form-buttons">
+          <button class="btn secondary" onclick="goHome()">বাতিল করুন</button>
+          <button class="btn primary" onclick="showScreen('questionFormScreen')">প্রবেশ করুন</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUESTION FORM SCREEN -->
+    <div class="screen" id="questionFormScreen">
+      <div class="question-form">
+        <div class="form-section">
+          <label>আপনার নাম:</label>
+          <input type="text" placeholder="নাম লিখুন">
+        </div>
+        
+        <div class="form-section">
+          <label>আপনার ইমেইল:</label>
+          <input type="email" placeholder="ইমেইল লিখুন">
+        </div>
+        
+        <div class="form-section">
+          <label>আপনার প্রশ্ন:</label>
+          <textarea placeholder="আপনার প্রশ্ন এখানে লিখুন..."></textarea>
+        </div>
+
+        <div class="form-buttons">
+          <button class="btn secondary" onclick="goHome()">বাতিল করুন</button>
+          <button class="btn primary" onclick="alert('প্রশ্ন জমা হয়েছে!')">জমা দিন</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CATEGORY SCREEN -->
+    <div class="screen" id="categoryScreen">
+      <div class="expandable-item">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <span class="title">আল কুরআনুল কারীম</span>
+          <span class="badge">৮</span>
+          <svg class="toggle" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="expandable-content">
+          <div class="sub-item">ফয়লাতপূর্ণ সূরা - আয়াত</div>
+          <div class="sub-item">কুরআনে কারীম সংরক্ষিত আদাব ও মাসায়েল</div>
+          <div class="sub-item">কুরআনের খটনালী</div>
+          <div class="sub-item">কুরআন ও হাদীসের ব্যাখ্যা</div>
+        </div>
+      </div>
+
+      <div class="expandable-item">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <span class="title">হাদীস ও সুন্নাহ</span>
+          <span class="badge">৬</span>
+          <svg class="toggle" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="expandable-content">
+          <div class="sub-item">হাদীসের সংজ্ঞা এবং গুরুত্ব</div>
+          <div class="sub-item">সুন্নতের বিভিন্ন বিষয়</div>
+        </div>
+      </div>
+
+      <div class="expandable-item">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <span class="title">তাসাউফ-আত্মউন্নতি | ইসলামী পরামর্শ</span>
+          <span class="badge">৭</span>
+          <svg class="toggle" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="expandable-content">
+          <div class="sub-item">আত্মার উন্নতির পথ</div>
+          <div class="sub-item">ইসলামী নৈতিকতা</div>
+        </div>
+      </div>
+
+      <div class="expandable-item">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <span class="title">শরীআত সম্পর্কিত</span>
+          <span class="badge">১৫</span>
+          <svg class="toggle" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="expandable-content">
+          <div class="sub-item">ইসলামী আইন এবং বিধান</div>
+        </div>
+      </div>
+
+      <div class="expandable-item">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <span class="title">ফিতনাসমূহ; বিবরণ - করণীয়</span>
+          <span class="badge">২</span>
+          <svg class="toggle" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="expandable-content">
+          <div class="sub-item">বিভিন্ন ফিতনা এবং তাদের সমাধান</div>
+        </div>
+      </div>
+
+      <div class="expandable-item">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <span class="title">আধিরাত - যুবতীর পরে</span>
+          <span class="badge">৭</span>
+          <svg class="toggle" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="expandable-content">
+          <div class="sub-item">যুবকদের জন্য আধুনিক সমস্যা এবং সমাধান</div>
+        </div>
+      </div>
+
+      <div class="expandable-item">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <span class="title">ঈমান বিষয়বস্তু কথা ও কাজ</span>
+          <span class="badge">৬</span>
+          <svg class="toggle" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="expandable-content">
+          <div class="sub-item">ঈমানের বৃদ্ধি এবং বিভিন্ন বিষয়</div>
+        </div>
+      </div>
+
+      <div class="expandable-item">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <span class="title">ফিরাকে বাঁচিলা - আত্ত দল ও মত</span>
+          <span class="badge">২</span>
+          <svg class="toggle" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="expandable-content">
+          <div class="sub-item">বিভিন্ন দল ও মতের আলোচনা</div>
+        </div>
+      </div>
+
+      <div class="expandable-item">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <span class="title">পরিবার অর্থন</span>
+          <span class="badge">৮</span>
+          <svg class="toggle" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="expandable-content">
+          <div class="sub-item">পরিবার সম্পর্কিত বিভিন্ন বিষয়</div>
+        </div>
+      </div>
+
+      <div class="expandable-item">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <span class="title">নামায়ের অধ্যায়</span>
+          <span class="badge">১১</span>
+          <svg class="toggle" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="expandable-content">
+          <div class="sub-item">নামাজ সম্পর্কিত বিভিন্ন মাসায়েল</div>
+        </div>
+      </div>
+
+      <div class="expandable-item">
+        <div class="expandable-header" onclick="toggleExpand(this)">
+          <span class="title">যাকাত - সদাকাহ</span>
+          <span class="badge">৫</span>
+          <svg class="toggle" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+        <div class="expandable-content">
+          <div class="sub-item">যাকাত এবং সদাকা সম্পর্কিত বিষয়</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOOKMARKED SCREEN -->
+    <div class="screen" id="bookmarkedScreen">
+      <div class="empty-state">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--text-mid)" stroke-width="1.5" style="margin-bottom:16px;"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+        <p class="empty-state-text">কোন মাস'আলা বুকমার্ক করা নেই</p>
+      </div>
+    </div>
+
+    <!-- RECENT SCREEN -->
+    <div class="screen" id="recentScreen">
+      <div class="answer-box">
+        <div class="answer-meta">
+          <span>📅 ২৯ জুলাই, ২০২৬</span>
+          <span>📍 ঢাকা</span>
+        </div>
+
+        <div class="answer-question">
+          মুসলিম সম্প্রদায়ে ক্ষতি অমুসলিম পিতামাতার মিরাস পাবে?
+        </div>
+
+        <div class="answer-text">
+          <strong>প্রশ্ন:</strong> ১৬৬৩৯। আস্সালামুআলাইকুম ওয়া রাহমাতুল্লাহ, মুহাম্মাদ একজন নওমুসলিম সে তার বাবা ১ বছর আগে মারা গেছেন। তারা ২ই মুসলিম বাক্তি সব হিন্দু। মা তার মেয়েকে সব দিয়ে দিয়েছে নামামী ও করিয়েছে। এই নওমুসলিমকে জায়গা দিছে না। টাকা আছে ১৮ লাখ সেখান থেকে ও দিছে না। বোশলে মা থেকে টাকা ও জায়গা নেওয়ার সহজ কিছু পথা বাতলিয়ে দিন।
+        </div>
+
+        <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--line);">
+          <div class="answer-question" style="margin-bottom:12px;">উত্তর</div>
+          <div class="arabic-text">
+            و عليـــــــــــــــــــــــــــــــــــكم و السلام و رحمة الله و بركاته
+          </div>
+          <div class="arabic-text">
+            بسم الله الرحمن الرحيم
+          </div>
+
+          <div class="answer-text">
+            সামনিত প্রশ্নকারী!
+          </div>
+
+          <div class="answer-text" style="line-height:1.8;">
+            যেমনিভাবে কোনো কাফির কোনো মুসলিমের উত্তরাধিকারী হতে পারে না তেমনিভাবে মুসলিম কোনো কাফিরের উত্তরাধিকারী হতে পারে না। সহিহ বুখারী এবং অন্যান্য এ পরিষ্কার হয়েছে যে:
+          </div>
+
+          <div class="arabic-text" style="margin:16px 0;">
+            «لا يرث المسلم الكافر ولا الكافر المسلم»
+          </div>
+
+          <div class="answer-text">
+            মুসলমান কোনো কাফিরের উত্তরাধিকারী হতে পারে না, আর কাফিরও কোনো মুসলিমের উত্তরাধিকারী হতে পারে না।
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Dialog Overlay -->
+<div class="dialog-overlay" id="dialogOverlay">
+  <div class="dialog" id="dialog"></div>
+</div>
+
+<script>
+let currentScreen = 'homeScreen';
+
+function showScreen(screenId) {
+  const current = document.getElementById(currentScreen);
+  const next = document.getElementById(screenId);
+  
+  if(current) current.classList.remove('active');
+  if(next) next.classList.add('active');
+  
+  currentScreen = screenId;
+
+  // Update header
+  const headerTitle = document.getElementById('headerTitle');
+  const backIcon = document.getElementById('backIcon');
+  const homeIcon = document.getElementById('homeIcon');
+
+  if(screenId === 'homeScreen') {
+    headerTitle.textContent = 'দ্বীনি জিজ্ঞাসা';
+    backIcon.style.display = 'none';
+    homeIcon.style.display = 'block';
+  } else {
+    let title = 'দ্বীনি জিজ্ঞাসা';
+    
+    if(screenId === 'yourQuestionsScreen') title = 'আপনার প্রশ্ন';
+    else if(screenId === 'askPhoneScreen') title = 'সরাসরি কল করুন';
+    else if(screenId === 'askWriteScreen') title = 'আমাদের লিখুন';
+    else if(screenId === 'questionFormScreen') title = 'প্রশ্ন জমা দিন';
+    else if(screenId === 'categoryScreen') title = 'বিষয়ভিত্তিক মাস\'আলা';
+    else if(screenId === 'bookmarkedScreen') title = 'বুকমার্ক করা মাস\'আলা';
+    else if(screenId === 'recentScreen') title = 'সর্বশেষ পঠিত';
+
+    headerTitle.textContent = title;
+    backIcon.style.display = 'block';
+    homeIcon.style.display = 'none';
+  }
+
+  // Scroll to top
+  document.getElementById('content').scrollTop = 0;
+}
+
+function goHome() {
+  showScreen('homeScreen');
+}
+
+function toggleExpand(header) {
+  header.classList.toggle('expanded');
+  const content = header.nextElementSibling;
+  if(content && content.classList.contains('expandable-content')) {
+    content.classList.toggle('show');
+  }
+}
+
+// Back button functionality
+document.querySelector('.back-btn').addEventListener('click', function(e) {
+  if(currentScreen !== 'homeScreen') {
+    goHome();
+  }
+});
+</script>
+</body>
+</html>
