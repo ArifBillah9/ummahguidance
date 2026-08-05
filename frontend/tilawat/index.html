@@ -8,6 +8,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
+
+    @font-face{
+    font-family:'Kalpurush';
+    src:url('/assets/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+  
+
   :root{
     --brand:#175a45;
     --brand-dark:#0f4534;
@@ -27,6 +37,12 @@
     display:flex;
     justify-content:center;
     -webkit-tap-highlight-color:transparent;
+  }
+
+     html,body{
+    margin:0;padding:0;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    background:#111;
   }
   #app{
     width:100%;

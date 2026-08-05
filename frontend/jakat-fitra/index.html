@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>যাকাত-ফিতরা</title>
+<style>
+        @font-face{
+    font-family:'Kalpurush';
+    src:url('/assets/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+  :root{
+    --green-dark:#1c3620;
+    --green-mid:#1f6b2c;
+    --green-accent:#2f8f3f;
+    --green-soft:#e7f2e8;
+    --text-dark:#1a1a1a;
+    --text-muted:#5b6b60;
+    --border:#e3e6e3;
+    --bg:#f6f7f5;
+    --white:#ffffff;
+    --content-max:760px;
+    --grid-max:1100px;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    font-family:"Noto Sans Bengali","Nirmala UI","Hind Siliguri",Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text-dark);
+    -webkit-tap-highlight-color:transparent;
+  }
+       html,body{
+    margin:0;padding:0;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    background:#111;
+  }
+  .app{min-height:100vh; display:flex; flex-direction:column;}
+  .icon{width:22px;height:22px;flex-shrink:0;}
+  .icon svg{width:100%;height:100%;display:block;}
+
+  /* Header */
+  header.appbar{
+    background:var(--green-dark);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 18px;
+    position:sticky;
+    top:0;
+    z-index:20;
+    flex-shrink:0;
+  }
+  .backbtn{
+    width:36px;height:36px;border-radius:50%;
+    border:1.5px solid rgba(255,255,255,0.85);
+    background:transparent;color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;flex-shrink:0;
+    transition:background .15s;
+  }
+  .backbtn .icon{width:18px;height:18px;}
+  .backbtn:active{background:rgba(255,255,255,0.15);}
+  .backbtn.hidden{visibility:hidden;}
+  header.appbar h1{
+    flex:1;text-align:center;font-size:18px;font-weight:600;
+    margin:0;padding-right:36px;
+    max-width:var(--content-max);
+    margin-left:auto;margin-right:auto;
+  }
+
+  main.screens{flex:1;position:relative;}
+  .screen{display:none; animation:fadeIn .18s ease;}
+  .screen.active{display:block;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  .wrap{max-width:var(--content-max); margin:0 auto; padding:0 16px;}
+  .wrap-wide{max-width:var(--grid-max); margin:0 auto; padding:0 16px;}
+
+  /* ---- Home menu ---- */
+  .menu-list{
+    padding:16px;
+    max-width:var(--grid-max);
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+  @media (min-width:640px){
+    .menu-list{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (min-width:980px){
+    .menu-list{grid-template-columns:repeat(3,1fr);}
+  }
+  .menu-card{
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    cursor:pointer;
+    transition:transform .12s, box-shadow .12s, border-color .12s;
+  }
+  .menu-card:hover{border-color:#c9d6cb; box-shadow:0 4px 14px rgba(0,0,0,0.06);}
+  .menu-card:active{transform:scale(0.98);}
+  .menu-icon{
+    width:46px;height:46px;border-radius:12px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .menu-icon .icon{width:24px;height:24px;}
+  .menu-text b{display:block;font-size:16px;font-weight:700;margin-bottom:3px;}
+  .menu-text span{display:block;font-size:13px;color:var(--green-accent);font-weight:500;}
+
+  /* ---- Modal (Nisab) ---- */
+  .overlay{
+    position:fixed;inset:0;background:rgba(0,0,0,0.45);
+    display:none;align-items:flex-start;justify-content:center;
+    z-index:50;padding:60px 18px;overflow-y:auto;
+  }
+  .overlay.show{display:flex;}
+  .modal{
+    background:#fff;border-radius:14px;padding:20px;width:100%;max-width:440px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.25);
+  }
+  .modal p{font-size:14.5px;line-height:1.6;margin:0 0 14px;}
+  .modal input{
+    width:100%;padding:12px;border:1.5px solid var(--border);border-radius:10px;
+    font-size:14px;margin-bottom:16px;font-family:inherit;
+  }
+  .modal .row{display:flex;gap:10px;}
+  .modal button{
+    flex:1;padding:11px;border-radius:10px;border:none;font-size:14.5px;
+    font-weight:600;cursor:pointer;font-family:inherit;
+  }
+  .btn-save{background:var(--green-accent);color:#fff;}
+  .btn-cancel{background:#e3e6e3;color:#333;}
+
+  /* ---- Calculator form ---- */
+  .calc-title{
+    text-align:center;font-weight:700;font-size:15.5px;
+    padding:18px 16px 4px;
+    max-width:var(--content-max);margin:0 auto;
+  }
+  .calc-fields{max-width:var(--content-max); margin:0 auto;}
+  .field{
+    padding:14px 16px;border-bottom:1px solid var(--border);
+  }
+  .field label{display:block;font-size:14.5px;font-weight:600;line-height:1.5;margin-bottom:10px;}
+  .field input{
+    width:100%;padding:11px 12px;border:1.5px solid var(--border);
+    border-radius:8px;font-size:14px;font-family:inherit;
+  }
+  .field input:focus{outline:none;border-color:var(--green-accent);}
+  .calc-footer{
+    position:sticky;bottom:0;background:var(--green-soft);
+    border-top:1px solid var(--border);
+    padding:12px 16px;
+    display:flex;align-items:center;justify-content:center;gap:10px;
+  }
+  .calc-footer-inner{
+    max-width:var(--content-max);width:100%;margin:0 auto;
+    display:flex;align-items:center;gap:10px;
+  }
+  .calc-footer .submit-btn{
+    flex:1;background:var(--green-dark);color:#fff;border:none;
+    padding:13px;border-radius:10px;font-size:14.5px;font-weight:700;
+    cursor:pointer;font-family:inherit;
+  }
+  .info-btn{
+    width:38px;height:38px;border-radius:50%;background:var(--green-accent);
+    color:#fff;border:none;cursor:pointer;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .info-btn .icon{width:20px;height:20px;}
+  .result-box{
+    margin:16px auto;max-width:var(--content-max);
+    padding:16px;border-radius:12px;background:var(--green-soft);
+    border:1px solid #cfe6d2;font-size:14.5px;line-height:1.7;display:none;
+  }
+  .result-box.show{display:block;}
+  .result-box b{color:var(--green-dark);font-size:16px;}
+
+  /* ---- Simple list screens (jaruri masala) ---- */
+  .simple-list{max-width:var(--content-max); margin:0 auto;}
+  .simple-item{
+    padding:20px 18px;border-bottom:1px solid var(--border);
+    background:#fafbfa;font-size:15.5px;font-weight:500;color:#222;
+    cursor:pointer; display:flex; align-items:center; justify-content:space-between;
+  }
+  .simple-item:hover{background:#f1f4f1;}
+  .simple-item:active{background:#eef1ee;}
+  .simple-item .icon{width:18px;height:18px;color:#8a938b;flex-shrink:0;}
+
+  .fab{
+    position:fixed;
+    bottom:22px;right:22px;
+    width:64px;height:64px;border-radius:50%;
+    background:var(--green-dark);color:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:2px;
+    box-shadow:0 6px 16px rgba(0,0,0,0.3);cursor:pointer;z-index:30;border:2px solid #fff;
+  }
+  .fab .icon{width:20px;height:20px;}
+  .fab span.label{font-size:9.5px;font-weight:700;line-height:1.2;text-align:center;}
+
+  /* ---- Dini Jiggasa list ---- */
+  .tabbar{display:flex;border-bottom:1px solid var(--border);background:#fff;max-width:var(--content-max);margin:0 auto;}
+  .tabbar .tab{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;
+    padding:12px 4px;font-size:12px;color:#333;cursor:pointer;
+  }
+  .tabbar .tab .icon{width:19px;height:19px;}
+  .tabbar .tab.active{color:var(--green-accent);font-weight:700;}
+  .allqa-link{
+    text-align:center;padding:11px;background:#e9f2e9;
+    color:var(--green-dark);font-size:13.5px;font-weight:600;
+    text-decoration:underline;cursor:pointer;
+  }
+  .pagination{
+    display:flex;justify-content:center;align-items:center;gap:14px;
+    padding:14px 0;background:#f2f3f1;
+  }
+  .pagination span{
+    width:30px;height:30px;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;font-size:14px;cursor:pointer;color:#444;
+  }
+  .pagination span.on{background:#3a3a3a;color:#fff;font-weight:700;}
+  .pagination .arrow .icon{width:16px;height:16px;color:var(--green-dark);}
+  .qa-listing{max-width:var(--content-max);margin:0 auto;}
+  .qa-card{
+    padding:18px;border-bottom:1px solid var(--border);background:#fff;cursor:pointer;
+  }
+  .qa-card:hover{background:#f7f8f7;}
+  .qa-card .qid{color:var(--green-dark);font-weight:700;font-size:14px;margin-bottom:6px;}
+  .qa-card .qtitle{font-size:15.5px;font-weight:600;line-height:1.5;margin-bottom:12px;}
+  .qa-meta{display:flex;gap:18px;font-size:12.5px;color:var(--text-muted);flex-wrap:wrap;margin-bottom:6px;}
+  .qa-meta span{display:flex;align-items:center;gap:5px;}
+  .qa-meta .icon{width:14px;height:14px;}
+  .qa-answerer{font-size:12.5px;color:var(--green-accent);display:flex;align-items:center;gap:5px;font-weight:600;}
+  .qa-answerer .icon{width:14px;height:14px;}
+
+  /* ---- Question detail ---- */
+  .detail-topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 16px;border-bottom:1px solid var(--border);background:#fff;
+    max-width:var(--content-max);margin:0 auto;
+  }
+  .detail-topbar .ic-btn{
+    width:34px;height:34px;border-radius:50%;display:flex;align-items:center;
+    justify-content:center;color:var(--green-dark);cursor:pointer;background:none;border:none;
+  }
+  .detail-topbar .ic-btn .icon{width:19px;height:19px;}
+  .detail-body{padding:20px 16px 90px; max-width:var(--content-max); margin:0 auto;}
+  .detail-body h2{font-size:17px;color:var(--green-dark);line-height:1.5;margin:0 0 14px;}
+  .detail-qnum{font-weight:700;}
+  .detail-qtext{font-size:14.5px;line-height:1.7;color:#333;margin-bottom:12px;}
+  .detail-meta{display:flex;gap:18px;font-size:12.5px;color:var(--text-muted);margin-bottom:18px;}
+  .detail-meta span{display:flex;align-items:center;gap:5px;}
+  .detail-meta .icon{width:14px;height:14px;}
+  .detail-answer-head{
+    text-align:center;font-weight:700;font-size:16px;margin:22px 0 14px;color:#111;
+  }
+  .arabic{
+    text-align:center;font-size:19px;line-height:2.1;margin:6px 0 16px;color:#111;
+    direction:rtl;
+  }
+  .detail-answer p{font-size:14.5px;line-height:1.85;color:#222;margin:0 0 14px;text-align:justify;}
+
+  .navbar{
+    position:sticky;bottom:0;background:var(--green-dark);
+    display:flex;align-items:center;justify-content:center;
+    padding:12px 26px;
+  }
+  .navbar-inner{max-width:var(--content-max); width:100%; display:flex; justify-content:space-between;}
+  .navbar button{
+    background:none;border:none;color:#fff;cursor:pointer;
+    width:38px;height:38px;display:flex;align-items:center;justify-content:center;
+  }
+  .navbar button .icon{width:20px;height:20px;}
+  .navbar button:disabled{opacity:0.35;cursor:default;}
+
+  .placeholder{
+    padding:70px 24px;text-align:center;color:var(--text-muted);font-size:15px;line-height:1.8;
+    max-width:var(--content-max);margin:0 auto;
+  }
+  .placeholder .big{width:56px;height:56px;margin:0 auto 16px;color:#b7bdb8;}
+
+  /* ---- Subheader (used by "latest read" detail + bookmark screen) ---- */
+  .subheader{
+    display:flex;align-items:center;gap:10px;
+    padding:14px 16px;border-bottom:1px solid var(--border);background:#fff;
+    max-width:var(--content-max);margin:0 auto;
+  }
+  .circle-back{
+    width:26px;height:26px;border-radius:50%;background:var(--green-accent);
+    color:#fff;border:none;display:flex;align-items:center;justify-content:center;
+    cursor:pointer;flex-shrink:0;
+  }
+  .circle-back .icon{width:15px;height:15px;}
+  .sublabel{font-size:14.5px;font-weight:600;color:#222;}
+
+  /* ---- Topics (বিষয়াদি) screen ---- */
+  .topics-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px;max-width:var(--content-max);margin:0 auto;
+  }
+  .topics-head h3{margin:0;font-size:17px;font-weight:700;}
+  .topics-close{
+    width:30px;height:30px;border-radius:50%;border:none;background:#fdeaea;color:#d23c3c;
+    display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
+  }
+  .topics-close .icon{width:16px;height:16px;}
+  .topics-list{max-width:var(--content-max);margin:0 auto;padding:0 16px 20px;}
+  .topic-group{border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden;background:#fff;}
+  .topic-group-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:15px 16px;cursor:pointer;font-size:15px;font-weight:600;
+  }
+  .topic-group-head .icon{width:16px;height:16px;color:#666;transition:transform .15s;flex-shrink:0;}
+  .topic-group.open .topic-group-head .icon{transform:rotate(180deg);}
+  .topic-children{display:none;border-top:1px solid var(--border);}
+  .topic-group.open .topic-children{display:block;}
+  .topic-child{
+    padding:14px 16px;font-size:14.5px;color:#333;border-bottom:1px solid var(--border);cursor:pointer;
+  }
+  .topic-child:last-child{border-bottom:none;}
+  .topic-child:hover{background:#f7f8f7;}
+
+  /* ---- Empty state (bookmark) ---- */
+  .empty-state{
+    padding:90px 24px;text-align:center;color:#333;font-size:15px;
+    max-width:var(--content-max);margin:0 auto;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="appbar">
+    <button class="backbtn" id="backBtn"><span class="icon" data-ic="chevronLeft"></span></button>
+    <h1 id="headerTitle">যাকাত-ফিতরা</h1>
+  </header>
+
+  <main class="screens" id="screens">
+
+    <!-- ============ SCREEN: HOME ============ -->
+    <section class="screen active" data-screen="home">
+      <div class="menu-list">
+        <div class="menu-card" data-action="placeholder" data-title="যাকাত প্রদান করুন">
+          <div class="menu-icon" style="background:#dceafd;color:#1d6fd6;"><span class="icon" data-ic="coin"></span></div>
+          <div class="menu-text"><b>যাকাত প্রদান করুন</b><span>সহজে যাকাত আদায় করুন এখনই</span></div>
+        </div>
+        <div class="menu-card" data-action="placeholder" data-title="যাকাতের ইতিহাস">
+          <div class="menu-icon" style="background:#e6f4e8;color:#1f8f38;"><span class="icon" data-ic="history"></span></div>
+          <div class="menu-text"><b>যাকাতের ইতিহাস</b><span>আপনার পূর্ববর্তী যাকাতের ইতিহাস</span></div>
+        </div>
+        <div class="menu-card" data-action="placeholder" data-title="যাকাত গ্রহীতাদের তালিকা">
+          <div class="menu-icon" style="background:#fbe1ec;color:#c23274;"><span class="icon" data-ic="users"></span></div>
+          <div class="menu-text"><b>যাকাত গ্রহীতাদের তালিকা</b><span>যাদের হাতে যাকাতের টাকা পৌঁছেছে</span></div>
+        </div>
+        <div class="menu-card" data-action="placeholder" data-title="যাকাত আবেদন ফর্ম">
+          <div class="menu-icon" style="background:#fdf1dc;color:#c68a1c;"><span class="icon" data-ic="clipboard"></span></div>
+          <div class="menu-text"><b>যাকাত আবেদন ফর্ম</b><span>যাকাত পেতে প্রবেশ করুন</span></div>
+        </div>
+        <div class="menu-card" data-action="calculator" data-title="যাকাত ক্যালকুলেটর">
+          <div class="menu-icon" style="background:#dceafd;color:#1d6fd6;"><span class="icon" data-ic="calculator"></span></div>
+          <div class="menu-text"><b>যাকাত ক্যালকুলেটর</b><span>সহজে আপনার যাকাত হিসাব করুন</span></div>
+        </div>
+        <div class="menu-card" data-action="masala" data-title="জরুরী মাস’আলা">
+          <div class="menu-icon" style="background:#e6f4e8;color:#1f8f38;"><span class="icon" data-ic="help"></span></div>
+          <div class="menu-text"><b>জরুরী মাস’আলা</b><span>যাকাত সম্পর্কিত জরুরী মাস’আলা</span></div>
+        </div>
+        <div class="menu-card" data-action="placeholder" data-title="কিতাব">
+          <div class="menu-icon" style="background:#fdf6d8;color:#a3821a;"><span class="icon" data-ic="book"></span></div>
+          <div class="menu-text"><b>কিতাব</b><span>যাকাত সম্পর্কিত কিতাব পড়ুন</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: CALCULATOR ============ -->
+    <section class="screen" data-screen="calculator">
+      <div class="calc-title">যে সকল সম্পদের উপর যাকাত ফরয</div>
+      <div class="calc-fields">
+        <div class="field">
+          <label>স্বর্ণ (ব্যবহৃত অলংকার হোক বা ব্যবসার পণ্য, অলংকার, বার বা গিনি কয়েন যে আকারেই থাকুক সব প্রকারের স্বর্ণ হিসাবযোগ্য)</label>
+          <input type="number" id="f_gold" placeholder="সমপরিমাণ মূল্য লিখুন" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label>রূপা (ব্যবহৃত অলংকার হোক বা ব্যবসার পণ্য এবং অলংকার বা অন্য যে আকারেই থাকুক সব প্রকারের রূপা হিসাবযোগ্য)</label>
+          <input type="number" id="f_silver" placeholder="সমপরিমাণ মূল্য লিখুন" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label>নগদ টাকা</label>
+          <input type="number" id="f_cash" placeholder="সমপরিমাণ মূল্য লিখুন" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label>কারো কাছে গচ্ছিত আমানত</label>
+          <input type="number" id="f_deposit" placeholder="সমপরিমাণ মূল্য লিখুন" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label>অন্যের কাছে পাওনা টাকা (যা পাওয়া নিশ্চিত বা পাওয়ার আশা রয়েছে)</label>
+          <input type="number" id="f_due" placeholder="সমপরিমাণ মূল্য লিখুন" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label>সিকিউরিটি মানি (যা সম্পূর্ণ ফেরতযোগ্য; অ্যাডভান্স হিসেবে প্রদত্ত অফেরতযোগ্য অগ্রিম ভাড়া নয়)</label>
+          <input type="number" id="f_security" placeholder="সমপরিমাণ মূল্য লিখুন" inputmode="decimal">
+        </div>
+        <div class="field">
+          <label>বৈদেশিক মুদ্রা (বর্তমান এক্সচেঞ্জ রেট)</label>
+          <input type="number" id="f_fx" placeholder="সমপরিমাণ মূল্য লিখুন" inputmode="decimal">
+        </div>
+      </div>
+
+      <div class="result-box" id="calcResult"></div>
+
+      <div class="calc-footer">
+        <div class="calc-footer-inner">
+          <button class="submit-btn" id="calcSubmit">যাকাতের নিসাব প্রদান করুন</button>
+          <button class="info-btn" id="infoBtn"><span class="icon" data-ic="info"></span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: MASALA LIST ============ -->
+    <section class="screen" data-screen="masala">
+      <div class="simple-list">
+        <div class="simple-item" data-topic="দান - সদকা - হাদিয়া">দান - সদকা - হাদিয়া <span class="icon" data-ic="chevronRight"></span></div>
+        <div class="simple-item" data-topic="উশর ও খিরাজ">উশর ও খিরাজ <span class="icon" data-ic="chevronRight"></span></div>
+        <div class="simple-item" data-topic="সাদকাতুল ফিতর">সাদকাতুল ফিতর <span class="icon" data-ic="chevronRight"></span></div>
+        <div class="simple-item" data-topic="আধুনিক মাসআলা">আধুনিক মাসআলা <span class="icon" data-ic="chevronRight"></span></div>
+        <div class="simple-item" data-topic="যাকাতের ফাযায়েল মাসায়েল">যাকাতের ফাযায়েল মাসায়েল <span class="icon" data-ic="chevronRight"></span></div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: DINI JIGGASA (Q&A LIST) ============ -->
+    <section class="screen" data-screen="qalist">
+      <div class="tabbar">
+        <div class="tab active" data-tab="topics"><span class="icon" data-ic="grid"></span>বিষয়াদি</div>
+        <div class="tab" data-tab="latest"><span class="icon" data-ic="fileText"></span>সর্বশেষ</div>
+        <div class="tab" data-tab="bookmark"><span class="icon" data-ic="bookmark"></span>বুকমার্ক</div>
+        <div class="tab" data-tab="search"><span class="icon" data-ic="search"></span>খুঁজুন</div>
+      </div>
+      <div class="allqa-link" id="allqaLink">সকল প্রশ্ন-উত্তর একত্রে দেখুন</div>
+      <div class="pagination" id="paginationWrap"></div>
+      <div class="qa-listing" id="qaListWrap"></div>
+    </section>
+
+    <!-- ============ SCREEN: TOPICS (বিষয়াদি) ============ -->
+    <section class="screen" data-screen="topics">
+      <div class="topics-head">
+        <h3>মাসায়েল-এর বিষয়াদি</h3>
+        <button class="topics-close" id="topicsClose"><span class="icon" data-ic="x"></span></button>
+      </div>
+      <div class="topics-list" id="topicsList"></div>
+      <div class="navbar">
+        <div class="navbar-inner" style="justify-content:flex-end;">
+          <button id="topicsNavReload"><span class="icon" data-ic="refresh"></span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: BOOKMARK (সংরক্ষিত মাসাইল) ============ -->
+    <section class="screen" data-screen="bookmark">
+      <div class="subheader">
+        <button class="circle-back" id="bookmarkBack"><span class="icon" data-ic="chevronLeft"></span></button>
+        <span class="sublabel">সংরক্ষিত মাসাইল</span>
+      </div>
+      <div class="empty-state">কোন মাসাইল সংরক্ষিত নেই</div>
+      <div class="navbar">
+        <div class="navbar-inner" style="justify-content:flex-end;">
+          <button id="bookmarkNavReload"><span class="icon" data-ic="refresh"></span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: QUESTION DETAIL ============ -->
+    <section class="screen" data-screen="qadetail">
+      <div class="detail-topbar" id="detailTopbar">
+        <button class="ic-btn" id="detailBack"><span class="icon" data-ic="chevronLeft"></span></button>
+        <button class="ic-btn" id="detailSearch"><span class="icon" data-ic="search"></span></button>
+      </div>
+      <div class="detail-body" id="qaDetailBody"></div>
+      <div class="navbar">
+        <div class="navbar-inner">
+          <button id="navPrev"><span class="icon" data-ic="chevronLeft"></span></button>
+          <button id="navReload"><span class="icon" data-ic="refresh"></span></button>
+          <button id="navNext"><span class="icon" data-ic="chevronRight"></span></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN: PLACEHOLDER ============ -->
+    <section class="screen" data-screen="placeholder">
+      <div class="placeholder">
+        <div class="big"><span class="icon" data-ic="construction" style="width:56px;height:56px;"></span></div>
+        <div id="placeholderText">এই ফিচারটি শীঘ্রই আসছে</div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FLOATING DINI JIGGASA BUTTON -->
+  <div class="fab" id="fabBtn" style="display:none;">
+    <span class="icon" data-ic="messageQuestion"></span>
+    <span class="label">দ্বীনি<br>জিজ্ঞাসা</span>
+  </div>
+
+  <!-- SEARCH MODAL -->
+  <div class="overlay" id="searchOverlay">
+    <div class="modal">
+      <p style="text-align:center;font-weight:700;font-size:15.5px;">শব্দ দিয়ে অনুসন্ধান</p>
+      <input type="text" id="searchInput" placeholder="অনুসন্ধান করুন *">
+      <div class="row">
+        <button class="btn-cancel" id="searchCancel">বাতিল</button>
+        <button class="btn-save" id="searchGo">অনুসন্ধান</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NISAB MODAL -->
+  <div class="overlay" id="nisabOverlay">
+    <div class="modal">
+      <p>দয়া করে ১ ভরি (তোলা) রূপার মূল্য লিখুন। নিসাব হিসাব করার জন্য এটি ব্যবহৃত হবে। নিসাব হিসাব ব্যতীত আপনার যাকাত হিসাব করা সম্ভব না।</p>
+      <input type="number" id="nisabInput" placeholder="সমপরিমাণ মূল্য লিখুন" inputmode="decimal">
+      <div class="row">
+        <button class="btn-save" id="nisabSave">সংরক্ষণ</button>
+        <button class="btn-cancel" id="nisabCancel">বাতিল</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  // ---------- SVG icon library (line-style, stroke=currentColor) ----------
+  var ICONS = {
+    chevronLeft:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>',
+    chevronRight:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
+    coin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9.5c0-1 1-1.8 3-1.8s3 .7 3 1.6c0 2.2-6 1.2-6 3.6 0 1 1 1.8 3 1.8s3-.8 3-1.8"/><line x1="12" y1="6.3" x2="12" y2="17.7"/></svg>',
+    history:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 9 8 9"/><polyline points="12 7 12 12 16 14"/></svg>',
+    users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    clipboard:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="m9 12 2 2 4-4"/></svg>',
+    calculator:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="11" x2="8" y2="11.01"/><line x1="12" y1="11" x2="12" y2="11.01"/><line x1="16" y1="11" x2="16" y2="11.01"/><line x1="8" y1="15" x2="8" y2="15.01"/><line x1="12" y1="15" x2="12" y2="15.01"/><line x1="16" y1="15" x2="16" y2="18"/><line x1="8" y1="18" x2="8" y2="18.01"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>',
+    help:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 4.9.8c0 1.7-2.4 1.9-2.4 3.7"/><line x1="12" y1="17" x2="12" y2="17.01"/></svg>',
+    book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+    info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16.5"/><line x1="12" y1="7.5" x2="12" y2="7.51"/></svg>',
+    calendar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+    mapPin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+    messageCircle:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.6 8.6 0 0 1-3.3-.7L3 21l1.8-5.6a8.4 8.4 0 0 1-.8-3.6A8.4 8.4 0 0 1 12.6 3a8.5 8.5 0 0 1 8.4 8.5z"/></svg>',
+    messageQuestion:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.6 8.6 0 0 1-3.3-.7L3 21l1.8-5.6a8.4 8.4 0 0 1-.8-3.6A8.4 8.4 0 0 1 12.6 3a8.5 8.5 0 0 1 8.4 8.5z"/><path d="M9.8 9.5a2.3 2.3 0 0 1 4.4.7c0 1.6-2.2 1.8-2.2 3.3"/><line x1="12" y1="16.3" x2="12" y2="16.31"/></svg>',
+    search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+    grid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+    fileText:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>',
+    bookmark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21 12 16 5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>',
+    refresh:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/></svg>',
+    construction:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="14" width="6" height="6" rx="1"/><rect x="16" y="14" width="6" height="6" rx="1"/><path d="M8 17h8"/><path d="M12 14V6"/><path d="m8 6 4-4 4 4"/></svg>',
+    x:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
+    chevronDown:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'
+  };
+  document.querySelectorAll("[data-ic]").forEach(function(el){
+    var key = el.getAttribute("data-ic");
+    if(ICONS[key]) el.innerHTML = ICONS[key];
+  });
+  function icon(name){ return '<span class="icon" style="display:inline-flex;">'+(ICONS[name]||"")+'</span>'; }
+
+  // ---------- Data ----------
+  var qaData = {
+    1:[
+      {id:"১৫৬৪০২", title:"পাওনাদারকে না পেলে তার পাওনা থেকে দায়মুক্তির জন্য করণীয়",
+       date:"১০ জুন, ২০২৬", loc:"নারায়নগঞ্জ", answerer:"মুহাম্মাদ আশরাফুল আলম",
+       q:"আসসালামুআলাইকুম ওয়া রাহমাতুল্লাহ, আমার কাছে অনেকেই টাকা পাবে, আমি অনেকদিন যোগাযোগ করিনি, এখন অনেকের মোবাই বন্ধ, যোগাযোগ করার কোন মাধ্যম নেই, এখন কিভাবে তাকে টাকা দিব বা এর সমাধান কি, তার কোন আত্মীয় স্বজন কাউকে চিনি‌ও না, কিভাবে তাকে টাকা দিব, না দিলে এর মাসআলা কি?",
+       answer:["মূল পাওনাদারকে বা তার কোন ওয়ারিশ-আত্মীয় স্বজনকে কোনোভাবেই পাওয়া না গেলে দায়মুক্তির জন্য তার পাওনা সদকা করে দেওয়া আবশ্যক।",
+       "সুতরাং প্রশ্নোক্ত ক্ষেত্রে প্রথমত আপনার করণীয় হলো, সাধ্যমতো সম্ভাব্য সকল মাধ্যমে মূল পাওনাদার বা তার কোন ওয়ারিশ-আত্মীয় স্বজনকে অনুসন্ধান করে বের করা। সম্ভাব্য সকল মাধ্যমে খোঁজ করার পরও যদি পাওয়া না যায় এবং তাদের খোঁজ পাওয়ার সম্ভাবনাও না থাকে, তাহলে এসব পাওনা থেকে দায়মুক্তির জন্য সকল পাওনা হিসাব করে গরিব-মিসকীনদেরকে সদকা করে দেওয়া জরুরি। এক্ষেত্রে যাকাতের হকদার গরিব-মিসকীনদেরকে দান করতে হবে। এভাবে আশা করা যায় ইনশাআল্লাহ আপনি এ দায় থেকে মুক্ত হয়ে যাবেন।"]},
+      {id:"১৫৬১৪৩", title:"অন্যায়ভাবে আত্মসাৎকৃত টাকা ফেরত দিতে হবে, তা সম্ভব না হলে সদকা করতে হবে",
+       date:"১৬ জুন, ২০২৬", loc:"৩৫৯৩০-১৬৪", answerer:"মুহাম্মাদ আশরাফুল আলম",
+       q:"অন্যায়ভাবে কারো টাকা আত্মসাৎ করার পর এখন তা ফেরত দিতে চাই, কিন্তু ব্যক্তিকে খুঁজে পাচ্ছি না। এক্ষেত্রে করণীয় কী?",
+       answer:["অন্যের হক বা সম্পদ অন্যায়ভাবে আত্মসাৎ করা কবিরা গুনাহ। তাই যত দ্রুত সম্ভব প্রকৃত মালিককে খুঁজে বের করে তার হক তাকে ফিরিয়ে দেওয়া আবশ্যক।",
+       "যদি চেষ্টা সত্ত্বেও প্রকৃত মালিক বা তার ওয়ারিশদের খুঁজে পাওয়া সম্ভব না হয়, তাহলে দায়মুক্তির নিয়তে ঐ পরিমাণ অর্থ গরিব-মিসকীনদের মাঝে সদকা করে দিতে হবে। আল্লাহর কাছে তওবা করাও আবশ্যক, যাতে তিনি এ গুনাহ ক্ষমা করে দেন।"]},
+      {id:"১৫৩৩৪৯", title:"মাদরাসায় বোর্ডিং না থাকলে মহল্লাবাসীর যাকাত-ফিতরা ও কুরবানীর চামড়া কালেকশন করা যাবে কিনা?",
+       date:"১৬ মে, ২০২৬", loc:"ঢাকা", answerer:"মুহাম্মাদ আশরাফুল আলম",
+       q:"আমাদের মাদরাসায় বোর্ডিং ব্যবস্থা নেই। এমতাবস্থায় মহল্লাবাসীর কাছ থেকে যাকাত-ফিতরা ও কুরবানীর চামড়া সংগ্রহ করা যাবে কিনা?",
+       answer:["মাদরাসায় বোর্ডিং না থাকলেও যদি মাদরাসাটি এমন গরিব-মিসকীন তালিবে ইলমদের জন্য পরিচালিত হয় যারা যাকাতের হকদার, তাহলে তাদের প্রয়োজনে যাকাত-ফিতরা ও কুরবানীর চামড়া কালেকশন করা জায়েজ।",
+       "তবে শর্ত হলো, সংগৃহীত অর্থ ও চামড়ার মূল্য অবশ্যই যাকাতের হকদার ছাত্রদের পেছনে যথাযথভাবে ব্যয় করতে হবে; অন্য কোনো খাতে ব্যয় করলে দাতাদের যাকাত আদায় হবে না।"]}
+    ],
+    2:[
+      {id:"১৪৯৯১০", title:"যৌথ ব্যবসায় অংশীদারদের নিসাব আলাদাভাবে হিসাব হবে কিনা", date:"০৩ মে, ২০২৬", loc:"চট্টগ্রাম", answerer:"মুফতী জাকির হোসাইন",
+       q:"আমরা দুই ভাই মিলে একটি ব্যবসা পরিচালনা করি। যাকাতের হিসাব কি যৌথভাবে হবে, নাকি প্রত্যেকের সম্পদ আলাদাভাবে হিসাব করতে হবে?",
+       answer:["যৌথ ব্যবসায় প্রত্যেক অংশীদারের নিজ নিজ শেয়ার অনুপাতে সম্পদের মালিকানা নির্ধারিত হয়। যাকাতের হিসাবও প্রত্যেকের নিজ নিজ অংশ অনুযায়ী পৃথকভাবে করতে হবে।",
+       "কারো অংশ এককভাবে নিসাব পরিমাণ না হলেও, তার অন্যান্য ব্যক্তিগত সম্পদের সাথে যোগ করে মোট নিসাব পূর্ণ হলে তার উপর যাকাত ফরজ হবে।"]}
+    ],
+    3:[
+      {id:"১৪৭২২০", title:"যাকাতের টাকা দিয়ে ঋণ পরিশোধ করে দেওয়া যাবে কিনা", date:"১১ এপ্রিল, ২০২৬", loc:"সিলেট", answerer:"মুফতী জাকির হোসাইন",
+       q:"একজন গরিব ব্যক্তির ঋণ থাকলে, তার অনুমতি ছাড়া আমি সরাসরি পাওনাদারকে যাকাতের টাকা দিয়ে ঋণ পরিশোধ করে দিতে পারব কিনা?",
+       answer:["যাকাতের মৌলিক নিয়ম হলো, যাকাতের হকদার ব্যক্তিকে সম্পদের মালিক বানিয়ে দেওয়া। তাই উত্তম হলো ঋণগ্রস্ত ব্যক্তিকে যাকাতের টাকা মালিকানা দিয়ে দেওয়া, এরপর সে ইচ্ছা করলে তা দিয়ে ঋণ পরিশোধ করবে।",
+       "তবে ঋণগ্রস্ত ব্যক্তির অনুমতিক্রমে তার পক্ষ থেকে সরাসরি পাওনাদারকে যাকাতের টাকা পরিশোধ করে দিলেও যাকাত আদায় হয়ে যাবে, যেহেতু এটি তারই প্রতিনিধিত্বে করা হচ্ছে।"]}
+    ],
+    search:[
+      {id:"১৬৩২৩৯", title:"মুসলিম সন্তান কি অমুসলিম পিতামাতার মিরাস পাবে?", date:"২৯ জুলাই, ২০২৬", loc:"JHCC+F৬", answerer:"মুফতী আবু সাঈদ",
+       q:"আমার পিতামাতা অমুসলিম, আমি মুসলমান হয়েছি। তাদের মৃত্যুর পর আমি কি তাদের সম্পত্তির ওয়ারিশ হব?",
+       answer:["ইসলামী শরীয়তের বিধান অনুযায়ী, ধর্মের ভিন্নতা ওয়ারিশ হওয়ার ক্ষেত্রে প্রতিবন্ধক। তাই মুসলিম সন্তান তার অমুসলিম পিতামাতার পরিত্যক্ত সম্পত্তির ওয়ারিশ হবে না।",
+       "তবে পিতামাতা জীবদ্দশায় ইচ্ছা করলে সন্তানকে হেবা বা দান হিসেবে সম্পদ দিয়ে যেতে পারেন, যা মিরাস নয় বরং একটি পৃথক লেনদেন হিসেবে গণ্য হবে।"]},
+      {id:"১৬৩১৪১", title:"মসজিদে ঘুমানো কি জায়েজ?", date:"২৯ জুলাই, ২০২৬", loc:"নিমতলা", answerer:"সাইদুজ্জামান কাসেমি",
+       q:"মুসাফির বা প্রয়োজনের কারণে মসজিদে ঘুমানো যাবে কিনা? এতে মসজিদের আদব রক্ষা হবে কিনা?",
+       answer:["মসজিদের আসল উদ্দেশ্য নামায ও ইবাদত হলেও প্রয়োজনে, বিশেষত মুসাফির বা ইতিকাফরত ব্যক্তির জন্য মসজিদে ঘুমানো জায়েজ। হাদীসে সাহাবীদের মসজিদে অবস্থান ও বিশ্রামের উদাহরণ পাওয়া যায়।",
+       "তবে মসজিদের পবিত্রতা ও আদব বজায় রাখা আবশ্যক; পা ছড়িয়ে অসম্মানজনকভাবে শোয়া থেকে বিরত থাকতে হবে এবং সার্বক্ষণিক বাসস্থান বানানো থেকে বিরত থাকা উচিত।"]}
+    ]
+  };
+
+  var topicCategories = [
+    {title:"আল কুরআনুল কারীম", open:true, children:["ফযীলতপূর্ণ সূরা - আয়াত","কুরআনে কারীম সংশ্লিষ্ট আদাব ও মাসায়েল","কুরআনের ঘটনাবলী","কুরআন ও হাদীসের ব্যাখ্যা"]},
+    {title:"হাদীস ও সুন্নাহ", open:false, children:["হাদীসের পরিভাষা","হাদীস সংকলনের ইতিহাস"]},
+    {title:"তাসাউফ-আত্মশুদ্ধি । ইসলাহী পরামর্শ", open:false, children:["আত্মশুদ্ধির পথ ও পদ্ধতি","ইসলাহী মজলিসের গুরুত্ব"]},
+    {title:"শরীআত সম্পর্কিত", open:false, children:["ফরজ-ওয়াজিব-সুন্নাত","হালাল-হারামের বিধান"]},
+    {title:"ফিতনাসমূহ; বিবরণ - করণীয়", open:false, children:["বর্তমান সময়ের ফিতনা","ফিতনা থেকে বাঁচার উপায়"]},
+    {title:"আখিরাত - মৃত্যুর পরে", open:false, children:["কবরের জীবন","কিয়ামতের আলামত"]},
+    {title:"ঈমান বিধ্বংসী কথা ও কাজ", open:false, children:["শিরকের প্রকারভেদ","ঈমান নষ্টকারী কথা"]},
+    {title:"ফিরকে বাতিলা - ভ্রান্ত দল ও মত", open:false, children:["ভ্রান্ত মতবাদ পরিচিতি","আকীদা সংশোধন"]}
+  ];
+
+  var headerTitles = {
+    home:"যাকাত-ফিতরা",
+    calculator:"যাকাত ক্যালকুলেটর",
+    masala:"জরুরী মাস’আলা",
+    qalist:"দ্বীনি জিজ্ঞাসা",
+    qadetail:"দ্বীনি জিজ্ঞাসা",
+    topics:"দ্বীনি জিজ্ঞাসা",
+    bookmark:"দ্বীনি জিজ্ঞাসা",
+    placeholder:"যাকাত-ফিতরা"
+  };
+
+  var showFab = {masala:true, qalist:true, qadetail:true, topics:true, bookmark:true};
+
+  var stack = ["home"];
+  var currentPage = 1;
+  var currentQ = null;
+  var nisabValue = null;
+  var detailMode = "normal"; // 'normal' | 'latest'
+  var qaListMode = "default"; // 'default' | 'search'
+
+  var bnDigits = ["০","১","২","৩","৪","৫","৬","৭","৮","৯"];
+  function toBn(n){ return String(n).split("").map(function(c){ return /[0-9]/.test(c) ? bnDigits[+c] : c; }).join(""); }
+
+  var screensEl = document.getElementById("screens");
+  var headerTitleEl = document.getElementById("headerTitle");
+  var backBtn = document.getElementById("backBtn");
+  var fabBtn = document.getElementById("fabBtn");
+
+  function showScreen(name){
+    document.querySelectorAll(".screen").forEach(function(s){
+      s.classList.toggle("active", s.dataset.screen === name);
+    });
+    headerTitleEl.textContent = headerTitles[name] || "যাকাত-ফিতরা";
+    backBtn.classList.toggle("hidden", stack.length <= 1);
+    fabBtn.style.display = showFab[name] ? "flex" : "none";
+    window.scrollTo(0,0);
+  }
+
+  function goto(name){ stack.push(name); showScreen(name); }
+  function goBack(){
+    if(stack.length > 1){ stack.pop(); showScreen(stack[stack.length-1]); }
+  }
+
+  backBtn.addEventListener("click", goBack);
+  fabBtn.addEventListener("click", function(){ openQaListDefault(); goto("qalist"); });
+
+  function openQaListDefault(){
+    qaListMode = "default";
+    setActiveTab("topics");
+    document.getElementById("allqaLink").textContent = "সকল প্রশ্ন-উত্তর একত্রে দেখুন";
+    renderPagination();
+    renderQaList(1);
+  }
+  function setActiveTab(key){
+    document.querySelectorAll(".tab").forEach(function(t){
+      t.classList.toggle("active", t.dataset.tab === key);
+    });
+  }
+
+  // ---------- HOME ----------
+  document.querySelectorAll(".menu-card").forEach(function(card){
+    card.addEventListener("click", function(){
+      var action = card.dataset.action;
+      if(action === "calculator"){
+        goto("calculator");
+        document.getElementById("nisabOverlay").classList.add("show");
+      } else if(action === "masala"){
+        goto("masala");
+      } else {
+        document.getElementById("placeholderText").textContent = card.dataset.title + " — এই ফিচারটি শীঘ্রই আসছে";
+        goto("placeholder");
+      }
+    });
+  });
+
+  // ---------- NISAB MODAL ----------
+  var overlay = document.getElementById("nisabOverlay");
+  document.getElementById("nisabSave").addEventListener("click", function(){
+    var v = document.getElementById("nisabInput").value;
+    if(v) nisabValue = parseFloat(v);
+    overlay.classList.remove("show");
+  });
+  document.getElementById("nisabCancel").addEventListener("click", function(){
+    overlay.classList.remove("show");
+  });
+  document.getElementById("infoBtn").addEventListener("click", function(){
+    document.getElementById("nisabInput").value = nisabValue || "";
+    overlay.classList.add("show");
+  });
+
+  // ---------- CALCULATOR ----------
+  document.getElementById("calcSubmit").addEventListener("click", function(){
+    var ids = ["f_gold","f_silver","f_cash","f_deposit","f_due","f_security","f_fx"];
+    var total = 0;
+    ids.forEach(function(id){
+      var v = parseFloat(document.getElementById(id).value);
+      if(!isNaN(v)) total += v;
+    });
+    var box = document.getElementById("calcResult");
+    if(!nisabValue){
+      box.innerHTML = "নিসাব হিসাব করার জন্য প্রথমে ১ ভরি রূপার মূল্য যোগ করুন (ⓘ বাটনে ক্লিক করুন)।";
+      box.classList.add("show");
+      return;
+    }
+    var nisab = nisabValue * 7.5;
+    if(total >= nisab){
+      var zakat = total * 0.025;
+      box.innerHTML = "মোট সম্পদ: <b>" + total.toLocaleString("bn-BD") + "</b><br>নিসাব সীমা: " + nisab.toLocaleString("bn-BD") + "<br><br>আপনার সম্পদ নিসাব পরিমাণ, তাই যাকাত ফরজ। <br>প্রদেয় যাকাত (২.৫%): <b>" + zakat.toLocaleString("bn-BD", {maximumFractionDigits:2}) + "</b>";
+    } else {
+      box.innerHTML = "মোট সম্পদ: <b>" + total.toLocaleString("bn-BD") + "</b><br>নিসাব সীমা: " + nisab.toLocaleString("bn-BD") + "<br><br>আপনার সম্পদ নিসাব পরিমাণে পৌঁছায়নি, তাই আপাতত যাকাত ফরজ নয়।";
+    }
+    box.classList.add("show");
+  });
+
+  // ---------- MASALA LIST ----------
+  document.querySelectorAll(".simple-item").forEach(function(item){
+    item.addEventListener("click", function(){
+      openQaListDefault();
+      goto("qalist");
+    });
+  });
+
+  // ---------- QA LIST ----------
+  function renderQaList(page){
+    currentPage = page;
+    document.querySelectorAll(".pg").forEach(function(p){
+      p.classList.toggle("on", p.dataset.pg === String(page));
+    });
+    var wrap = document.getElementById("qaListWrap");
+    wrap.innerHTML = "";
+    var dataKey = (qaListMode === "search") ? "search" : page;
+    var list = qaData[dataKey] || [];
+    list.forEach(function(item, idx){
+      var card = document.createElement("div");
+      card.className = "qa-card";
+      card.innerHTML =
+        '<div class="qid">' + item.id + '</div>' +
+        '<div class="qtitle">' + item.title + '</div>' +
+        '<div class="qa-meta"><span>'+icon("calendar")+item.date + '</span><span>'+icon("mapPin")+item.loc + '</span></div>' +
+        '<div class="qa-answerer">'+icon("messageCircle")+'উত্তর দিয়েছেনঃ ' + item.answerer + '</div>';
+      card.addEventListener("click", function(){ openQaDetail(dataKey, idx); });
+      wrap.appendChild(card);
+    });
+  }
+
+  function renderPagination(){
+    var wrap = document.getElementById("paginationWrap");
+    var maxPage = (qaListMode === "search") ? 544 : 3;
+    var tokens = [];
+    if(qaListMode === "search"){
+      tokens = [1,2,3,4,5,"...",544];
+    } else {
+      tokens = [1,2,3];
+    }
+    var html = '<span class="arrow" id="pgPrev">'+icon("chevronLeft")+'</span>';
+    tokens.forEach(function(t){
+      if(t === "..."){
+        html += '<span style="cursor:default;">…</span>';
+      } else {
+        html += '<span class="pg'+(t===1?" on":"")+'" data-pg="'+t+'">'+toBn(t)+'</span>';
+      }
+    });
+    html += '<span class="arrow" id="pgNext">'+icon("chevronRight")+'</span>';
+    wrap.innerHTML = html;
+    document.querySelectorAll(".pg").forEach(function(p){
+      p.addEventListener("click", function(){
+        var pg = parseInt(p.dataset.pg,10);
+        if(qaData[pg] || qaListMode === "search"){ renderQaList(qaListMode==="search" ? pg : pg); }
+      });
+    });
+    document.getElementById("pgPrev").addEventListener("click", function(){
+      if(currentPage > 1) renderQaList(currentPage - 1);
+    });
+    document.getElementById("pgNext").addEventListener("click", function(){
+      if(currentPage < maxPage) renderQaList(currentPage + 1);
+    });
+  }
+
+  // ---------- TABS ----------
+  document.querySelectorAll(".tab").forEach(function(tab){
+    tab.addEventListener("click", function(){
+      var key = tab.dataset.tab;
+      setActiveTab(key);
+      if(key === "topics"){
+        renderTopics();
+        goto("topics");
+      } else if(key === "latest"){
+        openLatestRead();
+      } else if(key === "bookmark"){
+        goto("bookmark");
+      } else if(key === "search"){
+        qaListMode = "search";
+        document.getElementById("allqaLink").textContent = "আপনার জিজ্ঞাসা/প্রশ্ন-উত্তর";
+        renderPagination();
+        renderQaList(1);
+        document.getElementById("searchOverlay").classList.add("show");
+      }
+    });
+  });
+
+  // ---------- TOPICS (বিষয়াদি) ----------
+  function renderTopics(){
+    var wrap = document.getElementById("topicsList");
+    wrap.innerHTML = "";
+    topicCategories.forEach(function(cat, ci){
+      var group = document.createElement("div");
+      group.className = "topic-group" + (cat.open ? " open" : "");
+      var childrenHtml = cat.children.map(function(ch){
+        return '<div class="topic-child" data-cat="'+ci+'">' + ch + '</div>';
+      }).join("");
+      group.innerHTML =
+        '<div class="topic-group-head">' + cat.title + icon("chevronDown") + '</div>' +
+        '<div class="topic-children">' + childrenHtml + '</div>';
+      group.querySelector(".topic-group-head").addEventListener("click", function(){
+        cat.open = !cat.open;
+        renderTopics();
+      });
+      group.querySelectorAll(".topic-child").forEach(function(el){
+        el.addEventListener("click", function(){
+          document.getElementById("topicsClose").click();
+        });
+      });
+      wrap.appendChild(group);
+    });
+  }
+  document.getElementById("topicsClose").addEventListener("click", goBack);
+  document.getElementById("topicsNavReload").addEventListener("click", renderTopics);
+
+  // ---------- BOOKMARK ----------
+  document.getElementById("bookmarkBack").addEventListener("click", goBack);
+  document.getElementById("bookmarkNavReload").addEventListener("click", function(){});
+
+  // ---------- SEARCH MODAL ----------
+  document.getElementById("searchCancel").addEventListener("click", function(){
+    document.getElementById("searchOverlay").classList.remove("show");
+  });
+  document.getElementById("searchGo").addEventListener("click", function(){
+    document.getElementById("searchOverlay").classList.remove("show");
+  });
+
+  // ---------- QA DETAIL ----------
+  function openQaDetail(page, idx){
+    currentQ = {page:page, index:idx};
+    detailMode = "normal";
+    renderQaDetail();
+    goto("qadetail");
+  }
+
+  function openLatestRead(){
+    currentQ = {page:1, index:0};
+    detailMode = "latest";
+    renderQaDetail();
+    goto("qadetail");
+  }
+
+  function renderDetailTopbar(){
+    var bar = document.getElementById("detailTopbar");
+    if(detailMode === "latest"){
+      bar.innerHTML =
+        '<button class="circle-back" id="detailBack" style="width:26px;height:26px;">'+icon("chevronLeft")+'</button>' +
+        '<span class="sublabel" style="margin-right:auto;margin-left:10px;">সর্বশেষ পঠিত মাসাইল</span>';
+    } else {
+      bar.innerHTML =
+        '<button class="ic-btn" id="detailBack">'+icon("chevronLeft")+'</button>' +
+        '<button class="ic-btn" id="detailSearch">'+icon("search")+'</button>';
+    }
+    document.getElementById("detailBack").addEventListener("click", goBack);
+    var searchBtn = document.getElementById("detailSearch");
+    if(searchBtn){
+      searchBtn.addEventListener("click", function(){
+        openQaListDefault();
+        goto("qalist");
+      });
+    }
+  }
+
+  function renderQaDetail(){
+    var item = qaData[currentQ.page][currentQ.index];
+    var body = document.getElementById("qaDetailBody");
+    var answerHtml = item.answer.map(function(p){ return "<p>" + p + "</p>"; }).join("");
+    body.innerHTML =
+      '<h2>' + item.title + '</h2>' +
+      '<div class="detail-qtext"><span class="detail-qnum">প্রশ্নঃ ' + item.id + '.</span> ' + item.q + '</div>' +
+      '<div class="detail-meta"><span>'+icon("calendar")+item.date + '</span><span>'+icon("mapPin")+item.loc + '</span></div>' +
+      '<div class="detail-answer-head">উত্তর</div>' +
+      '<div class="arabic">وَعَلَيْكُمُ السَّلَامُ وَرَحْمَةُ اللَّهِ وَبَرَكَاتُهُ<br>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>' +
+      '<div class="detail-answer">' + answerHtml + '</div>';
+
+    renderDetailTopbar();
+
+    document.getElementById("navPrev").disabled = (currentQ.index === 0);
+    var list = qaData[currentQ.page];
+    document.getElementById("navNext").disabled = (currentQ.index >= list.length - 1);
+  }
+
+  document.getElementById("navPrev").addEventListener("click", function(){
+    if(currentQ.index > 0){ currentQ.index--; renderQaDetail(); }
+  });
+  document.getElementById("navNext").addEventListener("click", function(){
+    var list = qaData[currentQ.page];
+    if(currentQ.index < list.length - 1){ currentQ.index++; renderQaDetail(); }
+  });
+  document.getElementById("navReload").addEventListener("click", function(){ renderQaDetail(); });
+
+  renderPagination();
+  showScreen("home");
+})();
+</script>
+</body>
+</html>
