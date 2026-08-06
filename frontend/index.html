@@ -268,6 +268,27 @@
     align-items:center;
     padding:0 24px 6px;
   }
+  
+  /* Prayer time background image */
+  .phone-prayer-bg{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    opacity:0.55;
+    z-index:0;
+    transition:background-image 0.6s ease, opacity 0.8s ease;
+    pointer-events:none;
+  }
+  .phone-prayer-bg-scrim{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(180deg, rgba(8,10,26,0.15) 0%, rgba(8,10,26,0.05) 45%, rgba(8,10,26,0.35) 100%);
+    z-index:0;
+    pointer-events:none;
+  }
   .ring-arc{
     position:relative;
     width:100%;
@@ -1832,6 +1853,9 @@
 <body>
 <div class="phone">
 
+  <div class="phone-prayer-bg" id="phonePrayerBg" aria-hidden="true"></div>
+  <div class="phone-prayer-bg-scrim" aria-hidden="true"></div>
+
   <div class="waqt-bg" id="waqtBg" aria-hidden="true">
     <div class="sky-cloud sky-cloud-1" id="skyCloud1"></div>
     <div class="sky-cloud sky-cloud-2" id="skyCloud2"></div>
@@ -1943,13 +1967,11 @@
           
           <!-- Time labels inside the arc -->
           <!-- সূর্যোদয় লেবেল (Arc এর বাম দিকে) -->
-          <text class="arc-time-label" x="50" y="140" font-weight="600" font-size="12" id="sunriseTimeLabel" text-anchor="middle">05:27</text>
           
           <!-- বর্তমান সময় লেবেল (Arc এর শীর্ষে) -->
           <text class="arc-time-label" x="180" y="25" font-weight="700" font-size="14" id="midTimeLabel" text-anchor="middle" style="display:none;">09:00</text>
           
           <!-- সূর্যাস্ত লেবেল (Arc এর ডান দিকে) -->
-          <text class="arc-time-label" x="310" y="140" font-weight="600" font-size="12" id="sunsetTimeLabel" text-anchor="middle">18:42</text>
           
           <!-- Arc এর নিচে সময় পরিসীমা -->
           <text class="arc-time-label-small" x="180" y="175" font-weight="400" font-size="11" text-anchor="middle" opacity="0.7" style="display:none;">দিনের সময়</text>
@@ -4405,6 +4427,108 @@
   
   // প্রতি সেকেন্ডেও দ্রুত আপডেটের জন্য (মসৃণতার জন্য)
   setInterval(updateProgressBars, 1000);
+})();
+
+// ====== নামাজের সময় অনুযায়ী Background Image পরিবর্তন ======
+(function() {
+  'use strict';
+  
+  // ছবির পথ এবং নামাজের সময়ের ম্যাপিং
+  var prayerTimeBackgrounds = {
+    'tahajjud': {
+      times: { start: 0 * 60 + 0, end: 4 * 60 + 4 },     // 00:00 - 04:04 (রাত/দেরী রাত)
+      image: 'assets/Tahajjud.png',
+      label: 'তাহাজ্জুদ'
+    },
+    'fajr': {
+      times: { start: 4 * 60 + 4, end: 5 * 60 + 26 },    // 04:04 - 05:26 (ভোর)
+      image: 'assets/Fajr.png',
+      label: 'ফজর'
+    },
+    'shuruq': {
+      times: { start: 5 * 60 + 26, end: 6 * 60 + 15 },   // 05:26 - 06:15 (সূর্যোদয়)
+      image: 'assets/Shuruq.png',
+      label: 'সূর্যোদয়'
+    },
+    'ishraq': {
+      times: { start: 6 * 60 + 15, end: 9 * 60 + 0 },    // 06:15 - 09:00 (ইশরাক/সকাল)
+      image: 'assets/Ishraq.png',
+      label: 'ইশরাক'
+    },
+    'duha': {
+      times: { start: 9 * 60 + 0, end: 12 * 60 + 7 },    // 09:00 - 12:07 (দুহা/মধ্য সকাল)
+      image: 'assets/Duha.png',
+      label: 'দুহা'
+    },
+    'zuhr': {
+      times: { start: 12 * 60 + 7, end: 16 * 60 + 42 },  // 12:07 - 16:42 (যুহর/দুপুর)
+      image: 'assets/Zhuhr.png',
+      label: 'যুহর'
+    },
+    'asr': {
+      times: { start: 16 * 60 + 42, end: 18 * 60 + 41 }, // 16:42 - 18:41 (আসর/বিকাল)
+      image: 'assets/Asr.png',
+      label: 'আসর'
+    },
+    'sunset': {
+      times: { start: 18 * 60 + 41, end: 18 * 60 + 50 }, // 18:41 - 18:50 (সূর্যাস্ত)
+      image: 'assets/Sunset.png',
+      label: 'সূর্যাস্ত'
+    },
+    'maghrib': {
+      times: { start: 18 * 60 + 50, end: 20 * 60 + 4 },  // 18:50 - 20:04 (মাগরিব)
+      image: 'assets/Maghrib.png',
+      label: 'মাগরিব'
+    },
+    'awwabin': {
+      times: { start: 20 * 60 + 4, end: 20 * 60 + 45 },  // 20:04 - 20:45 (আওয়াবিন)
+      image: 'assets/Awwabin.png',
+      label: 'আওয়াবিন'
+    },
+    'isha': {
+      times: { start: 20 * 60 + 45, end: 24 * 60 },      // 20:45 - 24:00 (ইশা/রাত)
+      image: 'assets/Isha.png',
+      label: 'ইশা'
+    }
+  };
+  
+  function updatePrayerBackground() {
+    var now = new Date();
+    var currentMinutes = now.getHours() * 60 + now.getMinutes();
+    var bgEl = document.getElementById('phonePrayerBg');
+    
+    if (!bgEl) return;
+    
+    // বর্তমান সময়ের জন্য উপযুক্ত ছবি খুঁজে বের করুন
+    var backgroundImage = 'assets/Ishraq.png'; // ডিফল্ট ছবি
+    var matchedPrayer = null;
+    
+    Object.keys(prayerTimeBackgrounds).forEach(function(prayerName) {
+      var prayer = prayerTimeBackgrounds[prayerName];
+      var startTime = prayer.times.start;
+      var endTime = prayer.times.end;
+      
+      if (currentMinutes >= startTime && currentMinutes < endTime) {
+        backgroundImage = prayer.image;
+        matchedPrayer = prayerName;
+      }
+    });
+    
+    // Background image সরাসরি এলিমেন্টে সেট করুন
+    var fullUrl = 'url("' + backgroundImage + '")';
+    if (bgEl.style.backgroundImage !== fullUrl) {
+      bgEl.style.backgroundImage = fullUrl;
+    }
+  }
+  
+  // প্রাথমিক আপডেট
+  updatePrayerBackground();
+  
+  // প্রতি মিনিটে আপডেট করুন
+  setInterval(updatePrayerBackground, 60000);
+  
+  // প্রতি সেকেন্ডে চেক করুন (মসৃণ ট্রানজিশনের জন্য)
+  setInterval(updatePrayerBackground, 1000);
 })();
 </script>
 
