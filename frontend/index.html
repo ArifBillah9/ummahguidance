@@ -189,34 +189,88 @@
     color:var(--ring-dark);
     position:relative;
     z-index:2;
+    min-height:50px;
   }
+  .topbar-logo{
+    width:80px;
+    height:auto;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .topbar-logo img{
+    width:100%;
+    height:auto;
+    max-height:40px;
+  }
+  
+  /* ===== নতুন Date Block স্টাইল (Ring Section এর উপরে) ===== */
   .date-block{
     display:flex;
-    gap:10px;
-    align-items:flex-start;
+    justify-content:center;
+    align-items:center;
+    padding:12px 20px;
+    border-radius:0;
+    color:var(--ring-dark);
+    margin:8px 15px;
+    width:calc(100% - 30px);
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    box-shadow:0 2px 6px rgba(31, 138, 95, 0.08);
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    white-space:nowrap;
+    backdrop-filter:blur(4px);
+    border:none;
+  }
+  .date-block::-webkit-scrollbar{
+    height:2px;
+  }
+  .date-block::-webkit-scrollbar-track{
+    background:transparent;
+  }
+  .date-block::-webkit-scrollbar-thumb{
+    background:rgba(31, 138, 95, 0.15);
+  }
+  .date-block-item{
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 auto;
+    text-align:center;
+    border-right:1px solid rgba(31, 138, 95, 0.08);
+    padding:0 12px;
+    gap:3px;
+  }
+  .date-block-item:last-child{
+    border-right:none;
   }
   .date-icon{
-    width:22px;height:22px;
-    margin-top:4px;
-    opacity:0.95;
-    flex-shrink:0;
+    display:none;
+  }
+  .date-text{
+    display:contents;
   }
   .date-text .hijri{
-    font-size:15px;
+    font-size:13px;
     font-weight:600;
-    line-height:1.35;
+    line-height:1.3;
+    color:#fff;
   }
   .date-text .gregorian{
-    font-size:13px;
+    font-size:10px;
     font-weight:400;
-    opacity:0.8;
-    line-height:1.35;
+    opacity:0.85;
+    line-height:1.2;
+    color:#e8e8e8;
   }
   .date-text .bangla{
-    font-size:13px;
+    font-size:10px;
     font-weight:400;
-    opacity:0.8;
-    line-height:1.35;
+    opacity:0.85;
+    line-height:1.2;
+    color:#e8e8e8;
   }
   .top-icons{
     display:flex;
@@ -266,7 +320,12 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    padding:0 24px 6px;
+    padding:0 0 6px;
+    width:100%;
+  }
+  .ring-section .date-block{
+    width:100%;
+    margin-bottom:8px;
   }
   
   /* Prayer time background image */
@@ -297,7 +356,7 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    padding:0 0 12px;
+    padding:0 24px 12px;
   }
   
   /* === SUN ARC VISUALIZATION === */
@@ -1879,18 +1938,8 @@
 
   <div class="left-pane">
   <div class="topbar">
-    <div class="date-block">
-      <svg class="date-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="3" y="5" width="18" height="16" rx="3" stroke="currentColor" stroke-width="1.6"/>
-        <path d="M3 9.5H21" stroke="currentColor" stroke-width="1.6"/>
-        <path d="M8 3V6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-        <path d="M16 3V6.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-      </svg>
-      <div class="date-text">
-        <div class="gregorian" id="gregorianDate">01 August 2026</div>
-        <div class="hijri" id="hijriDate">Saturday, 17 Safar 1448</div>
-        <div class="bangla" id="banglaDate">17 Shravan 1433</div>
-      </div>
+    <div class="topbar-logo">
+      <img src="assets/logo.png" alt="লোগু" title="আপনার লোগু এখানে থাকবে">
     </div>
     <div class="top-icons">
       <div class="bell-wrap" id="notifBell">
@@ -1904,6 +1953,25 @@
   </div>
 
   <div class="ring-section">
+    <!-- নতুন Date Block (রিং সেকশনের উপরে) -->
+    <div class="date-block">
+      <div class="date-block-item">
+        <div class="date-text">
+          <div class="hijri" id="hijriDate">Saturday, 17 Safar 1448</div>
+        </div>
+      </div>
+      <div class="date-block-item">
+        <div class="date-text">
+          <div class="gregorian" id="gregorianDate">01 August 2026</div>
+        </div>
+      </div>
+      <div class="date-block-item">
+        <div class="date-text">
+          <div class="bangla" id="banglaDate">17 Shravan 1433</div>
+        </div>
+      </div>
+    </div>
+    
     <div class="ring-arc">
       <!-- SUN ARC VISUALIZATION -->
       <div class="sun-arc-container">
