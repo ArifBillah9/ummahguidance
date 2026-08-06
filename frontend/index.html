@@ -99,13 +99,10 @@
   .waqt-bg-layer{
     position:absolute;
     inset:0;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    object-position:center;
+    background-size:cover;
+    background-position:center;
     opacity:0;
-    transition:opacity 1.2s ease;
-    display:block;
+    transition:opacity 1s ease;
   }
   .waqt-bg-layer.on{opacity:1;}
   .waqt-bg-scrim{
@@ -113,7 +110,6 @@
     inset:0;
     background:linear-gradient(180deg, rgba(8,10,26,0.16) 0%, rgba(8,10,26,0.06) 45%, rgba(8,10,26,0.30) 100%);
     pointer-events:none;
-    z-index:10;
   }
 
   /* ===== রিয়েল-টাইম আকাশ: সূর্য/চাঁদ/তারা/মেঘ (স্ট্যাটিক ছবির বদলে) ===== */
@@ -270,27 +266,27 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    padding:0px 24px 0px;
+    padding:0 24px 6px;
   }
   .ring-arc{
     position:relative;
     width:100%;
-    max-width:260px;
+    max-width:380px;
     margin:0 auto;
     display:flex;
     flex-direction:column;
     align-items:center;
-    padding:0;
+    padding:0 0 12px;
   }
   
   /* === SUN ARC VISUALIZATION === */
-  .sun-arc-container{
-    position:relative;
-    width:100%;
-    aspect-ratio:360/75;
-    max-width:280px;
-    margin:0 auto;
-  }
+.sun-arc-container {
+  position: relative;
+  width: 340px;  /* ✅ ঠিক রাখলেন */
+  aspect-ratio: 2 / 1;
+  margin: 0 auto;
+  margin-top: -100px;  /* 👈 এখানে সামঞ্জস্য করুন */
+}
   .sun-arc-svg{
     display:block;
     width:100%;
@@ -334,7 +330,7 @@
   
   /* Arc path styling */
   .sun-arc-path{
-    stroke:#5b8def;
+    stroke:#d4a574;
     stroke-width:2.5;
     stroke-dasharray:6,4;
     fill:none;
@@ -367,6 +363,15 @@
     r:3;
   }
   
+  /* Time labels */
+  .arc-time-label{
+    font-size:11px;
+    font-weight:600;
+    fill:var(--ring-dark);
+    text-anchor:middle;
+    opacity:0.85;
+    font-family:inherit;
+  }
   
   /* Small time labels inside arc */
   .arc-time-label-small{
@@ -395,26 +400,26 @@
     flex-direction:column;
     align-items:center;
     justify-content:flex-start;
-    gap:0px;
-    font-size:7px;
+    gap:2px;
+    font-size:11.5px;
     font-weight:600;
     color:var(--ring-dark);
     font-variant-numeric:tabular-nums;
   }
   .sunrise-sunset-indicator .sun-event-icon{
-    width:13px;
-    height:13px;
+    width:34px;
+    height:34px;
     object-fit:contain;
     filter:drop-shadow(0 2px 4px rgba(0,0,0,0.12));
   }
-  /* arc path baseline sits near the bottom of the shallow viewBox */
+  /* arc path starts/ends at y=160 of a 0-180 viewBox (~89% down) */
   .sunrise-indicator{
-    top:calc(93% - 6px);
-    left:0%;
+    top:calc(89% - 17px);
+    left:2%;
   }
   .sunset-indicator{
-    top:calc(93% - 6px);
-    right:0%;
+    top:calc(89% - 17px);
+    right:2%;
   }
   
   /* Arc decorative mosque silhouettes */
@@ -436,54 +441,54 @@
   
   .ring-center{
     position:absolute;
-    left:50%; top:8%;
+    left:50%; top:42%;
     transform:translate(-50%,0);
     text-align:center;
     color:var(--ring-dark);
     width:100%;
     z-index:10;
-    padding:0 12px;
+    padding:0 20px;
     box-sizing:border-box;
   }
   .ring-center .label{
-    font-size:12px;
+    font-size:16px;
     font-weight:700;
-    margin-bottom:1px;
-    letter-spacing:0.2px;
+    margin-bottom:3px;
+    letter-spacing:0.3px;
     word-break:break-word;
   }
   .ring-center .sub{
-    font-size:8px;
+    font-size:10.5px;
     opacity:0.75;
-    margin-bottom:1px;
+    margin-bottom:3px;
     font-weight:500;
     word-break:break-word;
   }
   .ring-center .countdown{
-    font-size:13px;
+    font-size:17px;
     font-weight:700;
-    letter-spacing:0.3px;
+    letter-spacing:0.5px;
     font-variant-numeric:tabular-nums;
     word-break:break-word;
   }
   
   /* Responsive improvements for ring-center */
   @media (max-width:480px){
-    .ring-center .label{font-size:11px; margin-bottom:1px;}
-    .ring-center .sub{font-size:7.5px; margin-bottom:1px;}
-    .ring-center .countdown{font-size:12px;}
+    .ring-center .label{font-size:14px; margin-bottom:2px;}
+    .ring-center .sub{font-size:9.5px; margin-bottom:2px;}
+    .ring-center .countdown{font-size:15px;}
   }
   
   @media (min-width:641px) and (max-width:1023px){
-    .ring-center .label{font-size:13px; margin-bottom:2px;}
-    .ring-center .sub{font-size:8.5px; margin-bottom:2px;}
-    .ring-center .countdown{font-size:14px;}
+    .ring-center .label{font-size:18px; margin-bottom:4px;}
+    .ring-center .sub{font-size:11.5px; margin-bottom:4px;}
+    .ring-center .countdown{font-size:20px;}
   }
   
   @media (min-width:1024px){
-    .ring-center .label{font-size:14px; margin-bottom:2px;}
-    .ring-center .sub{font-size:9px; margin-bottom:2px;}
-    .ring-center .countdown{font-size:16px;}
+    .ring-center .label{font-size:20px; margin-bottom:5px;}
+    .ring-center .sub{font-size:12.5px; margin-bottom:5px;}
+    .ring-center .countdown{font-size:24px;}
   }
 
   .pills-row{
@@ -492,34 +497,33 @@
     justify-content:center;
     gap:3px;
     flex-wrap:wrap;
-    margin-top:10px;
+    margin-top:20px;
     width:100%;
   }
   .location-row,
   .suntimes-row{
     display:flex;
     align-items:center;
-    gap:6px;
+    gap:9px;
     background:var(--pill-bg);
-    padding:3px 9px;
+    padding:5px 13px;
     color:var(--ring-dark);
-    font-size:9.5px;
+    font-size:11.5px;
     font-weight:600;
     backdrop-filter:blur(6px);
-    border-radius:20px;
   }
-  .location-row svg{width:12px;height:12px;opacity:0.9;}
-  .location-row .chev{width:9px;height:9px;opacity:0.75;margin-left:1px;}
+  .location-row svg{width:15px;height:15px;opacity:0.9;}
+  .location-row .chev{width:11px;height:11px;opacity:0.75;margin-left:2px;}
   .location-row{cursor:pointer; -webkit-tap-highlight-color:transparent; transition:transform .15s ease, opacity .15s ease;}
   .location-row:active{transform:scale(0.96); opacity:0.85;}
 
   .suntimes-row{
-    gap:7px;
-    font-size:10px;
+    gap:10px;
+    font-size:12.5px;
     font-weight:600;
   }
-  .suntimes-row span{display:flex;align-items:center;gap:3px;}
-  .suntimes-row svg{width:11px;height:11px;}
+  .suntimes-row span{display:flex;align-items:center;gap:5px;}
+  .suntimes-row svg{width:14px;height:14px;}
   .divider-dot{
     width:3px;height:3px;
     border-radius:50%;
@@ -1216,7 +1220,7 @@
       max-width:680px;
       border-radius:0 0 32px 32px;
     }
-    .ring-arc{max-width:280px;}
+    .ring-arc{max-width:320px;}
     .card{padding:8px 32px 30px;}
     .app-menu{padding:20px 32px 100px;}
     .menu-grid{grid-template-columns:repeat(5, 1fr);}
@@ -1243,7 +1247,7 @@
       max-width:760px;
       border-radius:0 0 32px 32px;
     }
-    .ring-arc{max-width:300px;}
+    .ring-arc{max-width:340px;}
     .card{padding:8px 36px 30px;}
     .app-menu{padding:24px 36px 100px;}
     .menu-grid{grid-template-columns:repeat(5, 1fr);}
@@ -1829,17 +1833,6 @@
 <div class="phone">
 
   <div class="waqt-bg" id="waqtBg" aria-hidden="true">
-    <img class="waqt-bg-layer" data-waqt-bg="fajr" loading="eager" referrerpolicy="no-referrer" src="https://i.pinimg.com/1200x/47/46/6c/47466c2821ec43b5b038eb386dee6d1d.jpg" alt="">
-    <img class="waqt-bg-layer" data-waqt-bg="sunrise" loading="eager" referrerpolicy="no-referrer" src="https://i.pinimg.com/736x/fd/c3/54/fdc354babbe254314755fce821b2d737.jpg" alt="">
-    <img class="waqt-bg-layer" data-waqt-bg="ishraq" loading="eager" referrerpolicy="no-referrer" src="https://i.pinimg.com/736x/19/d5/9e/19d59e89b9df249885ad8067bf51551b.jpg" alt="">
-    <img class="waqt-bg-layer" data-waqt-bg="duha" loading="eager" referrerpolicy="no-referrer" src="https://i.pinimg.com/1200x/77/40/a2/7740a272b1e3460073303049c991972f.jpg" alt="">
-    <img class="waqt-bg-layer" data-waqt-bg="zuhr" loading="eager" referrerpolicy="no-referrer" src="https://i.pinimg.com/736x/df/a2/e1/dfa2e1ebaba3dcd43c2549a89c52409e.jpg" alt="">
-    <img class="waqt-bg-layer" data-waqt-bg="asr" loading="eager" referrerpolicy="no-referrer" src="https://i.pinimg.com/736x/8f/65/63/8f6563a9d339ed641b026cb444d1fe3d.jpg" alt="">
-    <img class="waqt-bg-layer" data-waqt-bg="sunset" loading="eager" referrerpolicy="no-referrer" src="https://i.pinimg.com/736x/f4/4a/4a/f44a4aa08d9630d68f5fbd3f2701f727.jpg" alt="">
-    <img class="waqt-bg-layer" data-waqt-bg="maghrib" loading="eager" referrerpolicy="no-referrer" src="https://i.pinimg.com/1200x/84/b0/15/84b01551898f82f9eb1441ce37670e6a.jpg" alt="">
-    <img class="waqt-bg-layer" data-waqt-bg="awwabin" loading="eager" referrerpolicy="no-referrer" src="https://i.pinimg.com/736x/a9/4c/08/a94c08eb4be9a4dff5e41b0e7aeea5dc.jpg" alt="">
-    <img class="waqt-bg-layer" data-waqt-bg="isha" loading="eager" referrerpolicy="no-referrer" src="https://i.pinimg.com/1200x/19/80/eb/1980ebaeb6d16d12169908acd2bdd755.jpg" alt="">
-    <img class="waqt-bg-layer" data-waqt-bg="tahajjud" loading="eager" referrerpolicy="no-referrer" src="https://i.pinimg.com/1200x/6e/a2/76/6ea276b2d018ab7294dda9b75f48ddea.jpg" alt="">
     <div class="sky-cloud sky-cloud-1" id="skyCloud1"></div>
     <div class="sky-cloud sky-cloud-2" id="skyCloud2"></div>
     <div class="sky-cloud sky-cloud-3" id="skyCloud3"></div>
@@ -1859,6 +1852,7 @@
     <div class="sky-sun" id="skySun"></div>
     <div class="waqt-bg-scrim"></div>
   </div>
+
   <div class="left-pane">
   <div class="topbar">
     <div class="date-block">
@@ -1891,7 +1885,7 @@
       <div class="sun-arc-container">
         <div class="celestial-glow" id="celestialGlow"></div>
         
-        <svg class="sun-arc-svg" viewBox="0 5 360 75" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <svg class="sun-arc-svg" viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
           <!-- Defs for gradients and filters -->
           <defs>
             <!-- Sun glow -->
@@ -1914,7 +1908,7 @@
           </defs>
           
           <!-- Main sun arc path (dashed) -->
-          <path class="sun-arc-path" d="M 0 75 Q 180 12, 360 75" stroke-linecap="round"/>
+          <path class="sun-arc-path" d="M 30 160 Q 180 30, 330 160" stroke-linecap="round"/>
           
           <!-- Current position marker (sun during day, moon at night) -->
           <g id="celestialBody" transform="translate(180, 80)">
@@ -1949,13 +1943,16 @@
           
           <!-- Time labels inside the arc -->
           <!-- সূর্যোদয় লেবেল (Arc এর বাম দিকে) -->
-          <text x="18" y="72" font-weight="600" font-size="9" id="sunriseTimeLabel" text-anchor="middle">05:27</text>
+          <text class="arc-time-label" x="50" y="140" font-weight="600" font-size="12" id="sunriseTimeLabel" text-anchor="middle">05:27</text>
+          
+          <!-- বর্তমান সময় লেবেল (Arc এর শীর্ষে) -->
+          <text class="arc-time-label" x="180" y="25" font-weight="700" font-size="14" id="midTimeLabel" text-anchor="middle" style="display:none;">09:00</text>
           
           <!-- সূর্যাস্ত লেবেল (Arc এর ডান দিকে) -->
-          <text x="342" y="72" font-weight="600" font-size="9" id="sunsetTimeLabel" text-anchor="middle">18:42</text>
+          <text class="arc-time-label" x="310" y="140" font-weight="600" font-size="12" id="sunsetTimeLabel" text-anchor="middle">18:42</text>
           
           <!-- Arc এর নিচে সময় পরিসীমা -->
-          <text class="arc-time-label-small" x="180" y="80" font-weight="400" font-size="7" text-anchor="middle" opacity="0">দিনের সময়</text>
+          <text class="arc-time-label-small" x="180" y="175" font-weight="400" font-size="11" text-anchor="middle" opacity="0.7" style="display:none;">দিনের সময়</text>
         </svg>
         
         <!-- Sunrise indicator -->
@@ -1971,18 +1968,7 @@
         </div>
       </div>
 
-      <!-- Prayer times info -->
-      <div style="width:100%; text-align:center; margin-top:2px; font-size:10px; color:var(--ring-dark);">
-        <div style="display:flex; justify-content:center; gap:16px;">
-          <div>
-            <div style="font-weight:600; font-size:11px;">ফজর: 12:06</div>
-          </div>
-          <div>
-            <div style="font-weight:600; font-size:11px;">আসর: 08:43</div>
-          </div>
-        </div>
-      </div>
-      
+
       <div class="ring-center">
         <div class="label" id="ringLabel">ইশরাক</div>
         <div class="sub" id="ringSub">শেষ হতে বাকি</div>
@@ -1990,7 +1976,7 @@
       </div>
     </div>
 
-    <div class="pills-row" style="margin-top:10px;">
+    <div class="pills-row">
       <div class="location-row" id="locationRow" role="button">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M12 21C12 21 19 14.5 19 9.5C19 5.6 15.9 2.5 12 2.5C8.1 2.5 5 5.6 5 9.5C5 14.5 12 21 12 21Z" stroke="currentColor" stroke-width="1.6"/>
@@ -2966,46 +2952,34 @@
 
   // দিনের মিনিট হিসেবে সময়সীমা (ঘণ্টা*৬০+মিনিট)
   var FAJR_START   = 4*60+4;     // ০৪:০৪
-  var SUNRISE      = 5*60+26;    // ০৫:২৬ (সূর্যোদয় শুরু)
-  var SUNRISE_END  = 5*60+46;    // সূর্যোদয়ের স্বল্প সময় (২০ মিনিট)
-  var ISHRAQ_END   = 6*60+46;    // ইশরাক ~১ ঘণ্টা
+  var SUNRISE      = 5*60+26;    // ০৫:২৬
+  var ISHRAQ_END   = 6*60+26;    // ইশরাক ~১ ঘণ্টা
   var ZUHR_START   = 12*60+7;    // ১২:০৭
   var ASR_START    = 16*60+43;   // ০৪:৪৩ PM
   var MAGHRIB_START= 18*60+42;   // ০৬:৪২ PM
-  var SUNSET_END   = 19*60+2;    // সূর্যাস্তের স্বল্প সময় (মাগরিবের ২০ মিনিট আগে ধরা)
   var ISHA_START   = 20*60+5;    // ০৮:০৫ PM
-  var AWWABIN_END  = 20*60+35;   // আওয়াবিন ~৩০ মিনিট (মাগরিবের পর, ইশার আগে)
-  var TAHAJJUD_START = 1*60+30;  // রাত ০১:৩০ থেকে ফজরের আগ পর্যন্ত তাহাজ্জুদ
   var DAY          = 1440;
 
   // থিম: [sky-top, sky-mid, sky-bottom, ring-dark/ring-fg টেক্সট কালার, ring-track, pill-bg]
   var THEMES = {
-    isha:     { top:'#141a35', mid:'#232a52', bot:'#3b3663', ink:'#f3f0ff', track:'rgba(255,255,255,0.16)', pill:'rgba(255,255,255,0.14)' },
-    tahajjud: { top:'#0c1024', mid:'#171c3a', bot:'#262c50', ink:'#f3f0ff', track:'rgba(255,255,255,0.16)', pill:'rgba(255,255,255,0.14)' },
-    fajr:     { top:'#2c3560', mid:'#5b5a8c', bot:'#e2a37a', ink:'#fbf3ea', track:'rgba(255,255,255,0.22)', pill:'rgba(255,255,255,0.35)' },
-    sunrise:  { top:'#ffd7a0', mid:'#ffb15e', bot:'#f77f3c', ink:'#3a220a', track:'rgba(58,34,10,0.16)',    pill:'rgba(255,255,255,0.55)' },
-    ishraq:   { top:'#fbecb0', mid:'#f6d879', bot:'#e2a83e', ink:'#17352b', track:'rgba(23,53,43,0.14)',    pill:'rgba(255,255,255,0.55)' },
-    duha:     { top:'#eaf6ff', mid:'#bfe3f5', bot:'#79b8d9', ink:'#123a4a', track:'rgba(18,58,74,0.14)',    pill:'rgba(255,255,255,0.6)' },
-    zuhr:     { top:'#fff6df', mid:'#ffe29a', bot:'#f2b955', ink:'#3a2a08', track:'rgba(58,42,8,0.14)',     pill:'rgba(255,255,255,0.6)' },
-    asr:      { top:'#ffe3b0', mid:'#f6b65a', bot:'#d97a35', ink:'#3a220a', track:'rgba(58,34,10,0.16)',    pill:'rgba(255,255,255,0.55)' },
-    sunset:   { top:'#ff9a6b', mid:'#f56a4e', bot:'#c8425a', ink:'#fdf2e9', track:'rgba(255,255,255,0.2)',  pill:'rgba(255,255,255,0.3)'  },
-    maghrib:  { top:'#3a2f55', mid:'#a1517a', bot:'#e08a4a', ink:'#fdf2e9', track:'rgba(255,255,255,0.2)',  pill:'rgba(255,255,255,0.3)'  },
-    awwabin:  { top:'#211b3d', mid:'#3a2c5c', bot:'#5c3f6e', ink:'#f3ecff', track:'rgba(255,255,255,0.18)', pill:'rgba(255,255,255,0.2)'  }
+    isha:    { top:'#141a35', mid:'#232a52', bot:'#3b3663', ink:'#f3f0ff', track:'rgba(255,255,255,0.16)', pill:'rgba(255,255,255,0.14)' },
+    fajr:    { top:'#2c3560', mid:'#5b5a8c', bot:'#e2a37a', ink:'#fbf3ea', track:'rgba(255,255,255,0.22)', pill:'rgba(255,255,255,0.35)' },
+    ishraq:  { top:'#fbecb0', mid:'#f6d879', bot:'#e2a83e', ink:'#17352b', track:'rgba(23,53,43,0.14)',    pill:'rgba(255,255,255,0.55)' },
+    duha:    { top:'#eaf6ff', mid:'#bfe3f5', bot:'#79b8d9', ink:'#123a4a', track:'rgba(18,58,74,0.14)',    pill:'rgba(255,255,255,0.6)' },
+    zuhr:    { top:'#fff6df', mid:'#ffe29a', bot:'#f2b955', ink:'#3a2a08', track:'rgba(58,42,8,0.14)',     pill:'rgba(255,255,255,0.6)' },
+    asr:     { top:'#ffe3b0', mid:'#f6b65a', bot:'#d97a35', ink:'#3a220a', track:'rgba(58,34,10,0.16)',    pill:'rgba(255,255,255,0.55)' },
+    maghrib: { top:'#3a2f55', mid:'#a1517a', bot:'#e08a4a', ink:'#fdf2e9', track:'rgba(255,255,255,0.2)',  pill:'rgba(255,255,255,0.3)' }
   };
 
   // দিনের সময়সূচী অনুযায়ী উপ-সময়সমূহ (ring লেবেল ও থিমের জন্য)
   var SEGMENTS = [
-    { key:'tahajjud',label:'তাহাজ্জুদ',        start:TAHAJJUD_START, end:FAJR_START,  theme:'tahajjud',row:null      },
     { key:'fajr',    label:'ফজর',            start:FAJR_START,  end:SUNRISE,     theme:'fajr',    row:'fajr'    },
-    { key:'sunrise', label:'সূর্যোদয়',       start:SUNRISE,     end:SUNRISE_END, theme:'sunrise', row:null      },
-    { key:'ishraq',  label:'ইশরাক',          start:SUNRISE_END, end:ISHRAQ_END,  theme:'ishraq',  row:null      },
+    { key:'ishraq',  label:'ইশরাক',          start:SUNRISE,     end:ISHRAQ_END,  theme:'ishraq',  row:null      },
     { key:'duha',    label:'চাশত',           start:ISHRAQ_END,  end:ZUHR_START,  theme:'duha',    row:null      },
     { key:'zuhr',    label:'যুহর',           start:ZUHR_START,  end:ASR_START,   theme:'zuhr',    row:'zuhr'    },
-    { key:'asr',     label:'আসর',            start:ASR_START,   end:SUNSET_END,  theme:'asr',     row:'asr'     },
-    { key:'sunset',  label:'সূর্যাস্ত',       start:SUNSET_END,  end:MAGHRIB_START, theme:'sunset', row:null    },
-    { key:'maghrib', label:'মাগরিব',         start:MAGHRIB_START, end:AWWABIN_END, theme:'maghrib', row:'maghrib'},
-    { key:'awwabin', label:'আওয়াবিন',        start:AWWABIN_END, end:ISHA_START,  theme:'awwabin', row:null      },
-    { key:'isha',    label:'ইশা',            start:ISHA_START,  end:TAHAJJUD_START+DAY, theme:'isha',  row:'isha'    }
+    { key:'asr',     label:'আসর',            start:ASR_START,   end:MAGHRIB_START, theme:'asr',   row:'asr'     },
+    { key:'maghrib', label:'মাগরিব',         start:MAGHRIB_START, end:ISHA_START, theme:'maghrib', row:'maghrib'},
+    { key:'isha',    label:'ইশা',            start:ISHA_START,  end:FAJR_START+DAY, theme:'isha',  row:'isha'    }
   ];
 
   var root = document.documentElement;
@@ -3017,8 +2991,6 @@
   var arcLen = 330; // path length ≈ dasharray
 
   var currentThemeKey = null;
-
-  var waqtBgLayers = Array.prototype.slice.call(document.querySelectorAll('.waqt-bg-layer'));
 
   function applyTheme(key){
     if(key === currentThemeKey) return;
@@ -3034,14 +3006,6 @@
     root.style.setProperty('--ring-fg', '#ffffff');
     root.style.setProperty('--ring-track', 'rgba(255,255,255,0.28)');
     root.style.setProperty('--pill-bg', 'rgba(15,16,28,0.4)');
-    // ওয়াক্ত অনুযায়ী অনলাইন ব্যাকগ্রাউন্ড ছবি সুইচ করা
-    waqtBgLayers.forEach(function(layer){
-      if(layer.getAttribute('data-waqt-bg') === key){
-        layer.classList.add('on');
-      } else {
-        layer.classList.remove('on');
-      }
-    });
   }
 
   /* ===== রিয়েল-টাইম আকাশ (স্ট্যাটিক ছবির বদলে) =====
@@ -3845,6 +3809,131 @@
 </script>
 
 <!-- নামাজের সময় অনুযায়ী ব্যাকগ্রাউন্ড রঙ পরিবর্তন -->
+<script>
+(function(){
+  // নামাজের সময় সূচী (মিনিটে)
+  var prayerTimes = {
+    fajr: { start: 4*60+4, end: 5*60+26 },      // ০४:०४ - ०५:२६
+    zuhr: { start: 12*60+7, end: 16*60+42 },    // १२:०७ - १६:४२
+    asr: { start: 16*60+43, end: 18*60+41 },    // १६:४३ - १८:४१
+    maghrib: { start: 18*60+42, end: 20*60+4 }, // १८:४२ - २०:०४
+    isha: { start: 20*60+5, end: 4*60+5 }       // २०:०५ - ०४:०५ (পরের দিন)
+  };
+
+  // প্রতিটি সময় পিরিয়ডের জন্য রঙ সংজ্ঞা
+  var colorThemes = {
+    fajr: {
+      skyTop: '#2d1b4e',      // গভীর বেগুনি
+      skyMid: '#5a3d7a',      // মধ্য বেগুনি
+      skyBottom: '#3d2860',   // নীল-বেগুনি
+      ringDark: '#d4af37'     // সোনালী টেক্সট
+    },
+    sunrise: {
+      skyTop: '#ff9f43',      // কমলা-হলুদ
+      skyMid: '#ff7f50',      // কমলা
+      skyBottom: '#ff6b35',   // লাল-কমলা
+      ringDark: '#fff8f0'     // হালকা টেক্সট
+    },
+    daytime: {
+      skyTop: '#fbecb0',      // হালকা হলুদ
+      skyMid: '#f6d879',      // মধ্য হলুদ
+      skyBottom: '#e2a83e',   // গোলাপি-হলুদ
+      ringDark: '#17352b'     // গভীর সবুজ-কালো
+    },
+    afternoon: {
+      skyTop: '#ffd89b',      // হালকা কমলা-হলুদ
+      skyMid: '#ffb347',      // হালকা কমলা
+      skyBottom: '#ff9f43',   // মধ্য কমলা
+      ringDark: '#2c3e50'     // গভীর নীল
+    },
+    sunset: {
+      skyTop: '#ff6b6b',      // লাল
+      skyMid: '#ff8c42',      // কমলা-লাল
+      skyBottom: '#d63031',   // গভীর লাল
+      ringDark: '#fffacd'     // হালকা হলুদ
+    },
+    dusk: {
+      skyTop: '#4a235a',      // গভীর বেগুনি
+      skyMid: '#2f7a6b',      // নীল-সবুজ
+      skyBottom: '#1f4d43',   // গভীর নীল-সবুজ
+      ringDark: '#e8daef'     // হালকা টেক্সট
+    },
+    night: {
+      skyTop: '#1a0f2e',      // অত্যন্ত গভীর বেগুনি
+      skyMid: '#3b3663',      // গভীর বেগুনি
+      skyBottom: '#2c1e4d',   // মধ্য বেগুনি
+      ringDark: '#bdc3c7'     // ধূসর-সাদা টেক্সট
+    }
+  };
+
+  // বর্তমান সময় থেকে থিম নির্ধারণ করুন
+  function getThemeForCurrentTime(){
+    var now = new Date();
+    var minutes = now.getHours() * 60 + now.getMinutes();
+
+    // ফজর সময়
+    if(minutes >= prayerTimes.fajr.start && minutes < prayerTimes.fajr.end){
+      return colorThemes.fajr;
+    }
+    
+    // সূর্যোদয় থেকে যুহর পর্যন্ত (সকাল)
+    if(minutes >= prayerTimes.fajr.end && minutes < 12*60){
+      return colorThemes.sunrise;
+    }
+
+    // যুহর সময়
+    if(minutes >= prayerTimes.zuhr.start && minutes < 12*60+45){
+      return colorThemes.daytime;
+    }
+
+    // আসর সময়
+    if(minutes >= prayerTimes.asr.start && minutes < prayerTimes.asr.end){
+      return colorThemes.afternoon;
+    }
+
+    // মাগরিব সময় (সূর্যাস্ত)
+    if(minutes >= prayerTimes.maghrib.start && minutes < prayerTimes.maghrib.end){
+      return colorThemes.sunset;
+    }
+
+    // ইশা এবং রাতের আগের অংশ
+    if(minutes >= prayerTimes.isha.start){
+      return colorThemes.dusk;
+    }
+
+    // রাতের দ্বিতীয় অংশ (মধ্যরাত থেকে ফজর পর্যন্ত)
+    if(minutes < prayerTimes.fajr.start){
+      return colorThemes.night;
+    }
+
+    return colorThemes.daytime; // ডিফল্ট
+  }
+
+  // থিম প্রয়োগ করুন
+  function applyTheme(theme){
+    var root = document.documentElement;
+    root.style.setProperty('--sky-top', theme.skyTop);
+    root.style.setProperty('--sky-mid', theme.skyMid);
+    root.style.setProperty('--sky-bottom', theme.skyBottom);
+    root.style.setProperty('--ring-dark', theme.ringDark);
+    root.style.setProperty('--ring-fg', theme.ringDark);
+    root.style.setProperty('--text-dark', theme.ringDark);
+  }
+
+  // প্রাথমিক থিম প্রয়োগ করুন
+  applyTheme(getThemeForCurrentTime());
+
+  // প্রতি মিনিটে থিম আপডেট করুন
+  setInterval(function(){
+    applyTheme(getThemeForCurrentTime());
+  }, 60000);
+
+  // প্রতি 5 সেকেন্ডে দ্রুত আপডেট (উন্নত প্রতিক্রিয়ার জন্য)
+  setInterval(function(){
+    applyTheme(getThemeForCurrentTime());
+  }, 5000);
+})();
+</script>
 
 <!-- সূর্য এবং চাঁদের গতিশীল ভিজুয়ালাইজেশন -->
 <script>
@@ -3947,10 +4036,10 @@
   }
   
   // === আর্কের বাস্তব বাঁকা পথ অনুযায়ী অবস্থান গণনা ===
-  // sun-arc-path: M 0 75 Q 180 12, 360 75  (কোয়াড্রেটিক বেজিয়ার কার্ভ)
-  var ARC_P0 = {x:0, y:75};
-  var ARC_CTRL = {x:180, y:12};
-  var ARC_P2 = {x:360, y:75};
+  // sun-arc-path: M 30 160 Q 180 30, 330 160  (কোয়াড্রেটিক বেজিয়ার কার্ভ)
+  var ARC_P0 = {x:30, y:160};
+  var ARC_CTRL = {x:180, y:30};
+  var ARC_P2 = {x:330, y:160};
 
   function getPointOnArc(t){
     // t: 0 থেকে 1 (কোয়াড্রেটিক বেজিয়ার সূত্র)
@@ -4319,94 +4408,5 @@
 })();
 </script>
 
-<script>
-// ওয়াক্তভিত্তিক ব্যাকগ্রাউন্ড ইমেজ স্যুইচার
-(function(){
-  
-  function getCurrentWaqt() {
-    var now = new Date();
-    var hours = now.getHours();
-    var minutes = now.getMinutes();
-    var currentMinutes = hours * 60 + minutes;
-    
-    // সকালের ওয়াক্তগুলি (যখন currentMinutes ছোট)
-    if (currentMinutes >= 2*60 && currentMinutes < 4*60 + 4) {
-      return 'tahajjud';   // ২:০০ - ৪:০৩
-    }
-    if (currentMinutes >= 4*60 + 4 && currentMinutes < 5*60 + 27) {
-      return 'fajr';       // ৪:০৪ - ৫:২৬
-    }
-    if (currentMinutes >= 5*60 + 27 && currentMinutes < 6*60 + 31) {
-      return 'sunrise';    // ৫:২৭ - ৬:৩০
-    }
-    if (currentMinutes >= 6*60 + 31 && currentMinutes < 7*60 + 31) {
-      return 'ishraq';     // ৬:৩১ - ৭:৩০
-    }
-    if (currentMinutes >= 7*60 + 31 && currentMinutes < 12*60 + 7) {
-      return 'duha';       // ৭:৩১ - ১২:০৬
-    }
-    if (currentMinutes >= 12*60 + 7 && currentMinutes < 16*60 + 43) {
-      return 'zuhr';       // ১२:০७ - १६:४२
-    }
-    if (currentMinutes >= 16*60 + 43 && currentMinutes < 18*60 + 41) {
-      return 'asr';        // १६:४३ - १८:४१
-    }
-    if (currentMinutes >= 18*60 + 41 && currentMinutes < 18*60 + 42) {
-      return 'sunset';     // १८:४१ - १८:४२
-    }
-    if (currentMinutes >= 18*60 + 42 && currentMinutes < 20*60 + 5) {
-      return 'maghrib';    // १८:४२ - २०:०४
-    }
-    if (currentMinutes >= 20*60 + 5 && currentMinutes < 20*60 + 31) {
-      return 'awwabin';    // २०:०५ - २०:३०
-    }
-    // ইশা: ২০:৩১ থেকে রাতভর
-    if (currentMinutes >= 20*60 + 31) {
-      return 'isha';       // २०:३१ - २४:००
-    }
-    
-    // ডিফল্ট: ইশার চলমান অংশ (মধ্যরাত থেকে তাহাজ্জুদ পর্যন্ত)
-    return 'isha';
-  }
-
-  function updateBackgroundImage() {
-    var currentWaqt = getCurrentWaqt();
-    var layers = document.querySelectorAll('.waqt-bg-layer');
-    
-    layers.forEach(function(layer) {
-      var waqtAttr = layer.getAttribute('data-waqt-bg');
-      if (waqtAttr === currentWaqt) {
-        layer.classList.add('on');
-      } else {
-        layer.classList.remove('on');
-      }
-    });
-  }
-
-  // প্রাথমিক আপডেট
-  updateBackgroundImage();
-
-  // প্রতি ১০ সেকেন্ডে আপডেট করুন
-  setInterval(updateBackgroundImage, 10000);
-})();
-</script>
-
-<script>
-// ডিবাগ: waqt-bg ছবি লোড হচ্ছে কিনা কনসোলে যাচাই
-(function(){
-  var imgs = document.querySelectorAll('.waqt-bg-layer');
-  console.log('মোট ইমেজ পাওয়া গেছে:', imgs.length);
-  
-  imgs.forEach(function(img){
-    var waqtType = img.getAttribute('data-waqt-bg');
-    img.addEventListener('error', function(){
-      console.error('[waqt-bg] ছবি লোড ব্যর্থ:', waqtType, img.src);
-    });
-    img.addEventListener('load', function(){
-      console.log('[waqt-bg] ছবি লোড সফল:', waqtType);
-    });
-  });
-})();
-</script>
 </body>
 </html>
