@@ -185,14 +185,17 @@
     display:flex;
     align-items:center;
     justify-content:space-between;
-    padding:12px 22px 0;
-    color:var(--ring-dark);
+    padding:14px 20px;
+    color:var(--text-dark);
     position:relative;
     z-index:2;
-    min-height:50px;
+    min-height:60px;
+    background:transparent;
+    box-shadow:none;
+    border-bottom:none;
   }
   .topbar-logo{
-    width:80px;
+    width:90px;
     height:auto;
     flex-shrink:0;
     display:flex;
@@ -203,6 +206,7 @@
     width:100%;
     height:auto;
     max-height:40px;
+    object-fit:contain;
   }
   
   /* ===== নতুন Date Block স্টাইল (Ring Section এর উপরে) ===== */
@@ -274,35 +278,43 @@
   }
   .top-icons{
     display:flex;
-    gap:18px;
+    gap:12px;
     align-items:center;
   }
   .top-icons svg{
-    width:22px;height:22px;
-    opacity:0.95;
+    width:24px;height:24px;
+    opacity:0.7;
+    transition:opacity 0.2s ease;
   }
   .bell-wrap{
     position:relative;
     display:flex;
     align-items:center;
+    justify-content:center;
     cursor:pointer;
     -webkit-tap-highlight-color:transparent;
     user-select:none;
     transition:transform 0.15s ease;
+    width:40px;height:40px;
+    border-radius:8px;
+    background:rgba(31, 138, 95, 0.04);
   }
-  .bell-wrap:active{transform:scale(0.92);}
+  .bell-wrap:hover{
+    background:rgba(31, 138, 95, 0.08);
+  }
+  .bell-wrap:active{transform:scale(0.95);}
   .bell-wrap .badge{
     position:absolute;
-    top:-6px; right:-8px;
-    min-width:16px;
-    height:16px;
+    top:-4px; right:-4px;
+    min-width:18px;
+    height:18px;
     padding:0 4px;
     background:var(--badge-pink);
-    border-radius:999px;
+    border-radius:50%;
     display:flex;
     align-items:center;
     justify-content:center;
-    box-shadow:0 0 0 2px rgba(255,255,255,0.7);
+    box-shadow:0 2px 6px rgba(236, 24, 118, 0.35), 0 0 0 2px #ffffff;
     color:#fff;
     font-size:10px;
     font-weight:700;
@@ -312,6 +324,137 @@
   .bell-wrap .badge:empty,
   .bell-wrap .badge[data-count="0"]{
     display:none;
+  }
+
+  /* topbar search icon */
+  .topbar .search-btn{
+    width:40px;height:40px;
+    background:transparent;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:opacity 0.2s ease;
+  }
+  .topbar .search-btn:hover{
+    background:transparent;
+    opacity:0.8;
+  }
+  .topbar .search-btn:active{
+    transform:scale(0.95);
+  }
+
+  /* ===== Topbar: Hamburger (three-line) menu toggle ===== */
+  .menu-toggle{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:40px;height:40px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;
+    transition:opacity 0.15s ease;
+    border-radius:8px;
+    background:transparent;
+  }
+  .menu-toggle:hover{
+    background:transparent;
+    opacity:0.8;
+  }
+  .menu-toggle:active{transform:scale(0.95);}
+  .menu-toggle svg{width:24px;height:24px;opacity:1;}
+
+  .topbar .search-btn svg circle,
+  .topbar .search-btn svg path,
+  .menu-toggle svg line,
+  .menu-toggle svg path{
+    stroke:var(--text-dark);
+    opacity:1;
+  }
+
+  /* ===== Nav Drawer (slide-in side menu) ===== */
+  .nav-overlay{
+    position:fixed;
+    inset:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    max-width:430px;
+    height:100vh;
+    height:100dvh;
+    background:rgba(15,20,18,0.55);
+    z-index:150;
+    opacity:0;
+    visibility:hidden;
+    transition:opacity .28s ease, visibility 0s linear .28s;
+  }
+  .nav-overlay.open{
+    opacity:1;
+    visibility:visible;
+    transition:opacity .28s ease, visibility 0s linear 0s;
+  }
+  .nav-drawer{
+    position:absolute;
+    top:0; left:0;
+    width:78%;
+    max-width:300px;
+    height:100%;
+    background:#ffffff;
+    box-shadow:4px 0 24px rgba(0,0,0,0.18);
+    transform:translateX(-100%);
+    transition:transform .32s cubic-bezier(.32,.72,.35,1);
+    display:flex;
+    flex-direction:column;
+    overflow-y:auto;
+  }
+  .nav-overlay.open .nav-drawer{
+    transform:translateX(0);
+  }
+  .nav-drawer-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:20px 20px 16px;
+    border-bottom:1px solid rgba(31,138,95,0.1);
+  }
+  .nav-drawer-head img{
+    height:34px;width:auto;
+  }
+  .nav-drawer-close{
+    width:32px;height:32px;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    color:var(--menu-text-green);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .nav-drawer-close svg{width:18px;height:18px;}
+  .nav-drawer-list{
+    list-style:none;
+    margin:0;
+    padding:10px 8px;
+    flex:1;
+  }
+  .nav-drawer-list li a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:13px 12px;
+    border-radius:8px;
+    color:var(--text-dark);
+    text-decoration:none;
+    font-size:14.5px;
+    font-weight:500;
+    transition:background .15s ease;
+  }
+  .nav-drawer-list li a:active{
+    background:var(--active-bg);
+  }
+  .nav-drawer-list li a svg{
+    width:19px;height:19px;
+    flex-shrink:0;
+    color:var(--active-green);
   }
 
   .ring-section{
@@ -1208,26 +1351,36 @@
   .menu-grid{
     display:grid;
     grid-template-columns:repeat(4, 1fr);
-    gap:12px;
-    margin-bottom:26px;
+    gap:10px;
+    margin-bottom:14px;
+    padding:0 8px;
   }
   .menu-card{
     background:var(--menu-card-bg);
-    border-radius:20px;
-    padding:18px 6px 14px;
+    border-radius:0;
+    aspect-ratio:1 / 1;
+    width:100%;
+    padding:12px 6px;
     display:flex;
     flex-direction:column;
     align-items:center;
+    justify-content:center;
     text-align:center;
-    gap:10px;
+    gap:8px;
     box-shadow:0 2px 8px rgba(0,0,0,0.06);
     text-decoration:none;
     color:inherit;
     cursor:pointer;
+    transition:transform 0.2s ease, box-shadow 0.2s ease;
+    border:1px solid rgba(31, 138, 95, 0.06);
+  }
+  .menu-card:active{
+    transform:scale(0.95);
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
   }
   .menu-card:visited{color:inherit;}
   .menu-card .icon-box{
-    width:42px;height:42px;
+    width:38px;height:38px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -1235,18 +1388,18 @@
   }
   .menu-card .icon-box svg,
   .menu-card .icon-box img{
-    width:32px;
-    height:32px;
-    max-width:32px;
-    max-height:32px;
+    width:28px;
+    height:28px;
+    max-width:28px;
+    max-height:28px;
     object-fit:contain;
     display:block;
   }
   .menu-card .lbl{
-    font-size:13px;
+    font-size:12px;
     font-weight:700;
     color:var(--menu-text-green);
-    line-height:1.3;
+    line-height:1.25;
   }
 
   .bottom-nav{
@@ -1284,6 +1437,19 @@
   .menu-section-title{scroll-margin-top:16px;}
 
   /* ============================================================
+     RESPONSIVE — EXTRA SMALL MOBILE (320px – 400px)
+     Optimize grid and spacing for very small phones
+     ============================================================ */
+  @media (max-width:400px){
+    .menu-grid{gap:8px; padding:0 4px;}
+    .menu-card .icon-box{width:34px;height:34px;}
+    .menu-card .icon-box svg,
+    .menu-card .icon-box img{width:24px;height:24px;max-width:24px;max-height:24px;}
+    .menu-card .lbl{font-size:11px;}
+    .menu-card{padding:8px 4px; gap:6px;}
+  }
+
+  /* ============================================================
      RESPONSIVE — TABLET (641px – 1023px)
      Keep the phone-style single column but let it breathe: wider
      card, larger touch targets, more columns in the icon grid.
@@ -1303,10 +1469,10 @@
     .ring-arc{max-width:320px;}
     .card{padding:8px 32px 30px;}
     .app-menu{padding:20px 32px 100px;}
-    .menu-grid{grid-template-columns:repeat(5, 1fr);}
-    .menu-card .icon-box{width:48px;height:48px;}
+    .menu-grid{grid-template-columns:repeat(4, 1fr); gap:16px;}
+    .menu-card .icon-box{width:46px;height:46px;}
     .menu-card .icon-box svg,
-    .menu-card .icon-box img{width:36px;height:36px;max-width:36px;max-height:36px;}
+    .menu-card .icon-box img{width:34px;height:34px;max-width:34px;max-height:34px;}
   }
 
   /* ============================================================
@@ -1330,7 +1496,7 @@
     .ring-arc{max-width:340px;}
     .card{padding:8px 36px 30px;}
     .app-menu{padding:24px 36px 100px;}
-    .menu-grid{grid-template-columns:repeat(5, 1fr);}
+    .menu-grid{grid-template-columns:repeat(4, 1fr); gap:18px;}
     .menu-card .icon-box{width:50px;height:50px;}
     .menu-card .icon-box svg,
     .menu-card .icon-box img{width:38px;height:38px;max-width:38px;max-height:38px;}
@@ -1343,7 +1509,7 @@
     .phone{max-width:820px;}
     .bottom-nav{max-width:820px;}
     .app-menu{padding:28px 40px 100px;}
-    .menu-grid{grid-template-columns:repeat(6, 1fr);}
+    .menu-grid{grid-template-columns:repeat(4, 1fr);}
   }
 
   /* ===== Location screen (full-screen overlay) ===== */
@@ -1938,17 +2104,55 @@
 
   <div class="left-pane">
   <div class="topbar">
+    <div class="menu-toggle" id="navMenuToggle" role="button" aria-label="মেনু খুলুন">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
     <div class="topbar-logo">
       <img src="assets/logo.png" alt="লোগু" title="আপনার লোগু এখানে থাকবে">
     </div>
     <div class="top-icons">
-      <div class="bell-wrap" id="notifBell">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2.5C10.6 2.5 9.5 3.6 9.4 5C7.1 5.7 5.4 7.8 5.4 10.4V13.6C5.4 14.6 5 15.5 4.3 16.2L3.6 16.9C3.1 17.4 3.4 18.3 4.1 18.3H19.9C20.6 18.3 20.9 17.4 20.4 16.9L19.7 16.2C19 15.5 18.6 14.6 18.6 13.6V10.4C18.6 7.8 16.9 5.7 14.6 5C14.5 3.6 13.4 2.5 12 2.5Z" fill="currentColor"/>
-          <path d="M9.3 20C9.3 21.1 10.5 22 12 22C13.5 22 14.7 21.1 14.7 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+      <div class="search-btn" id="searchBtn" role="button" aria-label="অনুসন্ধান করুন">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"/>
+          <path d="M20 20L15.8 15.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
         </svg>
-        <span class="badge" id="notifBadge" data-count="3">৩</span>
       </div>
+    </div>
+  </div>
+
+  <!-- ===== Nav Drawer (three-line menu) ===== -->
+  <div class="nav-overlay" id="navOverlay">
+    <div class="nav-drawer">
+      <div class="nav-drawer-head">
+        <img src="assets/logo.png" alt="লোগু">
+        <div class="nav-drawer-close" id="navDrawerClose">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+      <ul class="nav-drawer-list">
+        <li><a href="/">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 11L12 3L21 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 10V20H19V10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          হোম</a></li>
+        <li><a href="/quran">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4H14C16.2 4 18 5.8 18 8V20H8C5.8 20 4 18.2 4 16V4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M18 8H20V20H8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          কুরআন</a></li>
+        <li><a href="/hadith">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="3" width="16" height="18" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M8 8H16M8 12H16M8 16H12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          হাদীস</a></li>
+        <li><a href="#" id="navNotifLink">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.5C10.6 2.5 9.5 3.6 9.4 5C7.1 5.7 5.4 7.8 5.4 10.4V13.6C5.4 14.6 5 15.5 4.3 16.2L3.6 16.9C3.1 17.4 3.4 18.3 4.1 18.3H19.9C20.6 18.3 20.9 17.4 20.4 16.9L19.7 16.2C19 15.5 18.6 14.6 18.6 13.6V10.4C18.6 7.8 16.9 5.7 14.6 5C14.5 3.6 13.4 2.5 12 2.5Z" fill="currentColor"/><path d="M9.3 20C9.3 21.1 10.5 22 12 22C13.5 22 14.7 21.1 14.7 20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/></svg>
+          নোটিফিকেশন</a></li>
+        <li><a href="/settings">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 13.5C19.5 12.75 19.5 11.25 19.4 10.5L21 9.3L19.5 6.7L17.6 7.4C17 6.9 16.35 6.5 15.6 6.2L15.3 4.2H12.7L12.4 6.2C11.65 6.5 11 6.9 10.4 7.4L8.5 6.7L7 9.3L8.6 10.5C8.5 11.25 8.5 12.75 8.6 13.5L7 14.7L8.5 17.3L10.4 16.6C11 17.1 11.65 17.5 12.4 17.8L12.7 19.8H15.3L15.6 17.8C16.35 17.5 17 17.1 17.6 16.6L19.5 17.3L21 14.7L19.4 13.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          সেটিংস</a></li>
+      </ul>
     </div>
   </div>
 
@@ -2358,19 +2562,6 @@
       })();
     </script>
 
-    <div class="menu-section-title ilm" id="sec-ilm">
-      <div class="left">
-        <div class="bar"></div>
-        <h3>ইলম</h3>
-      </div>
-      <div class="search-btn" id="searchBtn" role="button" aria-label="অনুসন্ধান করুন">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="11" cy="11" r="6.5" stroke="white" stroke-width="2"/>
-          <path d="M20 20L15.8 15.8" stroke="white" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </div>
-    </div>
-
     <div class="menu-grid">
       <a class="menu-card" href="/quran">
         <div class="icon-box">
@@ -2378,17 +2569,105 @@
         </div>
         <div class="lbl">কুরআন</div>
       </a>
-      <a class="menu-card" href="/books">
-        <div class="icon-box">
-          <img src="assets/books.png" alt="মাসায়েল">
-        </div>
-        <div class="lbl">কিতাব</div>
-      </a>
       <a class="menu-card" href="/hadith">
         <div class="icon-box">
-          <img src="assets/hadith.png" alt="হাদীস">
+          <img src="assets/hadith.png" alt="হাদিস">
         </div>
-        <div class="lbl">হাদীস</div>
+        <div class="lbl">হাদিস</div>
+      </a>
+      <a class="menu-card" href="/masayel">
+        <div class="icon-box">
+          <img src="assets/books.png" alt="মাসআলা">
+        </div>
+        <div class="lbl">মাসআলা</div>
+      </a>
+      <a class="menu-card" href="/amol-tracker">
+        <div class="icon-box">
+          <img src="assets/amol-tracker.png" alt="আমল ট্র্যাকার">
+        </div>
+        <div class="lbl">আমল ট্র্যাকার</div>
+      </a>
+
+      <a class="menu-card" href="/namajer-somoy">
+        <div class="icon-box">
+          <img src="assets/namazer-somoy.png" alt="নামাজের সময়">
+        </div>
+        <div class="lbl">নামাজের সময়</div>
+      </a>
+      <a class="menu-card" href="/namaz-shikkha">
+        <div class="icon-box">
+          <img src="assets/namaz-shikkha.png" alt="নামাজ শিক্ষা">
+        </div>
+        <div class="lbl">নামাজ শিক্ষা</div>
+      </a>
+      <a class="menu-card" href="/dua">
+        <div class="icon-box">
+          <img src="assets/dua.png" alt="দোয়া">
+        </div>
+        <div class="lbl">দোয়া</div>
+      </a>
+      <a class="menu-card" href="/sunnah">
+        <div class="icon-box">
+          <img src="assets/sunnah.png" alt="সুন্নাহ">
+        </div>
+        <div class="lbl">সুন্নাহ</div>
+      </a>
+
+      <a class="menu-card" href="/qibla">
+        <div class="icon-box">
+          <img src="assets/qibla.png" alt="কিবলা">
+        </div>
+        <div class="lbl">কিবলা</div>
+      </a>
+      <a class="menu-card" href="/masjid-khuji">
+        <div class="icon-box">
+          <img src="assets/mosque.png" alt="মসজিদ">
+        </div>
+        <div class="lbl">মসজিদ</div>
+      </a>
+      <a class="menu-card" href="/calendar">
+        <div class="icon-box">
+          <img src="assets/ramadan.png" alt="ক্যালেন্ডার">
+        </div>
+        <div class="lbl">ক্যালেন্ডার</div>
+      </a>
+      <a class="menu-card" href="/tasbih">
+        <div class="icon-box">
+          <img src="assets/tasbih.png" alt="তাসবিহ">
+        </div>
+        <div class="lbl">তাসবিহ</div>
+      </a>
+
+      <a class="menu-card" href="/roja">
+        <div class="icon-box">
+          <img src="assets/moon.png" alt="রোজা">
+        </div>
+        <div class="lbl">রোজা</div>
+      </a>
+      <a class="menu-card" href="/zakat-fitra">
+        <div class="icon-box">
+          <img src="assets/subsidy.png" alt="যাকাত">
+        </div>
+        <div class="lbl">যাকাত</div>
+      </a>
+      <a class="menu-card" href="/hajj-umrah">
+        <div class="icon-box">
+          <img src="assets/hajj-umrah.png" alt="হজ ও ওমরা">
+        </div>
+        <div class="lbl">হজ ও ওমরা</div>
+      </a>
+      <a class="menu-card" href="/makkah-live">
+        <div class="icon-box">
+          <img src="assets/kaaba.png" alt="মক্কা-মদিনা">
+        </div>
+        <div class="lbl">মক্কা-মদিনা</div>
+      </a>
+
+      <a class="menu-card" href="/books">
+        <div class="icon-box">
+          <img src="assets/books.png" alt="কিতাব">
+        </div>
+        <div class="lbl">কিতাব</div>
       </a>
       <a class="menu-card" href="/articles">
         <div class="icon-box">
@@ -2399,142 +2678,8 @@
       <a class="menu-card" href="/bayan">
         <div class="icon-box">
           <img src="assets/bayan.png" alt="বয়ান">
-          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <rect x="12" y="5" width="8" height="14" rx="4" fill="#2fb0a8"/>
-            <path d="M9 15C9 19 12 22 16 22C20 22 23 19 23 15" stroke="#1f8a83" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-            <path d="M16 22V27" stroke="#1f8a83" stroke-width="1.8" stroke-linecap="round"/>
-            <path d="M12 27H20" stroke="#1f8a83" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
         </div>
         <div class="lbl">বয়ান</div>
-      </a>
-      <a class="menu-card" href="/quran-shikkha">
-        <div class="icon-box">
-          <img src="assets/quran-shikkha.png" alt="কুরআন শিক্ষা">
-          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <rect x="5" y="7" width="22" height="15" rx="2" fill="#2f6fd0"/>
-            <path d="M11 26H21" stroke="#2f6fd0" stroke-width="2" stroke-linecap="round"/>
-            <path d="M16 22V26" stroke="#2f6fd0" stroke-width="2" stroke-linecap="round"/>
-            <path d="M13.5 11L19.5 14.5L13.5 18V11Z" fill="#fff"/>
-          </svg>
-        </div>
-        <div class="lbl">কুরআন শিক্ষা</div>
-      </a>
-      <a class="menu-card" href="/namaz-shikkha">
-        <div class="icon-box">
-          <img src="assets/namaz-shikkha.png" alt="নামায শিক্ষা">
-          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <path d="M8 26V15C8 10 11.5 6 16 6C20.5 6 24 10 24 15V26" stroke="#2fa76a" stroke-width="2" fill="none"/>
-            <path d="M13 26V17C13 14.5 14.5 12.5 16 11C17.5 12.5 19 14.5 19 17V26" stroke="#2fa76a" stroke-width="1.6" fill="none"/>
-            <path d="M8 26H24" stroke="#2fa76a" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="lbl">নামায শিক্ষা</div>
-      </a>
-    </div>
-
-    <div class="menu-section-title amol" id="sec-amol">
-      <div class="left">
-        <div class="bar"></div>
-        <h3>আমল</h3>
-      </div>
-    </div>
-
-    <div class="menu-grid">
-      <a class="menu-card" href="/namajer-somoy">
-        <div class="icon-box">
-          <img src="assets/namazer-somoy.png" alt="নামাযের সময়">
-          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="17" r="10" fill="#3a8ee0"/>
-            <path d="M16 11V17L20.5 19.5" stroke="#eaf3ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M13 6H19" stroke="#3a8ee0" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="lbl">নামাযের সময়</div>
-      </a>
-      <a class="menu-card" href="/tilawat">
-        <div class="icon-box">
-          <img src="assets/tilawat.png" alt="তিলাওয়াত">
-          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <path d="M16 9C13.7 7.5 10.8 7 8 7.6V22.6C10.8 22 13.7 22.5 16 24V9Z" fill="#2fa76a"/>
-            <path d="M16 9C18.3 7.5 21.2 7 24 7.6V22.6C21.2 22 18.3 22.5 16 24V9Z" fill="#59c98a"/>
-          </svg>
-        </div>
-        <div class="lbl">তিলাওয়াত</div>    
-      </a>
-      <a class="menu-card" href="/dua">
-        <div class="icon-box">
-          <img src="assets/dua.png" alt="দু'আ">
-          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 26C9 20 10 16 11.5 13C12 12 13.2 12.2 13.3 13.3C13.5 15.5 13.5 18 13 20" stroke="#e0a94a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-            <path d="M23 26C23 20 22 16 20.5 13C20 12 18.8 12.2 18.7 13.3C18.5 15.5 18.5 18 19 20" stroke="#e0a94a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
-            <path d="M11 26C10.5 22 10.7 19.5 12 17.5" stroke="#e0a94a" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-            <path d="M21 26C21.5 22 21.3 19.5 20 17.5" stroke="#e0a94a" stroke-width="1.6" stroke-linecap="round" fill="none"/>
-          </svg>
-        </div>
-        <div class="lbl">দু'আ</div>
-      </a>
-      <a class="menu-card" href="/tasbih">
-        <div class="icon-box">
-          <img src="assets/tasbih.png" alt="তাসবীহ্">
-          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="7" r="2.6" fill="#3a8ee0"/>
-            <circle cx="22" cy="10.5" r="2.6" fill="#2fa76a"/>
-            <circle cx="24.5" cy="17" r="2.6" fill="#e0a02a"/>
-            <circle cx="22" cy="23.5" r="2.6" fill="#d9483f"/>
-            <circle cx="16" cy="27" r="2.6" fill="#3a8ee0"/>
-            <circle cx="10" cy="23.5" r="2.6" fill="#2fa76a"/>
-            <circle cx="7.5" cy="17" r="2.6" fill="#e0a02a"/>
-            <circle cx="10" cy="10.5" r="2.6" fill="#d9483f"/>
-          </svg>
-        </div>
-        <div class="lbl">তাসবীহ্</div>
-      </a>
-      <a class="menu-card" href="/amol-tracker">
-        <div class="icon-box">
-          <img src="assets/amol-tracker.png" alt="আমল ট্রাকার">
-          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <rect x="7" y="6" width="18" height="21" rx="2.5" fill="#2fb0a8"/>
-            <rect x="12" y="4.5" width="8" height="4" rx="1.5" fill="#e8fbf9"/>
-            <path d="M11 15L14 18L21 12" stroke="#e8fbf9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M11 22H21" stroke="#e8fbf9" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="lbl">আমল ট্রাকার</div>
-      </a>
-      <a class="menu-card" href="/hajj-umrah">
-        <div class="icon-box">
-          <img src="assets/hajj-umrah.png" alt="হজ্জ ও উমরা">
-          <svg style="display:none" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-            <rect x="8" y="10" width="16" height="16" fill="#1c1c1c" stroke="#3a3a3a" stroke-width="1"/>
-            <path d="M8 15H24" stroke="#e0b95a" stroke-width="1.6"/>
-            <path d="M8 21H24" stroke="#e0b95a" stroke-width="1.6"/>
-            <path d="M13 10V26M19 10V26" stroke="#e0b95a" stroke-width="1.2"/>
-          </svg>
-        </div>
-        <div class="lbl">হজ্জ ও উমরা</div>
-      </a>
-    </div>
-
-    <div class="menu-section-title seba" id="sec-seba">
-      <div class="left">
-        <div class="bar"></div>
-        <h3>সেবা</h3>
-      </div>
-    </div>
-
-    <div class="menu-grid">
-      <a class="menu-card" href="/zakat-fitra">
-        <div class="icon-box">
-          <img src="assets/subsidy.png" alt="যাকাত-ফিতরা">
-        </div>
-        <div class="lbl">যাকাত-ফিতরা</div>
-      </a>
-      <a class="menu-card" href="/biniyog">
-        <div class="icon-box">
-          <img src="assets/earning.png" alt="বিনিয়োগ">
-        </div>
-        <div class="lbl">বিনিয়োগ</div>
       </a>
       <a class="menu-card" href="/dini-jiggasha">
         <div class="icon-box">
@@ -2542,21 +2687,57 @@
         </div>
         <div class="lbl">দ্বীনি জিজ্ঞাসা</div>
       </a>
-      <a class="menu-card" href="/quiz">
-        <div class="icon-box">
-          <img src="assets/quiz.png" alt="কুইজ">
-        </div>
-        <div class="lbl">কুইজ</div>
-      </a>
-    </div>
 
-    <div class="menu-grid">
+      <a class="menu-card" href="/research">
+        <div class="icon-box">
+          <img src="assets/quiz.png" alt="গবেষনা">
+        </div>
+        <div class="lbl">গবেষনা</div>
+      </a>
+      <a class="menu-card" href="/nobiji">
+        <div class="icon-box">
+          <img src="assets/masjid-al-nabawi.png" alt="নবীজি">
+        </div>
+        <div class="lbl">নবীজি</div>
+      </a>
+      <a class="menu-card" href="/history">
+        <div class="icon-box">
+          <img src="assets/arrange.png" alt="ইতিহাস">
+        </div>
+        <div class="lbl">ইতিহাস</div>
+      </a>
+      <a class="menu-card" href="/biography">
+        <div class="icon-box">
+          <img src="assets/label.png" alt="জীবনি">
+        </div>
+        <div class="lbl">জীবনি</div>
+      </a>
+
+      <a class="menu-card" href="/quran-shikkha">
+        <div class="icon-box">
+          <img src="assets/quran-shikkha.png" alt="কুরআন শিক্ষা">
+        </div>
+        <div class="lbl">কুরআন শিক্ষা</div>
+      </a>
+      <a class="menu-card" href="/islamic-name">
+        <div class="icon-box">
+          <img src="assets/label.png" alt="নাম">
+        </div>
+        <div class="lbl">নাম</div>
+      </a>
+      <a class="menu-card" href="/asmaul-husna">
+        <div class="icon-box">
+          <img src="assets/islam.png" alt="আসমাউল হুসনা">
+        </div>
+        <div class="lbl">আসমাউল হুসনা</div>
+      </a>
       <a class="menu-card" href="/bibaho">
         <div class="icon-box">
           <img src="assets/wedding-couple.png" alt="বিবাহ">
         </div>
         <div class="lbl">বিবাহ</div>
       </a>
+
       <a class="menu-card" href="/kenakata">
         <div class="icon-box">
           <img src="assets/shopping-cart.png" alt="কেনাকাটা">
@@ -2569,87 +2750,36 @@
         </div>
         <div class="lbl">চাকরি</div>
       </a>
+      <a class="menu-card" href="/important-days">
+        <div class="icon-box">
+          <img src="assets/calendar.png" alt="গুরুত্বপূর্ণ দিন">
+        </div>
+        <div class="lbl">গুরুত্বপূর্ণ দিন</div>
+      </a>
+      <a class="menu-card" href="/map">
+        <div class="icon-box">
+          <img src="assets/mosque.png" alt="মানচিত্র">
+        </div>
+        <div class="lbl">মানচিত্র</div>
+      </a>
+
+      <a class="menu-card" href="/about">
+        <div class="icon-box">
+          <img src="assets/islam.png" alt="আমাদের সম্পর্কে">
+        </div>
+        <div class="lbl">আমাদের সম্পর্কে</div>
+      </a>
       <a class="menu-card" href="/support">
         <div class="icon-box">
           <img src="assets/support.png" alt="সাপোর্ট">
         </div>
         <div class="lbl">সাপোর্ট</div>
       </a>
-    </div>
-
-    <div class="menu-section-title bibidho" id="sec-bibidho">
-      <div class="left">
-        <div class="bar"></div>
-        <h3>বিবিধ</h3>
-      </div>
-    </div>
-
-    <div class="menu-grid">
-      <a class="menu-card" href="/qibla">
+      <a class="menu-card" href="/donation">
         <div class="icon-box">
-          <img src="assets/qibla.png" alt="ক্বিবলা">
+          <img src="assets/earning.png" alt="ডোনেশন">
         </div>
-        <div class="lbl">ক্বিবলা</div>
-      </a>
-      <a class="menu-card" href="/masjid-khuji">
-        <div class="icon-box">
-          <img src="assets/mosque.png" alt="মসজিদ খুঁজি">
-        </div>
-        <div class="lbl">মসজিদ খুঁজি</div>
-      </a>
-      <a class="menu-card" href="/amar-masjid">
-        <div class="icon-box">
-          <img src="assets/masjid-al-nabawi.png" alt="আমার মসজিদ">
-        </div>
-        <div class="lbl">আমার মসজিদ</div>
-      </a>
-      <a class="menu-card" href="/asmaul-husna">
-        <div class="icon-box">
-          <img src="assets/islam.png" alt="আসমাউল হুসনা">
-        </div>
-        <div class="lbl">আসমাউল হুসনা</div>
-      </a>
-    </div>
-
-    <div class="menu-grid">
-      <a class="menu-card" href="/makkah-live">
-        <div class="icon-box">
-          <img src="assets/kaaba.png" alt="মক্কা লাইভ">
-        </div>
-        <div class="lbl">মক্কা লাইভ</div>
-      </a>
-      <a class="menu-card" href="/roja">
-        <div class="icon-box">
-          <img src="assets/moon.png" alt="রোজা">
-        </div>
-        <div class="lbl">রোজা</div>
-      </a>
-      <a class="menu-card" href="/sunnah">
-        <div class="icon-box">
-          <img src="assets/sunnah.png" alt="সুন্নাহ">
-        </div>
-        <div class="lbl">সুন্নাহ</div>
-      </a>
-      <a class="menu-card" href="/islamic-name">
-        <div class="icon-box">
-          <img src="assets/label.png" alt="ইসলামিক নাম">
-        </div>
-        <div class="lbl">ইসলামিক নাম</div>
-      </a>
-    </div>
-
-    <div class="menu-grid">
-      <a class="menu-card" href="/calendar">
-        <div class="icon-box">
-          <img src="assets/ramadan.png" alt="ক্যালেন্ডার">
-        </div>
-        <div class="lbl">ক্যালেন্ডার</div>
-      </a>
-      <a class="menu-card" href="/important-days">
-        <div class="icon-box">
-          <img src="assets/calendar.png" alt="গুরুত্বপূর্ণ দিন">
-        </div>
-        <div class="lbl">গুরুত্বপূর্ণ দিন</div>
+        <div class="lbl">ডোনেশন</div>
       </a>
       <a class="menu-card" href="/others">
         <div class="icon-box">
@@ -3614,6 +3744,42 @@
         },
         { enableHighAccuracy:true, timeout:12000, maximumAge:60000 }
       );
+    });
+  }
+
+  // ===== নেভিগেশন ড্রয়ার (থ্রি-লাইন মেনু) =====
+  var navMenuToggle = document.getElementById('navMenuToggle');
+  var navOverlay = document.getElementById('navOverlay');
+  var navDrawerClose = document.getElementById('navDrawerClose');
+  var navNotifLink = document.getElementById('navNotifLink');
+
+  function openNavDrawer(){
+    if(!navOverlay) return;
+    navOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeNavDrawer(){
+    if(!navOverlay) return;
+    navOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  if(navMenuToggle){
+    navMenuToggle.addEventListener('click', openNavDrawer);
+  }
+  if(navDrawerClose){
+    navDrawerClose.addEventListener('click', closeNavDrawer);
+  }
+  if(navOverlay){
+    navOverlay.addEventListener('click', function(e){
+      if(e.target === navOverlay) closeNavDrawer();
+    });
+  }
+  if(navNotifLink){
+    navNotifLink.addEventListener('click', function(e){
+      e.preventDefault();
+      closeNavDrawer();
+      var bellEl = document.getElementById('notifBell');
+      if(bellEl) bellEl.click();
     });
   }
 
