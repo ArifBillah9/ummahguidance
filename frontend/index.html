@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>নামাজের সময়সূচী</title>
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -4481,41 +4478,6 @@
     
     lastScrollY = currentScrollY;
   }, {passive: true});
-})();
-</script>
-
-<!-- ===== Service Worker এবং Cache Clear করার স্ক্রিপ্ট ===== -->
-<script>
-(function() {
-  'use strict';
-  
-  // Service Worker আনরেজিস্টার করুন (যদি থাকে)
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function(registrations) {
-      for (let registration of registrations) {
-        registration.unregister();
-        console.log('Service Worker unregistered:', registration);
-      }
-    });
-  }
-  
-  // localStorage এবং sessionStorage পরিষ্কার করুন
-  try {
-    localStorage.clear();
-    sessionStorage.clear();
-    console.log('Storage cleared');
-  } catch(e) {
-    console.warn('Could not clear storage:', e);
-  }
-  
-  // IndexedDB পরিষ্কার করুন
-  if ('indexedDB' in window) {
-    indexedDB.databases && indexedDB.databases().then(function(dbs) {
-      dbs.forEach(function(db) {
-        indexedDB.deleteDatabase(db.name);
-      });
-    });
-  }
 })();
 </script>
 
