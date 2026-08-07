@@ -19,7 +19,7 @@
 
       <!-- Logo & Title -->
       <a href="/index.html" class="navbar-logo">
-        <img src="/frontend/navbar/logo.png" alt="Logo">
+        <img src="navbar/logo.png" alt="Logo">
         <div class="navbar-logo-text">
           <div class="navbar-logo-text-main">Ummah</div>
           <div class="navbar-logo-text-sub">Guidance</div>
@@ -40,7 +40,7 @@
       <!-- Sidebar Header -->
       <div class="navbar-sidebar-header">
         <div class="navbar-sidebar-logo">
-          <img src="/frontend/navbar/logo.png" alt="Logo">
+          <img src="navbar/logo.png" alt="Logo">
           <div class="navbar-sidebar-logo-text">UMMAH<br>GUIDANCE</div>
         </div>
         <button id="navbar-sidebar-close" class="navbar-sidebar-close" title="বন্ধ করুন">✕</button>
@@ -65,14 +65,14 @@
   function loadCSS() {
     const cssLink = document.createElement('link');
     cssLink.rel = 'stylesheet';
-    cssLink.href = '/frontend/navbar/navbar.css';
+    cssLink.href = 'navbar/navbar.css';
     document.head.appendChild(cssLink);
   }
 
   // Load JavaScript
   function loadJS() {
     const script = document.createElement('script');
-    script.src = '/frontend/navbar/navbar.js';
+    script.src = 'navbar/navbar.js';
     script.async = false;
     document.body.appendChild(script);
   }
