@@ -18,6 +18,7 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
     }
 
     /* ===== NAVBAR CONTAINER ===== */
@@ -286,6 +287,174 @@
         font-size: 11px;
       }
     }
+
+    /* ===== SEARCH MODAL (নামাজের সময়সূচী পেজ থেকে যুক্ত করা হয়েছে) ===== */
+    .search-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      background: rgba(15, 20, 18, 0.6);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 26px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .25s ease, visibility 0s linear .25s;
+    }
+
+    .search-overlay.open {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity .25s ease, visibility 0s linear 0s;
+    }
+
+    .search-modal {
+      background: #fff;
+      border-radius: 10px;
+      padding: 30px 24px 24px;
+      width: 100%;
+      max-width: 340px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35);
+      transform: scale(0.9);
+      transition: transform .3s cubic-bezier(.32,.72,.35,1);
+    }
+
+    .search-overlay.open .search-modal {
+      transform: scale(1);
+    }
+
+    .search-modal-title {
+      margin: 0 0 22px;
+      font-size: 18.5px;
+      font-weight: 700;
+      color: #2f473f;
+      line-height: 1.5;
+    }
+
+    .search-modal-inputwrap {
+      margin-bottom: 18px;
+    }
+
+    .search-modal-input {
+      width: 100%;
+      border: 1.5px solid #1f8a5f;
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-size: 13px;
+      font-family: inherit;
+      color: #20242b;
+      outline: none;
+      background: #fff;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .search-modal-input::placeholder {
+      color: #8b909a;
+      opacity: 0.9;
+    }
+
+    .search-modal-btn {
+      width: 100%;
+      border: none;
+      border-radius: 8px;
+      padding: 13px 18px;
+      background: #d3d6d3;
+      color: #8b9089;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: background .25s ease, color .25s ease, box-shadow .25s ease, transform .15s ease;
+    }
+
+    .search-modal-btn:active {
+      transform: scale(0.97);
+      opacity: 0.9;
+    }
+
+    .search-modal-btn.highlight {
+      background: #1f8a5f;
+      color: #fff;
+      box-shadow: 0 8px 20px rgba(31, 138, 95, 0.45);
+    }
+
+    /* ===== সাইডবার মেনু গ্রিড (নামাজের সময়সূচী পেজ থেকে যুক্ত করা হয়েছে) ===== */
+    .navbar-sidebar-menu-title {
+      padding: 18px 20px 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #8b909a;
+      letter-spacing: 0.3px;
+    }
+
+    .navbar-sidebar-menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 4px 16px 20px;
+    }
+
+    .navbar-sidebar-menu-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 6px;
+      padding: 10px 4px;
+      background: #f7f8f7;
+      border: 1px solid rgba(31, 138, 95, 0.08);
+      border-radius: 10px;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .navbar-sidebar-menu-card:hover {
+      background: #eef8f3;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .navbar-sidebar-menu-card:active {
+      transform: scale(0.95);
+    }
+
+    .navbar-sidebar-menu-icon {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .navbar-sidebar-menu-icon img {
+      width: 24px;
+      height: 24px;
+      max-width: 24px;
+      max-height: 24px;
+      object-fit: contain;
+      display: block;
+    }
+
+    .navbar-sidebar-menu-lbl {
+      font-size: 11px;
+      font-weight: 600;
+      color: #2f473f;
+      line-height: 1.25;
+    }
   </style>
 </head>
 <body>
@@ -339,6 +508,17 @@
   <!-- Sidebar Backdrop -->
   <div id="navbar-sidebar-backdrop" class="navbar-sidebar-backdrop"></div>
 
+  <!-- ===== SEARCH MODAL (নামাজের সময়সূচী পেজ থেকে যুক্ত করা হয়েছে) ===== -->
+  <div class="search-overlay" id="navbar-search-overlay" aria-hidden="true">
+    <div class="search-modal">
+      <h3 class="search-modal-title">কি খুঁজছেন? আরবী বা বাংলায় বাক্যটি লিখুন</h3>
+      <div class="search-modal-inputwrap">
+        <input type="text" id="navbar-search-modal-input" class="search-modal-input" placeholder="মুসলিম বাংলার সকল সেকশনে অনুসন্ধান করুন">
+      </div>
+      <button type="button" class="search-modal-btn" id="navbar-search-modal-btn">অনুসন্ধান</button>
+    </div>
+  </div>
+
   <script>
     // ===== NAVBAR INITIALIZATION =====
     console.log('%c✨ Initializing Navbar', 'color: cyan; font-weight: bold; font-size: 14px;');
@@ -348,7 +528,7 @@
     const navbarSidebarBackdrop = document.getElementById('navbar-sidebar-backdrop');
     const navbarSidebarClose = document.getElementById('navbar-sidebar-close');
     const navbarSearchBtn = document.getElementById('navbar-search-btn');
-    const navbarSidebarLinks = document.querySelectorAll('.navbar-sidebar-link');
+    const navbarSidebarLinks = document.querySelectorAll('.navbar-sidebar-link, .navbar-sidebar-menu-card');
 
     // ===== SIDEBAR FUNCTIONS =====
 
@@ -421,14 +601,80 @@
     });
     console.log(`✅ ${navbarSidebarLinks.length} sidebar links listeners attached`);
 
+    // ===== SEARCH MODAL (নামাজের সময়সূচী পেজ থেকে যুক্ত করা হয়েছে) =====
+    const navbarSearchOverlay = document.getElementById('navbar-search-overlay');
+    const navbarSearchModalInput = document.getElementById('navbar-search-modal-input');
+    const navbarSearchModalBtn = document.getElementById('navbar-search-modal-btn');
+
+    function updateNavbarSearchModalBtnState() {
+      if (!navbarSearchModalBtn) return;
+      const hasText = !!(navbarSearchModalInput && navbarSearchModalInput.value.trim().length > 0);
+      navbarSearchModalBtn.classList.toggle('highlight', hasText);
+    }
+
+    function openNavbarSearchOverlay() {
+      if (!navbarSearchOverlay) return;
+      navbarSearchOverlay.classList.add('open');
+      navbarSearchOverlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      updateNavbarSearchModalBtnState();
+      setTimeout(function() {
+        if (navbarSearchModalInput) navbarSearchModalInput.focus();
+      }, 300);
+    }
+
+    function closeNavbarSearchOverlay() {
+      if (!navbarSearchOverlay) return;
+      navbarSearchOverlay.classList.remove('open');
+      navbarSearchOverlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = 'auto';
+    }
+
     // Search Button
     if (navbarSearchBtn) {
       navbarSearchBtn.addEventListener('click', function(e) {
         console.log('%c🔍 SEARCH BUTTON CLICKED', 'background: purple; color: white; font-weight: bold; padding: 3px 8px; border-radius: 3px;');
         e.preventDefault();
+        openNavbarSearchOverlay();
       });
       console.log('✅ Search button listener attached');
     }
+
+    // Close on backdrop click
+    if (navbarSearchOverlay) {
+      navbarSearchOverlay.addEventListener('click', function(e) {
+        if (e.target === navbarSearchOverlay) closeNavbarSearchOverlay();
+      });
+    }
+
+    // Input state + Enter key submit
+    if (navbarSearchModalInput) {
+      navbarSearchModalInput.addEventListener('input', updateNavbarSearchModalBtnState);
+      navbarSearchModalInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          if (navbarSearchModalBtn) navbarSearchModalBtn.click();
+        }
+      });
+    }
+
+    // Search submit — এখানে আপনার প্রকৃত সার্চ ফাংশন/পেজ যুক্ত করুন
+    if (navbarSearchModalBtn) {
+      navbarSearchModalBtn.addEventListener('click', function() {
+        const q = navbarSearchModalInput ? navbarSearchModalInput.value.trim() : '';
+        if (!q) return;
+        console.log('%c🔎 SEARCH QUERY:', 'background: purple; color: white; font-weight: bold; padding: 3px 8px; border-radius: 3px;', q);
+        // উদাহরণ: window.location.href = '/search?q=' + encodeURIComponent(q);
+        closeNavbarSearchOverlay();
+      });
+    }
+
+    // ESC Key to close search modal
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && navbarSearchOverlay && navbarSearchOverlay.classList.contains('open')) {
+        closeNavbarSearchOverlay();
+      }
+    });
 
     // ESC Key to Close Sidebar
     document.addEventListener('keydown', function(e) {
