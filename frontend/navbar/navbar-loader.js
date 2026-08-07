@@ -4,96 +4,74 @@
 (function() {
   'use strict';
   
-  // Navbar HTML
-  const navbarHTML = `
-    <!-- ===== NAVBAR ===== -->
-    <div class="navbar">
-      <!-- Hamburger Menu -->
-      <button id="navbar-menu-btn" class="navbar-menu-btn" title="মেনু">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <line x1="3" y1="6" x2="21" y2="6"></line>
-          <line x1="3" y1="12" x2="21" y2="12"></line>
-          <line x1="3" y1="18" x2="21" y2="18"></line>
-        </svg>
-      </button>
+  console.log('%c🔄 NAVBAR LOADER STARTED', 'color: blue; font-weight: bold; font-size: 12px;');
 
-      <!-- Logo & Title -->
-      <a href="/index.html" class="navbar-logo">
-        <img src="navbar/logo.png" alt="Logo">
-        <div class="navbar-logo-text">
-          <div class="navbar-logo-text-main">Ummah</div>
-          <div class="navbar-logo-text-sub">Guidance</div>
-        </div>
-      </a>
-
-      <!-- Search Button -->
-      <button id="navbar-search-btn" class="navbar-search-btn" title="খুঁজুন">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.35-4.35"></path>
-        </svg>
-      </button>
-    </div>
-
-    <!-- ===== SIDEBAR ===== -->
-    <div id="navbar-sidebar" class="navbar-sidebar">
-      <!-- Sidebar Header -->
-      <div class="navbar-sidebar-header">
-        <div class="navbar-sidebar-logo">
-          <img src="navbar/logo.png" alt="Logo">
-          <div class="navbar-sidebar-logo-text">UMMAH<br>GUIDANCE</div>
-        </div>
-        <button id="navbar-sidebar-close" class="navbar-sidebar-close" title="বন্ধ করুন">✕</button>
-      </div>
-
-      <!-- Sidebar Navigation -->
-      <nav class="navbar-sidebar-nav">
-        <a href="/index.html" class="navbar-sidebar-link">হোম</a>
-        <a href="/about.html" class="navbar-sidebar-link">আমাদের সম্পর্কে</a>
-        <a href="/services.html" class="navbar-sidebar-link">সেবা</a>
-        <a href="/blog.html" class="navbar-sidebar-link">ব্লগ</a>
-        <a href="/contact.html" class="navbar-sidebar-link">যোগাযোগ</a>
-        <a href="/faq.html" class="navbar-sidebar-link">FAQ</a>
-      </nav>
-    </div>
-
-    <!-- Sidebar Backdrop -->
-    <div id="navbar-sidebar-backdrop" class="navbar-sidebar-backdrop"></div>
-  `;
-
-  // Load CSS
-  function loadCSS() {
-    const cssLink = document.createElement('link');
-    cssLink.rel = 'stylesheet';
-    cssLink.href = 'navbar/navbar.css';
-    document.head.appendChild(cssLink);
-  }
-
-  // Load JavaScript
-  function loadJS() {
-    const script = document.createElement('script');
-    script.src = 'navbar/navbar.js';
-    script.async = false;
-    document.body.appendChild(script);
-  }
-
-  // Main loader function
-  function loadNavbar() {
-    console.log('%c🔄 NAVBAR LOADER STARTED', 'color: blue; font-weight: bold; font-size: 12px;');
-    
-    // Load CSS
-    loadCSS();
-    console.log('✅ CSS loaded');
-    
-    // Inject HTML at the beginning of body
-    document.body.insertAdjacentHTML('afterbegin', navbarHTML);
-    console.log('✅ HTML injected');
-    
-    // Load JavaScript
-    loadJS();
-    console.log('✅ JavaScript loaded');
-    
-    console.log('%c✅ NAVBAR LOADER COMPLETE', 'color: green; font-weight: bold; font-size: 12px;');
+  // Load navbar.html using fetch
+  async function loadNavbar() {
+    try {
+      console.log('%c📥 Fetching navbar.html...', 'color: orange; font-weight: bold;');
+      
+      const response = await fetch('navbar/navbar.html');
+      
+      if (!response.ok) {
+        throw new Error(`Failed to load navbar: ${response.status}`);
+      }
+      
+      const navbarContent = await response.text();
+      
+      // Extract and inject only the navbar elements (not the full HTML structure)
+      // We'll parse the fetched HTML and inject the relevant parts
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(navbarContent, 'text/html');
+      
+      // Get all style tags from the fetched document
+      const styleTags = doc.querySelectorAll('style');
+      styleTags.forEach(style => {
+        document.head.appendChild(style.cloneNode(true));
+      });
+      console.log('✅ Styles injected');
+      
+      // Get the navbar elements
+      const navbar = doc.querySelector('.navbar');
+      const sidebar = doc.querySelector('.navbar-sidebar');
+      const backdrop = doc.querySelector('.navbar-sidebar-backdrop');
+      
+      // Inject them at the beginning of body
+      if (navbar) {
+        document.body.insertAdjacentElement('afterbegin', navbar.cloneNode(true));
+      }
+      if (sidebar) {
+        document.body.insertAdjacentElement('afterbegin', sidebar.cloneNode(true));
+      }
+      if (backdrop) {
+        document.body.insertAdjacentElement('afterbegin', backdrop.cloneNode(true));
+      }
+      console.log('✅ HTML injected');
+      
+      // Get and execute script tags from the fetched document
+      const scriptTags = doc.querySelectorAll('script');
+      scriptTags.forEach(scriptTag => {
+        if (scriptTag.src) {
+          // External script
+          const newScript = document.createElement('script');
+          newScript.src = scriptTag.src;
+          newScript.async = false;
+          document.body.appendChild(newScript);
+        } else if (scriptTag.textContent) {
+          // Inline script
+          const newScript = document.createElement('script');
+          newScript.textContent = scriptTag.textContent;
+          newScript.async = false;
+          document.body.appendChild(newScript);
+        }
+      });
+      console.log('✅ JavaScript executed');
+      
+      console.log('%c✅ NAVBAR LOADER COMPLETE', 'color: green; font-weight: bold; font-size: 12px;');
+      
+    } catch (error) {
+      console.error('%c❌ NAVBAR LOADER ERROR', 'background: red; color: white; font-weight: bold; padding: 3px 8px; border-radius: 3px;', error);
+    }
   }
 
   // Wait for DOM to be ready
