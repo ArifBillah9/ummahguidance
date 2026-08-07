@@ -4339,57 +4339,57 @@
   var prayerTimeBackgrounds = {
     'tahajjud': {
       times: { start: 0 * 60 + 0, end: 4 * 60 + 4 },     // 00:00 - 04:04 (রাত/দেরী রাত)
-      image: 'assets/Tahajjud.png',
+      image: 'assets/tahajjud.png',
       label: 'তাহাজ্জুদ'
     },
     'fajr': {
       times: { start: 4 * 60 + 4, end: 5 * 60 + 26 },    // 04:04 - 05:26 (ভোর)
-      image: 'assets/Fajr.png',
+      image: 'assets/fajr.png',
       label: 'ফজর'
     },
     'shuruq': {
       times: { start: 5 * 60 + 26, end: 6 * 60 + 15 },   // 05:26 - 06:15 (সূর্যোদয়)
-      image: 'assets/Shuruq.png',
+      image: 'assets/shuruq.png',
       label: 'সূর্যোদয়'
     },
     'ishraq': {
       times: { start: 6 * 60 + 15, end: 9 * 60 + 0 },    // 06:15 - 09:00 (ইশরাক/সকাল)
-      image: 'assets/Ishraq.png',
+      image: 'assets/ishraq.png',
       label: 'ইশরাক'
     },
     'duha': {
       times: { start: 9 * 60 + 0, end: 12 * 60 + 7 },    // 09:00 - 12:07 (দুহা/মধ্য সকাল)
-      image: 'assets/Duha.png',
+      image: 'assets/duha.png',
       label: 'দুহা'
     },
     'zuhr': {
       times: { start: 12 * 60 + 7, end: 16 * 60 + 42 },  // 12:07 - 16:42 (যুহর/দুপুর)
-      image: 'assets/Zhuhr.png',
+      image: 'assets/zuhr.png',
       label: 'যুহর'
     },
     'asr': {
       times: { start: 16 * 60 + 42, end: 18 * 60 + 41 }, // 16:42 - 18:41 (আসর/বিকাল)
-      image: 'assets/Asr.png',
+      image: 'assets/asr.png',
       label: 'আসর'
     },
     'sunset': {
       times: { start: 18 * 60 + 41, end: 18 * 60 + 50 }, // 18:41 - 18:50 (সূর্যাস্ত)
-      image: 'assets/Sunset.png',
+      image: 'assets/sunset.png',
       label: 'সূর্যাস্ত'
     },
     'maghrib': {
       times: { start: 18 * 60 + 50, end: 20 * 60 + 4 },  // 18:50 - 20:04 (মাগরিব)
-      image: 'assets/Maghrib.png',
+      image: 'assets/maghrib.png',
       label: 'মাগরিব'
     },
     'awwabin': {
       times: { start: 20 * 60 + 4, end: 20 * 60 + 45 },  // 20:04 - 20:45 (আওয়াবিন)
-      image: 'assets/Awwabin.png',
+      image: 'assets/awwabin.png',
       label: 'আওয়াবিন'
     },
     'isha': {
       times: { start: 20 * 60 + 45, end: 24 * 60 },      // 20:45 - 24:00 (ইশা/রাত)
-      image: 'assets/Isha.png',
+      image: 'assets/isha.png',
       label: 'ইশা'
     }
   };
@@ -4402,7 +4402,7 @@
     if (!bgEl) return;
     
     // বর্তমান সময়ের জন্য উপযুক্ত ছবি খুঁজে বের করুন
-    var backgroundImage = 'assets/Ishraq.png'; // ডিফল্ট ছবি
+    var backgroundImage = 'assets/ishraq.png'; // ডিফল্ট ছবি
     var matchedPrayer = null;
     
     Object.keys(prayerTimeBackgrounds).forEach(function(prayerName) {
