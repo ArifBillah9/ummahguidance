@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মাসআলা তালিকা</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            background: linear-gradient(135deg, #F8F7F4 0%, #EFF5F8 100%);
+            color: #2C3E50;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ========== HEADER SECTION ========== */
+        .header {
+            background: linear-gradient(135deg, #1B3A5C 0%, #2C5282 100%);
+            position: relative;
+            padding: 36px 20px 32px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,30 Q300,0 600,30 T1200,30 L1200,120 L0,120 Z" fill="rgba(212,165,116,0.1)"/></svg>') repeat-x;
+            background-size: 600px 100%;
+            opacity: 0.5;
+        }
+
+        .header-text {
+            position: relative;
+            z-index: 2;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header-title {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            background: white;
+            padding: 8px 16px;
+            box-shadow: 0 4px 16px rgba(27, 58, 92, 0.15);
+            border-radius: 8px;
+            position: relative;
+            z-index: 3;
+            margin: 0 auto;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            font-family: inherit;
+            color: #2C3E50;
+            background: transparent;
+        }
+
+        .search-bar input::placeholder {
+            color: #BDC3C7;
+        }
+
+        .search-bar .mic-btn {
+            background: #2ECC71;
+            color: white;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .search-bar .mic-btn:hover {
+            background: #27AE60;
+            transform: scale(1.08);
+            box-shadow: 0 2px 8px rgba(46, 204, 113, 0.3);
+        }
+
+        .search-bar .mic-btn.listening {
+            animation: pulseMic 1s infinite;
+        }
+
+        @keyframes pulseMic {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.5); }
+            70% { box-shadow: 0 0 0 8px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+
+        .search-bar .clear-btn {
+            background: transparent;
+            color: #95A5A6;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .search-bar .clear-btn:hover {
+            background: #ECF0F1;
+            color: #34495E;
+        }
+
+        /* ========== MASAIL LIST ========== */
+        .masail-list {
+            list-style: none;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .masail-item {
+            padding: 16px 18px;
+            background: #FFFFFF;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .masail-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #2ECC71, #27AE60);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .masail-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(27, 58, 92, 0.12);
+            border-left-color: #2ECC71;
+        }
+
+        .masail-item:hover::before {
+            opacity: 1;
+        }
+
+        .masail-number {
+            font-size: 11px;
+            color: #95A5A6;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            display: inline-block;
+            padding: 4px 8px;
+            background: #F8F9FA;
+            border-radius: 3px;
+            width: fit-content;
+        }
+
+        .masail-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .masail-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1B3A5C;
+            line-height: 1.45;
+            flex: 1;
+            margin: 2px 0 0 0;
+        }
+
+        .masail-description {
+            font-size: 13px;
+            color: #7F8C8D;
+            line-height: 1.5;
+            margin: 2px 0 0 0;
+        }
+
+        .masail-meta-row {
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+            color: #7F8C8D;
+            flex-wrap: wrap;
+            padding-top: 8px;
+            border-top: 1px solid #F0F0F0;
+            margin-top: 2px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+        }
+
+        .meta-item i {
+            color: #2ECC71;
+            font-size: 12px;
+            width: 14px;
+            text-align: center;
+        }
+
+        .masail-actions {
+            display: flex;
+            gap: 18px;
+            justify-content: flex-start;
+            padding-top: 4px;
+        }
+
+        .action-btn {
+            background: transparent;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #95A5A6;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .action-btn:hover {
+            color: #2ECC71;
+            background: rgba(46, 204, 113, 0.08);
+            transform: translateX(2px);
+        }
+
+        .action-btn i {
+            font-size: 13px;
+            color: #2ECC71;
+        }
+
+        /* ========== DETAIL VIEW (ANSWER PAGE) ========== */
+        .detail-view {
+            display: none;
+            background: linear-gradient(135deg, #F8F7F4 0%, #EFF5F8 100%);
+            padding: 20px 16px 40px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .detail-view.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            background: #FFFFFF;
+            color: #1B3A5C;
+            border: 1px solid #E4EEE6;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: inherit;
+            font-weight: 600;
+            margin-bottom: 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(27, 58, 92, 0.06);
+        }
+
+        .back-btn:hover {
+            transform: translateX(-4px);
+            box-shadow: 0 4px 12px rgba(27, 58, 92, 0.12);
+        }
+
+        .card {
+            background: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0 2px 16px rgba(27, 58, 92, 0.08);
+            padding: 22px 20px;
+            margin-bottom: 18px;
+        }
+
+        .masail-title-main {
+            font-size: 21px;
+            font-weight: 800;
+            color: #1B8A4A;
+            line-height: 1.4;
+            margin-bottom: 18px;
+        }
+
+        .question-label { font-weight: 700; color: #1B3A5C; }
+        .question-number { color: #D4A574; font-weight: 700; }
+
+        .question-text {
+            font-size: 15px;
+            line-height: 1.85;
+            color: #2C3E50;
+            text-align: justify;
+        }
+
+        .meta-row {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            margin: 18px 0 14px;
+        }
+
+        .meta-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #34495E;
+            background: #F4F8F5;
+            border: 1px solid #E4EEE6;
+            padding: 8px 14px;
+            border-radius: 8px;
+        }
+
+        .meta-pill i { color: #2ECC71; font-size: 13px; }
+
+        .action-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding-top: 14px;
+            border-top: 1px solid #F0F0F0;
+        }
+
+        .pill-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1B8A4A;
+            background: #F4F8F5;
+            border: 1px solid #DCEEE0;
+            padding: 9px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .pill-btn:hover { background: #E6F5EA; }
+
+        .icon-btn {
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: #F4F8F5;
+            border: 1px solid #DCEEE0;
+            color: #1B8A4A;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .icon-btn:hover { background: #E6F5EA; }
+
+        .bookmark-row { margin-top: 12px; }
+
+        .bookmark-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #7F8C8D;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            padding: 6px 0;
+        }
+
+        .bookmark-btn:hover { color: #D4A574; }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+            font-weight: 800;
+            color: #1B8A4A;
+            margin-bottom: 16px;
+        }
+
+        .arabic-box {
+            background: linear-gradient(135deg, rgba(27, 58, 92, 0.04) 0%, rgba(46, 204, 113, 0.06) 100%);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .arabic-box p {
+            font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif;
+            font-size: 22px;
+            line-height: 2.1;
+            color: #1B3A5C;
+            direction: rtl;
+        }
+
+        .answer-text p {
+            font-size: 15px;
+            line-height: 1.9;
+            color: #2C3E50;
+            text-align: justify;
+            margin-bottom: 16px;
+        }
+
+        .answerer-box {
+            background: linear-gradient(135deg, #1B3A5C 0%, #2C5282 100%);
+            color: #fff;
+            border-radius: 8px;
+            padding: 18px 20px;
+            text-align: center;
+            margin: 22px 0 16px;
+        }
+
+        .answerer-box .label { font-size: 12px; opacity: 0.75; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .answerer-box .name { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+        .answerer-box .title { font-size: 13px; opacity: 0.9; }
+
+        .tags-label { font-size: 13px; font-weight: 700; color: #7F8C8D; margin: 18px 0 10px; }
+
+        .tags-row { display: flex; flex-wrap: wrap; gap: 10px; }
+
+        .tag-pill {
+            font-size: 13px;
+            color: #34495E;
+            background: #F4F4F4;
+            border: 1px solid #E8E8E8;
+            padding: 7px 14px;
+            border-radius: 20px;
+        }
+
+        .comments-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 17px;
+            font-weight: 800;
+            color: #1B8A4A;
+            margin-bottom: 16px;
+        }
+
+        .comments-empty {
+            text-align: center;
+            color: #95A5A6;
+            font-size: 14px;
+            background: #FAFAFA;
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+
+        .login-prompt { text-align: center; background: #FAFAFA; border-radius: 8px; padding: 26px 20px; }
+        .login-prompt i { font-size: 26px; color: #BDC3C7; margin-bottom: 10px; }
+        .login-prompt p { font-size: 14px; color: #7F8C8D; margin-bottom: 16px; }
+
+        .login-btn {
+            background: #1B8A4A;
+            color: #fff;
+            border: none;
+            padding: 11px 28px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .login-btn:hover { background: #157A3E; }
+
+        .related-heading {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1B8A4A;
+            margin-bottom: 16px;
+            padding: 0 2px;
+        }
+
+        .related-list { list-style: none; display: flex; flex-direction: column; gap: 14px; }
+
+        .related-item {
+            background: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            padding: 16px 18px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .related-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(27, 58, 92, 0.12);
+        }
+
+        .related-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .related-number {
+            font-size: 11px;
+            color: #95A5A6;
+            font-weight: 600;
+            padding: 4px 8px;
+            background: #F8F9FA;
+            border-radius: 3px;
+        }
+
+        .related-arrow { color: #BDC3C7; font-size: 14px; }
+
+        .related-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1B3A5C;
+            line-height: 1.5;
+            margin-bottom: 8px;
+        }
+
+        .related-answerer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #2ECC71;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .related-meta-row {
+            display: flex;
+            gap: 18px;
+            font-size: 12px;
+            color: #7F8C8D;
+            flex-wrap: wrap;
+            padding-top: 10px;
+            border-top: 1px solid #F0F0F0;
+        }
+
+        .related-meta-row .meta-item { display: flex; align-items: center; gap: 6px; }
+        .related-meta-row .meta-item i { color: #2ECC71; }
+
+        /* ========== SCROLLBAR ========== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #F8F7F4;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #D4A574;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1B3A5C;
+        }
+
+        .list-view {
+            display: block;
+        }
+
+        .list-view.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- List View -->
+        <div class="list-view" id="listView">
+            <!-- Header Section -->
+            <div class="header">
+                <div class="header-text">
+                    <div class="header-title">আপনার জিজ্ঞাসা/প্রশাদেশ</div>
+                    <div class="header-subtitle">প্রসক মাসআলের একটি তালিকা</div>
+                </div>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="মাসআলে অনুসন্ধান">
+                    <button class="mic-btn" id="micBtn" type="button"><i class="fas fa-microphone"></i></button>
+                    <button class="clear-btn" id="clearBtn" type="button">✕</button>
+                </div>
+            </div>
+
+            <!-- Masail List -->
+            <ul class="masail-list" id="masailList">
+            </ul>
+        </div>
+
+        <!-- Detail View (Answer Page - no navbar / footer / banner) -->
+        <div class="detail-view" id="detailView">
+            <button class="back-btn" onclick="backToList()">
+                <i class="fas fa-arrow-left"></i> প্রশ্ন তালিকায় ফিরে যান
+            </button>
+
+            <div id="detailContent"></div>
+        </div>
+    </div>
+
+    <script>
+        // বাংলা সংখ্যা ডেটা
+        const masailsData = [
+            {
+                id: 21,
+                number: '165410',
+                title: 'ওয়ারিশ সম্পত্তি বণ্টন: মা, স্ত্রী, ছেলে ও ভাই-বোনের অংশ কত?',
+                question: 'আসসালামু আলাইকুম ওয়া রহমাতুল্লাহ। হযরত এক ব্যক্তি ইন্তেকাল করেছেন। তিনি রেখে গেছেন— মা, স্ত্রী, ১ ছেলে, ৩ ভাই এবং ১ বোন। প্রশ্নগুলো হলো— ১. শরিয়ত অনুযায়ী এদের মধ্যে কে কত অংশ/শতকরা কত শতাংশ সম্পত্তি পাবে? ২. যদি মোট সম্পত্তি ৩,০০,০০০ (তিন লাখ) টাকা হয়, তাহলে প্রত্যেকে কত টাকা করে পাবে? ৩. মৃত ব্যক্তির স্ত্রী পরবর্তীতে ইদ্দত শেষ করে অন্যত্র বিয়ে করলে, মৃত স্বামীর সম্পত্তিতে তাঁর নির্ধারিত অংশ (১/৮) কি বহাল থাকবে, নাকি দ্বিতীয় বিয়ের কারণে তাঁর উত্তরাধিকার বাতিল হয়ে যাবে?',
+                tags: ['মিরাস ও উত্তরাধিকার', 'ফরায়েজ'],
+                description: 'উত্তর দিয়েছেন: মুফতী রফিকুল ইসলাম',
+                date: '05 আগস্ট, 2026',
+                location: 'Dhaka',
+                views: '54',
+                comments: '9',
+                likes: '28',
+                answerer: 'মুফতী রফিকুল ইসলাম',
+                answererTitle: 'ফরায়েজ ও মিরাস বিশেষজ্ঞ',
+                fullAnswer: '১. কার কত অংশ:\nমৃত ব্যক্তির ছেলে থাকার কারণে প্রত্যেকে নিম্নলিখিত অংশ পাবেন:\n• মা: এক ষষ্ঠমাংশ বা ছয় ভাগের এক ভাগ পাবে।\n• স্ত্রী: এক অষ্টমাংশ বা আট ভাগের এক ভাগ পাবে।\n• ১ ছেলে: আসাবাহ হিসেবে অবশিষ্ট সকল অংশ পাবে।\n• ৩ ভাই ও ১ বোন: মৃত ব্যক্তির ছেলে বিদ্যমান থাকায় ভাই ও বোন সম্পূর্ণ বঞ্চিত হবেন। তারা কোনো অংশ পাবেন না।\n\nএখানে মোট সম্পত্তিকে ২৪ ভাগে ভাগ করে মা পাবেন ৪ ভাগ, স্ত্রী পাবেন ৩ ভাগ এবং ছেলে পাবেন ১৭ ভাগ।\n\n২. তিন লাখ টাকার বণ্টন:\n• মা: ৫০,০০০ টাকা\n• স্ত্রী: ৩৭,৫০০ টাকা\n• ১ ছেলে: ২,১২,৫০০ টাকা\n• ৩ ভাই: ০ টাকা\n• ১ বোন: ০ টাকা\n\n৩. দ্বিতীয় বিয়ের কারণে স্ত্রীর অংশের বিধান:\nস্বামীর মৃত্যুর সময় স্ত্রী জীবিত থাকলে মৃত স্বামীর সম্পত্তিতে স্ত্রীর অষ্টমাংশ পাওয়ার অধিকার স্থায়ীভাবে প্রতিষ্ঠিত হয়ে যায়। পরবর্তীতে ইদ্দত পালন শেষে তিনি অন্যত্র বিয়ে করলেও প্রথম স্বামীর সম্পত্তিতে তাঁর এই উত্তরাধিকার বাতিল হবে না। নির্ধারিত পুরো অংশই বহাল থাকবে।\n\n<span class=\"arabic-line\">وَلِأَبَوَيْهِ لِكُلِّ وَاحِدٍ مِنْهُمَا السُّدُسُ مِمَّا تَرَكَ إِنْ كَانَ لَهُ وَلَدٌ</span>\nসূরা আন-নিসা, আয়াত: ১১\n\n<span class=\"arabic-line\">فَإِنْ كَانَ لَكُمْ وَلَدٌ فَلَهُنَّ الثُّمُنُ مِمَّا تَرَكْتُمْ</span>\nসূরা আন-নিসা, আয়াত: ১২\n\n<span class=\"arabic-line\">أَلْحِقُوا الْفَرَائِضَ بِأَهْلِهَا، فَمَا بَقِيَ فَهُوَ لِأَوْلَى رَجُلٍ ذَكَرٍ</span>\nসহীহ বুখারী, কিতাবুল ফারায়েজ, হাদীস নম্বর: ৬৩৫১\n\nকারণ, স্বামীর মৃত্যুর মাধ্যমে মিরাস প্রকাশ্যভাবে স্ত্রীর অধিকারে পরিণত হয়ে যায় এবং তা তাঁর জন্য স্থায়ীভাবে প্রতিষ্ঠিত হয়ে যায়।\n(আল-মুহীতুল বুরহানী: ৮/৫৪৮; আত-তাজরীদ লিল কুদূরী: ৯/৪৬৫৮)'
+            },
+            {
+                id: 1,
+                number: '163299',
+                title: 'কনের বাড়ীর দাওয়াত প্রসঙ্গ',
+                question: 'আসসালামুআলাইকুম ওয়া রাহমাতুল্লাহ, মেয়ের বিয়েতে এলাকাবাসী এবং ছেলের পক্ষ যে লোকজন আসবে তাদের জন্য খাবারের আয়োজন করা এটা কতটুকু জায়েজ? আর ছেলের বিয়েতে বরযাত্রী যেতে পারবে কিনা, যদি পারে তাহলে কতজন যেতে পারবে এবং সাথে মহিলা যেতে পারবে কিনা? আমার বিয়েতে বরযাত্রী মহিলারাও যেতে চাচ্ছে। এখন করনীয় কী?',
+                tags: ['প্রচলিত ভুল', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: আলেম মোহাম্মদ করিম',
+                date: '22 জুলাই, 2026',
+                location: 'Dhaka',
+                views: '142',
+                comments: '31',
+                likes: '87',
+                answerer: 'আলেম মোহাম্মদ করিম',
+                answererTitle: 'ইসলামী ফিকহ বিশেষজ্ঞ',
+                fullAnswer: 'কনের বাড়িতে দাওয়াতের ব্যাপারটি একটি গুরুত্বপূর্ণ আইনি এবং সামাজিক বিষয়। এটি বিবাহের পর নববধূর পক্ষ থেকে আয়োজিত একটি অনুষ্ঠান যা ইসলামী সংস্কৃতির একটি অংশ।\n\nশরীয়তের দৃষ্টিকোণ থেকে কনের বাড়ির দাওয়াত উদযাপন করা সুন্নত এবং বৈধ। এতে পরিবার এবং প্রতিবেশীদের সাথে খোশামোদ এবং সম্পর্ক গড়ে তোলার সুযোগ পাওয়া যায়।\n\nতবে এই দাওয়াতে অতিরিক্ত খরচ এবং অপচয় এড়ানো উচিত। সাধারণ এবং সহজ উপায়ে দাওয়াত দেওয়া আরও ভালো এবং বরকতময়। গরীবদের এবং দরিদ্রদের অন্তর্ভুক্ত করা এই দাওয়াতের একটি গুরুত্বপূর্ণ দিক।\n\nশরীয়তে বিবাহ উদযাপন করা ভালো কাজ এবং এটি ঘোষণামূলক ও প্রকাশ্য হওয়া উচিত যাতে সমাজে বিবাহের সংবাদ ছড়িয়ে পড়ে। তবে তা সংক্ষিপ্ত এবং সাশ্রয়ী হওয়া উচিত।'
+            },
+            {
+                id: 2,
+                number: '163239',
+                title: 'মুসলিম সন্তান কি অমুসলিম পিতামাতার মিরাস পাবে?',
+                question: 'আসসালামুআলাইকুম। জানতে চাই, মুসলিম সন্তান কি তার অমুসলিম পিতামাতার সম্পত্তির মিরাস পাবে? আর অমুসলিম পিতামাতাও কি মুসলিম সন্তানের মিরাস পাবেন? দয়া করে শরয়ী দৃষ্টিকোণ থেকে জানাবেন।',
+                tags: ['মিরাস ও উত্তরাধিকার', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: শায়েখ আব্দুল বারী',
+                date: '18 জুলাই, 2026',
+                location: 'Chittagong',
+                views: '178',
+                comments: '44',
+                likes: '96',
+                answerer: 'শায়েখ আব্দুল বারী',
+                answererTitle: 'ইসলামী ফিকহ ও মিরাস বিশেষজ্ঞ',
+                fullAnswer: 'এটি একটি অত্যন্ত গুরুত্বপূর্ণ ইসলামী প্রশ্ন যা বহু মানুষ জানতে চান। সংক্ষিপ্ত উত্তর হল: মুসলিম সন্তান অমুসলিম পিতামাতার মিরাস পাবে না, এবং অমুসলিম পিতামাতাও মুসলিম সন্তানের মিরাস পাবে না।\n\nইসলামী শরীয়তে মিরাস বণ্টনের একটি মৌলিক নীতি রয়েছে যা দীনের পার্থক্যের উপর ভিত্তি করে। আল্লাহ তায়ালা কুরআনে বলেছেন: \"এবং যারা বিশ্বাস করে এবং দেশ ত্যাগ করেছে এবং আমাদের রাস্তায় জিহাদ করেছে, আর যারা আশ্রয় দিয়েছে এবং সাহায্য করেছে - এরা পরস্পর বন্ধু।\" (সুরা আনফাল: ৭২)\n\nহাদীসে রাসুল (স.) স্পষ্টভাবে বলেছেন: মুসলিম অমুসলিমের উত্তরাধিকারী হয় না এবং অমুসলিম মুসলিমের উত্তরাধিকারী হয় না।\n\nতবে একজন মুসলিম পিতা বা মাতা তাদের অমুসলিম সন্তানদের জন্য উইল বা উপহার দিয়ে সম্পদ প্রদান করতে পারে। এটি শরীয়তসম্মত এবং বৈধ পদ্ধতি।\n\nকিন্তু মিরাস আইন অনুযায়ী, ইসলাম এবং অমুসলিমের মধ্যে কোনো উত্তরাধিকার সম্পর্ক থাকে না। এটি ইসলামী আইনের একটি স্পষ্ট এবং দৃঢ় নীতি।'
+            },
+            {
+                id: 3,
+                number: '195217',
+                title: 'কুরআন শেখার নিয়ম ও পদ্ধতি',
+                question: 'আসসালামুআলাইকুম। কুরআন শেখার নিয়ম ও পদ্ধতি — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['কুরআন', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: আলিম আব্দুল করিম',
+                date: '28 জুলাই, 2026',
+                location: 'Chittagong',
+                views: '89',
+                comments: '21',
+                likes: '45',
+                answerer: 'আলিম আব্দুল করিম',
+                answererTitle: 'কুরআন শিক্ষক',
+                fullAnswer: 'কুরআন শেখা প্রতিটি মুসলিমের জন্য ফরজে কিফায়া। সঠিক পদ্ধতিতে কুরআন শেখা অত্যন্ত জরুরি। প্রথমে তাজবীদের নিয়ম জানতে হবে, তারপর ধীরে ধীরে সুরা শিখতে হবে।'
+            },
+            {
+                id: 4,
+                number: '195216',
+                title: 'মেয়েদের জন্য কুরআন শেখা ফরজ নাকি সুন্নত',
+                question: 'আসসালামুআলাইকুম। মেয়েদের জন্য কুরআন শেখা ফরজ নাকি সুন্নত — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['কুরআন', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: শায়েখ ফারহাদ খান',
+                date: '25 জুলাই, 2026',
+                location: 'Sylhet',
+                views: '67',
+                comments: '14',
+                likes: '32',
+                answerer: 'শায়েখ ফারহাদ খান',
+                answererTitle: 'ইসলামী আলেম',
+                fullAnswer: 'মেয়েদের জন্য কুরআন শেখা ফরজ। পবিত্র কুরআনে আল্লাহ তায়ালা বলেছেন যে, কুরআন পাঠ করুন এবং এটি বুঝুন। এই আদেশ সকল মুসলিমের জন্য প্রযোজ্য, চাই তারা নারী হোন বা পুরুষ।\n\nইসলামের প্রাথমিক যুগে অনেক নারী সাহাবী কুরআন মুখস্থ করেছিলেন এবং মুহাদ্দিসা হয়েছিলেন। তাই মেয়েদের কুরআন শেখা অত্যন্ত গুরুত্বপূর্ণ এবং প্রশংসিত কাজ।'
+            },
+            {
+                id: 5,
+                number: '195215',
+                title: 'পর্দার বিধান ও গুরুত্ব',
+                question: 'আসসালামুআলাইকুম। পর্দার বিধান ও গুরুত্ব — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['পর্দা', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: মুফতী মোহাম্মদ সালেম',
+                date: '22 জুলাই, 2026',
+                location: 'Rajshahi',
+                views: '95',
+                comments: '18',
+                likes: '55',
+                answerer: 'মুফতী মোহাম্মদ সালেম',
+                answererTitle: 'হাদীস বিশেষজ্ঞ',
+                fullAnswer: 'পর্দা ইসলামের একটি মৌলিক বিধান। পবিত্র কুরআনে একাধিক স্থানে পর্দার কথা বলা হয়েছে। সুরা নূরের ৩০ ও ৩১ আয়াতে এবং সুরা আহজাবের ৫৩ আয়াতে পর্দা সম্পর্কে স্পষ্ট নির্দেশনা দেওয়া আছে।\n\nপর্দা শুধুমাত্র পোশাক নয়, এটি একটি জীবনধারা যা নারীদের সম্মান এবং মর্যাদা রক্ষা করে। প্রতিটি মুসলিম নারীর জন্য পর্দা পালন করা ফরজ।'
+            },
+            {
+                id: 6,
+                number: '195214',
+                title: 'নামাজের নিয়মকানুন ও আদব',
+                question: 'আসসালামুআলাইকুম। নামাজের নিয়মকানুন ও আদব — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['নামাজ', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: আলেম ইউসুফ আলী',
+                date: '20 জুলাই, 2026',
+                location: 'Khulna',
+                views: '112',
+                comments: '25',
+                likes: '68',
+                answerer: 'আলেম ইউসুফ আলী',
+                answererTitle: 'ফিকহ বিশেষজ্ঞ',
+                fullAnswer: 'নামাজ ইসলামের দ্বিতীয় স্তম্ভ এবং সবচেয়ে গুরুত্বপূর্ণ ইবাদত। নামাজের নির্দিষ্ট নিয়মকানুন এবং আদব রয়েছে যা প্রতিটি মুসলিমকে মেনে চলতে হয়।\n\nনামাজের আগে ওযু করা ফরজ। নামাজে হৃদয় এবং শরীর উভয়ের উপস্থিতি থাকা জরুরি। রাসুল (স.) এর হাদীসে এমন অনেক নামাজ সম্পর্কে কথা আছে যেখানে লোক নামাজ পড়ছে কিন্তু মনোযোগ দিচ্ছে না।'
+            },
+            {
+                id: 7,
+                number: '195213',
+                title: 'হালাল ও হারাম খাবারের পার্থক্য',
+                question: 'আসসালামুআলাইকুম। হালাল ও হারাম খাবারের পার্থক্য — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['হালাল-হারাম', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: শায়েখ আব্বাস উদ্দীন',
+                date: '18 জুলাই, 2026',
+                location: 'Barisal',
+                views: '78',
+                comments: '16',
+                likes: '41',
+                answerer: 'শায়েখ আব্বাস উদ্দীন',
+                answererTitle: 'ইসলামী দাঈ',
+                fullAnswer: 'হালাল মানে যা ইসলামে অনুমতিপ্রাপ্ত এবং হারাম মানে যা ইসলামে নিষিদ্ধ। খাবার-দাবারের ক্ষেত্রে ইসলাম খুবই স্পষ্ট নির্দেশনা দিয়েছে।\n\nহালাল খাবার হল: গরু, ছাগল, ভেড়া, মুরগি এবং অন্যান্য অনেক পশুর মাংস যা নিয়মানুবর্তিতার সাথে কাটা হয়েছে। সব ধরনের সবজি, ফল এবং শস্য হালাল।\n\nহারাম খাবার হল: শুকরের মাংস, মৃত জন্তু, খুনে ডুবানো মাংস ইত্যাদি।'
+            },
+            {
+                id: 8,
+                number: '195212',
+                title: 'যাকাত দেওয়ার নিয়ম ও মাসায়েল',
+                question: 'আসসালামুআলাইকুম। যাকাত দেওয়ার নিয়ম ও মাসায়েল — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['যাকাত', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: মুফতী করিম উল্লাহ',
+                date: '15 জুলাই, 2026',
+                location: 'Mymensingh',
+                views: '88',
+                comments: '20',
+                likes: '52',
+                answerer: 'মুফতী করিম উল্লাহ',
+                answererTitle: 'ফিকহ বিশেষজ্ঞ',
+                fullAnswer: 'যাকাত ইসলামের তৃতীয় স্তম্ভ এবং গরীবদের অধিকার। প্রতিটি মুসলিমের উপর নিসাব পরিমাণ সম্পদ থাকলে বছরে একবার যাকাত দেওয়া ফরজ।\n\nনিসাব হল: স্বর্ণের ক্ষেত্রে ৭.৫ তোলা এবং রূপার ক্ষেত্রে ৫২.৫ তোলা। যাকাতের হার হল সম্পদের দুই এক দশমাংশ (২.৫%)।\n\nযাকাত দেওয়ার যোগ্য লোক: গরীব, মিসকীন, যাকাত সংগ্রাহক, দাসমুক্তিতে আগ্রহী, ঋণগ্রস্ত, ফিসাবিলিল্লাহ এবং মুসাফির।'
+            },
+            {
+                id: 9,
+                number: '195211',
+                title: 'হজ্জের আহকাম ও মাসায়েল',
+                question: 'আসসালামুআলাইকুম। হজ্জের আহকাম ও মাসায়েল — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['হজ্জ', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: শায়েখ রফিকুল ইসলাম',
+                date: '12 জুলাই, 2026',
+                location: 'Noakhali',
+                views: '105',
+                comments: '27',
+                likes: '71',
+                answerer: 'শায়েখ রফিকুল ইসলাম',
+                answererTitle: 'হজ্জ বিশেষজ্ঞ',
+                fullAnswer: 'হজ্জ ইসলামের পঞ্চম স্তম্ভ এবং যারা সামর্থ্যবান তাদের উপর জীবনে একবার হজ্জ করা ফরজ।\n\nহজ্জের শর্তাবলী: মুসলিম হওয়া, সুবুদ্ধিমান হওয়া, প্রাপ্তবয়স্ক হওয়া, স্বাধীন হওয়া এবং শারীরিক ও আর্থিক সামর্থ্য থাকা।\n\nহজ্জের মূল কাজ: ইহরাম বাঁধা, আরাফায় অবস্থান করা, মিনায় পাথর নিক্ষেপ করা এবং তাওয়াফ করা।'
+            },
+            {
+                id: 10,
+                number: '195210',
+                title: 'আত্মীয়তার সেতুবন্ধন (সিলে রেহেম)',
+                question: 'আসসালামুআলাইকুম। আত্মীয়তার সেতুবন্ধন (সিলে রেহেম) — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['আত্মীয়তার হক', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: মুফতী সাখাওয়াত হোসেন',
+                date: '10 জুলাই, 2026',
+                location: 'Feni',
+                views: '72',
+                comments: '13',
+                likes: '38',
+                answerer: 'মুফতী সাখাওয়াত হোসেন',
+                answererTitle: 'ইসলামী মোরাল বিশেষজ্ঞ',
+                fullAnswer: 'সিলে রেহেম অর্থ আত্মীয়তার সম্পর্ক রক্ষা করা এবং আত্মীয়দের সাথে ভালো ব্যবহার করা। এটি ইসলামে অত্যন্ত গুরুত্বপূর্ণ এবং মহৎ কাজ।\n\nআল্লাহ তায়ালা কুরআনে বলেছেন আত্মীয়দের সাথে ভালো আচরণ করো। রাসুল (স.) এর অনেক হাদীসে সিলে রেহেমের গুরুত্ব বর্ণিত আছে।\n\nসিলে রেহেম করলে আয়ু বৃদ্ধি পায় এবং রিজিক বাড়ে। অন্যদিকে আত্মীয়তা ছিন্ন করলে আল্লাহর অভিশাপ পড়ে।'
+            },
+            {
+                id: 11,
+                number: '195209',
+                title: 'পিতামাতার সেবা করার নিয়ম',
+                question: 'আসসালামুআলাইকুম। পিতামাতার সেবা করার নিয়ম — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['পারিবারিক জীবন', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: আলেম মাহমুদ রেজা',
+                date: '8 জুলাই, 2026',
+                location: 'Tangail',
+                views: '98',
+                comments: '22',
+                likes: '59',
+                answerer: 'আলেম মাহমুদ রেজা',
+                answererTitle: 'আখলাক বিশেষজ্ঞ',
+                fullAnswer: 'পিতামাতার সেবা করা প্রতিটি সন্তানের কর্তব্য। আল্লাহ তায়ালা কুরআনে পিতামাতার সাথে ভালো আচরণ করার কঠোর আদেশ দিয়েছেন।\n\nসুরা ইসরার ২৩-২৪ আয়াতে বলা হয়েছে: আপনার প্রভু নির্দেশ দিয়েছেন যে তাঁকে ছাড়া কোনো ইবাদত করবেন না এবং পিতামাতার প্রতি সদ্ব্যবহার করবেন।\n\nবিশেষত বয়স্ক অবস্থায় পিতামাতার সেবা করা অত্যন্ত জরুরি এবং এটি সবচেয়ে বড় নেকি।'
+            },
+            {
+                id: 12,
+                number: '195208',
+                title: 'স্বামী-স্ত্রীর অধিকার ও কর্তব্য',
+                question: 'আসসালামুআলাইকুম। স্বামী-স্ত্রীর অধিকার ও কর্তব্য — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['দাম্পত্য জীবন', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: শায়েখ ইমরান আহমেদ',
+                date: '5 জুলাই, 2026',
+                location: 'Comilla',
+                views: '115',
+                comments: '29',
+                likes: '75',
+                answerer: 'শায়েখ ইমরান আহমেদ',
+                answererTitle: 'বৈবাহিক বিশেষজ্ঞ',
+                fullAnswer: 'স্বামী-স্ত্রীর সম্পর্ক ইসলামের ভিত্তি। উভয়ের নির্দিষ্ট অধিকার এবং কর্তব্য রয়েছে।\n\nস্ত্রীর অধিকার: মহর, যথাযথ খরচ-পরিচালনা, সম্মান এবং সদ্ব্যবহার।\n\nস্বামীর অধিকার: স্ত্রী তার নির্দেশ মেনে চলবে, ঘর সামলাবে এবং তার গোপনীয়তা রক্ষা করবে।\n\nরাসুল (স.) এর হাদীসে বলা আছে যে তোমাদের মধ্যে যে ব্যক্তি তার স্ত্রীর সাথে সর্বোত্তম আচরণ করে, সে সর্বোত্তম।'
+            },
+            {
+                id: 13,
+                number: '195207',
+                title: 'সন্তান প্রতিপালনের নিয়ম ও আদব',
+                question: 'আসসালামুআলাইকুম। সন্তান প্রতিপালনের নিয়ম ও আদব — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['পারিবারিক জীবন', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: মুফতী নাসরুদ্দিন সাহেব',
+                date: '2 জুলাই, 2026',
+                location: 'Kishoreganj',
+                views: '82',
+                comments: '17',
+                likes: '46',
+                answerer: 'মুফতী নাসরুদ্দিন সাহেব',
+                answererTitle: 'শিক্ষা বিশেষজ্ঞ',
+                fullAnswer: 'সন্তান প্রতিপালন একটি মহান দায়িত্ব যা প্রতিটি অভিভাবকের উপর রয়েছে। সন্তানদের ভালো আচরণ এবং ধর্মীয় শিক্ষা দেওয়া পিতামাতার কর্তব্য।\n\nপ্রথমে শিশুকে ভালোবাসা এবং স্নেহ দিতে হবে। তারপর ক্রমে তাকে নামাজ, কুরআন এবং ইসলামী শিক্ষা শেখাতে হবে।\n\nশিশুর সাথে সবসময় সদ্ব্যবহার করতে হবে এবং কখনো অন্যায়ভাবে শাস্তি দেওয়া যায় না।'
+            },
+            {
+                id: 14,
+                number: '195206',
+                title: 'ঋণের হুকুম ও পরিশোধের নিয়ম',
+                question: 'আসসালামুআলাইকুম। ঋণের হুকুম ও পরিশোধের নিয়ম — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['লেনদেন', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: মুফতী খোরশেদ আলম',
+                date: '30 জুন, 2026',
+                location: 'Jashore',
+                views: '69',
+                comments: '11',
+                likes: '35',
+                answerer: 'মুফতী খোরশেদ আলম',
+                answererTitle: 'ফিকহ পন্ডিত',
+                fullAnswer: 'ঋণ নেওয়া কোনো পাপ নয় কিন্তু ঋণ পরিশোধ করা ফরজ। রাসুল (স.) এর হাদীসে বলা আছে ঋণ পরিশোধ করা সবচেয়ে বড় দেখা দেওয়ার পরে আসে।\n\nযখন কোনো মুমিন ঋণ নেয় তখন তার উচিত সে ঋণ পরিশোধের নিয়ত করা এবং যথাযথ সময়ে তা আদায় করা।\n\nঋণের পরিমাণ এবং মেয়াদ স্পষ্টভাবে নির্ধারণ করা উচিত। সুদ নেওয়া সম্পূর্ণ হারাম।'
+            },
+            {
+                id: 15,
+                number: '195205',
+                title: 'কর্মের উপর পারিশ্রমিক নেওয়ার বিধান',
+                question: 'আসসালামুআলাইকুম। কর্মের উপর পারিশ্রমিক নেওয়ার বিধান — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['লেনদেন', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: আলেম আবু নূর',
+                date: '28 জুন, 2026',
+                location: 'Jhenaidah',
+                views: '76',
+                comments: '14',
+                likes: '42',
+                answerer: 'আলেম আবু নূর',
+                answererTitle: 'অর্থনীতি বিশেষজ্ঞ',
+                fullAnswer: 'কর্মের জন্য পারিশ্রমিক নেওয়া সম্পূর্ণভাবে হালাল এবং মুস্তাহাব। মজুর তার পরিশ্রমের ফল পাওয়ার যোগ্য।\n\nরাসুল (স.) এর হাদীসে বলা আছে মজুরকে তার ঘাম শুকানোর আগে পারিশ্রমিক দিয়ে দাও।\n\nতবে কর্মফল চাওয়া উচিত ন্যায্য এবং উপযুক্ত। অত্যধিক মূল্য চাওয়া অন্যায়।'
+            },
+            {
+                id: 16,
+                number: '195204',
+                title: 'ব্যবসা-বাণিজ্যে সততা ও ন্যায়',
+                question: 'আসসালামুআলাইকুম। ব্যবসা-বাণিজ্যে সততা ও ন্যায় — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['লেনদেন', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: শায়েখ ওবায়দুল্লাহ',
+                date: '25 জুন, 2026',
+                location: 'Satkhira',
+                views: '91',
+                comments: '19',
+                likes: '53',
+                answerer: 'শায়েখ ওবায়দুল্লাহ',
+                answererTitle: 'ব্যবসায়িক ফিকহ বিশেষজ্ঞ',
+                fullAnswer: 'ব্যবসা-বাণিজ্যে সততা ও ন্যায় অত্যন্ত গুরুত্বপূর্ণ। রাসুল (স.) নিজে একজন ব্যবসায়ী ছিলেন এবং সততার জন্য আল-আমিন (বিশ্বস্ত) উপাধি পেয়েছিলেন।\n\nব্যবসায়ে জালিয়াতি, মিথ্যা প্রতিশ্রুতি, তাজা এবং পচা পণ্য মিশিয়ে বিক্রয় করা সম্পূর্ণ হারাম।\n\nসততা সহকারে ব্যবসা করলে লাভ কম হতে পারে কিন্তু আল্লাহর রহমত এবং বরকত পাওয়া যায়।'
+            },
+            {
+                id: 17,
+                number: '195203',
+                title: 'দাতব্য কাজ ও দাতব্যের নিয়ম',
+                question: 'আসসালামুআলাইকুম। দাতব্য কাজ ও দাতব্যের নিয়ম — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['দান-সদকা', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: মুফতী জিয়াউদ্দিন',
+                date: '22 জুন, 2026',
+                location: 'Meherpur',
+                views: '84',
+                comments: '15',
+                likes: '48',
+                answerer: 'মুফতী জিয়াউদ্দিন',
+                answererTitle: 'সমাজ কল্যাণ বিশেষজ্ঞ',
+                fullAnswer: 'দাতব্য কাজ ইসলামে অত্যন্ত প্রশংসিত এবং পুরস্কৃত। গরীব ও অসহায়দের সাহায্য করা প্রতিটি সামর্থ্যবান ব্যক্তির কর্তব্য।\n\nপবিত্র কুরআনে বলা হয়েছে যারা দাতব্য কাজ করে তারা জান্নাতি হবে।\n\nদান করার সময় লক্ষ্য করতে হবে যে: দান গোপনীয় হতে হবে, দাতব্য দাতা ও প্রাপক উভয়ের জন্য মঙ্গলজনক হতে হবে এবং দানের পরে কোনো অহংকার প্রকাশ করা যায় না।'
+            },
+            {
+                id: 18,
+                number: '195202',
+                title: 'ঈর্ষা ও পরনিন্দার গুনাহ',
+                question: 'আসসালামুআলাইকুম। ঈর্ষা ও পরনিন্দার গুনাহ — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['আখলাক', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: শায়েখ সালাহুদ্দীন',
+                date: '20 জুন, 2026',
+                location: 'Sunamganj',
+                views: '77',
+                comments: '16',
+                likes: '44',
+                answerer: 'শায়েখ সালাহুদ্দীন',
+                answererTitle: 'আখলাক প্রশিক্ষক',
+                fullAnswer: 'ঈর্ষা এবং পরনিন্দা ইসলামে মহা পাপ। এই দুটি রোগ হৃদয়কে নষ্ট করে এবং সমাজে বিভেদ সৃষ্টি করে।\n\nরাসুল (স.) বলেছেন ঈর্ষা ভালোকাজকে যেমন আগুন শুকনো লাকড়িকে খরচ করে দেয়।\n\nপরনিন্দা শুধুমাত্র হারামই নয়, বরং এটি মানুষের সম্মানকে ক্ষতিগ্রস্ত করে। রাসুল (স.) এর হাদীসে বলা আছে যে পরনিন্দা সবচেয়ে বড় জুলুম।'
+            },
+            {
+                id: 19,
+                number: '195201',
+                title: 'জিহ্বার হিফাজত করার গুরুত্ব',
+                question: 'আসসালামুআলাইকুম। জিহ্বার হিফাজত করার গুরুত্ব — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['আখলাক', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: মুফতী করিম সাহেব',
+                date: '18 জুন, 2026',
+                location: 'Pirojpur',
+                views: '88',
+                comments: '20',
+                likes: '51',
+                answerer: 'মুফতী করিম সাহেব',
+                answererTitle: 'ইসলামী পণ্ডিত',
+                fullAnswer: 'জিহ্বার হিফাজত করা ইসলামের একটি গুরুত্বপূর্ণ শিক্ষা। জিহ্বা দিয়ে আমরা মিথ্যা, গালি, পরনিন্দা এবং অপবাদ বলি যা গুনাহের কাজ।\n\nরাসুল (স.) বলেছেন আমি কি তোমাদের জান্নাতের পথ দেখাব? সবাই বলেছে হ্যাঁ। তখন তিনি বলেছেন জিহ্বা হিফাজত কর।\n\nমুসলিম হাদীস গ্রন্থে বর্ণিত আছে যে বেশিরভাগ মানুষ তাদের জিহ্বার কারণেই জাহান্নামে যায়।'
+            },
+            {
+                id: 20,
+                number: '195200',
+                title: 'সুস্বাস্থ্য ও শারীরিক সুস্থতার নিয়ম',
+                question: 'আসসালামুআলাইকুম। সুস্বাস্থ্য ও শারীরিক সুস্থতার নিয়ম — এ বিষয়ে শরীয়তের সঠিক নির্দেশনা কী? দয়া করে বিস্তারিত জানালে উপকৃত হব।',
+                tags: ['স্বাস্থ্য', 'জায়েয । নাজায়েয'],
+                description: 'উত্তর দিয়েছেন: ডাক্তার মোহাম্মদ হাসান',
+                date: '15 জুন, 2026',
+                location: 'Patuakhali',
+                views: '73',
+                comments: '12',
+                likes: '39',
+                answerer: 'ডাক্তার মোহাম্মদ হাসান',
+                answererTitle: 'চিকিৎসক ও ইসলামী পন্ডিত',
+                fullAnswer: 'সুস্বাস্থ্য আল্লাহর একটি বড় নেয়ামত। রাসুল (স.) বলেছেন দুটি নেয়ামত অনেকেই পরিত্যাগ করে: স্বাস্থ্য এবং অবসর।\n\nসুস্বাস্থ্য রক্ষার জন্য: সময়মতো খাওয়া, নিয়মিত ব্যায়াম করা, পর্যাপ্ত ঘুম নেওয়া এবং পরিচ্ছন্নতা বজায় রাখা জরুরি।\n\nইসলাম পরিচ্ছন্নতাকে অর্ধেক ঈমান বলেছে এবং রোগ প্রতিরোধে উৎসাহিত করেছে।'
+            }
+        ];
+
+        // শুধুমাত্র সাধারণ সংখ্যা প্রদর্শন - Devanagari সংখ্যা নেই
+        function convertToBangla(num) {
+            return num.toString();
+        }
+
+        // লিস্ট তৈরি করুন
+        function createMasailList(dataToRender = masailsData) {
+            const listContainer = document.getElementById('masailList');
+            listContainer.innerHTML = '';
+
+            if (dataToRender.length === 0) {
+                listContainer.innerHTML = '<li style="text-align:center; padding:16px 10px; color:#95A5A6;">কোনো ফলাফল পাওয়া যায়নি</li>';
+                return;
+            }
+
+            dataToRender.forEach(masail => {
+                const li = document.createElement('li');
+                li.className = 'masail-item';
+                li.onclick = () => showDetail(masail.id);
+
+                li.innerHTML = `
+                    <div class="masail-number">প্রশ্ন নম্বর: ${convertToBangla(masail.number)}</div>
+                    <div class="masail-header-row">
+                        <div>
+                            <div class="masail-title">${masail.title}</div>
+                            <div class="masail-description">${masail.description}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="masail-meta-row">
+                        <div class="meta-item">
+                            <i class="far fa-calendar"></i>
+                            <span>${convertToBangla(masail.date.split(' ')[0])} ${masail.date.split(' ').slice(1).join(' ')}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>${masail.location}</span>
+                        </div>
+                    </div>
+
+                    <div class="masail-actions">
+                        <button class="action-btn">
+                            <i class="far fa-eye"></i>
+                            <span>দেখেছেন ${convertToBangla(masail.views)}</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="far fa-comment"></i>
+                            <span>মন্তব্য ${convertToBangla(masail.comments)}</span>
+                        </button>
+                        <button class="action-btn">
+                            <i class="far fa-heart"></i>
+                            <span>পছন্দ ${convertToBangla(masail.likes)}</span>
+                        </button>
+                    </div>
+                `;
+
+                listContainer.appendChild(li);
+            });
+        }
+
+        // বিস্তারিত (উত্তর) ভিউ দেখান — নেভবার, ফুটার ও ব্যানার ছাড়া
+        function showDetail(id) {
+            const masail = masailsData.find(m => m.id === id);
+            if (!masail) return;
+
+            const dateParts = masail.date.split(' ');
+            const dateStr = `${convertToBangla(dateParts[0])} ${dateParts.slice(1).join(' ')}`;
+
+            const answerParagraphs = masail.fullAnswer
+                .split('\n\n')
+                .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+                .join('');
+
+            const tags = masail.tags || ['সাধারণ মাসআলা'];
+            const tagsHtml = tags.map(t => `<span class="tag-pill">${t}</span>`).join('');
+
+            // সম্পর্কিত প্রশ্ন (একই বিষয়ের ট্যাগ মিললে অগ্রাধিকার, নাহলে সাম্প্রতিক অন্য প্রশ্ন)
+            const others = masailsData.filter(m => m.id !== masail.id);
+            const related = others
+                .sort((a, b) => {
+                    const aMatch = (a.tags || []).some(t => tags.includes(t)) ? 1 : 0;
+                    const bMatch = (b.tags || []).some(t => tags.includes(t)) ? 1 : 0;
+                    return bMatch - aMatch;
+                })
+                .slice(0, 4);
+
+            const relatedHtml = related.map(m => {
+                const dParts = m.date.split(' ');
+                const dStr = `${convertToBangla(dParts[0])} ${dParts.slice(1).join(' ')}`;
+                return `
+                <li class="related-item" onclick="showDetail(${m.id})">
+                    <div class="related-top-row">
+                        <span class="related-number">${convertToBangla(m.number)}</span>
+                        <i class="fas fa-chevron-right related-arrow"></i>
+                    </div>
+                    <div class="related-title">${m.title}</div>
+                    <div class="related-answerer"><i class="far fa-user"></i><span>উত্তর দিয়েছেন: ${m.answerer}</span></div>
+                    <div class="related-meta-row">
+                        <div class="meta-item"><i class="far fa-calendar"></i><span>${dStr}</span></div>
+                        <div class="meta-item"><i class="fas fa-map-marker-alt"></i><span>${m.location}</span></div>
+                    </div>
+                </li>`;
+            }).join('');
+
+            const detailContent = document.getElementById('detailContent');
+            detailContent.innerHTML = `
+                <div class="card">
+                    <div class="masail-title-main">${masail.title}</div>
+                    <div class="question-text">
+                        <span class="question-label">প্রশ্নঃ</span>
+                        <span class="question-number">${convertToBangla(masail.number)}.</span>
+                        ${masail.question}
+                    </div>
+                    <div class="meta-row">
+                        <div class="meta-pill"><i class="far fa-calendar"></i><span>${dateStr}</span></div>
+                        <div class="meta-pill"><i class="fas fa-map-marker-alt"></i><span>${masail.location}</span></div>
+                    </div>
+                    <div class="action-row">
+                        <button class="pill-btn" onclick="shareMasail(${masail.id})"><i class="fas fa-share-alt"></i><span>শেয়ার / কপি</span></button>
+                        <button class="icon-btn" onclick="window.print()"><i class="fas fa-print"></i></button>
+                    </div>
+                    <div class="bookmark-row">
+                        <button class="bookmark-btn"><i class="far fa-bookmark"></i><span>বুকমার্ক করুন</span></button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="section-heading"><i class="far fa-comment-dots"></i><span>উত্তর</span></div>
+                    <div class="arabic-box">
+                        <p>وَ عَلَيْكُـمُ السَّلَام وَرَحْمَةُ اللَّٰهِ وَبَرَكَاتُهُ<br>بِسْمِ اللَّٰهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
+                    </div>
+                    <div class="answer-text">${answerParagraphs}</div>
+
+                    <div class="answerer-box">
+                        <div class="label">উত্তর দাতা</div>
+                        <div class="name">${masail.answerer}</div>
+                        <div class="title">${masail.answererTitle}</div>
+                    </div>
+
+                    <button class="pill-btn" onclick="shareMasail(${masail.id})"><i class="fas fa-share-alt"></i><span>শেয়ার / কপি</span></button>
+
+                    <div class="tags-label">প্রসঙ্গসমূহ:</div>
+                    <div class="tags-row">${tagsHtml}</div>
+                </div>
+
+                <div class="card">
+                    <div class="comments-header"><i class="far fa-comment"></i><span>মন্তব্য (০)</span></div>
+                    <div class="comments-empty">কোনো মন্তব্য নেই। প্রথম মন্তব্য করুন!</div>
+                    <div class="login-prompt">
+                        <i class="far fa-comment-dots"></i>
+                        <p>মন্তব্য করতে লগইন করুন</p>
+                        <button class="login-btn">লগইন করুন</button>
+                    </div>
+                </div>
+
+                <div class="related-heading">এ সম্পর্কিত আরও জিজ্ঞাসা/প্রশ্ন-উত্তর</div>
+                <ul class="related-list">${relatedHtml}</ul>
+            `;
+
+            document.getElementById('listView').classList.add('hidden');
+            document.getElementById('detailView').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // শেয়ার / কপি লিংক
+        function shareMasail(id) {
+            const masail = masailsData.find(m => m.id === id);
+            const shareText = masail ? `${masail.title} - প্রশ্ন নম্বরঃ ${masail.number}` : document.title;
+            if (navigator.share) {
+                navigator.share({ title: shareText, url: window.location.href }).catch(() => {});
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareText + ' — ' + window.location.href);
+                alert('লিংক কপি করা হয়েছে!');
+            }
+        }
+
+        // ফিরে যান
+        function backToList() {
+            document.getElementById('listView').classList.remove('hidden');
+            document.getElementById('detailView').classList.remove('active');
+        }
+
+        // সার্চ কার্যকর করা
+        function filterMasail(query) {
+            const q = query.trim().toLowerCase();
+            if (!q) {
+                createMasailList(masailsData);
+                return;
+            }
+            const filtered = masailsData.filter(masail =>
+                masail.title.toLowerCase().includes(q) ||
+                masail.description.toLowerCase().includes(q) ||
+                masail.fullAnswer.toLowerCase().includes(q) ||
+                masail.answerer.toLowerCase().includes(q) ||
+                masail.location.toLowerCase().includes(q) ||
+                masail.number.includes(q)
+            );
+            createMasailList(filtered);
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearBtn');
+            const micBtn = document.getElementById('micBtn');
+
+            searchInput.addEventListener('input', (e) => {
+                filterMasail(e.target.value);
+            });
+
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    filterMasail(searchInput.value);
+                }
+            });
+
+            clearBtn.addEventListener('click', () => {
+                searchInput.value = '';
+                filterMasail('');
+                searchInput.focus();
+            });
+
+            // মাইক দিয়ে ভয়েস সার্চ (যদি ব্রাউজার সমর্থন করে) - বলার সাথে সাথে অটো সার্চ হবে
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                const recognition = new SpeechRecognition();
+                recognition.lang = 'bn-BD';
+                recognition.interimResults = true;   // বলার সময়ই ফলাফল আসতে থাকবে
+                recognition.continuous = true;        // থামা পর্যন্ত শুনতে থাকবে
+                recognition.maxAlternatives = 1;
+
+                let listening = false;
+
+                micBtn.addEventListener('click', () => {
+                    if (listening) {
+                        recognition.stop();
+                        return;
+                    }
+                    try {
+                        recognition.start();
+                    } catch (e) {
+                        // already started guard
+                    }
+                });
+
+                recognition.addEventListener('start', () => {
+                    listening = true;
+                    micBtn.style.background = '#E74C3C';
+                    micBtn.classList.add('listening');
+                });
+
+                recognition.addEventListener('result', (event) => {
+                    let transcript = '';
+                    for (let i = 0; i < event.results.length; i++) {
+                        transcript += event.results[i][0].transcript;
+                    }
+                    searchInput.value = transcript;
+                    filterMasail(transcript);   // বলার সাথে সাথে অটো সার্চ
+                });
+
+                recognition.addEventListener('end', () => {
+                    listening = false;
+                    micBtn.style.background = '';
+                    micBtn.classList.remove('listening');
+                });
+
+                recognition.addEventListener('error', () => {
+                    listening = false;
+                    micBtn.style.background = '';
+                    micBtn.classList.remove('listening');
+                });
+            } else {
+                micBtn.addEventListener('click', () => {
+                    alert('আপনার ব্রাউজার ভয়েস সার্চ সমর্থন করে না। অনুগ্রহ করে Chrome ব্রাউজার ব্যবহার করুন।');
+                });
+            }
+        }
+
+        // প্রাথমিক লোড
+        window.addEventListener('DOMContentLoaded', () => {
+            createMasailList();
+            setupSearch();
+        });
+    </script>
+</body>
+</html>
