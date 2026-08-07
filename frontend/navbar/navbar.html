@@ -36,6 +36,12 @@
       height: 60px;
       z-index: 100;
       box-shadow: 0 2px 4px var(--navbar-shadow);
+      transform: translateY(0);
+      transition: transform 0.3s ease;
+    }
+
+    .navbar.navbar-hidden {
+      transform: translateY(-100%);
     }
 
     /* ===== HAMBURGER MENU ===== */
@@ -433,6 +439,48 @@
       }
     });
     console.log('✅ ESC key listener attached');
+
+    // ===== SCROLL SHOW/HIDE NAVBAR =====
+    const navbarEl = document.querySelector('.navbar');
+    let lastScrollY = window.scrollY;
+    let ticking = false;
+    const scrollThreshold = 5; // ignore tiny scroll jitters
+    const minScrollToHide = 60; // don't hide navbar until scrolled past this point
+
+    function handleNavbarScroll() {
+      const currentScrollY = window.scrollY;
+      const diff = currentScrollY - lastScrollY;
+
+      if (Math.abs(diff) < scrollThreshold) {
+        ticking = false;
+        return;
+      }
+
+      // Always show navbar near the top of the page
+      if (currentScrollY < minScrollToHide) {
+        navbarEl.classList.remove('navbar-hidden');
+      } else if (diff > 0) {
+        // Scrolling down -> hide navbar (and close sidebar if open)
+        navbarEl.classList.add('navbar-hidden');
+        if (navbarSidebar && navbarSidebar.classList.contains('active')) {
+          closeSidebar();
+        }
+      } else {
+        // Scrolling up -> show navbar
+        navbarEl.classList.remove('navbar-hidden');
+      }
+
+      lastScrollY = currentScrollY;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        window.requestAnimationFrame(handleNavbarScroll);
+        ticking = true;
+      }
+    }, { passive: true });
+    console.log('✅ Scroll show/hide navbar enabled');
 
     // ===== ACTIVE LINK HIGHLIGHTING =====
     function updateActiveLink() {
