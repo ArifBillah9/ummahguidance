@@ -301,13 +301,15 @@
 <body>
 <div class="app">
 
-<div id="navbar-menu-toggle"></div>
-<!-- navbar লোডার -->
+<div id="navbar-placeholder"></div>
+
 <script>
-  fetch('/navbar/index.html')
-    .then(r => r.text())
+  fetch("https://cdn.jsdelivr.net/gh/username/repo-name@main/navbar/navbar.html")
+    .then(res => res.text())
     .then(html => {
-      document.getElementById('navbar-menu-toggle').innerHTML = html;
+      document.getElementById("navbar-placeholder").innerHTML = html;
+      // এখানে navbar.html-এর ভেতরের <script> ট্যাগগুলো
+      // আলাদাভাবে রান করাতে হতে পারে, নিচে নোট দেখুন
     });
 </script>
 
