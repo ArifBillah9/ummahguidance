@@ -158,12 +158,13 @@
 
     /* ===== SIDEBAR HEADER ===== */
     .navbar-sidebar-header {
+      position: relative;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--navbar-border);
-      background: #f9f9f9;
+      justify-content: center;
+      padding: 28px 20px 20px;
+      border-bottom: none;
+      background: transparent;
     }
 
     .navbar-sidebar-logo {
@@ -173,8 +174,8 @@
     }
 
     .navbar-sidebar-logo img {
-      width: 40px;
-      height: 40px;
+      width: 72px;
+      height: 72px;
       object-fit: contain;
       margin-bottom: 6px;
     }
@@ -187,9 +188,12 @@
     }
 
     .navbar-sidebar-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
       background: none;
       border: none;
-      font-size: 24px;
+      font-size: 20px;
       cursor: pointer;
       color: #333;
       width: 32px;
@@ -210,7 +214,7 @@
     .navbar-sidebar-nav {
       display: flex;
       flex-direction: column;
-      padding: 8px 0;
+      padding: 24px 0 8px;
     }
 
     .navbar-sidebar-link {
