@@ -2005,27 +2005,6 @@
   <div class="phone-prayer-bg" id="phonePrayerBg" aria-hidden="true"></div>
 
   <div class="left-pane">
-  <div class="topbar">
-    <div class="menu-toggle" id="navMenuToggle" role="button" aria-label="মেনু খুলুন">
-      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        <path d="M3 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        <path d="M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-    </div>
-    <div class="topbar-logo">
-      <img src="assets/ummahguidanceLOGO3.png" alt="Ummah Guidance" title="Ummah Guidance">
-    </div>
-    <div class="top-icons">
-      <div class="search-btn" id="searchBtn" role="button" aria-label="অনুসন্ধান করুন">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="2"/>
-          <path d="M20 20L15.8 15.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </div>
-    </div>
-  </div>
-
   <!-- ===== Nav Drawer (three-line menu) ===== -->
   <div class="nav-overlay" id="navOverlay">
     <div class="nav-drawer">
@@ -4455,6 +4434,7 @@
   var lastScrollY = 0;
   var isHidden = false;
   
+  if(topbar){
   window.addEventListener('scroll', function(){
     var currentScrollY = window.scrollY || window.pageYOffset;
     
@@ -4475,8 +4455,14 @@
     
     lastScrollY = currentScrollY;
   }, {passive: true});
+  }
 })();
 </script>
+
+
+
+  <!-- Navbar Loader -->
+<script src="navbar/navbar-loader.js"></script>
 
 </body>
 </html>
