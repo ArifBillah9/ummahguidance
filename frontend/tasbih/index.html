@@ -304,7 +304,7 @@
 <div id="navbar-container"></div>
 <!-- navbar লোডার -->
 <script>
-  fetch('/frontend/navbar/navbar-complete.html')
+  fetch('/navbar')
     .then(r => r.text())
     .then(html => {
       document.getElementById('navbar-container').innerHTML = html;
