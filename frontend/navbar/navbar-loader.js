@@ -1,0 +1,106 @@
+// ===== NAVBAR LOADER =====
+// Dynamically load navbar on all pages
+
+(function() {
+  'use strict';
+  
+  // Navbar HTML
+  const navbarHTML = `
+    <!-- ===== NAVBAR ===== -->
+    <div class="navbar">
+      <!-- Hamburger Menu -->
+      <button id="navbar-menu-btn" class="navbar-menu-btn" title="মেনু">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Logo & Title -->
+      <a href="/index.html" class="navbar-logo">
+        <img src="/frontend/navbar/logo.png" alt="Logo">
+        <div class="navbar-logo-text">
+          <div class="navbar-logo-text-main">Ummah</div>
+          <div class="navbar-logo-text-sub">Guidance</div>
+        </div>
+      </a>
+
+      <!-- Search Button -->
+      <button id="navbar-search-btn" class="navbar-search-btn" title="খুঁজুন">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <div id="navbar-sidebar" class="navbar-sidebar">
+      <!-- Sidebar Header -->
+      <div class="navbar-sidebar-header">
+        <div class="navbar-sidebar-logo">
+          <img src="/frontend/navbar/logo.png" alt="Logo">
+          <div class="navbar-sidebar-logo-text">UMMAH<br>GUIDANCE</div>
+        </div>
+        <button id="navbar-sidebar-close" class="navbar-sidebar-close" title="বন্ধ করুন">✕</button>
+      </div>
+
+      <!-- Sidebar Navigation -->
+      <nav class="navbar-sidebar-nav">
+        <a href="/index.html" class="navbar-sidebar-link">হোম</a>
+        <a href="/about.html" class="navbar-sidebar-link">আমাদের সম্পর্কে</a>
+        <a href="/services.html" class="navbar-sidebar-link">সেবা</a>
+        <a href="/blog.html" class="navbar-sidebar-link">ব্লগ</a>
+        <a href="/contact.html" class="navbar-sidebar-link">যোগাযোগ</a>
+        <a href="/faq.html" class="navbar-sidebar-link">FAQ</a>
+      </nav>
+    </div>
+
+    <!-- Sidebar Backdrop -->
+    <div id="navbar-sidebar-backdrop" class="navbar-sidebar-backdrop"></div>
+  `;
+
+  // Load CSS
+  function loadCSS() {
+    const cssLink = document.createElement('link');
+    cssLink.rel = 'stylesheet';
+    cssLink.href = '/frontend/navbar/navbar.css';
+    document.head.appendChild(cssLink);
+  }
+
+  // Load JavaScript
+  function loadJS() {
+    const script = document.createElement('script');
+    script.src = '/frontend/navbar/navbar.js';
+    script.async = false;
+    document.body.appendChild(script);
+  }
+
+  // Main loader function
+  function loadNavbar() {
+    console.log('%c🔄 NAVBAR LOADER STARTED', 'color: blue; font-weight: bold; font-size: 12px;');
+    
+    // Load CSS
+    loadCSS();
+    console.log('✅ CSS loaded');
+    
+    // Inject HTML at the beginning of body
+    document.body.insertAdjacentHTML('afterbegin', navbarHTML);
+    console.log('✅ HTML injected');
+    
+    // Load JavaScript
+    loadJS();
+    console.log('✅ JavaScript loaded');
+    
+    console.log('%c✅ NAVBAR LOADER COMPLETE', 'color: green; font-weight: bold; font-size: 12px;');
+  }
+
+  // Wait for DOM to be ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadNavbar);
+  } else {
+    loadNavbar();
+  }
+
+})();

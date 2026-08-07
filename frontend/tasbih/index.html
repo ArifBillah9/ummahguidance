@@ -301,18 +301,6 @@
 <body>
 <div class="app">
 
-<div id="navbar-placeholder"></div>
-
-<script>
-  fetch("https://ummahguidance-bhmv.vercel.app/frontend/navbar/navbar.html")
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById("navbar-placeholder").innerHTML = html;
-      // এখানে navbar.html-এর ভেতরের <script> ট্যাগগুলো
-      // আলাদাভাবে রান করাতে হতে পারে, নিচে নোট দেখুন
-    });
-</script>
-
   <header>
     <button class="icon-btn" id="homeBtn" aria-label="তালিকা">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
@@ -642,5 +630,9 @@
   render();
 })();
 </script>
+
+
+  <!-- Navbar Loader -->
+<script src="/frontend/navbar/navbar-loader.js"></script>
 </body>
 </html>
