@@ -1,583 +1,659 @@
-<!-- ===== NAVBAR - সম্পূর্ণ একক ফাইল (FIXED) ===== -->
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UMMAH GUIDANCE - ইসলামিক গাইডেন্স</title>
+  
+  <style>
+    /* ===== CSS VARIABLES ===== */
+    :root {
+      --card-bg: #ffffff;
+      --text-dark: #20242b;
+      --text-mute: #8b909a;
+      --badge-pink: #ec1876;
+      --active-green: #1f8a5f;
+      --active-bg: #eef8f3;
+      --menu-bg: #e4e4e4;
+      --menu-card-bg: #ffffff;
+      --menu-text-green: #2f473f;
+      --menu-teal: #03c3d2;
+    }
 
-<style>
-  /* ===== CSS VARIABLES ===== */
-  :root {
-    --card-bg: #ffffff;
-    --text-dark: #20242b;
-    --text-mute: #8b909a;
-    --badge-pink: #ec1876;
-    --active-green: #1f8a5f;
-    --active-bg: #eef8f3;
-    --menu-bg: #e4e4e4;
-    --menu-card-bg: #ffffff;
-    --menu-text-green: #2f473f;
-    --menu-teal: #03c3d2;
-  }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  /* ===== TOPBAR STYLING ===== */
-  .navbar-topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 8px;
-    color: var(--text-dark);
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    min-height: 58px;
-    background: var(--menu-card-bg);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    width: 100%;
-    transition: transform 0.3s ease;
-    box-sizing: border-box;
-  }
+    /* ===== TOPBAR STYLING ===== */
+    .navbar-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 8px;
+      color: var(--text-dark);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      min-height: 58px;
+      background: var(--menu-card-bg);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      transition: transform 0.3s ease;
+      box-sizing: border-box;
+    }
 
-  .navbar-topbar.hide {
-    transform: translateY(-100%);
-  }
+    .navbar-topbar.hide {
+      transform: translateY(-100%);
+    }
 
-  /* লোগো */
-  .navbar-logo {
-    width: 120px;
-    max-width: 120px;
-    height: auto;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: -5px 0;
-  }
+    /* লোগো */
+    .navbar-logo {
+      width: 120px;
+      max-width: 120px;
+      height: auto;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: -5px 0;
+    }
 
-  .navbar-logo img {
-    width: 100%;
-    height: auto;
-    max-height: 56px;
-    object-fit: contain;
-  }
+    .navbar-logo a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
 
-  /* সার্চ বাটন */
-  .navbar-search-btn {
-    width: 36px;
-    height: 36px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-dark);
-    transition: opacity 0.2s ease;
-    flex-shrink: 0;
-    padding: 0;
-  }
+    .navbar-logo img {
+      width: 100%;
+      height: auto;
+      max-height: 56px;
+      object-fit: contain;
+    }
 
-  .navbar-search-btn:hover {
-    opacity: 0.8;
-  }
+    /* সার্চ বাটন */
+    .navbar-search-btn {
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dark);
+      transition: opacity 0.2s ease;
+      flex-shrink: 0;
+      padding: 0;
+    }
 
-  .navbar-search-btn:active {
-    transform: scale(0.95);
-  }
+    .navbar-search-btn:hover {
+      opacity: 0.8;
+    }
 
-  .navbar-search-btn svg {
-    width: 18px;
-    height: 18px;
-  }
+    .navbar-search-btn:active {
+      transform: scale(0.95);
+    }
 
-  /* হ্যামবার্গার মেনু */
-  .navbar-menu-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    color: var(--text-dark);
-    transition: opacity 0.15s ease;
-    flex-shrink: 0;
-    padding: 0;
-    z-index: 102;
-  }
+    .navbar-search-btn svg {
+      width: 18px;
+      height: 18px;
+    }
 
-  .navbar-menu-toggle:hover {
-    opacity: 0.8;
-  }
+    /* হ্যামবার্গার মেনু */
+    .navbar-menu-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--text-dark);
+      transition: opacity 0.15s ease;
+      flex-shrink: 0;
+      padding: 0;
+      z-index: 102;
+    }
 
-  .navbar-menu-toggle:active {
-    transform: scale(0.95);
-  }
+    .navbar-menu-toggle:hover {
+      opacity: 0.8;
+    }
 
-  .navbar-menu-toggle svg {
-    width: 24px;
-    height: 24px;
-  }
+    .navbar-menu-toggle:active {
+      transform: scale(0.95);
+    }
 
-  /* ===== SIDEBAR STYLING ===== */
-  .navbar-sidebar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 80%;
-    max-width: 300px;
-    height: 100vh;
-    background: #ffffff;
-    z-index: 101;
-    transform: translateX(-100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow-y: auto;
-    padding-top: 0;
-    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
-    overflow-x: hidden;
-  }
+    .navbar-menu-toggle svg {
+      width: 24px;
+      height: 24px;
+    }
 
-  .navbar-sidebar.active {
-    transform: translateX(0);
-  }
+    /* ===== SIDEBAR STYLING ===== */
+    .navbar-sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 80%;
+      max-width: 300px;
+      height: 100vh;
+      background: #ffffff;
+      z-index: 101;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow-y: auto;
+      padding-top: 0;
+      box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+      overflow-x: hidden;
+    }
 
-  .navbar-sidebar-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    background: #ffffff;
-    position: relative;
-  }
+    .navbar-sidebar.active {
+      transform: translateX(0);
+    }
 
-  .navbar-sidebar-logo {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
-  }
+    .navbar-sidebar-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+      background: #ffffff;
+      position: relative;
+    }
 
-  .navbar-sidebar-logo img {
-    width: 60px;
-    height: 60px;
-    object-fit: contain;
-  }
+    .navbar-sidebar-logo {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
 
-  .navbar-sidebar-header .navbar-sidebar-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    margin: 0;
-  }
+    .navbar-sidebar-logo img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+    }
 
-  .navbar-sidebar-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #333333;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    transition: background 0.2s ease;
-    padding: 0;
-    z-index: 103;
-  }
+    .navbar-sidebar-header .navbar-sidebar-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      margin: 0;
+    }
 
-  .navbar-sidebar-close:hover {
-    background: rgba(0, 0, 0, 0.05);
-  }
+    .navbar-sidebar-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #333333;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+      transition: background 0.2s ease;
+      padding: 0;
+      z-index: 103;
+    }
 
-  .navbar-sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    padding: 10px 0;
-  }
+    .navbar-sidebar-close:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
 
-  .navbar-sidebar-link {
-    padding: 16px 20px;
-    text-decoration: none;
-    color: #333333;
-    border-left: 3px solid transparent;
-    transition: all 0.2s ease;
-    font-size: 15px;
-    display: block;
-    font-weight: 500;
-  }
+    .navbar-sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      padding: 10px 0;
+    }
 
-  .navbar-sidebar-link:hover {
-    background: #f5f5f5;
-    border-left-color: #2f473f;
-    color: #2f473f;
-  }
+    .navbar-sidebar-link {
+      padding: 16px 20px;
+      text-decoration: none;
+      color: #333333;
+      border-left: 3px solid transparent;
+      transition: all 0.2s ease;
+      font-size: 15px;
+      display: block;
+      font-weight: 500;
+    }
 
-  .navbar-sidebar-link.active {
-    background: #f0f0f0;
-    border-left-color: #20242b;
-    color: #20242b;
-    font-weight: 600;
-  }
+    .navbar-sidebar-link:hover {
+      background: #f5f5f5;
+      border-left-color: #2f473f;
+      color: #2f473f;
+    }
 
-  /* সাইডবার ব্যাকড্রপ */
-  .navbar-sidebar-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 99;
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-  }
+    .navbar-sidebar-link.active {
+      background: #f0f0f0;
+      border-left-color: #20242b;
+      color: #20242b;
+      font-weight: 600;
+    }
 
-  .navbar-sidebar-backdrop.active {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-  }
+    /* সাইডবার ব্যাকড্রপ */
+    .navbar-sidebar-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 99;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
 
-  /* Body এ padding */
-  body {
-    padding-top: 58px;
-  }
-</style>
+    .navbar-sidebar-backdrop.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
 
-<!-- ===== NAVBAR HTML ===== -->
-<!-- TOPBAR -->
-<nav class="navbar-topbar" id="navbar-topbar">
-  <!-- হ্যামবার্গার মেনু - বাম পাশে -->
-  <button class="navbar-menu-toggle" id="navbar-menu-toggle" type="button" aria-label="মেনু">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="18" x2="15" y2="18"></line>
-    </svg>
-  </button>
+    /* Body এ padding */
+    body {
+      padding-top: 58px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f5f5;
+    }
 
-  <!-- লোগো - মাঝে -->
-  <div class="navbar-logo">
-    <a href="index.html">
-      <img src="assets/ummahguidanceLOGO3.png" alt="লোগো" />
-    </a>
-  </div>
+    /* মেইন কন্টেন্ট */
+    main {
+      padding: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
 
-  <!-- সার্চ বাটন - ডান পাশে -->
-  <button class="navbar-search-btn" id="navbar-search-btn" type="button" aria-label="সার্চ">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="11" cy="11" r="8"></circle>
-      <path d="m21 21-4.35-4.35"></path>
-    </svg>
-  </button>
-</nav>
+    h1 {
+      color: var(--text-dark);
+      margin-bottom: 20px;
+      text-align: center;
+    }
 
-<!-- SIDEBAR BACKDROP -->
-<div class="navbar-sidebar-backdrop" id="navbar-sidebar-backdrop"></div>
+    .content-card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
 
-<!-- SIDEBAR -->
-<aside class="navbar-sidebar" id="navbar-sidebar">
-  <div class="navbar-sidebar-header">
-    <div class="navbar-sidebar-logo">
-      <img src="/frontend/assets/ummahguidanceLOGO3.png" alt="UMMAH GUIDANCE" />
+    /* রেসপন্সিভ */
+    @media (max-width: 600px) {
+      .navbar-sidebar {
+        width: 100%;
+        max-width: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== NAVBAR HTML ===== -->
+  <!-- TOPBAR -->
+  <nav class="navbar-topbar" id="navbar-topbar">
+    <!-- হ্যামবার্গার মেনু - বাম পাশে -->
+    <button class="navbar-menu-toggle" id="navbar-menu-toggle" type="button" aria-label="মেনু">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="15" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- লোগো - মাঝে -->
+    <div class="navbar-logo">
+      <a href="index.html">
+        <img src="../assets/ummahguidanceLOGO3.png" alt="UMMAH GUIDANCE লোগো" />
+      </a>
     </div>
-    <button class="navbar-sidebar-close" id="navbar-sidebar-close" type="button">✕</button>
-  </div>
 
-  <nav class="navbar-sidebar-nav">
-    <a href="index.html" class="navbar-sidebar-link">🏠 হোম</a>
-    <a href="prayer-times.html" class="navbar-sidebar-link">🕌 নামাজের সময়</a>
-    <a href="quran.html" class="navbar-sidebar-link">📖 কুরআন</a>
-    <a href="hadith.html" class="navbar-sidebar-link">📜 হাদিস</a>
-    <a href="settings.html" class="navbar-sidebar-link">⚙️ সেটিংস</a>
-    <a href="about.html" class="navbar-sidebar-link">ℹ️ সম্পর্কে</a>
+    <!-- সার্চ বাটন - ডান পাশে -->
+    <button class="navbar-search-btn" id="navbar-search-btn" type="button" aria-label="সার্চ">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+    </button>
   </nav>
-</aside>
 
-<!-- ===== NAVBAR JAVASCRIPT ===== -->
-<script>
-  console.log('%c🚀 NAVBAR SCRIPT STARTING...', 'color: blue; font-size: 14px; font-weight: bold;');
+  <!-- SIDEBAR BACKDROP -->
+  <div class="navbar-sidebar-backdrop" id="navbar-sidebar-backdrop"></div>
 
-  // ===== DEBUGGING FUNCTION =====
-  window.debugNavbar = function() {
-    console.clear();
-    console.log('%c📋 NAVBAR DEBUGGING REPORT', 'color: green; font-size: 16px; font-weight: bold;');
-    console.log('='.repeat(50));
+  <!-- SIDEBAR -->
+  <aside class="navbar-sidebar" id="navbar-sidebar">
+    <div class="navbar-sidebar-header">
+      <div class="navbar-sidebar-logo">
+        <img src="../assets/ummahguidanceLOGO3.png" alt="UMMAH GUIDANCE" />
+      </div>
+      <button class="navbar-sidebar-close" id="navbar-sidebar-close" type="button">✕</button>
+    </div>
 
-    // 1. DOM Elements চেক
-    console.log('%c1️⃣ DOM ELEMENTS CHECK:', 'color: orange; font-weight: bold;');
-    const menuToggle = document.getElementById('navbar-menu-toggle');
-    const sidebar = document.getElementById('navbar-sidebar');
-    const backdrop = document.getElementById('navbar-sidebar-backdrop');
-    const closeBtn = document.getElementById('navbar-sidebar-close');
+    <nav class="navbar-sidebar-nav">
+      <a href="index.html" class="navbar-sidebar-link">🏠 হোম</a>
+      <a href="prayer-times.html" class="navbar-sidebar-link">🕌 নামাজের সময়</a>
+      <a href="quran.html" class="navbar-sidebar-link">📖 কুরআন</a>
+      <a href="hadith.html" class="navbar-sidebar-link">📜 হাদিস</a>
+      <a href="settings.html" class="navbar-sidebar-link">⚙️ সেটিংস</a>
+      <a href="about.html" class="navbar-sidebar-link">ℹ️ সম্পর্কে</a>
+    </nav>
+  </aside>
 
-    console.log('Menu Toggle Button:', menuToggle ? '✅ Found' : '❌ NOT FOUND');
-    console.log('Sidebar:', sidebar ? '✅ Found' : '❌ NOT FOUND');
-    console.log('Backdrop:', backdrop ? '✅ Found' : '❌ NOT FOUND');
-    console.log('Close Button:', closeBtn ? '✅ Found' : '❌ NOT FOUND');
-
-    // 2. CSS Classes চেক
-    console.log('%c2️⃣ CSS CLASSES:', 'color: orange; font-weight: bold;');
-    if (sidebar) {
-      console.log('Sidebar classes:', sidebar.className || 'no classes');
-      console.log('Sidebar active?', sidebar.classList.contains('active') ? 'YES' : 'NO');
-    }
-    if (backdrop) {
-      console.log('Backdrop classes:', backdrop.className || 'no classes');
-      console.log('Backdrop active?', backdrop.classList.contains('active') ? 'YES' : 'NO');
-    }
-
-    // 3. Z-index চেক
-    console.log('%c3️⃣ Z-INDEX VALUES:', 'color: orange; font-weight: bold;');
-    if (sidebar) {
-      const sidebarZIndex = window.getComputedStyle(sidebar).zIndex;
-      console.log('Sidebar z-index:', sidebarZIndex);
-    }
-    if (backdrop) {
-      const backdropZIndex = window.getComputedStyle(backdrop).zIndex;
-      console.log('Backdrop z-index:', backdropZIndex);
-    }
-
-    // 4. Display & Transform চেক
-    console.log('%c4️⃣ DISPLAY & TRANSFORM:', 'color: orange; font-weight: bold;');
-    if (sidebar) {
-      const style = window.getComputedStyle(sidebar);
-      console.log('Sidebar display:', style.display);
-      console.log('Sidebar transform:', style.transform);
-      console.log('Sidebar visibility:', style.visibility);
-      console.log('Sidebar opacity:', style.opacity);
-    }
-
-    // 5. Event Listeners চেক
-    console.log('%c5️⃣ EVENT LISTENERS:', 'color: orange; font-weight: bold;');
-    console.log('Menu Toggle listeners:', menuToggle ? 'Ready to attach' : 'Element not found');
+  <!-- ===== মেইন কন্টেন্ট ===== -->
+  <main>
+    <h1>🌙 UMMAH GUIDANCE - ইসলামিক গাইডেন্স</h1>
     
-    // 6. সাইডবার ম্যানুয়ালি খোলার জন্য কমান্ড
-    console.log('%c6️⃣ MANUAL COMMANDS:', 'color: orange; font-weight: bold;');
-    console.log('সাইডবার খুলতে run করুন: debugNavbar.openSidebar()');
-    console.log('সাইডবার বন্ধ করতে run করুন: debugNavbar.closeSidebar()');
-    console.log('সবকিছু রিসেট করতে run করুন: debugNavbar.reset()');
+    <div class="content-card">
+      <h2>স্বাগতম</h2>
+      <p>এই অ্যাপ্লিকেশনে আপনি পাবেন:</p>
+      <ul style="margin-left: 20px; margin-top: 10px;">
+        <li>দৈনিক নামাজের সময়সূচী</li>
+        <li>কুরআন তিলাওয়াত এবং অর্থ</li>
+        <li>হাদিস সংগ্রহ</li>
+        <li>ইসলামিক শিক্ষামূলক সামগ্রী</li>
+      </ul>
+    </div>
 
-    console.log('%c✅ DEBUGGING COMPLETE', 'color: green; font-size: 14px; font-weight: bold;');
-    console.log('='.repeat(50));
-  };
+    <div class="content-card">
+      <h2>নেভিগেশন</h2>
+      <p>উপরের বাম দিকে হ্যামবার্গার আইকনে ক্লিক করে মেনু খুলুন এবং বিভিন্ন বিভাগ দেখুন।</p>
+    </div>
+  </main>
 
-  // ===== MANUAL CONTROL FUNCTIONS =====
-  window.debugNavbar.openSidebar = function() {
-    console.log('%c🟢 MANUALLY OPENING SIDEBAR', 'color: green; font-weight: bold;');
-    const sidebar = document.getElementById('navbar-sidebar');
-    const backdrop = document.getElementById('navbar-sidebar-backdrop');
-    
-    if (sidebar) {
-      sidebar.classList.add('active');
-      console.log('✅ Active class added to sidebar');
-      console.log('Sidebar classes now:', sidebar.className);
-    } else {
-      console.error('❌ Sidebar element not found');
-    }
-    
-    if (backdrop) {
-      backdrop.classList.add('active');
-      console.log('✅ Active class added to backdrop');
-    } else {
-      console.error('❌ Backdrop element not found');
-    }
-  };
+  <!-- ===== NAVBAR JAVASCRIPT ===== -->
+  <script>
+    console.log('%c🚀 NAVBAR SCRIPT STARTING...', 'color: blue; font-size: 14px; font-weight: bold;');
 
-  window.debugNavbar.closeSidebar = function() {
-    console.log('%c🔴 MANUALLY CLOSING SIDEBAR', 'color: red; font-weight: bold;');
-    const sidebar = document.getElementById('navbar-sidebar');
-    const backdrop = document.getElementById('navbar-sidebar-backdrop');
-    
-    if (sidebar) {
-      sidebar.classList.remove('active');
-      console.log('✅ Active class removed from sidebar');
-    } else {
-      console.error('❌ Sidebar element not found');
-    }
-    
-    if (backdrop) {
-      backdrop.classList.remove('active');
-      console.log('✅ Active class removed from backdrop');
-    } else {
-      console.error('❌ Backdrop element not found');
-    }
-  };
+    // ===== DEBUGGING FUNCTION =====
+    window.debugNavbar = function() {
+      console.clear();
+      console.log('%c📋 NAVBAR DEBUGGING REPORT', 'color: green; font-size: 16px; font-weight: bold;');
+      console.log('='.repeat(50));
 
-  window.debugNavbar.reset = function() {
-    console.log('%c🔄 RESETTING NAVBAR', 'color: purple; font-weight: bold;');
-    window.debugNavbar.closeSidebar();
-    console.log('✅ Reset complete');
-  };
+      // 1. DOM Elements চেক
+      console.log('%c1️⃣ DOM ELEMENTS CHECK:', 'color: orange; font-weight: bold;');
+      const menuToggle = document.getElementById('navbar-menu-toggle');
+      const sidebar = document.getElementById('navbar-sidebar');
+      const backdrop = document.getElementById('navbar-sidebar-backdrop');
+      const closeBtn = document.getElementById('navbar-sidebar-close');
 
-  // ===== ACTUAL NAVBAR CODE =====
-  console.log('%c✨ Initializing Navbar Elements', 'color: cyan; font-weight: bold;');
+      console.log('Menu Toggle Button:', menuToggle ? '✅ Found' : '❌ NOT FOUND');
+      console.log('Sidebar:', sidebar ? '✅ Found' : '❌ NOT FOUND');
+      console.log('Backdrop:', backdrop ? '✅ Found' : '❌ NOT FOUND');
+      console.log('Close Button:', closeBtn ? '✅ Found' : '❌ NOT FOUND');
 
-  const navbarMenuToggle = document.getElementById('navbar-menu-toggle');
-  const navbarSidebar = document.getElementById('navbar-sidebar');
-  const navbarSidebarBackdrop = document.getElementById('navbar-sidebar-backdrop');
-  const navbarSidebarClose = document.getElementById('navbar-sidebar-close');
-  const navbarSearchBtn = document.getElementById('navbar-search-btn');
-  const navbarTopbar = document.getElementById('navbar-topbar');
-
-  // প্রাথমিক চেক
-  const elementsStatus = {
-    menuToggle: !!navbarMenuToggle,
-    sidebar: !!navbarSidebar,
-    backdrop: !!navbarSidebarBackdrop,
-    close: !!navbarSidebarClose,
-    search: !!navbarSearchBtn,
-    topbar: !!navbarTopbar
-  };
-
-  console.log('%c📊 Elements Status:', 'color: cyan; font-weight: bold;');
-  Object.keys(elementsStatus).forEach(key => {
-    const status = elementsStatus[key] ? '✅' : '❌';
-    console.log(`${status} ${key}: ${elementsStatus[key]}`);
-  });
-
-  // সাইডবার খোলার ফাংশন
-  function openSidebar() {
-    console.log('%c🟢 openSidebar() called', 'background: lightgreen; color: black; padding: 3px 6px;');
-    
-    if (navbarSidebar) {
-      navbarSidebar.classList.add('active');
-      console.log('✅ Added "active" class to sidebar');
-      console.log('Sidebar className:', navbarSidebar.className);
-      console.log('Sidebar has active class?', navbarSidebar.classList.contains('active'));
-    }
-    
-    if (navbarSidebarBackdrop) {
-      navbarSidebarBackdrop.classList.add('active');
-      console.log('✅ Added "active" class to backdrop');
-    }
-
-    // CSS values verify করুন
-    setTimeout(() => {
-      if (navbarSidebar) {
-        const transform = window.getComputedStyle(navbarSidebar).transform;
-        console.log('Sidebar computed transform:', transform);
+      // 2. CSS Classes চেক
+      console.log('%c2️⃣ CSS CLASSES:', 'color: orange; font-weight: bold;');
+      if (sidebar) {
+        console.log('Sidebar classes:', sidebar.className || 'no classes');
+        console.log('Sidebar active?', sidebar.classList.contains('active') ? 'YES' : 'NO');
       }
-    }, 100);
-  }
-
-  // সাইডবার বন্ধের ফাংশন
-  function closeSidebar() {
-    console.log('%c🔴 closeSidebar() called', 'background: lightcoral; color: white; padding: 3px 6px;');
-    
-    if (navbarSidebar) {
-      navbarSidebar.classList.remove('active');
-      console.log('✅ Removed "active" class from sidebar');
-    }
-    
-    if (navbarSidebarBackdrop) {
-      navbarSidebarBackdrop.classList.remove('active');
-      console.log('✅ Removed "active" class from backdrop');
-    }
-  }
-
-  // ===== EVENT LISTENERS =====
-  console.log('%c🔗 Attaching Event Listeners', 'color: cyan; font-weight: bold;');
-
-  if (navbarMenuToggle) {
-    navbarMenuToggle.addEventListener('click', function(e) {
-      console.log('%c🍔 MENU TOGGLE CLICKED!', 'background: yellow; color: black; font-weight: bold; padding: 5px 10px; font-size: 12px;');
-      console.log('Event:', e);
-      console.log('Event target:', e.target);
-      openSidebar();
-    });
-    console.log('✅ Menu toggle listener attached');
-  } else {
-    console.error('❌ Cannot attach listener - menu toggle not found');
-  }
-
-  if (navbarSidebarClose) {
-    navbarSidebarClose.addEventListener('click', function(e) {
-      console.log('%c❌ CLOSE BUTTON CLICKED', 'background: orange; color: white; font-weight: bold; padding: 5px 10px; font-size: 12px;');
-      closeSidebar();
-    });
-    console.log('✅ Close button listener attached');
-  }
-
-  if (navbarSidebarBackdrop) {
-    navbarSidebarBackdrop.addEventListener('click', function(e) {
-      console.log('%c⬛ BACKDROP CLICKED', 'background: gray; color: white; font-weight: bold; padding: 5px 10px; font-size: 12px;');
-      closeSidebar();
-    });
-    console.log('✅ Backdrop listener attached');
-  }
-
-  const navbarSidebarLinks = document.querySelectorAll('.navbar-sidebar-link');
-  navbarSidebarLinks.forEach(link => {
-    link.addEventListener('click', function() {
-      console.log('%c🔗 SIDEBAR LINK CLICKED', 'background: blue; color: white; font-weight: bold; padding: 5px 10px; font-size: 12px;');
-      console.log('Link text:', this.textContent);
-      setTimeout(closeSidebar, 150);
-    });
-  });
-  console.log(`✅ ${navbarSidebarLinks.length} sidebar links listeners attached`);
-
-  if (navbarSearchBtn) {
-    navbarSearchBtn.addEventListener('click', function(e) {
-      console.log('%c🔍 SEARCH BUTTON CLICKED', 'background: purple; color: white; font-weight: bold; padding: 5px 10px; font-size: 12px;');
-    });
-    console.log('✅ Search button listener attached');
-  }
-
-  // ESC key listener
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      console.log('%c⌨️ ESC KEY PRESSED', 'background: brown; color: white; font-weight: bold; padding: 5px 10px; font-size: 12px;');
-      closeSidebar();
-    }
-  });
-  console.log('✅ ESC key listener attached');
-
-  // স্টিকি navbar
-  let lastScrollY = 0;
-  let isHidden = false;
-
-  window.addEventListener('scroll', function() {
-    const currentScrollY = window.scrollY || window.pageYOffset;
-
-    if (currentScrollY > lastScrollY && currentScrollY > 50) {
-      if (!isHidden && navbarTopbar) {
-        navbarTopbar.classList.add('hide');
-        isHidden = true;
+      if (backdrop) {
+        console.log('Backdrop classes:', backdrop.className || 'no classes');
+        console.log('Backdrop active?', backdrop.classList.contains('active') ? 'YES' : 'NO');
       }
-    } else {
-      if (isHidden && navbarTopbar) {
-        navbarTopbar.classList.remove('hide');
-        isHidden = false;
+
+      // 3. Z-index চেক
+      console.log('%c3️⃣ Z-INDEX VALUES:', 'color: orange; font-weight: bold;');
+      if (sidebar) {
+        const sidebarZIndex = window.getComputedStyle(sidebar).zIndex;
+        console.log('Sidebar z-index:', sidebarZIndex);
       }
-    }
+      if (backdrop) {
+        const backdropZIndex = window.getComputedStyle(backdrop).zIndex;
+        console.log('Backdrop z-index:', backdropZIndex);
+      }
 
-    lastScrollY = currentScrollY;
-  }, { passive: true });
+      // 4. Display & Transform চেক
+      console.log('%c4️⃣ DISPLAY & TRANSFORM:', 'color: orange; font-weight: bold;');
+      if (sidebar) {
+        const style = window.getComputedStyle(sidebar);
+        console.log('Sidebar display:', style.display);
+        console.log('Sidebar transform:', style.transform);
+        console.log('Sidebar visibility:', style.visibility);
+        console.log('Sidebar opacity:', style.opacity);
+      }
 
-  // অ্যাক্টিভ লিংক হাইলাইট
-  function updateActiveLink() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    
-    navbarSidebarLinks.forEach(link => {
-      const href = link.getAttribute('href');
-      if (href === currentPage || (currentPage === '' && href === 'index.html')) {
-        link.classList.add('active');
+      // 5. Event Listeners চেক
+      console.log('%c5️⃣ EVENT LISTENERS:', 'color: orange; font-weight: bold;');
+      console.log('Menu Toggle listeners:', menuToggle ? 'Ready to attach' : 'Element not found');
+      
+      // 6. সাইডবার ম্যানুয়ালি খোলার জন্য কমান্ড
+      console.log('%c6️⃣ MANUAL COMMANDS:', 'color: orange; font-weight: bold;');
+      console.log('সাইডবার খুলতে run করুন: debugNavbar.openSidebar()');
+      console.log('সাইডবার বন্ধ করতে run করুন: debugNavbar.closeSidebar()');
+      console.log('সবকিছু রিসেট করতে run করুন: debugNavbar.reset()');
+
+      console.log('%c✅ DEBUGGING COMPLETE', 'color: green; font-size: 14px; font-weight: bold;');
+      console.log('='.repeat(50));
+    };
+
+    // ===== MANUAL CONTROL FUNCTIONS =====
+    window.debugNavbar.openSidebar = function() {
+      console.log('%c🟢 MANUALLY OPENING SIDEBAR', 'color: green; font-weight: bold;');
+      const sidebar = document.getElementById('navbar-sidebar');
+      const backdrop = document.getElementById('navbar-sidebar-backdrop');
+      
+      if (sidebar) {
+        sidebar.classList.add('active');
+        console.log('✅ Active class added to sidebar');
+        console.log('Sidebar classes now:', sidebar.className);
       } else {
-        link.classList.remove('active');
+        console.error('❌ Sidebar element not found');
+      }
+      
+      if (backdrop) {
+        backdrop.classList.add('active');
+        console.log('✅ Active class added to backdrop');
+      } else {
+        console.error('❌ Backdrop element not found');
+      }
+    };
+
+    window.debugNavbar.closeSidebar = function() {
+      console.log('%c🔴 MANUALLY CLOSING SIDEBAR', 'color: red; font-weight: bold;');
+      const sidebar = document.getElementById('navbar-sidebar');
+      const backdrop = document.getElementById('navbar-sidebar-backdrop');
+      
+      if (sidebar) {
+        sidebar.classList.remove('active');
+        console.log('✅ Active class removed from sidebar');
+      } else {
+        console.error('❌ Sidebar element not found');
+      }
+      
+      if (backdrop) {
+        backdrop.classList.remove('active');
+        console.log('✅ Active class removed from backdrop');
+      } else {
+        console.error('❌ Backdrop element not found');
+      }
+    };
+
+    window.debugNavbar.reset = function() {
+      console.log('%c🔄 RESETTING NAVBAR', 'color: purple; font-weight: bold;');
+      window.debugNavbar.closeSidebar();
+      console.log('✅ Reset complete');
+    };
+
+    // ===== ACTUAL NAVBAR CODE =====
+    console.log('%c✨ Initializing Navbar Elements', 'color: cyan; font-weight: bold;');
+
+    const navbarMenuToggle = document.getElementById('navbar-menu-toggle');
+    const navbarSidebar = document.getElementById('navbar-sidebar');
+    const navbarSidebarBackdrop = document.getElementById('navbar-sidebar-backdrop');
+    const navbarSidebarClose = document.getElementById('navbar-sidebar-close');
+    const navbarSearchBtn = document.getElementById('navbar-search-btn');
+    const navbarTopbar = document.getElementById('navbar-topbar');
+
+    // প্রাথমিক চেক
+    const elementsStatus = {
+      menuToggle: !!navbarMenuToggle,
+      sidebar: !!navbarSidebar,
+      backdrop: !!navbarSidebarBackdrop,
+      close: !!navbarSidebarClose,
+      search: !!navbarSearchBtn,
+      topbar: !!navbarTopbar
+    };
+
+    console.log('%c📊 Elements Status:', 'color: cyan; font-weight: bold;');
+    Object.keys(elementsStatus).forEach(key => {
+      const status = elementsStatus[key] ? '✅' : '❌';
+      console.log(`${status} ${key}: ${elementsStatus[key]}`);
+    });
+
+    // সাইডবার খোলার ফাংশন
+    function openSidebar() {
+      console.log('%c🟢 openSidebar() called', 'background: lightgreen; color: black; padding: 3px 6px;');
+      
+      if (navbarSidebar) {
+        navbarSidebar.classList.add('active');
+        console.log('✅ Added "active" class to sidebar');
+        console.log('Sidebar className:', navbarSidebar.className);
+        console.log('Sidebar has active class?', navbarSidebar.classList.contains('active'));
+      }
+      
+      if (navbarSidebarBackdrop) {
+        navbarSidebarBackdrop.classList.add('active');
+        console.log('✅ Added "active" class to backdrop');
+      }
+
+      // CSS values verify করুন
+      setTimeout(() => {
+        if (navbarSidebar) {
+          const transform = window.getComputedStyle(navbarSidebar).transform;
+          console.log('Sidebar computed transform:', transform);
+        }
+      }, 100);
+    }
+
+    // সাইডবার বন্ধের ফাংশন
+    function closeSidebar() {
+      console.log('%c🔴 closeSidebar() called', 'background: lightcoral; color: white; padding: 3px 6px;');
+      
+      if (navbarSidebar) {
+        navbarSidebar.classList.remove('active');
+        console.log('✅ Removed "active" class from sidebar');
+      }
+      
+      if (navbarSidebarBackdrop) {
+        navbarSidebarBackdrop.classList.remove('active');
+        console.log('✅ Removed "active" class from backdrop');
+      }
+    }
+
+    // ===== EVENT LISTENERS =====
+    console.log('%c🔗 Attaching Event Listeners', 'color: cyan; font-weight: bold;');
+
+    if (navbarMenuToggle) {
+      navbarMenuToggle.addEventListener('click', function(e) {
+        console.log('%c🍔 MENU TOGGLE CLICKED!', 'background: yellow; color: black; font-weight: bold; padding: 5px 10px; font-size: 12px;');
+        console.log('Event:', e);
+        console.log('Event target:', e.target);
+        openSidebar();
+      });
+      console.log('✅ Menu toggle listener attached');
+    } else {
+      console.error('❌ Cannot attach listener - menu toggle not found');
+    }
+
+    if (navbarSidebarClose) {
+      navbarSidebarClose.addEventListener('click', function(e) {
+        console.log('%c❌ CLOSE BUTTON CLICKED', 'background: orange; color: white; font-weight: bold; padding: 5px 10px; font-size: 12px;');
+        closeSidebar();
+      });
+      console.log('✅ Close button listener attached');
+    }
+
+    if (navbarSidebarBackdrop) {
+      navbarSidebarBackdrop.addEventListener('click', function(e) {
+        console.log('%c⬛ BACKDROP CLICKED', 'background: gray; color: white; font-weight: bold; padding: 5px 10px; font-size: 12px;');
+        closeSidebar();
+      });
+      console.log('✅ Backdrop listener attached');
+    }
+
+    const navbarSidebarLinks = document.querySelectorAll('.navbar-sidebar-link');
+    navbarSidebarLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        console.log('%c🔗 SIDEBAR LINK CLICKED', 'background: blue; color: white; font-weight: bold; padding: 5px 10px; font-size: 12px;');
+        console.log('Link text:', this.textContent);
+        setTimeout(closeSidebar, 150);
+      });
+    });
+    console.log(`✅ ${navbarSidebarLinks.length} sidebar links listeners attached`);
+
+    if (navbarSearchBtn) {
+      navbarSearchBtn.addEventListener('click', function(e) {
+        console.log('%c🔍 SEARCH BUTTON CLICKED', 'background: purple; color: white; font-weight: bold; padding: 5px 10px; font-size: 12px;');
+      });
+      console.log('✅ Search button listener attached');
+    }
+
+    // ESC key listener
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        console.log('%c⌨️ ESC KEY PRESSED', 'background: brown; color: white; font-weight: bold; padding: 5px 10px; font-size: 12px;');
+        closeSidebar();
       }
     });
-  }
+    console.log('✅ ESC key listener attached');
 
-  updateActiveLink();
-  window.addEventListener('hashchange', updateActiveLink);
+    // স্টিকি navbar
+    let lastScrollY = 0;
+    let isHidden = false;
 
-  console.log('%c✅ NAVBAR SCRIPT LOADED SUCCESSFULLY!', 'color: green; font-size: 14px; font-weight: bold;');
-  console.log('%c💡 Run debugNavbar() in console to check navbar status', 'color: blue; font-size: 12px;');
-  console.log('%c💡 Run debugNavbar.openSidebar() to manually open sidebar', 'color: blue; font-size: 12px;');
-  console.log('%c💡 Run debugNavbar.closeSidebar() to manually close sidebar', 'color: blue; font-size: 12px;');
-</script>
+    window.addEventListener('scroll', function() {
+      const currentScrollY = window.scrollY || window.pageYOffset;
+
+      if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        if (!isHidden && navbarTopbar) {
+          navbarTopbar.classList.add('hide');
+          isHidden = true;
+        }
+      } else {
+        if (isHidden && navbarTopbar) {
+          navbarTopbar.classList.remove('hide');
+          isHidden = false;
+        }
+      }
+
+      lastScrollY = currentScrollY;
+    }, { passive: true });
+
+    // অ্যাক্টিভ লিংক হাইলাইট
+    function updateActiveLink() {
+      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+      
+      navbarSidebarLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage || (currentPage === '' && href === 'index.html')) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
+    updateActiveLink();
+    window.addEventListener('hashchange', updateActiveLink);
+
+    console.log('%c✅ NAVBAR SCRIPT LOADED SUCCESSFULLY!', 'color: green; font-size: 14px; font-weight: bold;');
+    console.log('%c💡 Run debugNavbar() in console to check navbar status', 'color: blue; font-size: 12px;');
+    console.log('%c💡 Run debugNavbar.openSidebar() to manually open sidebar', 'color: blue; font-size: 12px;');
+    console.log('%c💡 Run debugNavbar.closeSidebar() to manually close sidebar', 'color: blue; font-size: 12px;');
+  </script>
+
+</body>
+</html>

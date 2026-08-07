@@ -301,13 +301,13 @@
 <body>
 <div class="app">
 
-<div id="navbar-container"></div>
+<div id="navbar-menu-toggle"></div>
 <!-- navbar লোডার -->
 <script>
   fetch('/navbar')
     .then(r => r.text())
     .then(html => {
-      document.getElementById('navbar-container').innerHTML = html;
+      document.getElementById('navbar-menu-toggle').innerHTML = html;
     });
 </script>
 
