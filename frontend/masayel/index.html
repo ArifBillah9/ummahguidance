@@ -480,6 +480,203 @@
             margin-bottom: 16px;
         }
 
+        /* ========== ARABIC QUOTE LINE ========== */
+        .arabic-line {
+            display: inline-block;
+            font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif;
+            font-size: 19px;
+            line-height: 2;
+            color: #1B3A5C;
+            direction: rtl;
+        }
+
+        /* ========== REFERENCE ICON (hides raw references, opens popup) ========== */
+        .ref-icon-btn,
+        .ref-line-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            vertical-align: middle;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .ref-icon-btn {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(46, 204, 113, 0.12);
+            color: #1B8A4A;
+            font-size: 11px;
+            margin: 0 2px;
+            transition: all 0.25s ease;
+        }
+
+        .ref-icon-btn:hover {
+            background: #2ECC71;
+            color: #fff;
+            transform: scale(1.08);
+        }
+
+        .ref-line-wrap {
+            display: block;
+            text-align: right;
+            margin: 2px 0 6px;
+        }
+
+        .ref-line-btn {
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: rgba(27, 58, 92, 0.06);
+            color: #1B3A5C;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .ref-line-btn:hover {
+            background: #1B3A5C;
+            color: #fff;
+        }
+
+        /* ========== REFERENCE POPUP MODAL ========== */
+        .ref-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(27, 58, 92, 0.45);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.25s ease;
+            z-index: 999;
+            padding: 0;
+        }
+
+        .ref-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .ref-modal {
+            background: #fff;
+            width: 100%;
+            max-width: 600px;
+            max-height: 80vh;
+            border-radius: 16px 16px 0 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(30px);
+            transition: transform 0.25s ease;
+            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .ref-modal-overlay.active .ref-modal {
+            transform: translateY(0);
+        }
+
+        .ref-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 18px;
+            background: linear-gradient(135deg, #1B3A5C 0%, #2C5282 100%);
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .ref-modal-header span {
+            font-size: 15px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ref-modal-close {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ref-modal-close:hover { background: rgba(255, 255, 255, 0.3); }
+
+        .ref-modal-body {
+            padding: 14px 18px 22px;
+            overflow-y: auto;
+        }
+
+        .ref-item {
+            background: #F8F7F4;
+            border-radius: 10px;
+            padding: 14px 14px 12px;
+            margin-bottom: 12px;
+        }
+
+        .ref-item:last-child { margin-bottom: 0; }
+
+        .ref-item-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .ref-item-type {
+            font-size: 11px;
+            font-weight: 800;
+            color: #1B8A4A;
+            background: rgba(46, 204, 113, 0.12);
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.3px;
+        }
+
+        .ref-copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            border: none;
+            background: transparent;
+            color: #1B3A5C;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .ref-copy-btn:hover { background: rgba(27, 58, 92, 0.08); }
+
+        .ref-item-arabic {
+            font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif;
+            font-size: 18px;
+            line-height: 1.9;
+            color: #1B3A5C;
+            direction: rtl;
+            margin-bottom: 8px;
+        }
+
+        .ref-item-text {
+            font-size: 14px;
+            color: #2C3E50;
+            line-height: 1.7;
+            word-break: break-word;
+        }
+
         .answerer-box {
             background: linear-gradient(135deg, #1B3A5C 0%, #2C5282 100%);
             color: #fff;
@@ -672,6 +869,17 @@
             </button>
 
             <div id="detailContent"></div>
+        </div>
+    </div>
+
+    <!-- রেফারেন্স পপআপ (আয়াত/হাদিস/কিতাব রেফারেন্স গোপন রেখে আইকনে ক্লিকে দেখানো হয়) -->
+    <div class="ref-modal-overlay" id="refModalOverlay" onclick="closeRefPopup(event)">
+        <div class="ref-modal" onclick="event.stopPropagation()">
+            <div class="ref-modal-header">
+                <span><i class="fas fa-book-quran"></i> রেফারেন্স</span>
+                <button class="ref-modal-close" onclick="closeRefPopup()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="ref-modal-body" id="refModalBody"></div>
         </div>
     </div>
 
@@ -1021,6 +1229,147 @@
             return num.toString();
         }
 
+        // ================== রেফারেন্স (আয়াত/হাদিস/কিতাব) গোপন রেখে আইকনে দেখানোর সিস্টেম ==================
+        // বর্তমানে প্রদর্শিত উত্তরের রেফারেন্সগুলো এখানে জমা থাকে; প্রতিটি আইটেম একটি আইকনের সাথে যুক্ত
+        let currentRefs = [];
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        // একটি রেফারেন্স গ্রুপ যোগ করে তার ইনডেক্স রিটার্ন করে (গ্রুপে একাধিক আইটেম থাকতে পারে, যেমন একাধিক কিতাবের রেফারেন্স একসাথে)
+        function pushRefGroup(items) {
+            currentRefs.push(items);
+            return currentRefs.length - 1;
+        }
+
+        function refIconButton(idx, iconClass = 'fa-link') {
+            return ` <button type="button" class="ref-icon-btn" onclick="event.stopPropagation();openRefPopup(${idx})" title="রেফারেন্স দেখুন"><i class="fas ${iconClass}"></i></button>`;
+        }
+
+        // fullAnswer টেক্সট প্রসেস করে আয়াত/হাদিস/কিতাবের রেফারেন্স গোপন করে তার জায়গায় একটি ছোট আইকন বসিয়ে দেয়।
+        // আইকনে ক্লিক করলে পপআপে আসল রেফারেন্স (ও কপি করার সুযোগ) দেখানো হয়।
+        function renderAnswerWithHiddenReferences(text) {
+            currentRefs = [];
+
+            const ayatLineRegex = /^স[ূু]রা[^\n]*আয়াত\s*[:：]?\s*[০-৯0-9]+\.?$/;
+            const hadithLineRegex = /হাদী[সছ][^০-৯0-9]*[:：]?\s*[০-৯0-9]+\.?$/;
+            const inlineRefRegex = /\(([^()]*(?:স[ূু]রা|আয়াত|হাদীস|হাদিস|বুখারী|মুসলিম|তিরমিযি|আবু দাউদ|ইবনে মাজাহ|মুসনাদ)[^()]*)\)/g;
+
+            const paragraphs = text.split('\n\n').map(paragraph => {
+                const lines = paragraph.split('\n');
+                const outLines = [];
+
+                lines.forEach(rawLine => {
+                    const trimmed = rawLine.trim();
+
+                    // ১) আয়াত বা হাদিসের সরাসরি রেফারেন্স লাইন (আরবি উদ্ধৃতির ঠিক পরের লাইন)
+                    const isAyatLine = ayatLineRegex.test(trimmed);
+                    const isHadithLine = /হাদী[সছ]/.test(trimmed) && /নম্বর/.test(trimmed);
+
+                    if ((isAyatLine || isHadithLine) && outLines.length > 0 && /class=["']arabic-line["']/.test(outLines[outLines.length - 1])) {
+                        const idx = pushRefGroup([{
+                            type: isAyatLine ? 'আয়াত রেফারেন্স' : 'হাদিস রেফারেন্স',
+                            text: trimmed
+                        }]);
+                        outLines[outLines.length - 1] += refIconButton(idx, isAyatLine ? 'fa-book-quran' : 'fa-scroll');
+                        return;
+                    }
+
+                    // ২) সম্পূর্ণ লাইন জুড়ে বন্ধনীতে থাকা কিতাব/সূত্র রেফারেন্স, যেমন: (কিতাব ১: ৮/৫৪৮; কিতাব ২: ৯/৪৬৫৮)
+                    const fullParenMatch = trimmed.match(/^\((.+)\)$/);
+                    if (fullParenMatch && /[:：]/.test(fullParenMatch[1])) {
+                        const items = fullParenMatch[1]
+                            .split(';')
+                            .map(s => s.trim())
+                            .filter(Boolean)
+                            .map(s => ({ type: 'কিতাব রেফারেন্স', text: s }));
+                        const idx = pushRefGroup(items);
+                        outLines.push(`<span class="ref-line-wrap"><button type="button" class="ref-line-btn" onclick="openRefPopup(${idx})" title="রেফারেন্স দেখুন"><i class="fas fa-book"></i><span>রেফারেন্স দেখুন</span></button></span>`);
+                        return;
+                    }
+
+                    // ৩) স্বাভাবিক বাক্যের ভেতরে ইনলাইন বন্ধনীযুক্ত রেফারেন্স, যেমন: (সূরা আনফাল: ৭২)
+                    const processedLine = rawLine.replace(inlineRefRegex, (match, inner) => {
+                        const idx = pushRefGroup([{ type: 'রেফারেন্স', text: inner.trim() }]);
+                        return refIconButton(idx, 'fa-book-quran');
+                    });
+
+                    outLines.push(processedLine);
+                });
+
+                return `<p>${outLines.join('<br>')}</p>`;
+            });
+
+            return paragraphs.join('');
+        }
+
+        // রেফারেন্স পপআপ খুলুন
+        function openRefPopup(idx) {
+            const items = currentRefs[idx];
+            if (!items) return;
+
+            const body = document.getElementById('refModalBody');
+            body.innerHTML = items.map((item, i) => `
+                <div class="ref-item">
+                    <div class="ref-item-top">
+                        <span class="ref-item-type">${escapeHtml(item.type)}</span>
+                        <button type="button" class="ref-copy-btn" onclick="copyRefText(this, ${idx}, ${i})">
+                            <i class="far fa-copy"></i><span>কপি</span>
+                        </button>
+                    </div>
+                    <div class="ref-item-text">${escapeHtml(item.text)}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('refModalOverlay').classList.add('active');
+        }
+
+        // রেফারেন্স পপআপ বন্ধ করুন
+        function closeRefPopup(e) {
+            if (e && e.target && e.target.id !== 'refModalOverlay') return;
+            document.getElementById('refModalOverlay').classList.remove('active');
+        }
+
+        // একক রেফারেন্স কপি করুন
+        function copyRefText(btn, groupIdx, itemIdx) {
+            const group = currentRefs[groupIdx];
+            if (!group || !group[itemIdx]) return;
+            const text = group[itemIdx].text;
+
+            const finishCopy = () => {
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i><span>কপি হয়েছে</span>';
+                setTimeout(() => { btn.innerHTML = original; }, 1500);
+            };
+
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(finishCopy).catch(() => {
+                    fallbackCopy(text);
+                    finishCopy();
+                });
+            } else {
+                fallbackCopy(text);
+                finishCopy();
+            }
+        }
+
+        // পুরনো ব্রাউজারের জন্য কপি করার বিকল্প পদ্ধতি
+        function fallbackCopy(text) {
+            const temp = document.createElement('textarea');
+            temp.value = text;
+            temp.style.position = 'fixed';
+            temp.style.opacity = '0';
+            document.body.appendChild(temp);
+            temp.focus();
+            temp.select();
+            try { document.execCommand('copy'); } catch (err) {}
+            document.body.removeChild(temp);
+        }
+
         // লিস্ট তৈরি করুন
         function createMasailList(dataToRender = masailsData) {
             const listContainer = document.getElementById('masailList');
@@ -1084,10 +1433,7 @@
             const dateParts = masail.date.split(' ');
             const dateStr = `${convertToBangla(dateParts[0])} ${dateParts.slice(1).join(' ')}`;
 
-            const answerParagraphs = masail.fullAnswer
-                .split('\n\n')
-                .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
-                .join('');
+            const answerParagraphs = renderAnswerWithHiddenReferences(masail.fullAnswer);
 
             const tags = masail.tags || ['সাধারণ মাসআলা'];
             const tagsHtml = tags.map(t => `<span class="tag-pill">${t}</span>`).join('');
