@@ -49,6 +49,7 @@
   html,body{
     margin:0;padding:0;
     font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    padding-top:60px;
   }
   /* left-pane is a transparent wrapper on mobile/tablet: it doesn't affect
      layout there, children behave exactly as if not wrapped. On desktop it
@@ -66,7 +67,8 @@
     min-height:100vh;
     background:none;
     position:relative;
-    overflow:hidden;
+    overflow-y:auto;
+    overflow-x:hidden;
     display:flex;
     flex-direction:column;
   }
@@ -77,12 +79,20 @@
     justify-content:space-between;
     padding:6px 20px;
     color:var(--text-dark);
-    position:relative;
-    z-index:2;
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:9999;
     min-height:60px;
     background:var(--menu-card-bg);
-    box-shadow:none;
+    box-shadow:0 2px 8px rgba(0,0,0,0.08);
     border-bottom:none;
+    transition:transform 0.3s ease;
+    width:100%;
+  }
+  .topbar.hide{
+    transform:translateY(-100%);
   }
   .topbar-logo{
     width:130px;
@@ -4412,6 +4422,38 @@
   
   // প্রতি সেকেন্ডে চেক করুন (মসৃণ ট্রানজিশনের জন্য)
   setInterval(updatePrayerBackground, 1000);
+})();
+</script>
+
+<!-- ===== Sticky Navbar Script ===== -->
+<script>
+(function(){
+  'use strict';
+  
+  var topbar = document.querySelector('.topbar');
+  var lastScrollY = 0;
+  var isHidden = false;
+  
+  window.addEventListener('scroll', function(){
+    var currentScrollY = window.scrollY || window.pageYOffset;
+    
+    // যদি নিচের দিকে স্ক্রল করছে এবং ৫০px এর বেশি
+    if(currentScrollY > lastScrollY && currentScrollY > 50){
+      // topbar hide করুন
+      if(!isHidden){
+        topbar.classList.add('hide');
+        isHidden = true;
+      }
+    } else {
+      // উপরের দিকে স্ক্রল করলে topbar দেখান
+      if(isHidden){
+        topbar.classList.remove('hide');
+        isHidden = false;
+      }
+    }
+    
+    lastScrollY = currentScrollY;
+  }, {passive: true});
 })();
 </script>
 
