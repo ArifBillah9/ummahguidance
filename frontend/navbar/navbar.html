@@ -519,10 +519,11 @@
     </div>
   </div>
 
-  <script>
-    // ===== NAVBAR INITIALIZATION =====
-    console.log('%c✨ Initializing Navbar', 'color: cyan; font-weight: bold; font-size: 14px;');
 
+  <script>
+
+
+function initNavbar() {
     const navbarMenuBtn = document.getElementById('navbar-menu-btn');
     const navbarSidebar = document.getElementById('navbar-sidebar');
     const navbarSidebarBackdrop = document.getElementById('navbar-sidebar-backdrop');
@@ -775,6 +776,13 @@
 
     console.log('%c✅ NAVBAR LOADED SUCCESSFULLY!', 'color: green; font-size: 14px; font-weight: bold; background: lightgreen; padding: 8px; border-radius: 4px;');
     console.log('%c💡 Run debugNavbar() to check navbar status', 'color: blue; font-size: 12px;');
+}
+
+// পেজ লোড হওয়ার সময় নেভবার markup যদি আগে থেকেই HTML-এ থাকে (fetch ছাড়া), তাহলে auto-run করবে।
+// fetch() দিয়ে বসালে এটি স্বয়ংক্রিয়ভাবে কিছু করবে না -- আপনাকে ম্যানুয়ালি initNavbar() কল করতে হবে।
+if (document.getElementById('navbar-menu-btn')) {
+  initNavbar();
+}
   </script>
 
 </body>
