@@ -301,6 +301,16 @@
 <body>
 <div class="app">
 
+<div id="navbar-container"></div>
+<!-- navbar লোডার -->
+<script>
+  fetch('/frontend/navbar/navbar-complete.html')
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById('navbar-container').innerHTML = html;
+    });
+</script>
+
   <header>
     <button class="icon-btn" id="homeBtn" aria-label="তালিকা">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
