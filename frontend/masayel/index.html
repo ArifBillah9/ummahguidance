@@ -242,20 +242,26 @@
 
         .masail-meta-row {
             display: flex;
-            gap: 20px;
+            gap: 14px;
             font-size: 12px;
             color: #7F8C8D;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             padding-top: 8px;
             border-top: 1px solid #F0F0F0;
             margin-top: 2px;
+            overflow-x: auto;
+            scrollbar-width: none;
         }
+
+        .masail-meta-row::-webkit-scrollbar { display: none; }
 
         .meta-item {
             display: flex;
             align-items: center;
             gap: 6px;
             font-size: 12px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .meta-item i {
@@ -267,9 +273,10 @@
 
         .masail-actions {
             display: flex;
-            gap: 18px;
-            justify-content: flex-start;
+            gap: 6px;
+            justify-content: space-between;
             padding-top: 4px;
+            flex-wrap: nowrap;
         }
 
         .action-btn {
@@ -277,15 +284,19 @@
             border: none;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             font-size: 12px;
             color: #95A5A6;
             cursor: pointer;
             transition: all 0.2s ease;
             font-family: inherit;
             font-weight: 500;
-            padding: 4px 8px;
+            padding: 4px 6px;
             border-radius: 4px;
+            white-space: nowrap;
+            flex: 1;
+            justify-content: center;
+            min-width: 0;
         }
 
         .action-btn:hover {
@@ -297,6 +308,12 @@
         .action-btn i {
             font-size: 13px;
             color: #2ECC71;
+        }
+
+        @media (max-width: 360px) {
+            .masail-actions { gap: 2px; }
+            .action-btn { font-size: 11px; padding: 4px 3px; gap: 4px; }
+            .masail-meta-row { gap: 10px; }
         }
 
         /* ========== DETAIL VIEW (ANSWER PAGE) ========== */
@@ -367,10 +384,14 @@
 
         .meta-row {
             display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
+            gap: 10px;
+            flex-wrap: nowrap;
             margin: 18px 0 14px;
+            overflow-x: auto;
+            scrollbar-width: none;
         }
+
+        .meta-row::-webkit-scrollbar { display: none; }
 
         .meta-pill {
             display: flex;
@@ -382,6 +403,8 @@
             border: 1px solid #E4EEE6;
             padding: 8px 14px;
             border-radius: 8px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .meta-pill i { color: #2ECC71; font-size: 13px; }
@@ -389,25 +412,32 @@
         .action-row {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
             padding-top: 14px;
             border-top: 1px solid #F0F0F0;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scrollbar-width: none;
         }
+
+        .action-row::-webkit-scrollbar { display: none; }
 
         .pill-btn {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 14px;
+            gap: 7px;
+            font-size: 13px;
             font-weight: 600;
             color: #1B8A4A;
             background: #F4F8F5;
             border: 1px solid #DCEEE0;
-            padding: 9px 16px;
+            padding: 9px 14px;
             border-radius: 8px;
             cursor: pointer;
             font-family: inherit;
             transition: all 0.2s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .pill-btn:hover { background: #E6F5EA; }
@@ -428,23 +458,32 @@
 
         .icon-btn:hover { background: #E6F5EA; }
 
-        .bookmark-row { margin-top: 12px; }
-
         .bookmark-btn {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 14px;
+            gap: 6px;
+            font-size: 13px;
             font-weight: 600;
             color: #7F8C8D;
             background: transparent;
-            border: none;
+            border: 1px solid #EAEAEA;
             cursor: pointer;
             font-family: inherit;
-            padding: 6px 0;
+            padding: 9px 12px;
+            border-radius: 8px;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
-        .bookmark-btn:hover { color: #D4A574; }
+        .bookmark-btn:hover { color: #D4A574; border-color: #D4A574; }
+
+        @media (max-width: 380px) {
+            .action-row { gap: 5px; }
+            .pill-btn, .bookmark-btn { font-size: 12px; padding: 8px 9px; }
+            .pill-btn span, .bookmark-btn span { display: inline; }
+            .meta-row { gap: 8px; }
+            .meta-pill { font-size: 12px; padding: 7px 10px; }
+        }
 
         .section-heading {
             display: flex;
@@ -459,17 +498,50 @@
         .arabic-box {
             background: linear-gradient(135deg, rgba(27, 58, 92, 0.04) 0%, rgba(46, 204, 113, 0.06) 100%);
             border-radius: 8px;
-            padding: 20px;
+            padding: 12px 16px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .arabic-box p {
             font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif;
-            font-size: 22px;
-            line-height: 2.1;
+            font-size: 18px;
+            line-height: 1.55;
             color: #1B3A5C;
             direction: rtl;
+        }
+
+        .ref-button-row {
+            display: flex;
+            justify-content: center;
+            margin: 18px 0 16px;
+        }
+
+        .ref-main-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(135deg, #1B8A4A 0%, #27AE60 100%);
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(27, 138, 74, 0.2);
+        }
+
+        .ref-main-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(27, 138, 74, 0.3);
+            background: linear-gradient(135deg, #16733E 0%, #229954 100%);
+        }
+
+        .ref-main-btn i {
+            font-size: 15px;
         }
 
         .answer-text p {
@@ -546,13 +618,13 @@
             inset: 0;
             background: rgba(27, 58, 92, 0.45);
             display: flex;
-            align-items: flex-end;
+            align-items: center;
             justify-content: center;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.25s ease;
             z-index: 999;
-            padding: 0;
+            padding: 20px;
         }
 
         .ref-modal-overlay.active {
@@ -563,33 +635,33 @@
         .ref-modal {
             background: #fff;
             width: 100%;
-            max-width: 600px;
-            max-height: 80vh;
-            border-radius: 16px 16px 0 0;
+            max-width: 360px;
+            max-height: 75vh;
+            border-radius: 0;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            transform: translateY(30px);
+            transform: scale(0.95);
             transition: transform 0.25s ease;
-            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
         }
 
         .ref-modal-overlay.active .ref-modal {
-            transform: translateY(0);
+            transform: scale(1);
         }
 
         .ref-modal-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 18px;
+            padding: 14px 16px;
             background: linear-gradient(135deg, #1B3A5C 0%, #2C5282 100%);
             color: #fff;
             flex-shrink: 0;
         }
 
         .ref-modal-header span {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 800;
             display: flex;
             align-items: center;
@@ -600,9 +672,9 @@
             background: rgba(255, 255, 255, 0.15);
             border: none;
             color: #fff;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
+            width: 26px;
+            height: 26px;
+            border-radius: 0;
             cursor: pointer;
             font-size: 13px;
             display: flex;
@@ -613,7 +685,7 @@
         .ref-modal-close:hover { background: rgba(255, 255, 255, 0.3); }
 
         .ref-modal-body {
-            padding: 14px 18px 22px;
+            padding: 14px 16px 18px;
             overflow-y: auto;
         }
 
@@ -629,7 +701,7 @@
         .ref-item-top {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             margin-bottom: 8px;
         }
 
@@ -661,6 +733,39 @@
 
         .ref-copy-btn:hover { background: rgba(27, 58, 92, 0.08); }
 
+        .ref-all-copy-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .ref-copy-all-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            background: linear-gradient(135deg, #1B8A4A 0%, #27AE60 100%);
+            color: white;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            padding: 11px 18px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(27, 138, 74, 0.2);
+        }
+
+        .ref-copy-all-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(27, 138, 74, 0.3);
+            background: linear-gradient(135deg, #16733E 0%, #229954 100%);
+        }
+
+        .ref-copy-all-btn i {
+            font-size: 14px;
+        }
+
         .ref-item-arabic {
             font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif;
             font-size: 18px;
@@ -677,30 +782,130 @@
             word-break: break-word;
         }
 
-        .answerer-box {
-            background: linear-gradient(135deg, #1B3A5C 0%, #2C5282 100%);
-            color: #fff;
-            border-radius: 8px;
-            padding: 18px 20px;
+        .ref-empty {
             text-align: center;
-            margin: 22px 0 16px;
+            color: #95A5A6;
+            font-size: 13px;
+            padding: 24px 10px;
         }
 
-        .answerer-box .label { font-size: 12px; opacity: 0.75; letter-spacing: 0.5px; margin-bottom: 6px; }
-        .answerer-box .name { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
-        .answerer-box .title { font-size: 13px; opacity: 0.9; }
+        .ref-final-row { margin-top: 14px; }
 
-        .tags-label { font-size: 13px; font-weight: 700; color: #7F8C8D; margin: 18px 0 10px; }
+        .info-footer {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 14px 0;
+            border-top: 1px solid #E4EEE6;
+            border-bottom: 1px solid #E4EEE6;
+            margin: 16px 0;
+            font-size: 12px;
+            color: #34495E;
+        }
 
-        .tags-row { display: flex; flex-wrap: wrap; gap: 10px; }
+        .footer-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        .footer-item.answerer-info strong {
+            color: #1B3A5C;
+            font-weight: 700;
+            margin-right: 4px;
+        }
+
+        .footer-item.answerer-info span {
+            color: #7F8C8D;
+            font-size: 11px;
+        }
+
+        .footer-item i {
+            color: #2ECC71;
+            font-size: 12px;
+        }
+
+        .footer-divider {
+            color: #BDC3C7;
+            font-size: 10px;
+        }
+
+        .footer-btn {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F4F8F5;
+            border: 1px solid #DCEEE0;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #2ECC71;
+            font-size: 13px;
+            transition: all 0.2s ease;
+            padding: 0;
+        }
+
+        .footer-btn:hover {
+            background: #E6F5EA;
+            transform: scale(1.08);
+        }
+
+        .tags-inline {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .answerer-box {
+            display: none;
+        }
+
+        .meta-row {
+            display: none;
+        }
+
+        .action-row {
+            display: none;
+        }
+
+        .tags-wrap {
+            display: none;
+        }
+
+        .ref-final-row {
+            display: none;
+        }
+
+        .tags-wrap {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 18px 0 0;
+        }
+
+        .tags-label { font-size: 13px; font-weight: 700; color: #7F8C8D; white-space: nowrap; }
+
+        .tags-row { display: flex; flex-wrap: wrap; gap: 8px; }
 
         .tag-pill {
-            font-size: 13px;
+            font-size: 11px;
             color: #34495E;
             background: #F4F4F4;
             border: 1px solid #E8E8E8;
-            padding: 7px 14px;
-            border-radius: 20px;
+            padding: 4px 10px;
+            border-radius: 14px;
+            white-space: nowrap;
+        }
+
+        .tags-inline .tag-pill {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 12px;
         }
 
         .comments-header {
@@ -1229,6 +1434,45 @@
             return num.toString();
         }
 
+        // ================== প্রতিটি প্রশ্ন-উত্তরের জন্য আলাদা URL (SEO) ==================
+        const originalTitle = document.title;
+        const originalMetaDescription = (document.querySelector('meta[name="description"]') || {}).content || '';
+
+        // পেজ লোড হওয়ার সময় বর্তমান URL দেখে "লিস্টিং পেজ"-এর বেস পাথ বের করা।
+        // যদি সরাসরি কোনো মাসআলার পার্মালিংকে (যেমন /frontend/masayel/163239/স্লাগ) লোড হয়,
+        // তাহলে সংখ্যা ও স্লাগ অংশ বাদ দিয়ে বেস পাথ ঠিক করা হয়, যাতে "masail" নামের কোনো
+        // অতিরিক্ত অংশ URL-এ যোগ না হয়।
+        function computeBasePath() {
+            const segments = window.location.pathname.split('/').filter(Boolean);
+            if (segments.length >= 2 && /^[0-9]+$/.test(segments[segments.length - 2])) {
+                segments.pop(); // স্লাগ
+                segments.pop(); // সংখ্যা
+            } else if (segments.length >= 1 && /^[0-9]+$/.test(segments[segments.length - 1])) {
+                segments.pop(); // শুধু সংখ্যা (স্লাগ ছাড়া)
+            }
+            return '/' + segments.join('/') + (segments.length ? '/' : '');
+        }
+
+        const basePath = computeBasePath();
+
+        // শিরোনাম থেকে URL-friendly স্লাগ তৈরি, যেমন "কনের বাড়ীর দাওয়াত প্রসঙ্গ" -> "কনের-বাড়ীর-দাওয়াত-প্রসঙ্গ"
+        function slugify(text) {
+            return String(text)
+                .trim()
+                .replace(/[?,।:;!"'’‘""()]/g, '')
+                .replace(/\s+/g, '-');
+        }
+
+        function setMetaDescription(content) {
+            let metaDesc = document.querySelector('meta[name="description"]');
+            if (!metaDesc) {
+                metaDesc = document.createElement('meta');
+                metaDesc.setAttribute('name', 'description');
+                document.head.appendChild(metaDesc);
+            }
+            metaDesc.setAttribute('content', content || '');
+        }
+
         // ================== রেফারেন্স (আয়াত/হাদিস/কিতাব) গোপন রেখে আইকনে দেখানোর সিস্টেম ==================
         // বর্তমানে প্রদর্শিত উত্তরের রেফারেন্সগুলো এখানে জমা থাকে; প্রতিটি আইটেম একটি আইকনের সাথে যুক্ত
         let currentRefs = [];
@@ -1246,12 +1490,9 @@
             return currentRefs.length - 1;
         }
 
-        function refIconButton(idx, iconClass = 'fa-link') {
-            return ` <button type="button" class="ref-icon-btn" onclick="event.stopPropagation();openRefPopup(${idx})" title="রেফারেন্স দেখুন"><i class="fas ${iconClass}"></i></button>`;
-        }
-
-        // fullAnswer টেক্সট প্রসেস করে আয়াত/হাদিস/কিতাবের রেফারেন্স গোপন করে তার জায়গায় একটি ছোট আইকন বসিয়ে দেয়।
-        // আইকনে ক্লিক করলে পপআপে আসল রেফারেন্স (ও কপি করার সুযোগ) দেখানো হয়।
+        // fullAnswer টেক্সট প্রসেস করে আয়াত/হাদিস/কিতাবের সকল দলিল ও হাওলা উত্তরের ভেতর থেকে
+        // সম্পূর্ণ সরিয়ে ফেলে (কোনো আইকন/বাটনও রাখা হয় না) এবং আলাদাভাবে currentRefs-এ জমা রাখে,
+        // যা পুরো পেজের একদম শেষে একটিমাত্র "রেফারেন্স" আইকনে ক্লিক করলে পপআপে দেখানো হয়।
         function renderAnswerWithHiddenReferences(text) {
             currentRefs = [];
 
@@ -1262,83 +1503,117 @@
             const paragraphs = text.split('\n\n').map(paragraph => {
                 const lines = paragraph.split('\n');
                 const outLines = [];
+                let pendingArabic = null; // ঠিক আগের লাইনে পাওয়া আরবি আয়াত/হাদিসের মূল উদ্ধৃতি, রেফারেন্স লাইনের অপেক্ষায়
 
                 lines.forEach(rawLine => {
                     const trimmed = rawLine.trim();
 
-                    // ১) আয়াত বা হাদিসের সরাসরি রেফারেন্স লাইন (আরবি উদ্ধৃতির ঠিক পরের লাইন)
-                    const isAyatLine = ayatLineRegex.test(trimmed);
-                    const isHadithLine = /হাদী[সছ]/.test(trimmed) && /নম্বর/.test(trimmed);
-
-                    if ((isAyatLine || isHadithLine) && outLines.length > 0 && /class=["']arabic-line["']/.test(outLines[outLines.length - 1])) {
-                        const idx = pushRefGroup([{
-                            type: isAyatLine ? 'আয়াত রেফারেন্স' : 'হাদিস রেফারেন্স',
-                            text: trimmed
-                        }]);
-                        outLines[outLines.length - 1] += refIconButton(idx, isAyatLine ? 'fa-book-quran' : 'fa-scroll');
+                    // ০) আরবি উদ্ধৃতি লাইন (আয়াত/হাদিসের মূল আরবি টেক্সট) - উত্তরে দেখানো হবে না,
+                    //    পরের লাইনের রেফারেন্সের সাথে একত্রে জমা রাখা হলো
+                    const arabicLineMatch = trimmed.match(/^<span class=["']arabic-line["']>([\s\S]*)<\/span>$/);
+                    if (arabicLineMatch) {
+                        pendingArabic = arabicLineMatch[1];
                         return;
                     }
 
-                    // ২) সম্পূর্ণ লাইন জুড়ে বন্ধনীতে থাকা কিতাব/সূত্র রেফারেন্স, যেমন: (কিতাব ১: ৮/৫৪৮; কিতাব ২: ৯/৪৬৫৮)
+                    // ১) আয়াত বা হাদিসের রেফারেন্স লাইন - ঠিক আগের আরবি উদ্ধৃতির সাথে মিলিয়ে
+                    //    একটি সম্পূর্ণ দলিল (আরবি + উৎস) হিসেবে জমা রাখা হলো, উত্তরে দেখানো হবে না
+                    const isAyatLine = ayatLineRegex.test(trimmed);
+                    const isHadithLine = /হাদী[সছ]/.test(trimmed) && /নম্বর/.test(trimmed);
+
+                    if (isAyatLine || isHadithLine) {
+                        pushRefGroup([{
+                            type: isAyatLine ? 'আয়াত রেফারেন্স' : 'হাদিস রেফারেন্স',
+                            arabic: pendingArabic || null,
+                            source: trimmed
+                        }]);
+                        pendingArabic = null;
+                        return;
+                    }
+
+                    // ২) সম্পূর্ণ লাইন জুড়ে বন্ধনীতে থাকা কিতাব/সূত্র রেফারেন্স, যেমন: (কিতাব ১: ৮/৫৪৮; কিতাব ২: ৯/৪৬৫৮) - সংগ্রহ করে রাখা হলো, উত্তরে দেখানো হবে না
                     const fullParenMatch = trimmed.match(/^\((.+)\)$/);
                     if (fullParenMatch && /[:：]/.test(fullParenMatch[1])) {
                         const items = fullParenMatch[1]
                             .split(';')
                             .map(s => s.trim())
                             .filter(Boolean)
-                            .map(s => ({ type: 'কিতাব রেফারেন্স', text: s }));
-                        const idx = pushRefGroup(items);
-                        outLines.push(`<span class="ref-line-wrap"><button type="button" class="ref-line-btn" onclick="openRefPopup(${idx})" title="রেফারেন্স দেখুন"><i class="fas fa-book"></i><span>রেফারেন্স দেখুন</span></button></span>`);
+                            .map(s => ({ type: 'কিতাব রেফারেন্স', source: s }));
+                        pushRefGroup(items);
                         return;
                     }
 
-                    // ৩) স্বাভাবিক বাক্যের ভেতরে ইনলাইন বন্ধনীযুক্ত রেফারেন্স, যেমন: (সূরা আনফাল: ৭২)
-                    const processedLine = rawLine.replace(inlineRefRegex, (match, inner) => {
-                        const idx = pushRefGroup([{ type: 'রেফারেন্স', text: inner.trim() }]);
-                        return refIconButton(idx, 'fa-book-quran');
-                    });
+                    // ৩) স্বাভাবিক বাক্যের ভেতরে ইনলাইন বন্ধনীযুক্ত রেফারেন্স, যেমন: (সূরা আনফাল: ৭২) - সংগ্রহ করে বাক্য থেকে সরিয়ে ফেলা হলো
+                    const processedLine = rawLine
+                        .replace(inlineRefRegex, (match, inner) => {
+                            pushRefGroup([{ type: 'রেফারেন্স', source: inner.trim() }]);
+                            return '';
+                        })
+                        .replace(/\s+([।,.!?])/g, '$1')
+                        .replace(/[ \t]{2,}/g, ' ')
+                        .trimEnd();
 
-                    outLines.push(processedLine);
+                    if (processedLine.trim()) {
+                        outLines.push(processedLine);
+                    }
                 });
+
+                if (!outLines.length) return ''; // যে প্যারাগ্রাফে শুধু আরবি উদ্ধৃতি/রেফারেন্স ছিল, উত্তরে তার জন্য ফাঁকা প্যারাগ্রাফ দেখানো হবে না
 
                 return `<p>${outLines.join('<br>')}</p>`;
             });
 
-            return paragraphs.join('');
+            return paragraphs.filter(Boolean).join('');
         }
 
-        // রেফারেন্স পপআপ খুলুন
-        function openRefPopup(idx) {
-            const items = currentRefs[idx];
-            if (!items) return;
-
+        // পুরো উত্তরের সকল দলিল/হাওলা একসাথে পপআপে দেখানো (একদম শেষের একটিমাত্র রেফারেন্স আইকনে ক্লিক করলে)
+        function openRefPopup() {
             const body = document.getElementById('refModalBody');
-            body.innerHTML = items.map((item, i) => `
-                <div class="ref-item">
-                    <div class="ref-item-top">
-                        <span class="ref-item-type">${escapeHtml(item.type)}</span>
-                        <button type="button" class="ref-copy-btn" onclick="copyRefText(this, ${idx}, ${i})">
-                            <i class="far fa-copy"></i><span>কপি</span>
+
+            if (!currentRefs.length) {
+                body.innerHTML = '<div class="ref-empty">এই উত্তরের জন্য কোনো রেফারেন্স যোগ করা হয়নি।</div>';
+            } else {
+                let refHtml = `
+                    <div class="ref-all-copy-container">
+                        <button type="button" class="ref-copy-all-btn" onclick="copyAllReferences()">
+                            <i class="fas fa-copy"></i><span>সকল রেফারেন্স কপি করুন</span>
                         </button>
                     </div>
-                    <div class="ref-item-text">${escapeHtml(item.text)}</div>
-                </div>
-            `).join('');
+                `;
+                
+                refHtml += currentRefs.map((group, gIdx) => group.map((item, iIdx) => `
+                    <div class="ref-item">
+                        <div class="ref-item-top">
+                            <span class="ref-item-type">${escapeHtml(item.type)}</span>
+                        </div>
+                        ${item.arabic ? `<div class="ref-item-arabic">${escapeHtml(item.arabic)}</div>` : ''}
+                        <div class="ref-item-text">${escapeHtml(item.source)}</div>
+                    </div>
+                `).join('')).join('');
+                
+                body.innerHTML = refHtml;
+            }
 
             document.getElementById('refModalOverlay').classList.add('active');
         }
 
-        // রেফারেন্স পপআপ বন্ধ করুন
-        function closeRefPopup(e) {
-            if (e && e.target && e.target.id !== 'refModalOverlay') return;
-            document.getElementById('refModalOverlay').classList.remove('active');
-        }
-
-        // একক রেফারেন্স কপি করুন
-        function copyRefText(btn, groupIdx, itemIdx) {
-            const group = currentRefs[groupIdx];
-            if (!group || !group[itemIdx]) return;
-            const text = group[itemIdx].text;
+        // সব রেফারেন্স একসাথে কপি করুন
+        function copyAllReferences() {
+            if (!currentRefs.length) return;
+            
+            let allText = [];
+            currentRefs.forEach(group => {
+                group.forEach(item => {
+                    if (item.arabic) {
+                        allText.push(`${item.arabic}\n(${item.source})`);
+                    } else {
+                        allText.push(item.source);
+                    }
+                });
+            });
+            
+            const fullText = allText.join('\n\n');
+            const btn = document.querySelector('.ref-copy-all-btn');
 
             const finishCopy = () => {
                 const original = btn.innerHTML;
@@ -1347,12 +1622,12 @@
             };
 
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(finishCopy).catch(() => {
-                    fallbackCopy(text);
+                navigator.clipboard.writeText(fullText).then(finishCopy).catch(() => {
+                    fallbackCopy(fullText);
                     finishCopy();
                 });
             } else {
-                fallbackCopy(text);
+                fallbackCopy(fullText);
                 finishCopy();
             }
         }
@@ -1426,7 +1701,7 @@
         }
 
         // বিস্তারিত (উত্তর) ভিউ দেখান — নেভবার, ফুটার ও ব্যানার ছাড়া
-        function showDetail(id) {
+        function showDetail(id, skipUrlUpdate = false) {
             const masail = masailsData.find(m => m.id === id);
             if (!masail) return;
 
@@ -1475,17 +1750,6 @@
                         <span class="question-number">${convertToBangla(masail.number)}.</span>
                         ${masail.question}
                     </div>
-                    <div class="meta-row">
-                        <div class="meta-pill"><i class="far fa-calendar"></i><span>${dateStr}</span></div>
-                        <div class="meta-pill"><i class="fas fa-map-marker-alt"></i><span>${masail.location}</span></div>
-                    </div>
-                    <div class="action-row">
-                        <button class="pill-btn" onclick="shareMasail(${masail.id})"><i class="fas fa-share-alt"></i><span>শেয়ার / কপি</span></button>
-                        <button class="icon-btn" onclick="window.print()"><i class="fas fa-print"></i></button>
-                    </div>
-                    <div class="bookmark-row">
-                        <button class="bookmark-btn"><i class="far fa-bookmark"></i><span>বুকমার্ক করুন</span></button>
-                    </div>
                 </div>
 
                 <div class="card">
@@ -1495,16 +1759,32 @@
                     </div>
                     <div class="answer-text">${answerParagraphs}</div>
 
-                    <div class="answerer-box">
-                        <div class="label">উত্তর দাতা</div>
-                        <div class="name">${masail.answerer}</div>
-                        <div class="title">${masail.answererTitle}</div>
+                    <div class="ref-button-row">
+                        <button class="ref-main-btn" onclick="openRefPopup()"><i class="fas fa-book-quran"></i><span>রেফারেন্স</span></button>
                     </div>
 
-                    <button class="pill-btn" onclick="shareMasail(${masail.id})"><i class="fas fa-share-alt"></i><span>শেয়ার / কপি</span></button>
-
-                    <div class="tags-label">প্রসঙ্গসমূহ:</div>
-                    <div class="tags-row">${tagsHtml}</div>
+                    <div class="info-footer">
+                        <div class="footer-item answerer-info">
+                            <strong>${masail.answerer}</strong>
+                            <span>${masail.answererTitle}</span>
+                        </div>
+                        <div class="footer-divider">|</div>
+                        <div class="footer-item">
+                            <i class="far fa-calendar"></i> <span>${dateStr}</span>
+                        </div>
+                        <div class="footer-divider">|</div>
+                        <div class="footer-item">
+                            <i class="fas fa-map-marker-alt"></i> <span>${masail.location}</span>
+                        </div>
+                        <div class="footer-divider">|</div>
+                        <button class="footer-btn" title="শেয়ার করুন" onclick="shareMasail(${masail.id})"><i class="fas fa-share-alt"></i></button>
+                        <button class="footer-btn" title="প্রিন্ট করুন" onclick="window.print()"><i class="fas fa-print"></i></button>
+                        <button class="footer-btn" title="বুকমার্ক করুন"><i class="far fa-bookmark"></i></button>
+                        <div style="margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+                            <span style="font-size: 11px; color: #7F8C8D; white-space: nowrap;">ট্যাগ:</span>
+                            <div class="tags-inline">${tagsHtml}</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card">
@@ -1524,6 +1804,14 @@
             document.getElementById('listView').classList.add('hidden');
             document.getElementById('detailView').classList.add('active');
             window.scrollTo(0, 0);
+
+            // প্রতিটি প্রশ্ন-উত্তরের জন্য আলাদা, SEO-বান্ধব URL: {বেসপাথ}/{number}/{slug}
+            document.title = `${masail.title} - মাসআলা`;
+            setMetaDescription(masail.description || (masail.question || '').slice(0, 155));
+            if (!skipUrlUpdate) {
+                const url = basePath + `${encodeURIComponent(masail.number)}/${slugify(masail.title)}`;
+                history.pushState({ masailId: masail.id }, '', url);
+            }
         }
 
         // শেয়ার / কপি লিংক
@@ -1539,10 +1827,36 @@
         }
 
         // ফিরে যান
-        function backToList() {
+        function backToList(skipUrlUpdate = false) {
             document.getElementById('listView').classList.remove('hidden');
             document.getElementById('detailView').classList.remove('active');
+            document.title = originalTitle;
+            setMetaDescription(originalMetaDescription);
+            if (!skipUrlUpdate) {
+                history.pushState({}, '', basePath);
+            }
         }
+
+        // বর্তমান URL অনুযায়ী সঠিক পেজ (তালিকা বা নির্দিষ্ট মাসআলা) দেখানো
+        function routeFromLocation() {
+            const path = window.location.pathname;
+            if (path.indexOf(basePath) === 0) {
+                const rest = path.slice(basePath.length).replace(/^\/+|\/+$/g, '');
+                if (rest) {
+                    const number = decodeURIComponent(rest.split('/')[0]);
+                    if (/^[0-9]+$/.test(number)) {
+                        const masail = masailsData.find(m => m.number === number);
+                        if (masail) {
+                            showDetail(masail.id, true);
+                            return;
+                        }
+                    }
+                }
+            }
+            backToList(true);
+        }
+
+        window.addEventListener('popstate', routeFromLocation);
 
         // সার্চ কার্যকর করা
         function filterMasail(query) {
@@ -1644,6 +1958,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             createMasailList();
             setupSearch();
+            routeFromLocation();
         });
     </script>
 
