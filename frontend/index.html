@@ -4352,7 +4352,7 @@
 <script>
 (function(){
   // নামাজের সময় ডেটা (বাংলা সংখ্যা থেকে সংখ্যায় রূপান্তরিত)
-  var banglaDigits = {'०': '0', '१': '1', '२': '2', '३': '3', '४': '4', '५': '5', '६': '6', '७': '7', '८': '8', '९': '9'};
+  var banglaDigits = {'০': '0', '১': '1', '२': '2', '৩': '3', '৪': '4', '৫': '5', '६': '6', '७': '7', '८': '8', '९': '9'};
   
   function convertBanglaTime(timeStr) {
     // "०४:०४ - ०५:२६" এর মতো বাংলা সংখ্যা থেকে সাধারণ সংখ্যায় রূপান্তরিত করুন
@@ -4456,86 +4456,91 @@
   setInterval(updateProgressBars, 1000);
 })();
 
-// ====== নামাজের সময় অনুযায়ী Background Image পরিবর্তন ======
+// ====== নামাজের সময় অনুযায়ী Background পরিবর্তন (ছবি + ফলব্যাক রঙ) ======
 (function() {
   'use strict';
   
-  // ছবির পথ এবং নামাজের সময়ের ম্যাপিং
-  // সব ফাইলনেম ছোট হাতে এবং সামঞ্জস্যপূর্ণ
+  // ছবির পথ এবং নামাজের সময়ের ম্যাপিং (ফলব্যাক রঙ সহ)
   var prayerTimeBackgrounds = {
     'tahajjud': {
       times: { start: 0 * 60 + 0, end: 4 * 60 + 4 },     // 00:00 - 04:04 (রাত/দেরী রাত)
       image: '/assets/tahajjud.png',
+      fallbackColor: '#1a1a2e',
       label: 'তাহাজ্জুদ'
     },
     'fajr': {
       times: { start: 4 * 60 + 4, end: 5 * 60 + 26 },    // 04:04 - 05:26 (ভোর)
       image: '/assets/fajr.png',
+      fallbackColor: '#2d3142',
       label: 'ফজর'
     },
     'shuruq': {
       times: { start: 5 * 60 + 26, end: 6 * 60 + 15 },   // 05:26 - 06:15 (সূর্যোদয়)
       image: '/assets/shuruq.png',
+      fallbackColor: '#f97316',
       label: 'সূর্যোদয়'
     },
     'ishraq': {
       times: { start: 6 * 60 + 15, end: 9 * 60 + 0 },    // 06:15 - 09:00 (ইশরাক/সকাল)
       image: '/assets/ishraq.png',
+      fallbackColor: '#fbbf24',
       label: 'ইশরাক'
     },
     'duha': {
       times: { start: 9 * 60 + 0, end: 12 * 60 + 7 },    // 09:00 - 12:07 (দুহা/মধ্য সকাল)
       image: '/assets/duha.png',
+      fallbackColor: '#facc15',
       label: 'দুহা'
     },
     'zuhr': {
       times: { start: 12 * 60 + 7, end: 16 * 60 + 42 },  // 12:07 - 16:42 (যুহর/দুপুর)
-      image: '/assets/zuhr.png',
+      image: '/assets/zhuhr.png',
+      fallbackColor: '#f59e0b',
       label: 'যুহর'
     },
     'asr': {
       times: { start: 16 * 60 + 42, end: 18 * 60 + 41 }, // 16:42 - 18:41 (আসর/বিকাল)
       image: '/assets/asr.png',
+      fallbackColor: '#ef4444',
       label: 'আসর'
     },
     'sunset': {
       times: { start: 18 * 60 + 41, end: 18 * 60 + 50 }, // 18:41 - 18:50 (সূর্যাস্ত)
       image: '/assets/sunset.png',
+      fallbackColor: '#dc2626',
       label: 'সূর্যাস্ত'
     },
     'maghrib': {
       times: { start: 18 * 60 + 50, end: 20 * 60 + 4 },  // 18:50 - 20:04 (মাগরিব)
       image: '/assets/maghrib.png',
+      fallbackColor: '#7c3aed',
       label: 'মাগরিব'
     },
     'awwabin': {
       times: { start: 20 * 60 + 4, end: 20 * 60 + 45 },  // 20:04 - 20:45 (আওয়াবিন)
       image: '/assets/awwabin.png',
+      fallbackColor: '#3b82f6',
       label: 'আওয়াবিন'
     },
     'isha': {
       times: { start: 20 * 60 + 45, end: 24 * 60 },      // 20:45 - 24:00 (ইশা/রাত)
       image: '/assets/isha.png',
+      fallbackColor: '#1e293b',
       label: 'ইশা'
     }
   };
-  
-  // ডিফল্ট পটভূমি ইমেজ
-  var defaultImage = '/assets/ishraq.png';
   
   function updatePrayerBackground() {
     var now = new Date();
     var currentMinutes = now.getHours() * 60 + now.getMinutes();
     var bgEl = document.getElementById('phonePrayerBg');
     
-    if (!bgEl) {
-      console.error('[prayer-bg] ত্রুটি: #phonePrayerBg উপাদান খুঁজে পাওয়া যায়নি');
-      return;
-    }
+    if (!bgEl) return;
     
-    // বর্তমান সময়ের জন্য উপযুক্ত ছবি খুঁজে বের করুন
-    var backgroundImage = defaultImage;
-    var matchedPrayer = 'default';
+    // বর্তমান সময়ের জন্য উপযুক্ত ব্যাকগ্রাউন্ড খুঁজে বের করুন
+    var backgroundImage = '/assets/ishraq.png';
+    var fallbackColor = '#fbbf24';
+    var matchedPrayer = 'ishraq';
     
     Object.keys(prayerTimeBackgrounds).forEach(function(prayerName) {
       var prayer = prayerTimeBackgrounds[prayerName];
@@ -4544,32 +4549,29 @@
       
       if (currentMinutes >= startTime && currentMinutes < endTime) {
         backgroundImage = prayer.image;
+        fallbackColor = prayer.fallbackColor;
         matchedPrayer = prayerName;
       }
     });
     
-    // বর্তমান সময় লগ করুন (ডিবাগিংয়ের জন্য)
-    var timeStr = String(now.getHours()).padStart(2, '0') + ':' + 
-                  String(now.getMinutes()).padStart(2, '0');
+    // প্রথমে ফলব্যাক রঙ সেট করুন
+    bgEl.style.backgroundColor = fallbackColor;
     
-    // Background image সরাসরি এলিমেন্টে সেট করুন
+    // তারপর ছবি চেষ্টা করুন
     var fullUrl = 'url("' + backgroundImage + '")';
     if (bgEl.style.backgroundImage !== fullUrl) {
       bgEl.style.backgroundImage = fullUrl;
-      
-      console.log('[prayer-bg] ' + timeStr + ' - পটভূমি আপডেট: ' + matchedPrayer + ' → ' + backgroundImage);
-      
-      // ইমেজটি সঠিকভাবে লোড হচ্ছে কিনা যাচাই করুন
+      bgEl.style.backgroundSize = 'cover';
+      bgEl.style.backgroundPosition = 'center';
+      bgEl.style.backgroundRepeat = 'no-repeat';
+
+      // ডিবাগ: ছবিটি লোড করার চেষ্টা করুন
       var testImg = new Image();
-      testImg.onload = function() {
-        console.log('[prayer-bg] ✓ ইমেজ সফলভাবে লোড হয়েছে: ' + backgroundImage);
+      testImg.onload = function(){
+        console.log('[prayer-bg] সফলভাবে লোড হয়েছে (' + matchedPrayer + ')');
       };
-      testImg.onerror = function() {
-        console.error('[prayer-bg] ✗ ইমেজ লোড করতে ব্যর্থ! নিম্নোক্ত চেক করুন:');
-        console.error('  1. ফাইলের পথ সঠিক আছে কিনা: ' + backgroundImage);
-        console.error('  2. ফাইলনেম case-sensitive: পূর্ণ ছোট হাতে ব্যবহার করুন');
-        console.error('  3. ফাইলটি /assets/ ফোল্ডারে আছে কিনা');
-        console.error('  4. ফাইলের সঠিক এক্সটেনশন (.png, .jpg ইত্যাদি)');
+      testImg.onerror = function(){
+        console.log('[prayer-bg] ছবি পাওয়া যায়নি, ফলব্যাক রঙ ব্যবহার করছি (' + matchedPrayer + ', রঙ: ' + fallbackColor + ')');
       };
       testImg.src = backgroundImage;
     }
@@ -4577,15 +4579,13 @@
   
   // প্রাথমিক আপডেট
   updatePrayerBackground();
-  console.log('[prayer-bg] স্ক্রিপ্ট চালু হয়েছে');
   
-  // প্রতি মিনিটে আপডেট করুন (প্রধান আপডেট)
+  // প্রতি মিনিটে আপডেট করুন
   setInterval(updatePrayerBackground, 60000);
   
   // প্রতি সেকেন্ডে চেক করুন (মসৃণ ট্রানজিশনের জন্য)
   setInterval(updatePrayerBackground, 1000);
 })();
-
 </script>
 
 <!-- ===== Sticky Navbar Script ===== -->
@@ -4625,7 +4625,22 @@
 
 
   <!-- Navbar Loader -->
-<script src="navbar/navbar-loader.js"></script>
+<script>
+  // navbar-loader.js এর জন্য নিরাপদ লোডিং
+  fetch('navbar/navbar-loader.js')
+    .then(r => r.ok ? r.text() : null)
+    .then(text => {
+      if(text) {
+        var script = document.createElement('script');
+        script.textContent = text;
+        document.body.appendChild(script);
+        console.log('✓ navbar-loader.js লোড হয়েছে');
+      } else {
+        console.log('ℹ navbar-loader.js পাওয়া যায়নি, তবে অ্যাপ্লিকেশন কাজ করছে');
+      }
+    })
+    .catch(err => console.log('ℹ navbar-loader.js লোড ব্যর্থ (ঐচ্ছিক)'));
+</script>
 
 </body>
 </html>
