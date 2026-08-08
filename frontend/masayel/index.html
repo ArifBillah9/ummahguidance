@@ -715,6 +715,7 @@
         .ref-modal-body {
             padding: 14px 16px 18px;
             overflow-y: auto;
+            flex: 1;
         }
 
         .ref-item {
@@ -764,7 +765,9 @@
         .ref-all-copy-container {
             display: flex;
             justify-content: center;
-            margin-bottom: 18px;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #E4EEE6;
         }
 
         .ref-copy-all-btn {
@@ -1106,11 +1109,11 @@
     </div>
 
     <!-- রেফারেন্স পপআপ (আয়াত/হাদিস/কিতাব রেফারেন্স গোপন রেখে আইকনে ক্লিকে দেখানো হয়) -->
-    <div class="ref-modal-overlay" id="refModalOverlay" onclick="closeRefPopup(event)">
+    <div class="ref-modal-overlay" id="refModalOverlay" onclick="if(event.target.id === 'refModalOverlay') closeRefPopup(event)">
         <div class="ref-modal" onclick="event.stopPropagation()">
             <div class="ref-modal-header">
                 <span><i class="fas fa-book-quran"></i> রেফারেন্স</span>
-                <button class="ref-modal-close" onclick="closeRefPopup()"><i class="fas fa-times"></i></button>
+                <button class="ref-modal-close" onclick="document.getElementById('refModalOverlay').classList.remove('active')"><i class="fas fa-times"></i></button>
             </div>
             <div class="ref-modal-body" id="refModalBody"></div>
         </div>
@@ -1594,6 +1597,17 @@
             return paragraphs.filter(Boolean).join('');
         }
 
+        // Modal বন্ধ করুন
+        function closeRefPopup(event) {
+            // যদি overlay এর উপর সরাসরি ক্লিক হয় তাহলেই বন্ধ করুন (modal এর উপর নয়)
+            if (event && event.target.id === 'refModalOverlay') {
+                document.getElementById('refModalOverlay').classList.remove('active');
+            } else if (!event) {
+                // ক্লোজ বাটন থেকে event ছাড়াই কল হলে
+                document.getElementById('refModalOverlay').classList.remove('active');
+            }
+        }
+
         // পুরো উত্তরের সকল দলিল/হাওলা একসাথে পপআপে দেখানো (একদম শেষের একটিমাত্র রেফারেন্স আইকনে ক্লিক করলে)
         function openRefPopup() {
             const body = document.getElementById('refModalBody');
@@ -1601,15 +1615,7 @@
             if (!currentRefs.length) {
                 body.innerHTML = '<div class="ref-empty">এই উত্তরের জন্য কোনো রেফারেন্স যোগ করা হয়নি।</div>';
             } else {
-                let refHtml = `
-                    <div class="ref-all-copy-container">
-                        <button type="button" class="ref-copy-all-btn" onclick="copyAllReferences()">
-                            <i class="fas fa-copy"></i><span>সকল রেফারেন্স কপি করুন</span>
-                        </button>
-                    </div>
-                `;
-                
-                refHtml += currentRefs.map((group, gIdx) => group.map((item, iIdx) => `
+                let refHtml = currentRefs.map((group, gIdx) => group.map((item, iIdx) => `
                     <div class="ref-item">
                         <div class="ref-item-top">
                             <span class="ref-item-type">${escapeHtml(item.type)}</span>
@@ -1618,6 +1624,14 @@
                         <div class="ref-item-text">${escapeHtml(item.source)}</div>
                     </div>
                 `).join('')).join('');
+                
+                refHtml += `
+                    <div class="ref-all-copy-container">
+                        <button type="button" class="ref-copy-all-btn" onclick="copyAllReferences()">
+                            <i class="fas fa-copy"></i><span>সকল রেফারেন্স কপি করুন</span>
+                        </button>
+                    </div>
+                `;
                 
                 body.innerHTML = refHtml;
             }
