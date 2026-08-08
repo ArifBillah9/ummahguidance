@@ -820,6 +820,208 @@
             padding: 24px 10px;
         }
 
+        /* ========== SHARE MODAL STYLES ========== */
+        .share-modal-body {
+            padding: 16px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .share-title-box {
+            background: #F8F7F4;
+            padding: 14px;
+            border-radius: 8px;
+            margin-bottom: 18px;
+        }
+
+        .share-title-box h3 {
+            font-size: 15px;
+            color: #1B3A5C;
+            margin: 0;
+            line-height: 1.5;
+            font-weight: 700;
+        }
+
+        .share-section {
+            margin-bottom: 18px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #E4EEE6;
+        }
+
+        .share-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .share-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1B3A5C;
+            margin-bottom: 10px;
+        }
+
+        .share-label i {
+            color: #2ECC71;
+            font-size: 13px;
+        }
+
+        .share-input-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .share-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #DCEEE0;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            color: #2C3E50;
+            background: #F8F9FA;
+        }
+
+        .share-input:focus {
+            outline: none;
+            border-color: #2ECC71;
+            background: white;
+        }
+
+        .share-copy-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #1B8A4A 0%, #27AE60 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .share-copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(27, 138, 74, 0.3);
+        }
+
+        .share-text-box {
+            background: #F8F9FA;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #E4EEE6;
+            font-size: 12px;
+            color: #2C3E50;
+            line-height: 1.6;
+            word-break: break-word;
+            max-height: 100px;
+            overflow-y: auto;
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+
+        .share-text-copy-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            width: 100%;
+            justify-content: center;
+            padding: 10px 14px;
+            background: linear-gradient(135deg, #1B8A4A 0%, #27AE60 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .share-text-copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(27, 138, 74, 0.3);
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .social-share-btn {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .social-share-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .social-share-btn.facebook {
+            background: #1877F2;
+        }
+
+        .social-share-btn.whatsapp {
+            background: #25D366;
+        }
+
+        .social-share-btn.twitter {
+            background: #1DA1F2;
+        }
+
+        .social-share-btn.telegram {
+            background: #0088cc;
+        }
+
+        .social-share-btn.email {
+            background: #EA4335;
+        }
+
+        .share-native-btn {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #2C5282 0%, #1B3A5C 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            margin-top: 12px;
+        }
+
+        .share-native-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(44, 82, 130, 0.3);
+        }
+
         .ref-final-row { margin-top: 14px; }
 
         .info-footer {
@@ -1116,6 +1318,64 @@
                 <button class="ref-modal-close" onclick="document.getElementById('refModalOverlay').classList.remove('active')"><i class="fas fa-times"></i></button>
             </div>
             <div class="ref-modal-body" id="refModalBody"></div>
+        </div>
+    </div>
+
+    <!-- শেয়ার মডাল -->
+    <div class="ref-modal-overlay" id="shareModalOverlay" onclick="if(event.target.id === 'shareModalOverlay') closeShareModal()">
+        <div class="ref-modal" onclick="event.stopPropagation()">
+            <div class="ref-modal-header">
+                <span><i class="fas fa-share-alt"></i> শেয়ার করুন</span>
+                <button class="ref-modal-close" onclick="closeShareModal()"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="share-modal-body">
+                <div class="share-title-box">
+                    <h3 id="shareTitle"></h3>
+                </div>
+
+                <div class="share-section">
+                    <label class="share-label"><i class="fas fa-link"></i> লিংক কপি করুন</label>
+                    <div class="share-input-group">
+                        <input type="text" id="shareUrl" class="share-input" readonly>
+                        <button class="share-copy-btn" onclick="copyShareLink()" title="লিংক কপি করুন">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="share-section">
+                    <label class="share-label"><i class="fas fa-message"></i> সম্পূর্ণ টেক্সট কপি করুন</label>
+                    <div class="share-text-box" id="shareText"></div>
+                    <button class="share-text-copy-btn" onclick="copyShareText()">
+                        <i class="fas fa-copy"></i> টেক্সট কপি করুন
+                    </button>
+                </div>
+
+                <div class="share-section">
+                    <label class="share-label"><i class="fas fa-share-nodes"></i> অন্যান্য মাধ্যমে শেয়ার করুন</label>
+                    <div class="share-buttons">
+                        <button class="social-share-btn facebook" onclick="shareTo('facebook')" title="ফেসবুকে শেয়ার করুন">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                        <button class="social-share-btn whatsapp" onclick="shareTo('whatsapp')" title="হোয়াটসঅ্যাপে শেয়ার করুন">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                        <button class="social-share-btn twitter" onclick="shareTo('twitter')" title="টুইটারে শেয়ার করুন">
+                            <i class="fab fa-twitter"></i>
+                        </button>
+                        <button class="social-share-btn telegram" onclick="shareTo('telegram')" title="টেলিগ্রামে শেয়ার করুন">
+                            <i class="fab fa-telegram"></i>
+                        </button>
+                        <button class="social-share-btn email" onclick="shareTo('email')" title="ইমেইলে শেয়ার করুন">
+                            <i class="fas fa-envelope"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button class="share-native-btn" id="nativeShareBtn" onclick="nativeShare()" style="display:none;">
+                    <i class="fas fa-share"></i> নেটিভ শেয়ার
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1854,13 +2114,116 @@
         // শেয়ার / কপি লিংক
         function shareMasail(id) {
             const masail = masailsData.find(m => m.id === id);
-            const shareText = masail ? `${masail.title} - প্রশ্ন নম্বরঃ ${masail.number}` : document.title;
-            if (navigator.share) {
-                navigator.share({ title: shareText, url: window.location.href }).catch(() => {});
-            } else if (navigator.clipboard) {
-                navigator.clipboard.writeText(shareText + ' — ' + window.location.href);
-                alert('লিংক কপি করা হয়েছে!');
+            if (!masail) return;
+            
+            // প্রশ্নের জন্য সঠিক URL তৈরি করুন
+            const shareUrl = window.location.origin + basePath + `${encodeURIComponent(masail.number)}/${slugify(masail.title)}`;
+            const shareText = `${masail.title}\n\nপ্রশ্ন নম্বর: ${masail.number}\n\n${shareUrl}`;
+            
+            // শেয়ার মডাল খুলুন
+            openShareModal(masail.title, shareUrl, shareText);
+        }
+        
+        // শেয়ার মডাল খুলুন
+        function openShareModal(title, url, text) {
+            document.getElementById('shareModalOverlay').classList.add('active');
+            document.getElementById('shareTitle').textContent = title;
+            document.getElementById('shareUrl').value = url;
+            document.getElementById('shareText').textContent = text;
+        }
+        
+        // শেয়ার মডাল বন্ধ করুন
+        function closeShareModal() {
+            document.getElementById('shareModalOverlay').classList.remove('active');
+        }
+        
+        // লিংক কপি করুন
+        function copyShareLink() {
+            const url = document.getElementById('shareUrl').value;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(url).then(() => {
+                    const btn = event.target;
+                    const original = btn.innerHTML;
+                    btn.innerHTML = '<i class="fas fa-check"></i> কপি হয়েছে';
+                    setTimeout(() => {
+                        btn.innerHTML = original;
+                    }, 2000);
+                }).catch(() => {
+                    fallbackCopy(url);
+                });
+            } else {
+                fallbackCopy(url);
             }
+        }
+        
+        // টেক্সট কপি করুন
+        function copyShareText() {
+            const text = document.getElementById('shareText').textContent;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(() => {
+                    const btn = event.target;
+                    const original = btn.innerHTML;
+                    btn.innerHTML = '<i class="fas fa-check"></i> কপি হয়েছে';
+                    setTimeout(() => {
+                        btn.innerHTML = original;
+                    }, 2000);
+                }).catch(() => {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+        
+        // নেটিভ শেয়ার (যদি উপলব্ধ থাকে)
+        function nativeShare() {
+            const url = document.getElementById('shareUrl').value;
+            const title = document.getElementById('shareTitle').textContent;
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    url: url
+                }).catch(() => {});
+            }
+        }
+        
+        // সোশ্যাল মিডিয়ায় শেয়ার করুন
+        function shareTo(platform) {
+            const url = encodeURIComponent(document.getElementById('shareUrl').value);
+            const title = encodeURIComponent(document.getElementById('shareTitle').textContent);
+            let shareUrl = '';
+            
+            switch(platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                    break;
+                case 'whatsapp':
+                    const text = encodeURIComponent(document.getElementById('shareTitle').textContent + '\n' + document.getElementById('shareUrl').value);
+                    shareUrl = `https://wa.me/?text=${text}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
+                    break;
+                case 'telegram':
+                    shareUrl = `https://t.me/share/url?url=${url}&text=${title}`;
+                    break;
+                case 'email':
+                    shareUrl = `mailto:?subject=${title}&body=${document.getElementById('shareUrl').value}`;
+                    break;
+            }
+            
+            if (shareUrl) {
+                if (platform === 'email') {
+                    window.location.href = shareUrl;
+                } else {
+                    window.open(shareUrl, '_blank', 'width=600,height=400');
+                }
+            }
+        }
+        
+        // চেক করুন নেটিভ শেয়ার সাপোর্ট করে কিনা
+        if (navigator.share) {
+            document.getElementById('nativeShareBtn').style.display = 'block';
         }
 
         // ফিরে যান
