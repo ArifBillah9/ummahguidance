@@ -557,31 +557,27 @@
             margin-bottom: 16px;
         }
 
-        .answer-text .ref-quote-btn {
+        .answer-text .ref-icon-btn {
             display: inline-flex;
-            align-items: center;
-            justify-content: center;
             margin-left: 8px;
             vertical-align: baseline;
             float: right;
             margin-top: -28px;
-            width: 36px;
-            height: 36px;
-            font-size: 18px;
-            background: #E8F5E9;
-            color: #2196F3;
+            width: 32px;
+            height: 32px;
+            font-size: 15px;
+            background: linear-gradient(135deg, rgba(27, 138, 74, 0.15) 0%, rgba(46, 204, 113, 0.15) 100%);
+            color: #1B8A4A;
             border-radius: 8px;
-            border: 2px solid #C8E6C9;
-            cursor: pointer;
+            border: 1px solid rgba(46, 204, 113, 0.3);
             transition: all 0.3s ease;
         }
 
-        .answer-text .ref-quote-btn:hover {
-            background: #2196F3;
+        .answer-text .ref-icon-btn:hover {
+            background: linear-gradient(135deg, #1B8A4A 0%, #27AE60 100%);
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(33, 150, 243, 0.25);
-            border-color: #2196F3;
+            box-shadow: 0 4px 10px rgba(27, 138, 74, 0.2);
         }
 
         /* ========== ARABIC QUOTE LINE ========== */
@@ -667,15 +663,15 @@
         .ref-modal {
             background: #fff;
             width: 100%;
-            max-width: 380px;
-            max-height: 80vh;
-            border-radius: 10px;
+            max-width: 360px;
+            max-height: 75vh;
+            border-radius: 0;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             transform: scale(0.95);
             transition: transform 0.25s ease;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
         }
 
         .ref-modal-overlay.active .ref-modal {
@@ -687,9 +683,8 @@
             align-items: center;
             justify-content: space-between;
             padding: 14px 16px;
-            background: linear-gradient(135deg, #E8F5E9 0%, #F1F8E9 100%);
-            border-bottom: 2px solid #C8E6C9;
-            color: #1B8A4A;
+            background: linear-gradient(135deg, #1B3A5C 0%, #2C5282 100%);
+            color: #fff;
             flex-shrink: 0;
         }
 
@@ -699,78 +694,53 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            color: #1B8A4A;
         }
 
         .ref-modal-close {
-            background: transparent;
+            background: rgba(255, 255, 255, 0.15);
             border: none;
-            color: #1B8A4A;
-            width: 28px;
-            height: 28px;
-            border-radius: 4px;
+            color: #fff;
+            width: 26px;
+            height: 26px;
+            border-radius: 0;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
         }
 
-        .ref-modal-close:hover { 
-            background: rgba(27, 138, 74, 0.15);
-            transform: scale(1.1);
-        }
+        .ref-modal-close:hover { background: rgba(255, 255, 255, 0.3); }
 
         .ref-modal-body {
-            padding: 12px 14px 16px;
+            padding: 14px 16px 18px;
             overflow-y: auto;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .ref-modal-body .ref-item {
-            margin-bottom: 10px;
-        }
-
-        .ref-modal-body .ref-item:last-of-type {
-            margin-bottom: 0;
         }
 
         .ref-item {
-            background: #E8F5E9;
-            border: 2px solid #C8E6C9;
-            border-radius: 8px;
-            padding: 10px 12px;
-            margin-bottom: 9px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
+            background: #F8F7F4;
+            border-radius: 10px;
+            padding: 14px 14px 12px;
+            margin-bottom: 12px;
         }
 
         .ref-item:last-child { margin-bottom: 0; }
 
         .ref-item-top {
-            display: none;
-        }
-
-        .ref-item-icon {
-            color: #2196F3;
-            font-size: 20px;
-            flex-shrink: 0;
-            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 8px;
         }
 
         .ref-item-type {
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 800;
             color: #1B8A4A;
-            background: rgba(27, 138, 74, 0.2);
-            padding: 4px 12px;
-            border-radius: 12px;
-            letter-spacing: 0.4px;
-            text-transform: uppercase;
+            background: rgba(46, 204, 113, 0.12);
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.3px;
         }
 
         .ref-copy-btn {
@@ -794,61 +764,50 @@
         .ref-all-copy-container {
             display: flex;
             justify-content: center;
-            margin-top: 12px;
-            padding-top: 10px;
-            border-top: 1px solid #E8E8E8;
+            margin-bottom: 18px;
         }
 
         .ref-copy-all-btn {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
             border: none;
-            background: #E8F5E9;
-            color: #1B8A4A;
-            font-size: 10px;
+            background: linear-gradient(135deg, #1B8A4A 0%, #27AE60 100%);
+            color: white;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
             font-family: inherit;
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 11px 18px;
+            border-radius: 8px;
             transition: all 0.3s ease;
-            border: 1px solid #C8E6C9;
+            box-shadow: 0 4px 12px rgba(27, 138, 74, 0.2);
         }
 
         .ref-copy-all-btn:hover {
-            transform: translateY(-1px);
-            background: #1B8A4A;
-            color: white;
-            border-color: #1B8A4A;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(27, 138, 74, 0.3);
+            background: linear-gradient(135deg, #16733E 0%, #229954 100%);
         }
 
         .ref-copy-all-btn i {
-            font-size: 11px;
-        }
-
-        .ref-item-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
+            font-size: 14px;
         }
 
         .ref-item-arabic {
             font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif;
-            font-size: 15px;
-            line-height: 1.5;
+            font-size: 18px;
+            line-height: 1.9;
             color: #1B3A5C;
             direction: rtl;
-            margin: 0;
+            margin-bottom: 8px;
         }
 
         .ref-item-text {
-            font-size: 11px;
-            color: #666;
-            line-height: 1.4;
+            font-size: 14px;
+            color: #2C3E50;
+            line-height: 1.7;
             word-break: break-word;
-            margin: 0;
         }
 
         .ref-empty {
@@ -1642,17 +1601,7 @@
             if (!currentRefs.length) {
                 body.innerHTML = '<div class="ref-empty">এই উত্তরের জন্য কোনো রেফারেন্স যোগ করা হয়নি।</div>';
             } else {
-                refHtml += currentRefs.map((group, gIdx) => group.map((item, iIdx) => `
-                    <div class="ref-item">
-                        <i class="fas fa-file-alt ref-item-icon"></i>
-                        <div class="ref-item-content">
-                            ${item.arabic ? `<div class="ref-item-arabic">${escapeHtml(item.arabic)}</div>` : ''}
-                            <div class="ref-item-text">${escapeHtml(item.source)}</div>
-                        </div>
-                    </div>
-                `).join('')).join('');
-                
-                refHtml += `
+                let refHtml = `
                     <div class="ref-all-copy-container">
                         <button type="button" class="ref-copy-all-btn" onclick="copyAllReferences()">
                             <i class="fas fa-copy"></i><span>সকল রেফারেন্স কপি করুন</span>
@@ -1660,16 +1609,20 @@
                     </div>
                 `;
                 
+                refHtml += currentRefs.map((group, gIdx) => group.map((item, iIdx) => `
+                    <div class="ref-item">
+                        <div class="ref-item-top">
+                            <span class="ref-item-type">${escapeHtml(item.type)}</span>
+                        </div>
+                        ${item.arabic ? `<div class="ref-item-arabic">${escapeHtml(item.arabic)}</div>` : ''}
+                        <div class="ref-item-text">${escapeHtml(item.source)}</div>
+                    </div>
+                `).join('')).join('');
+                
                 body.innerHTML = refHtml;
             }
 
             document.getElementById('refModalOverlay').classList.add('active');
-        }
-
-        // রেফারেন্স পপআপ বন্ধ করুন
-        function closeRefPopup(e) {
-            if (e && e.target && e.target.id !== 'refModalOverlay') return;
-            document.getElementById('refModalOverlay').classList.remove('active');
         }
 
         // সব রেফারেন্স একসাথে কপি করুন
@@ -1834,7 +1787,7 @@
                     </div>
                     <div class="answer-text">
                         ${answerParagraphs}
-                        <button class="ref-quote-btn" title="রেফারেন্স দেখুন" onclick="openRefPopup()"><i class="fas fa-quote-right"></i></button>
+                        <button class="ref-icon-btn" title="রেফারেন্স দেখুন" onclick="openRefPopup()"><i class="fas fa-book-quran"></i></button>
                     </div>
 
                     <div class="info-footer">
