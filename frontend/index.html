@@ -4461,6 +4461,7 @@
   'use strict';
   
   // ছবির পথ এবং নামাজের সময়ের ম্যাপিং
+  // সব ফাইলনেম ছোট হাতে এবং সামঞ্জস্যপূর্ণ
   var prayerTimeBackgrounds = {
     'tahajjud': {
       times: { start: 0 * 60 + 0, end: 4 * 60 + 4 },     // 00:00 - 04:04 (রাত/দেরী রাত)
@@ -4489,10 +4490,10 @@
     },
     'zuhr': {
       times: { start: 12 * 60 + 7, end: 16 * 60 + 42 },  // 12:07 - 16:42 (যুহর/দুপুর)
-      image: '/assets/zhuhr.png',
+      image: '/assets/zuhr.png',
       label: 'যুহর'
     },
-    'Asr': {
+    'asr': {
       times: { start: 16 * 60 + 42, end: 18 * 60 + 41 }, // 16:42 - 18:41 (আসর/বিকাল)
       image: '/assets/asr.png',
       label: 'আসর'
@@ -4519,16 +4520,22 @@
     }
   };
   
+  // ডিফল্ট পটভূমি ইমেজ
+  var defaultImage = '/assets/ishraq.png';
+  
   function updatePrayerBackground() {
     var now = new Date();
     var currentMinutes = now.getHours() * 60 + now.getMinutes();
     var bgEl = document.getElementById('phonePrayerBg');
     
-    if (!bgEl) return;
+    if (!bgEl) {
+      console.error('[prayer-bg] ত্রুটি: #phonePrayerBg উপাদান খুঁজে পাওয়া যায়নি');
+      return;
+    }
     
     // বর্তমান সময়ের জন্য উপযুক্ত ছবি খুঁজে বের করুন
-    var backgroundImage = '/assets/ishraq.png'; // ডিফল্ট ছবি
-    var matchedPrayer = null;
+    var backgroundImage = defaultImage;
+    var matchedPrayer = 'default';
     
     Object.keys(prayerTimeBackgrounds).forEach(function(prayerName) {
       var prayer = prayerTimeBackgrounds[prayerName];
@@ -4541,20 +4548,28 @@
       }
     });
     
+    // বর্তমান সময় লগ করুন (ডিবাগিংয়ের জন্য)
+    var timeStr = String(now.getHours()).padStart(2, '0') + ':' + 
+                  String(now.getMinutes()).padStart(2, '0');
+    
     // Background image সরাসরি এলিমেন্টে সেট করুন
     var fullUrl = 'url("' + backgroundImage + '")';
     if (bgEl.style.backgroundImage !== fullUrl) {
       bgEl.style.backgroundImage = fullUrl;
-
-      // ডিবাগ: ছবিটি আসলেই লোড হচ্ছে কিনা যাচাই করুন। লোড না হলে
-      // ব্রাউজার কনসোলে (F12 > Console) একটি সতর্কবার্তা দেখাবে,
-      // যা থেকে বোঝা যাবে path/ফাইলনেম ভুল আছে কিনা।
+      
+      console.log('[prayer-bg] ' + timeStr + ' - পটভূমি আপডেট: ' + matchedPrayer + ' → ' + backgroundImage);
+      
+      // ইমেজটি সঠিকভাবে লোড হচ্ছে কিনা যাচাই করুন
       var testImg = new Image();
-      testImg.onload = function(){
-        console.log('[prayer-bg] লোড হয়েছে ("' + matchedPrayer + '"):', backgroundImage);
+      testImg.onload = function() {
+        console.log('[prayer-bg] ✓ ইমেজ সফলভাবে লোড হয়েছে: ' + backgroundImage);
       };
-      testImg.onerror = function(){
-        console.warn('[prayer-bg] ছবিটি খুঁজে পাওয়া যায়নি, path/ফাইলনেম চেক করুন ("' + matchedPrayer + '"):', backgroundImage);
+      testImg.onerror = function() {
+        console.error('[prayer-bg] ✗ ইমেজ লোড করতে ব্যর্থ! নিম্নোক্ত চেক করুন:');
+        console.error('  1. ফাইলের পথ সঠিক আছে কিনা: ' + backgroundImage);
+        console.error('  2. ফাইলনেম case-sensitive: পূর্ণ ছোট হাতে ব্যবহার করুন');
+        console.error('  3. ফাইলটি /assets/ ফোল্ডারে আছে কিনা');
+        console.error('  4. ফাইলের সঠিক এক্সটেনশন (.png, .jpg ইত্যাদি)');
       };
       testImg.src = backgroundImage;
     }
@@ -4562,13 +4577,15 @@
   
   // প্রাথমিক আপডেট
   updatePrayerBackground();
+  console.log('[prayer-bg] স্ক্রিপ্ট চালু হয়েছে');
   
-  // প্রতি মিনিটে আপডেট করুন
+  // প্রতি মিনিটে আপডেট করুন (প্রধান আপডেট)
   setInterval(updatePrayerBackground, 60000);
   
   // প্রতি সেকেন্ডে চেক করুন (মসৃণ ট্রানজিশনের জন্য)
   setInterval(updatePrayerBackground, 1000);
 })();
+
 </script>
 
 <!-- ===== Sticky Navbar Script ===== -->
