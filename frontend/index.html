@@ -4057,7 +4057,7 @@
     function step(timestamp){
       if(startTime === null) startTime = timestamp;
       var elapsed = timestamp - startTime;
-      var rawProgress = Math.min(elapsed / duration, 1);
+      var rawProgress = Math.min(elapsed / duration, 1);     
       var eased = easeOutBack(rawProgress);
 
       // আর্কের বাঁকা পথ ধরেই t=0 থেকে t=finalPercent পর্যন্ত এগিয়ে যান
