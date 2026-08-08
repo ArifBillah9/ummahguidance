@@ -4456,76 +4456,65 @@
   setInterval(updateProgressBars, 1000);
 })();
 
-// ====== নামাজের সময় অনুযায়ী Background পরিবর্তন (ছবি + ফলব্যাক রঙ) ======
+// ====== নামাজের সময় অনুযায়ী Background ছবি পরিবর্তন ======
 (function() {
   'use strict';
   
-  // ছবির পথ এবং নামাজের সময়ের ম্যাপিং (ফলব্যাক রঙ সহ)
+  // ছবির পথ এবং নামাজের সময়ের ম্যাপিং
   var prayerTimeBackgrounds = {
     'tahajjud': {
       times: { start: 0 * 60 + 0, end: 4 * 60 + 4 },     // 00:00 - 04:04 (রাত/দেরী রাত)
       image: '/assets/tahajjud.png',
-      fallbackColor: '#1a1a2e',
       label: 'তাহাজ্জুদ'
     },
     'fajr': {
       times: { start: 4 * 60 + 4, end: 5 * 60 + 26 },    // 04:04 - 05:26 (ভোর)
       image: '/assets/fajr.png',
-      fallbackColor: '#2d3142',
       label: 'ফজর'
     },
     'shuruq': {
       times: { start: 5 * 60 + 26, end: 6 * 60 + 15 },   // 05:26 - 06:15 (সূর্যোদয়)
       image: '/assets/shuruq.png',
-      fallbackColor: '#f97316',
       label: 'সূর্যোদয়'
     },
     'ishraq': {
       times: { start: 6 * 60 + 15, end: 9 * 60 + 0 },    // 06:15 - 09:00 (ইশরাক/সকাল)
       image: '/assets/ishraq.png',
-      fallbackColor: '#fbbf24',
       label: 'ইশরাক'
     },
     'duha': {
       times: { start: 9 * 60 + 0, end: 12 * 60 + 7 },    // 09:00 - 12:07 (দুহা/মধ্য সকাল)
       image: '/assets/duha.png',
-      fallbackColor: '#facc15',
       label: 'দুহা'
     },
     'zuhr': {
       times: { start: 12 * 60 + 7, end: 16 * 60 + 42 },  // 12:07 - 16:42 (যুহর/দুপুর)
       image: '/assets/zhuhr.png',
-      fallbackColor: '#f59e0b',
       label: 'যুহর'
     },
     'asr': {
       times: { start: 16 * 60 + 42, end: 18 * 60 + 41 }, // 16:42 - 18:41 (আসর/বিকাল)
       image: '/assets/asr.png',
-      fallbackColor: '#ef4444',
       label: 'আসর'
     },
     'sunset': {
       times: { start: 18 * 60 + 41, end: 18 * 60 + 50 }, // 18:41 - 18:50 (সূর্যাস্ত)
       image: '/assets/sunset.png',
-      fallbackColor: '#dc2626',
       label: 'সূর্যাস্ত'
     },
     'maghrib': {
       times: { start: 18 * 60 + 50, end: 20 * 60 + 4 },  // 18:50 - 20:04 (মাগরিব)
       image: '/assets/maghrib.png',
-      fallbackColor: '#7c3aed',
       label: 'মাগরিব'
     },
     'awwabin': {
       times: { start: 20 * 60 + 4, end: 20 * 60 + 45 },  // 20:04 - 20:45 (আওয়াবিন)
       image: '/assets/awwabin.png',
-      fallbackColor: '#3b82f6',
       label: 'আওয়াবিন'
     },
     'isha': {
       times: { start: 20 * 60 + 45, end: 24 * 60 },      // 20:45 - 24:00 (ইশা/রাত)
       image: '/assets/isha.png',
-      fallbackColor: '#1e293b',
       label: 'ইশা'
     }
   };
@@ -4537,9 +4526,8 @@
     
     if (!bgEl) return;
     
-    // বর্তমান সময়ের জন্য উপযুক্ত ব্যাকগ্রাউন্ড খুঁজে বের করুন
+    // বর্তমান সময়ের জন্য উপযুক্ত ছবি খুঁজে বের করুন
     var backgroundImage = '/assets/ishraq.png';
-    var fallbackColor = '#fbbf24';
     var matchedPrayer = 'ishraq';
     
     Object.keys(prayerTimeBackgrounds).forEach(function(prayerName) {
@@ -4549,32 +4537,27 @@
       
       if (currentMinutes >= startTime && currentMinutes < endTime) {
         backgroundImage = prayer.image;
-        fallbackColor = prayer.fallbackColor;
         matchedPrayer = prayerName;
       }
     });
     
-    // প্রথমে ফলব্যাক রঙ সেট করুন
-    bgEl.style.backgroundColor = fallbackColor;
-    
-    // তারপর ছবি চেষ্টা করুন
+    // শুধু ছবি সেট করুন - কোন ফলব্যাক কালার নয়
     var fullUrl = 'url("' + backgroundImage + '")';
-    if (bgEl.style.backgroundImage !== fullUrl) {
-      bgEl.style.backgroundImage = fullUrl;
-      bgEl.style.backgroundSize = 'cover';
-      bgEl.style.backgroundPosition = 'center';
-      bgEl.style.backgroundRepeat = 'no-repeat';
+    bgEl.style.backgroundImage = fullUrl;
+    bgEl.style.backgroundSize = 'cover';
+    bgEl.style.backgroundPosition = 'center';
+    bgEl.style.backgroundRepeat = 'no-repeat';
+    bgEl.style.backgroundColor = 'transparent'; // স্বচ্ছ থাকবে যদি ছবি না পাওয়া যায়
 
-      // ডিবাগ: ছবিটি লোড করার চেষ্টা করুন
-      var testImg = new Image();
-      testImg.onload = function(){
-        console.log('[prayer-bg] সফলভাবে লোড হয়েছে (' + matchedPrayer + ')');
-      };
-      testImg.onerror = function(){
-        console.log('[prayer-bg] ছবি পাওয়া যায়নি, ফলব্যাক রঙ ব্যবহার করছি (' + matchedPrayer + ', রঙ: ' + fallbackColor + ')');
-      };
-      testImg.src = backgroundImage;
-    }
+    // ডিবাগ: ছবিটি লোড হচ্ছে কিনা যাচাই করুন
+    var testImg = new Image();
+    testImg.onload = function(){
+      console.log('✓ ছবি লোড: ' + matchedPrayer);
+    };
+    testImg.onerror = function(){
+      console.log('⚠ ছবি পাওয়া যায়নি: ' + backgroundImage);
+    };
+    testImg.src = backgroundImage;
   }
   
   // প্রাথমিক আপডেট
