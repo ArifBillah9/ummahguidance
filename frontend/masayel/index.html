@@ -544,12 +544,40 @@
             font-size: 15px;
         }
 
+        .answer-text {
+            position: relative;
+            display: flow-root;
+        }
+
         .answer-text p {
             font-size: 15px;
             line-height: 1.9;
             color: #2C3E50;
             text-align: justify;
             margin-bottom: 16px;
+        }
+
+        .answer-text .ref-icon-btn {
+            display: inline-flex;
+            margin-left: 8px;
+            vertical-align: baseline;
+            float: right;
+            margin-top: -28px;
+            width: 32px;
+            height: 32px;
+            font-size: 15px;
+            background: linear-gradient(135deg, rgba(27, 138, 74, 0.15) 0%, rgba(46, 204, 113, 0.15) 100%);
+            color: #1B8A4A;
+            border-radius: 8px;
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .answer-text .ref-icon-btn:hover {
+            background: linear-gradient(135deg, #1B8A4A 0%, #27AE60 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(27, 138, 74, 0.2);
         }
 
         /* ========== ARABIC QUOTE LINE ========== */
@@ -1757,10 +1785,9 @@
                     <div class="arabic-box">
                         <p>وَ عَلَيْكُـمُ السَّلَام وَرَحْمَةُ اللَّٰهِ وَبَرَكَاتُهُ<br>بِسْمِ اللَّٰهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
                     </div>
-                    <div class="answer-text">${answerParagraphs}</div>
-
-                    <div class="ref-button-row">
-                        <button class="ref-main-btn" onclick="openRefPopup()"><i class="fas fa-book-quran"></i><span>রেফারেন্স</span></button>
+                    <div class="answer-text">
+                        ${answerParagraphs}
+                        <button class="ref-icon-btn" title="রেফারেন্স দেখুন" onclick="openRefPopup()"><i class="fas fa-book-quran"></i></button>
                     </div>
 
                     <div class="info-footer">
@@ -1780,10 +1807,6 @@
                         <button class="footer-btn" title="শেয়ার করুন" onclick="shareMasail(${masail.id})"><i class="fas fa-share-alt"></i></button>
                         <button class="footer-btn" title="প্রিন্ট করুন" onclick="window.print()"><i class="fas fa-print"></i></button>
                         <button class="footer-btn" title="বুকমার্ক করুন"><i class="far fa-bookmark"></i></button>
-                        <div style="margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
-                            <span style="font-size: 11px; color: #7F8C8D; white-space: nowrap;">ট্যাগ:</span>
-                            <div class="tags-inline">${tagsHtml}</div>
-                        </div>
                     </div>
                 </div>
 
