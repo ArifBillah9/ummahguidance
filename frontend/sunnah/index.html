@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সুনাহ - Islamic Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+              @font-face{
+    font-family:'Kalpurush';
+    src:url('tasbih/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hind Siliguri', 'Kalpurush', 'Noto Sans Bengali', sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2d5a4d 0%, #3d7a6d 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-back {
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            border-radius: 0;
+            visibility: hidden;
+        }
+
+        .header-back.active {
+            visibility: visible;
+        }
+
+        .header-title {
+            text-align: center;
+            flex: 1;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            visibility: hidden;
+        }
+
+        .content {
+            padding: 20px;
+            min-height: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 18px 15px;
+            background: #f9f9f9;
+            border-radius: 0;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e8e8e8;
+        }
+
+        .menu-item:hover {
+            background: #e8f5f3;
+            border-color: #2d5a4d;
+            transform: translateX(5px);
+        }
+
+        .menu-item:active {
+            transform: translateX(3px);
+            background: #d8eae5;
+        }
+
+        .menu-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 0;
+            margin-right: 15px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .menu-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .menu-text {
+            font-size: 16px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .detail-text {
+            line-height: 1.8;
+            color: #333;
+            font-size: 15px;
+        }
+
+        .detail-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 0;
+            margin-bottom: 15px;
+            border-left: 4px solid #2d5a4d;
+        }
+
+        .detail-number {
+            font-weight: 700;
+            color: #2d5a4d;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .detail-text-body {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 8px;
+        }
+
+        .reference {
+            font-size: 13px;
+            color: #888;
+            font-weight: 500;
+            padding-top: 8px;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 8px;
+        }
+
+        .footer {
+            padding: 15px;
+            text-align: center;
+            border-top: 1px solid #e8e8e8;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .content::-webkit-scrollbar-thumb {
+            background: #2d5a4d;
+            border-radius: 0;
+        }
+
+        .content::-webkit-scrollbar-thumb:hover {
+            background: #1a3a33;
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 15px 10px;
+            }
+
+            .header-title {
+                font-size: 18px;
+            }
+
+            .content {
+                padding: 15px;
+                min-height: auto;
+            }
+
+            .menu-item {
+                padding: 15px 12px;
+                margin-bottom: 10px;
+            }
+
+            .menu-icon {
+                width: 45px;
+                height: 45px;
+            }
+
+            .menu-text {
+                font-size: 15px;
+            }
+
+            .detail-item {
+                padding: 12px;
+            }
+
+            .detail-text-body {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-back" id="backBtn">‹</div>
+            <div class="header-title" id="headerTitle">সুনাহ</div>
+            <div class="header-icon"></div>
+        </div>
+
+        <div class="content">
+            <!-- Page 1: Main Menu -->
+            <div class="page active" id="page1">
+                <div class="detail-text" style="text-align: center; margin-bottom: 20px; font-weight: 600; color: #2d5a4d;">সুনত সমূহ</div>
+                
+                <div class="menu-item" onclick="goToPageWithHistory('page2')">
+                    <div class="menu-icon"><img src="assets/shalat.png" alt="নামাজ"></div>
+                    <div class="menu-text">নামাজ</div>
+                </div>
+
+                <div class="menu-item" onclick="goToPageWithHistory('page-dummy')">
+                    <div class="menu-icon"><img src="assets/mosque.png" alt="মসজিদে প্রবেশ করা"></div>
+                    <div class="menu-text">মসজিদে প্রবেশ করা</div>
+                </div>
+
+                <div class="menu-item" onclick="goToPageWithHistory('page-dummy')">
+                    <div class="menu-icon"><img src="assets/exit.png" alt="মসজিদ থেকে বের হওয়া"></div>
+                    <div class="menu-text">মসজিদ থেকে বের হওয়া</div>
+                </div>
+
+                <div class="menu-item" onclick="goToPageWithHistory('page-dummy')">
+                    <div class="menu-icon"><img src="assets/object.png" alt="টয়লেট / ইস্তিঞ্জা"></div>
+                    <div class="menu-text">টয়লেট / ইস্তিঞ্জা</div>
+                </div>
+
+                <div class="menu-item" onclick="goToPageWithHistory('page-dummy')">
+                    <div class="menu-icon"><img src="assets/wudhu.png" alt="ওজু"></div>
+                    <div class="menu-text">ওজু</div>
+                </div>
+
+                <div class="menu-item" onclick="goToPageWithHistory('page-dummy')">
+                    <div class="menu-icon"><img src="assets/islamic.png" alt="গোসল"></div>
+                    <div class="menu-text">গোসল</div>
+                </div>
+
+                <div class="menu-item" onclick="goToPageWithHistory('page-dummy')">
+                    <div class="menu-icon"><img src="assets/tayammum.png" alt="তায়াম্মুম"></div>
+                    <div class="menu-text">তায়াম্মুম</div>
+                </div>
+
+                <div class="menu-item" onclick="goToPageWithHistory('page-dummy')">
+                    <div class="menu-icon"><img src="assets/sleep.png" alt="ঘুমানো"></div>
+                    <div class="menu-text">ঘুমানো</div>
+                </div>
+
+                <div class="menu-item" onclick="goToPageWithHistory('page-dummy')">
+                    <div class="menu-icon"><img src="assets/wake-up.png" alt="ঘুম থেকে উঠা"></div>
+                    <div class="menu-text">ঘুম থেকে উঠা</div>
+                </div>
+            </div>
+
+            <!-- Page 2: Namaj Sub Menu -->
+            <div class="page" id="page2">
+                <div class="detail-text" style="text-align: center; margin-bottom: 20px; font-weight: 600; color: #2d5a4d;">নামাজ</div>
+                
+                <div class="menu-item" onclick="goToPageWithHistory('page3')">
+                    <div class="menu-icon"><img src="assets/shalat.png" alt="দাড়ানো অবস্থায়"></div>
+                    <div class="menu-text">দাড়ানো অবস্থায়</div>
+                </div>
+
+                <div class="menu-item" onclick="goToPageWithHistory('page-dummy')">
+                    <div class="menu-icon"><img src="assets/shalat.png" alt="কেরাত"></div>
+                    <div class="menu-text">কেরাত</div>
+                </div>
+
+                <div class="menu-item" onclick="goToPageWithHistory('page-dummy')">
+                    <div class="menu-icon"><img src="assets/shalat.png" alt="রুকুতে অবস্থায়"></div>
+                    <div class="menu-text">রুকুতে অবস্থায়</div>
+                </div>
+
+                <div class="menu-item" onclick="goToPageWithHistory('page-dummy')">
+                    <div class="menu-icon"><img src="assets/shalat.png" alt="সিজদারত অবস্থায়"></div>
+                    <div class="menu-text">সিজদারত অবস্থায়</div>
+                </div>
+
+                <div class="menu-item" onclick="goToPageWithHistory('page-dummy')">
+                    <div class="menu-icon"><img src="assets/shalat.png" alt="নামাজে বসা অবস্থায়"></div>
+                    <div class="menu-text">নামাজে বসা অবস্থায়</div>
+                </div>
+            </div>
+
+            <!-- Page 3: Daraning Avosthay Detail -->
+            <div class="page" id="page3">
+                <div class="detail-text" style="text-align: center; margin-bottom: 20px; font-weight: 600; color: #2d5a4d;">দাড়ানো অবস্থায়</div>
+                
+                <div class="detail-item">
+                    <div class="detail-number">(1)</div>
+                    <div class="detail-text-body">উভয় পায়ের আঙুল সমূহ কিবলামুখী রাখা এবং উভয় পায়ের মাবধানে চার আঙুল রাখা; উদ্ধর্বে একটি বিশিষ্ট পরিমান ফাঁকা রাখা।</div>
+                    <div class="reference">- নাসাঈ 692; মুসলামা ইবনে আবি শাইবা 7063</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-number">(2)</div>
+                    <div class="detail-text-body">তাকবীরে তাহরিমার সময় ছেহারা কেবলার দিকে রেখে নজর সিজদার জায়গায় রাখা এবং হাত উঠানের সময় মাথা ও পিঠ একই লাইনে থাকা।</div>
+                    <div class="reference">- তিরমিজি 304, মুসলিম 397</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-number">(3)</div>
+                    <div class="detail-text-body">পুরুষের জন্য তাকবীরে তাহরিমা বলার সময় উভয় হাত কাঁধ পর্যন্ত উঠানো - অথাৎ উভয় হাতের বুদ্ধাঙ্গুলি কানের লতি পর্যন্ত উঠানো।</div>
+                    <div class="reference">- মুসলিম 391</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-number">(4)</div>
+                    <div class="detail-text-body">হাত উঠানের সময় উভয় হাতের তালু কিবলামুখী রাখা।</div>
+                    <div class="reference">- তাবারানি আউসাত 7801</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-number">(5)</div>
+                    <div class="detail-text-body">হাত উঠানের সময় আঙুলসমূহ ফাঁকা রাখা। অর্থাৎ একেবারে মিলিয়েও না রাখা আবার বেশি ছড়িয়েও না রাখা।</div>
+                    <div class="reference">- মুআদারাইকে হাকিম-650</div>
+                </div>
+            </div>
+
+            <!-- Dummy Page for future content -->
+            <div class="page" id="page-dummy">
+                <div class="detail-text" style="text-align: center; padding: 40px 20px; color: #999;">
+                    শীঘ্রই আরও বিষয়বস্তু যোগ করা হবে...
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            সুনাহ - Islamic Practices Guide
+        </div>
+    </div>
+
+    <script>
+        let pageHistory = ['page1'];
+        
+        function goToPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            updateHeader(pageId);
+            document.querySelector('.content').scrollTop = 0;
+        }
+
+        function goToPageWithHistory(pageId) {
+            pageHistory.push(pageId);
+            goToPage(pageId);
+        }
+
+        function updateHeader(pageId) {
+            const backBtn = document.getElementById('backBtn');
+            const headerTitle = document.getElementById('headerTitle');
+
+            if (pageId === 'page1') {
+                backBtn.classList.remove('active');
+                headerTitle.textContent = 'সুনাহ';
+            } else if (pageId === 'page2') {
+                backBtn.classList.add('active');
+                headerTitle.textContent = 'নামাজ';
+            } else if (pageId === 'page3') {
+                backBtn.classList.add('active');
+                headerTitle.textContent = 'দাড়ানো অবস্থায়';
+            } else if (pageId === 'page-dummy') {
+                backBtn.classList.add('active');
+                headerTitle.textContent = 'বিবরণ';
+            }
+        }
+
+        document.getElementById('backBtn').addEventListener('click', function() {
+            if (pageHistory.length > 1) {
+                pageHistory.pop();
+                const previousPageId = pageHistory[pageHistory.length - 1];
+                goToPage(previousPageId);
+            }
+        });
+    </script>
+
+    
+      <!-- Navbar Loader -->
+<script src="navbar/navbar-loader.js"></script>
+</body>
+</html>

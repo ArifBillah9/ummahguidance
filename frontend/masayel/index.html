@@ -100,6 +100,7 @@
             font-family: inherit;
             color: #2C3E50;
             background: transparent;
+            cursor: text;
         }
 
         .search-bar input::placeholder {
@@ -598,10 +599,214 @@
             justify-content: center;
             gap: 5px;
             vertical-align: middle;
-            border: none;
-            cursor: pointer;
-            font-family: inherit;
         }
+
+        /* রেফারেন্স আইকন ইনলাইন স্টাইল - ব্যাকগ্রাউন্ড ছাড়া */
+        .ref-inline-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin-left: 6px;
+            vertical-align: baseline;
+            background: transparent;
+            color: transparent;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            border: none;
+            padding: 0;
+            position: relative;
+        }
+
+        .ref-inline-icon::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('/frontend/assets/reference.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.85;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .ref-inline-icon:hover::before {
+            opacity: 1;
+            transform: scale(1.15);
+        }
+
+        .ref-inline-icon i {
+            display: none;
+        }
+
+        /* রেফারেন্স মোডাল স্টাইল - উন্নত ডিজাইন */
+        .ref-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .ref-modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .ref-modal {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%);
+            border-radius: 16px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.2),
+                0 0 0 1px rgba(46, 204, 113, 0.1);
+            animation: slideUpModal 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 1px solid rgba(46, 204, 113, 0.2);
+        }
+
+        @keyframes slideUpModal {
+            from { 
+                transform: translateY(40px) scale(0.95);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .ref-modal-header {
+            padding: 24px 28px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #1B8A4A 0%, #2ECC71 100%);
+            border-radius: 16px 16px 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ref-modal-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="15" fill="rgba(255,255,255,0.05)"/><circle cx="80" cy="50" r="25" fill="rgba(255,255,255,0.03)"/><circle cx="50" cy="80" r="20" fill="rgba(255,255,255,0.04)"/></svg>');
+            background-size: 200px 200px;
+        }
+
+        .ref-modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .ref-modal-title i {
+            color: #FFD700;
+            font-size: 22px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .ref-modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ref-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .ref-modal-content {
+            padding: 28px;
+        }
+
+        .ref-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #E8F5E9 0%, #F1F8F5 100%);
+            color: #1B8A4A;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            border: 1px solid rgba(27, 138, 74, 0.2);
+            letter-spacing: 0.5px;
+        }
+
+        .ref-type-badge::before {
+            content: '📖';
+            font-size: 13px;
+        }
+
+        .ref-source-text {
+            font-size: 15px;
+            line-height: 1.7;
+            color: #2C3E50;
+            margin-bottom: 18px;
+        }
+
+        .ref-source-detail {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.08) 0%, rgba(46, 204, 113, 0.04) 100%);
+            border-left: 4px solid #1B8A4A;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #34495E;
+            margin-bottom: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .ref-source-detail:hover {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.12) 0%, rgba(46, 204, 113, 0.08) 100%);
+            transform: translateX(2px);
+        }
+
+        .ref-source-detail strong {
+            color: #1B8A4A;
+            font-weight: 700;
+        }
+     
 
         .ref-icon-btn {
             width: 22px;
@@ -1406,7 +1611,7 @@
                 likes: '28',
                 answerer: 'মুফতি ইউসুফ কাসেমী',
                 answererTitle: 'ইসলামী বিধান ও ফরায়েজ বিশেষজ্ঞ',
-                fullAnswer: '1. কার কত অংশ:\nমৃত ব্যক্তির ছেলে থাকার কারণে প্রত্যেকে নিম্নলিখিত অংশ পাবেন:\n• মা: এক ষষ্ঠমাংশ বা ছয় ভাগের এক ভাগ পাবে।\n• স্ত্রী: এক অষ্টমাংশ বা আট ভাগের এক ভাগ পাবে।\n• 1 ছেলে: আসাবাহ হিসেবে অবশিষ্ট সকল অংশ পাবে।\n• 3 ভাই ও 1 বোন: মৃত ব্যক্তির ছেলে বিদ্যমান থাকায় ভাই ও বোন সম্পূর্ণ বঞ্চিত হবেন। তারা কোনো অংশ পাবেন না।\n\nএখানে মোট সম্পত্তিকে 24 ভাগে ভাগ করে মা পাবেন 4 ভাগ, স্ত্রী পাবেন 3 ভাগ এবং ছেলে পাবেন 17 ভাগ।\n\n2. তিন লাখ টাকার বণ্টন:\n• মা: 50,000 টাকা\n• স্ত্রী: 37,500 টাকা\n• 1 ছেলে: 2,12,500 টাকা\n• 3 ভাই: 0 টাকা\n• 1 বোন: 0 টাকা\n\n3. দ্বিতীয় বিয়ের কারণে স্ত্রীর অংশের বিধান:\nস্বামীর মৃত্যুর সময় স্ত্রী জীবিত থাকলে মৃত স্বামীর সম্পত্তিতে স্ত্রীর অষ্টমাংশ পাওয়ার অধিকার স্থায়ীভাবে প্রতিষ্ঠিত হয়ে যায়। পরবর্তীতে ইদ্দত পালন শেষে তিনি অন্যত্র বিয়ে করলেও প্রথম স্বামীর সম্পত্তিতে তাঁর এই উত্তরাধিকার বাতিল হবে না। নির্ধারিত পুরো অংশই বহাল থাকবে।\n\n<span class="arabic-line">قال الله تعالى: وَلِأَبَوَيْهِ لِكُلِّ وَاحِدٍ مِنْهُمَا السُّدُسُ مِمَّا تَرَكَ إِنْ كَانَ لَهُ وَلَدٌ</span>\nسورة النساء، الآية: ١١\n\n<span class="arabic-line">قال الله تعالى: فَإِنْ كَانَ لَكُمْ وَلَدٌ فَلَهُنَّ الثُّمُنُ مِمَّا تَرَكْتُمْ</span>\nسورة النساء، الآية: ١٢\n\n<span class="arabic-line">قال رسول الله ﷺ: أَلْحِقُوا الْفَرَائِضَ بِأَهْلِهَا، فَمَا بَقِيَ فَهُوَ لِأَوْلَى رَجُلٍ ذَكَرٍ</span>\nصحيح البخاري، كتاب الفرائض، باب ميراث الولد من أبيه وأمه، رقم الحديث: ٦٣٥١\n\n<span class="arabic-line">لأن الميراث صار حقًا لها بموت الزوج من حيث الظاهر، فهما بشهادتهما أتلفا عليها الميراث بغير حق،</span>\nالمحيط البرهاني ٨/‏٥٤٨، كتاب الرجوع عن الشهادات، الفصل الخامس: في الرجوع عن الشهادة في النكاح والطلاق والدخول\n\n<span class="arabic-line">تستحق الميراث بوفاة زوجها فاستقر لها بوفاته مهرًا.</span>\nالتجريد للقدوري ٩/‏٤٦٥٨\n\nকারণ, স্বামীর মৃত্যুর মাধ্যমে মিরাস প্রকাশ্যভাবে স্ত্রীর অধিকারে পরিণত হয়ে যায় এবং তা তাঁর জন্য স্থায়ীভাবে প্রতিষ্ঠিত হয়ে যায়। তাই দ্বিতীয় বিয়ের কারণে এই অধিকার বাতিল হবে না।'
+                fullAnswer: '<div class="answer-with-refs"><h3>1. কার কত অংশ:</h3><p>মৃত ব্যক্তির ছেলে থাকার কারণে প্রত্যেকে নিম্নলিখিত অংশ পাবেন:</p><ul><li>মা: এক ষষ্ঠমাংশ বা ছয় ভাগের এক ভাগ পাবে। <span class="ref-inline-icon" onclick="openRefModal(\'ref1\')" title="রেফারেন্স দেখুন"><i class="fas fa-link"></i></span></li><li>স্ত্রী: এক অষ্টমাংশ বা আট ভাগের এক ভাগ পাবে। <span class="ref-inline-icon" onclick="openRefModal(\'ref2\')" title="রেফারেন্স দেখুন"><i class="fas fa-link"></i></span></li><li>1 ছেলে: আসাবাহ হিসেবে অবশিষ্ট সকল অংশ পাবে। <span class="ref-inline-icon" onclick="openRefModal(\'ref3\')" title="রেফারেন্স দেখুন"><i class="fas fa-link"></i></span></li><li>3 ভাই ও 1 বোন: মৃত ব্যক্তির ছেলে বিদ্যমান থাকায় ভাই ও বোন সম্পূর্ণ বঞ্চিত হবেন। তারা কোনো অংশ পাবেন না। <span class="ref-inline-icon" onclick="openRefModal(\'ref3\')" title="রেফারেন্স দেখুন"><i class="fas fa-link"></i></span></li></ul><p><strong>মোট সম্পত্তি বণ্টন:</strong> মোট সম্পত্তিকে 24 ভাগে ভাগ করে মা পাবেন 4 ভাগ, স্ত্রী পাবেন 3 ভাগ এবং ছেলে পাবেন 17 ভাগ।</p><h3>2. তিন লাখ টাকার বণ্টন:</h3><ul><li>মা: 50,000 টাকা</li><li>স্ত্রী: 37,500 টাকা</li><li>1 ছেলে: 2,12,500 টাকা</li><li>3 ভাই: 0 টাকা</li><li>1 বোন: 0 টাকা</li></ul><h3>3. দ্বিতীয় বিয়ের কারণে স্ত্রীর অংশের বিধান:</h3><p>স্বামীর মৃত্যুর সময় স্ত্রী জীবিত থাকলে মৃত স্বামীর সম্পত্তিতে স্ত্রীর অষ্টমাংশ পাওয়ার অধিকার স্থায়ীভাবে প্রতিষ্ঠিত হয়ে যায়। পরবর্তীতে ইদ্দত পালন শেষে তিনি অন্যত্র বিয়ে করলেও প্রথম স্বামীর সম্পত্তিতে তাঁর এই উত্তরাধিকার বাতিল হবে না। নির্ধারিত পুরো অংশই বহাল থাকবে। <span class="ref-inline-icon" onclick="openRefModal(\'ref4\')" title="রেফারেন্স দেখুন"><i class="fas fa-link"></i></span></p><p>কারণ, স্বামীর মৃত্যুর মাধ্যমে মিরাস প্রকাশ্যভাবে স্ত্রীর অধিকারে পরিণত হয়ে যায় এবং তা তাঁর জন্য স্থায়ীভাবে প্রতিষ্ঠিত হয়ে যায়। তাই দ্বিতীয় বিয়ের কারণে এই অধিকার বাতিল হবে না।</p></div>'
             },
             {
                 id: 22,
@@ -2099,8 +2304,130 @@
         });
     </script>
 
+        <!-- রেফারেন্স মোডাল -->
+        <div id="refModalOverlay" class="ref-modal-overlay">
+            <div class="ref-modal">
+                <div class="ref-modal-header">
+                    <div class="ref-modal-title">
+                        <i class="fas fa-book"></i>
+                        রেফারেন্স তথ্য
+                    </div>
+                    <button class="ref-modal-close" onclick="closeRefModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="ref-modal-content" id="refModalContent">
+                    <!-- রেফারেন্স কন্টেন্ট এখানে লোড হবে -->
+                </div>
+            </div>
+        </div>
+
       <!-- Navbar Loader -->
 <script src="navbar/navbar-loader.js"></script>
+
+<script>
+// রেফারেন্স ডাটা
+const referenceData = {
+    ref1: {
+        title: 'মায়ের অংশ (ষষ্ঠমাংশ)',
+        type: 'কুরআন',
+        source: 'সূরা আন-নিসা, আয়াত: ১১',
+        sourceText: 'وَلِأَبَوَيْهِ لِكُلِّ وَاحِدٍ مِنْهُمَا السُّدُسُ مِمَّا تَرَكَ إِنْ كَانَ لَهُ وَلَدٌ',
+        transliteration: 'Wa-li-abawayhi likulli wahidin minhuma al-sudus mimma taraka in kana lahu walad',
+        banglaTranslation: 'এবং তার উভয় পিতামাতার জন্য তাদের প্রত্যেকের জন্য যদি সন্তান থাকে তবে ছেড়ে যাওয়া সম্পত্তির ছয় ভাগের এক ভাগ।',
+        detail: 'যখন মৃত ব্যক্তির সন্তান থাকে তখন মা ষষ্ঠমাংশ পায়। এটি ফরায়েজ শাস্ত্রের মূল নীতি।'
+    },
+
+    ref2: {
+        title: 'স্ত্রীর অংশ (অষ্টমাংশ)',
+        type: 'কুরআন',
+        source: 'সূরা আন-নিসা, আয়াত: ১২',
+        sourceText: 'فَإِنْ كَانَ لَكُمْ وَلَدٌ فَلَهُنَّ الثُّمُنُ مِمَّا تَرَكْتُمْ',
+        transliteration: 'Fa-in kana lakum walad falahunna al-thumn mimma taraktum',
+        banglaTranslation: 'এবং যদি তোমাদের সন্তান থাকে তবে তাদের (স্ত্রীদের) জন্য তোমরা যা রেখে যাও তার অষ্টমাংশ।',
+        detail: 'স্বামীর মৃত্যুতে সন্তান থাকলে স্ত্রী অষ্টমাংশ পায়। এটি ইসলামী শরিয়তের একটি দৃঢ় বিধান।'
+    },
+
+    ref3: {
+        title: 'পুত্র এবং ভাই-বোনের অধিকার',
+        type: 'হাদীস',
+        source: 'সহীহ বুখারী - কিতাব আল-ফারায়েজ - ফ্রায়েজ অধ্যায়',
+        sourceText: 'أَلْحِقُوا الْفَرَائِضَ بِأَهْلِهَا، فَمَا بَقِيَ فَهُوَ لِأَوْلَى رَجُلٍ ذَكَرٍ',
+        transliteration: 'Alhaqu al-faraa\'id bi-ahliha, fa-ma baqiya fa-huwa li-awla rajul dhakr',
+        banglaTranslation: 'নির্ধারিত অংশগুলি তাদের যাওয়ার যোগ্য মানুষদের দিয়ে দিন, আর যা বাকি থাকে তা নিকটতম পুরুষ পুত্রের জন্য।',
+        detail: 'সরাসরি সন্তান থাকলে তার চেয়ে দূর সম্পর্কের লোক (ভাই-বোন) কোনো অংশ পায় না। সন্তান সমস্ত উত্তরাধিকার গ্রহণ করে আসাবাহ হিসেবে।'
+    },
+
+    ref4: {
+        title: 'দ্বিতীয় বিয়েতেও উত্তরাধিকার বহাল',
+        type: 'ফিকহের নীতি',
+        source: 'আল-মুহীত আল-বুরহানী - কতাব আল-রুজু',
+        sourceText: 'لأن الميراث صار حقًا لها بموت الزوج من حيث الظاهر، فاستقر لها بوفاته',
+        detail: 'স্বামীর মৃত্যুর সাথে সাথে উত্তরাধিকার স্ত্রীর অধিকারে চলে যায় এবং স্থায়ী হয়। পরবর্তী বিয়ে এই অধিকারকে বাতিল করে না কারণ এটি প্রথম স্বামীর মৃত্যুর মাধ্যমে ইতিমধ্যে প্রতিষ্ঠিত হয়েছে।',
+        banglaDetail: 'ইসলামী আইনে এটি একটি প্রতিষ্ঠিত নীতি যে উত্তরাধিকার একবার নির্ধারিত হলে দ্বিতীয় বিয়ে তা বাতিল করতে পারে না।'
+    }
+};
+    // রেফারেন্স মোডাল খোলার ফাংশন
+    function openRefModal(refId) {
+        const ref = referenceData[refId];
+        if (!ref) return;
+
+        const content = document.getElementById('refModalContent');
+        
+        let html = `
+            <div class="ref-type-badge">${ref.type}</div>
+            <h3 style="font-size: 16px; color: #1B3A5C; margin-bottom: 15px; font-weight: 700;">${ref.title}</h3>
+        `;
+
+        if (ref.sourceText) {
+            html += `
+                <div style="background: #FDF9F4; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-right: 3px solid #D4A574; direction: rtl; text-align: right;">
+                    <p style="font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif; font-size: 16px; color: #1B3A5C; line-height: 2; margin: 0;">${ref.sourceText}</p>
+                </div>
+            `;
+        }
+
+        html += `<div class="ref-source-detail"><strong>উৎস:</strong> ${ref.source}</div>`;
+
+        if (ref.transliteration) {
+            html += `<div class="ref-source-detail"><strong>লিপ্যন্তর:</strong> ${ref.transliteration}</div>`;
+        }
+
+        if (ref.banglaTranslation) {
+            html += `<div class="ref-source-detail"><strong>অনুবাদ:</strong> ${ref.banglaTranslation}</div>`;
+        }
+
+        if (ref.detail) {
+            html += `<div class="ref-source-text"><strong>ব্যাখ্যা:</strong> ${ref.detail}</div>`;
+        }
+
+        if (ref.banglaDetail) {
+            html += `<div class="ref-source-text">${ref.banglaDetail}</div>`;
+        }
+
+        content.innerHTML = html;
+        document.getElementById('refModalOverlay').classList.add('active');
+    }
+
+    // রেফারেন্স মোডাল বন্ধ করার ফাংশন
+    function closeRefModal() {
+        document.getElementById('refModalOverlay').classList.remove('active');
+    }
+
+    // ব্যাকগ্রাউন্ডে ক্লিক করলে মোডাল বন্ধ হবে
+    document.getElementById('refModalOverlay').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeRefModal();
+        }
+    });
+
+    // ESC কী চাপলে মোডাল বন্ধ হবে
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeRefModal();
+        }
+    });
+</script>
 
 </body>
 </html>
