@@ -273,6 +273,8 @@
   .menu-toggle svg line,
   .menu-toggle svg path{
     stroke:#000000;
+    stroke-linecap:round;
+    stroke-linejoin:round;
     opacity:1;
   }
 
@@ -606,6 +608,74 @@
     letter-spacing:0.5px;
     font-variant-numeric:tabular-nums;
     word-break:break-word;
+  }
+  
+  /* ===== MOBILE MENU (SIDEBAR) - FIXED ===== */
+  .mobile-menu{
+    position:fixed;
+    top:0;left:0;
+    width:100%;
+    height:100vh;
+    background:rgba(0,0,0,0);
+    z-index:9000;
+    pointer-events:none;
+    transition:all 0.3s ease;
+  }
+  .mobile-menu.active{
+    background:rgba(0,0,0,0.4);
+    pointer-events:auto;
+  }
+
+  .mobile-menu-overlay{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    cursor:pointer;
+  }
+
+  .mobile-menu-panel{
+    position:fixed;
+    top:0;
+    left:0;
+    width:280px;
+    height:100vh;
+    background:var(--menu-bg);
+    z-index:9001;
+    transform:translateX(-100%);
+    transition:transform 0.3s ease;
+    overflow-y:auto;
+    box-shadow:2px 0 8px rgba(0,0,0,0.15);
+  }
+
+  .mobile-menu.active .mobile-menu-panel{
+    transform:translateX(0);
+  }
+
+  .menu-item{
+    padding:16px 20px;
+    color:var(--menu-text-green);
+    border-bottom:1px solid rgba(0,0,0,0.05);
+    cursor:pointer;
+    transition:background 0.2s ease;
+    display:block;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:none;
+    font-family:inherit;
+    font-size:14px;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+
+  .menu-item:hover{
+    background:rgba(31,138,95,0.08);
+  }
+
+  .menu-item:active{
+    background:rgba(31,138,95,0.12);
   }
   
   /* Responsive improvements for ring-center */
@@ -2107,6 +2177,21 @@
           সেটিংস</a></li>
       </ul>
     </div>
+  </div>
+
+  <!-- ===== MOBILE MENU (SIDEBAR) - FIXED VERSION ===== -->
+  <div class="mobile-menu" id="mobileMenu">
+    <div class="mobile-menu-overlay" id="menuOverlay"></div>
+    <nav class="mobile-menu-panel">
+      <button class="menu-item mobile-menu-close" id="menuClose">বন্ধ করুন ✕</button>
+      <button class="menu-item" data-link="/">হোম</button>
+      <button class="menu-item" data-link="/quran">কুরআন</button>
+      <button class="menu-item" data-link="/hadith">হাদীস</button>
+      <button class="menu-item" data-link="/" id="navNotifLink2">নোটিফিকেশন</button>
+      <button class="menu-item" data-link="/settings">সেটিংস</button>
+      <button class="menu-item" data-link="/about">আমাদের সম্পর্কে</button>
+      <button class="menu-item" data-link="/contact">যোগাযোগ করুন</button>
+    </nav>
   </div>
 
   <div class="ring-section">
@@ -4648,6 +4733,150 @@
       }
     })
     .catch(err => console.log('ℹ navbar-loader.js লোড ব্যর্থ (ঐচ্ছিক)'));
+</script>
+
+<!-- ===== MOBILE MENU FIX SCRIPT ===== -->
+<script>
+(function(){
+  'use strict';
+  
+  // DOM Elements
+  const menuToggle = document.querySelector('.menu-toggle');
+  const mobileMenu = document.querySelector('#mobileMenu');
+  const menuOverlay = document.querySelector('#menuOverlay');
+  const closeBtn = document.querySelector('#menuClose');
+  const menuItems = document.querySelectorAll('.menu-item:not(.mobile-menu-close)');
+  
+  // Menu state - 🔑 CRITICAL
+  let menuOpen = false;
+  let isTransitioning = false;
+  
+  // Initialize - শুরুতে state সঠিক করুন
+  if(mobileMenu) {
+    mobileMenu.classList.remove('active');
+  }
+  
+  /**
+   * মেনু খুলুন - একবার শুধু
+   */
+  function openMenu() {
+    if(menuOpen || isTransitioning) return;
+    
+    isTransitioning = true;
+    menuOpen = true;
+    
+    if(mobileMenu) {
+      mobileMenu.classList.add('active');
+    }
+    document.body.style.overflow = 'hidden';
+    
+    setTimeout(() => {
+      isTransitioning = false;
+    }, 300);
+  }
+  
+  /**
+   * মেনু বন্ধ করুন - একবার শুধু
+   */
+  function closeMenu() {
+    if(!menuOpen || isTransitioning) return;
+    
+    isTransitioning = true;
+    menuOpen = false;
+    
+    if(mobileMenu) {
+      mobileMenu.classList.remove('active');
+    }
+    document.body.style.overflow = '';
+    
+    setTimeout(() => {
+      isTransitioning = false;
+    }, 300);
+  }
+  
+  /**
+   * মেনু টগল করুন
+   */
+  function toggleMenu(e) {
+    if(e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
+    if(menuOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  }
+  
+  // ===== EVENT LISTENERS =====
+  
+  // Remove duplicate listeners - Clone করুন
+  if(menuToggle) {
+    const newToggle = menuToggle.cloneNode(true);
+    menuToggle.parentNode.replaceChild(newToggle, menuToggle);
+    
+    const updatedToggle = document.querySelector('.menu-toggle');
+    updatedToggle.addEventListener('click', toggleMenu, false);
+  }
+  
+  // Overlay click
+  if(menuOverlay) {
+    menuOverlay.addEventListener('click', closeMenu, false);
+  }
+  
+  // Close button
+  if(closeBtn) {
+    closeBtn.addEventListener('click', closeMenu, false);
+  }
+  
+  // Menu items
+  menuItems.forEach(item => {
+    item.addEventListener('click', function(e) {
+      e.stopPropagation();
+      
+      // Link থাকলে navigate করুন
+      const link = this.getAttribute('data-link');
+      if(link) {
+        closeMenu();
+        setTimeout(() => {
+          window.location.href = link;
+        }, 150);
+      } else {
+        closeMenu();
+      }
+    }, false);
+  });
+  
+  // Escape key
+  document.addEventListener('keydown', function(e) {
+    if(e.key === 'Escape' && menuOpen && !isTransitioning) {
+      closeMenu();
+    }
+  }, false);
+  
+  // Panel click propagation বন্ধ করুন
+  if(mobileMenu) {
+    const panel = mobileMenu.querySelector('.mobile-menu-panel');
+    if(panel) {
+      panel.addEventListener('click', function(e) {
+        e.stopPropagation();
+      }, false);
+    }
+  }
+  
+  console.log('✓ মোবাইল মেনু ফিক্স সফল - প্রথম ক্লিকে কাজ করবে!');
+  
+  // Debug mode
+  window.MobileMenuDebug = {
+    isOpen: () => menuOpen,
+    open: () => openMenu(),
+    close: () => closeMenu(),
+    toggle: () => toggleMenu()
+  };
+  
+})();
 </script>
 
 </body>
