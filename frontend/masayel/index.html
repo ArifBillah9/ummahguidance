@@ -667,17 +667,34 @@
         }
 
         .ref-modal {
-            background: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%);
-            border-radius: 16px;
-            max-width: 520px;
-            width: 100%;
-            max-height: 80vh;
-            overflow-y: auto;
+            background: linear-gradient(135deg, #E8D4F8 0%, #F0E8F8 50%, #FFFFFF 100%);
+            border-radius: 28px;
+            max-width: 420px;
+            width: 95%;
+            padding: 50px 30px 35px;
             box-shadow: 
-                0 25px 50px rgba(0, 0, 0, 0.2),
-                0 0 0 1px rgba(46, 204, 113, 0.1);
+                0 30px 60px rgba(147, 51, 234, 0.25),
+                0 0 0 1px rgba(147, 51, 234, 0.15);
             animation: slideUpModal 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            border: 1px solid rgba(46, 204, 113, 0.2);
+            border: 2px solid rgba(147, 51, 234, 0.2);
+            text-align: center;
+            position: relative;
+            overflow: visible;
+            max-height: none;
+        }
+        
+        .ref-modal::before {
+            content: '';
+            position: absolute;
+            bottom: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 22px solid transparent;
+            border-right: 22px solid transparent;
+            border-top: 22px solid rgba(240, 232, 248, 1);
+            filter: drop-shadow(0 3px 6px rgba(147, 51, 234, 0.2));
         }
 
         @keyframes slideUpModal {
@@ -692,13 +709,13 @@
         }
 
         .ref-modal-header {
-            padding: 24px 28px;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-            display: flex;
+            padding: 0;
+            border-bottom: none;
+            display: none;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(135deg, #1B8A4A 0%, #2ECC71 100%);
-            border-radius: 16px 16px 0 0;
+            background: transparent;
+            border-radius: 0;
             position: relative;
             overflow: hidden;
         }
@@ -755,56 +772,104 @@
         }
 
         .ref-modal-content {
-            padding: 28px;
+            padding: 0;
+            text-align: center;
         }
 
         .ref-type-badge {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: linear-gradient(135deg, #E8F5E9 0%, #F1F8F5 100%);
-            color: #1B8A4A;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 11px;
+            background: linear-gradient(135deg, #D946EF 0%, #EC4899 100%);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: 700;
             text-transform: uppercase;
-            margin-bottom: 16px;
-            border: 1px solid rgba(27, 138, 74, 0.2);
-            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            border: none;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(217, 70, 239, 0.3);
         }
 
         .ref-type-badge::before {
-            content: '📖';
-            font-size: 13px;
+            content: '🔒';
+            font-size: 14px;
+            margin-right: 2px;
         }
 
         .ref-source-text {
             font-size: 15px;
             line-height: 1.7;
-            color: #2C3E50;
-            margin-bottom: 18px;
+            color: #5B7288;
+            margin-bottom: 0;
+            display: none;
         }
 
         .ref-source-detail {
-            background: linear-gradient(135deg, rgba(46, 204, 113, 0.08) 0%, rgba(46, 204, 113, 0.04) 100%);
-            border-left: 4px solid #1B8A4A;
-            padding: 16px;
-            border-radius: 8px;
+            background: transparent;
+            border-left: none;
+            padding: 0;
+            border-radius: 0;
             font-size: 13px;
             color: #34495E;
-            margin-bottom: 14px;
+            margin-bottom: 0;
             transition: all 0.3s ease;
+            display: none;
         }
 
         .ref-source-detail:hover {
-            background: linear-gradient(135deg, rgba(46, 204, 113, 0.12) 0%, rgba(46, 204, 113, 0.08) 100%);
-            transform: translateX(2px);
+            background: transparent;
+            transform: none;
         }
 
         .ref-source-detail strong {
             color: #1B8A4A;
             font-weight: 700;
+        }
+        
+        .ref-modal-content h3 {
+            display: none;
+        }
+        
+        .ref-modal-content::before {
+            content: 'আপগ্রেড করুন ব্যবসায়িক প্ল্যানে আজই রেফারেন্স সুবিধা পেতে';
+            display: block;
+            font-size: 18px;
+            font-weight: 600;
+            color: #4C63D2;
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+        
+        .ref-modal-content::after {
+            content: 'এই প্রিমিয়াম ফিচার আনলক করতে এখনই আপগ্রেড করুন এবং 10% ছাড় পান।';
+            display: block;
+            font-size: 15px;
+            color: #6B7280;
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+        
+        .ref-upgrade-btn {
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            font-family: inherit;
+        }
+        
+        .ref-upgrade-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+            background: linear-gradient(135deg, #5B63E1 0%, #7C3AED 100%);
         }
      
 
@@ -2369,41 +2434,12 @@ const referenceData = {
 };
     // রেফারেন্স মোডাল খোলার ফাংশন
     function openRefModal(refId) {
-        const ref = referenceData[refId];
-        if (!ref) return;
-
         const content = document.getElementById('refModalContent');
         
         let html = `
-            <div class="ref-type-badge">${ref.type}</div>
-            <h3 style="font-size: 16px; color: #1B3A5C; margin-bottom: 15px; font-weight: 700;">${ref.title}</h3>
+            <div class="ref-type-badge">প্রিমিয়াম ফিচার</div>
+            <button class="ref-upgrade-btn" onclick="alert('আপগ্রেড পেজে যান')">আপগ্রেড করুন</button>
         `;
-
-        if (ref.sourceText) {
-            html += `
-                <div style="background: #FDF9F4; padding: 12px; border-radius: 6px; margin-bottom: 12px; border-right: 3px solid #D4A574; direction: rtl; text-align: right;">
-                    <p style="font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif; font-size: 16px; color: #1B3A5C; line-height: 2; margin: 0;">${ref.sourceText}</p>
-                </div>
-            `;
-        }
-
-        html += `<div class="ref-source-detail"><strong>উৎস:</strong> ${ref.source}</div>`;
-
-        if (ref.transliteration) {
-            html += `<div class="ref-source-detail"><strong>লিপ্যন্তর:</strong> ${ref.transliteration}</div>`;
-        }
-
-        if (ref.banglaTranslation) {
-            html += `<div class="ref-source-detail"><strong>অনুবাদ:</strong> ${ref.banglaTranslation}</div>`;
-        }
-
-        if (ref.detail) {
-            html += `<div class="ref-source-text"><strong>ব্যাখ্যা:</strong> ${ref.detail}</div>`;
-        }
-
-        if (ref.banglaDetail) {
-            html += `<div class="ref-source-text">${ref.banglaDetail}</div>`;
-        }
 
         content.innerHTML = html;
         document.getElementById('refModalOverlay').classList.add('active');
