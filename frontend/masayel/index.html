@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>মাসআলা তালিকা</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&subset=arabic&display=swap" rel="stylesheet">
     <style>
                @font-face{
     font-family:'Kalpurush';
@@ -213,7 +216,7 @@
             letter-spacing: 0.8px;
             display: inline-block;
             padding: 4px 8px;
-            background: #F8F9FA;
+            background: #FFFFFF;
             border-radius: 3px;
             width: fit-content;
         }
@@ -505,7 +508,7 @@
         }
 
         .arabic-box p {
-            font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif;
+            font-family: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
             font-size: 18px;
             line-height: 1.55;
             color: #1B3A5C;
@@ -558,41 +561,17 @@
             margin-bottom: 16px;
         }
 
-        .answer-text .ref-icon-btn {
-            display: inline-flex;
-            margin-left: 8px;
-            vertical-align: baseline;
-            float: right;
-            margin-top: -28px;
-            width: 32px;
-            height: 32px;
-            font-size: 15px;
-            background: linear-gradient(135deg, rgba(27, 138, 74, 0.15) 0%, rgba(46, 204, 113, 0.15) 100%);
-            color: #1B8A4A;
-            border-radius: 8px;
-            border: 1px solid rgba(46, 204, 113, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .answer-text .ref-icon-btn:hover {
-            background: linear-gradient(135deg, #1B8A4A 0%, #27AE60 100%);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(27, 138, 74, 0.2);
-        }
-
         /* ========== ARABIC QUOTE LINE ========== */
         .arabic-line {
             display: inline-block;
-            font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif;
+            font-family: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
             font-size: 19px;
             line-height: 2;
             color: #1B3A5C;
             direction: rtl;
         }
 
-        /* ========== REFERENCE ICON (hides raw references, opens popup) ========== */
-        .ref-icon-btn,
+        /* ========== REFERENCE ICON (কোনো ব্যাকগ্রাউন্ড ছাড়া প্লেইন আইকন) ========== */
         .ref-line-btn {
             display: inline-flex;
             align-items: center;
@@ -601,69 +580,92 @@
             vertical-align: middle;
         }
 
-        /* রেফারেন্স আইকন ইনলাইন স্টাইল - ব্যাকগ্রাউন্ড ছাড়া */
-        .ref-inline-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 24px;
-            height: 24px;
-            margin-left: 6px;
-            vertical-align: baseline;
-            background: transparent;
-            color: transparent;
-            border-radius: 0;
+        .ref-icon {
             cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s ease;
+            color: #1B8A4A;
+            margin: 0 4px;
+            font-size: 14px;
+            background: none;
             border: none;
-            padding: 0;
-            position: relative;
+            vertical-align: middle;
         }
 
-        .ref-inline-icon::before {
+        /* ========== রেফারেন্স টুলটিপ (আইকনে ক্লিক করলে পাশে শুধু আরবি টেক্সট দেখাবে) ========== */
+        .ref-tooltip-popup {
+            position: absolute;
+            z-index: 2000;
+            width: 280px;
+            max-width: calc(100vw - 24px);
+            background: #FFFFFF;
+            border-radius: 0;
+            box-shadow: 0 16px 40px rgba(27, 58, 92, 0.22), 0 0 0 1px rgba(27, 58, 92, 0.06);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(6px) scale(0.96);
+            transition: opacity 0.16s ease, transform 0.16s ease;
+            pointer-events: none;
+        }
+
+        .ref-tooltip-popup.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .ref-tooltip-popup::after {
             content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: url('assets/reference.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0.85;
-            transition: opacity 0.3s ease, transform 0.3s ease;
+            width: 14px;
+            height: 14px;
+            background: #FFFFFF;
+            transform: rotate(45deg);
+            left: var(--ref-arrow-left, 24px);
         }
 
-        .ref-inline-icon:hover::before {
-            opacity: 1;
-            transform: scale(1.15);
+        .ref-tooltip-popup.ref-arrow-top::after {
+            top: -7px;
+            box-shadow: -2px -2px 4px rgba(27, 58, 92, 0.05);
         }
 
-        .ref-inline-icon i {
-            display: none;
+        .ref-tooltip-popup.ref-arrow-bottom::after {
+            bottom: -7px;
+            box-shadow: 2px 2px 4px rgba(27, 58, 92, 0.05);
         }
 
-        /* রেফারেন্স মোডাল স্টাইল - উন্নত ডিজাইন */
-        .ref-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.55);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            padding: 20px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            backdrop-filter: blur(4px);
+        .ref-tooltip-arabic {
+            direction: rtl;
+            font-size: 16px;
+            line-height: 1.9;
+            color: #1B3A5C;
+            background: #FFFFFF;
+            padding: 14px 16px;
+            border-radius: 0;
+            font-family: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
         }
 
-        .ref-modal-overlay.active {
-            display: flex;
-            opacity: 1;
+        .ref-tooltip-arabic + .ref-tooltip-arabic {
+            margin-top: 6px;
+        }
+
+        .ref-tooltip-source-ar {
+            direction: rtl;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #1B8A4A;
+            background: #FFFFFF;
+            padding: 0 16px 12px;
+            margin-top: -6px;
+            font-family: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
+        }
+
+        .ref-tooltip-empty {
+            direction: rtl;
+            font-size: 13px;
+            color: #95A5A6;
+            background: #FFFFFF;
+            padding: 14px 16px;
+            text-align: center;
         }
 
         .ref-modal {
@@ -731,24 +733,6 @@
             background-size: 200px 200px;
         }
 
-        .ref-modal-title {
-            font-size: 18px;
-            font-weight: 800;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            position: relative;
-            z-index: 1;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        }
-
-        .ref-modal-title i {
-            color: #FFD700;
-            font-size: 22px;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-        }
-
         .ref-modal-close {
             background: rgba(255, 255, 255, 0.2);
             border: none;
@@ -771,125 +755,6 @@
             transform: rotate(90deg);
         }
 
-        .ref-modal-content {
-            padding: 0;
-            text-align: center;
-        }
-
-        .ref-type-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: linear-gradient(135deg, #D946EF 0%, #EC4899 100%);
-            color: white;
-            padding: 8px 18px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-            border: none;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 12px rgba(217, 70, 239, 0.3);
-        }
-
-        .ref-type-badge::before {
-            content: '🔒';
-            font-size: 14px;
-            margin-right: 2px;
-        }
-
-        .ref-source-text {
-            font-size: 15px;
-            line-height: 1.7;
-            color: #5B7288;
-            margin-bottom: 0;
-            display: none;
-        }
-
-        .ref-source-detail {
-            background: transparent;
-            border-left: none;
-            padding: 0;
-            border-radius: 0;
-            font-size: 13px;
-            color: #34495E;
-            margin-bottom: 0;
-            transition: all 0.3s ease;
-            display: none;
-        }
-
-        .ref-source-detail:hover {
-            background: transparent;
-            transform: none;
-        }
-
-        .ref-source-detail strong {
-            color: #1B8A4A;
-            font-weight: 700;
-        }
-        
-        .ref-modal-content h3 {
-            display: none;
-        }
-        
-        .ref-modal-content::before {
-            content: 'আপগ্রেড করুন ব্যবসায়িক প্ল্যানে আজই রেফারেন্স সুবিধা পেতে';
-            display: block;
-            font-size: 18px;
-            font-weight: 600;
-            color: #4C63D2;
-            margin-bottom: 16px;
-            line-height: 1.4;
-        }
-        
-        .ref-modal-content::after {
-            content: 'এই প্রিমিয়াম ফিচার আনলক করতে এখনই আপগ্রেড করুন এবং 10% ছাড় পান।';
-            display: block;
-            font-size: 15px;
-            color: #6B7280;
-            margin-bottom: 24px;
-            line-height: 1.5;
-        }
-        
-        .ref-upgrade-btn {
-            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
-            color: white;
-            border: none;
-            padding: 12px 32px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-            font-family: inherit;
-        }
-        
-        .ref-upgrade-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
-            background: linear-gradient(135deg, #5B63E1 0%, #7C3AED 100%);
-        }
-     
-
-        .ref-icon-btn {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: rgba(46, 204, 113, 0.12);
-            color: #1B8A4A;
-            font-size: 11px;
-            margin: 0 2px;
-            transition: all 0.25s ease;
-        }
-
-        .ref-icon-btn:hover {
-            background: #2ECC71;
-            color: #fff;
-            transform: scale(1.08);
-        }
-
         .ref-line-wrap {
             display: block;
             text-align: right;
@@ -910,25 +775,6 @@
             color: #fff;
         }
 
-        /* ========== REFERENCE POPUP MODAL ========== */
-        .ref-modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(27, 58, 92, 0.45);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.25s ease;
-            z-index: 999;
-            padding: 20px;
-        }
-
-        .ref-modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
 
         .ref-modal {
             background: #fff;
@@ -942,10 +788,6 @@
             transform: scale(0.95);
             transition: transform 0.25s ease;
             box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-        }
-
-        .ref-modal-overlay.active .ref-modal {
-            transform: scale(1);
         }
 
         .ref-modal-header {
@@ -1068,7 +910,7 @@
         }
 
         .ref-item-arabic {
-            font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif;
+            font-family: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
             font-size: 18px;
             line-height: 1.9;
             color: #1B3A5C;
@@ -1088,7 +930,7 @@
         .ref-item-text-rtl {
             direction: rtl;
             text-align: right;
-            font-family: 'Traditional Arabic', 'Amiri', 'Scheherazade New', serif;
+            font-family: 'Amiri', 'Traditional Arabic', 'Scheherazade New', serif;
             font-size: 16px;
             line-height: 1.9;
         }
@@ -1098,208 +940,6 @@
             color: #95A5A6;
             font-size: 13px;
             padding: 24px 10px;
-        }
-
-        /* ========== SHARE MODAL STYLES ========== */
-        .share-modal-body {
-            padding: 16px;
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .share-title-box {
-            background: #F8F7F4;
-            padding: 14px;
-            border-radius: 8px;
-            margin-bottom: 18px;
-        }
-
-        .share-title-box h3 {
-            font-size: 15px;
-            color: #1B3A5C;
-            margin: 0;
-            line-height: 1.5;
-            font-weight: 700;
-        }
-
-        .share-section {
-            margin-bottom: 18px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #E4EEE6;
-        }
-
-        .share-section:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .share-label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            font-weight: 700;
-            color: #1B3A5C;
-            margin-bottom: 10px;
-        }
-
-        .share-label i {
-            color: #2ECC71;
-            font-size: 13px;
-        }
-
-        .share-input-group {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-
-        .share-input {
-            flex: 1;
-            padding: 10px 12px;
-            border: 1px solid #DCEEE0;
-            border-radius: 6px;
-            font-size: 13px;
-            font-family: 'Courier New', monospace;
-            color: #2C3E50;
-            background: #F8F9FA;
-        }
-
-        .share-input:focus {
-            outline: none;
-            border-color: #2ECC71;
-            background: white;
-        }
-
-        .share-copy-btn {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #1B8A4A 0%, #27AE60 100%);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .share-copy-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(27, 138, 74, 0.3);
-        }
-
-        .share-text-box {
-            background: #F8F9FA;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #E4EEE6;
-            font-size: 12px;
-            color: #2C3E50;
-            line-height: 1.6;
-            word-break: break-word;
-            max-height: 100px;
-            overflow-y: auto;
-            margin-bottom: 10px;
-            white-space: pre-wrap;
-        }
-
-        .share-text-copy-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            width: 100%;
-            justify-content: center;
-            padding: 10px 14px;
-            background: linear-gradient(135deg, #1B8A4A 0%, #27AE60 100%);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.3s ease;
-        }
-
-        .share-text-copy-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(27, 138, 74, 0.3);
-        }
-
-        .share-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .social-share-btn {
-            width: 45px;
-            height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            font-size: 18px;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-        }
-
-        .social-share-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        .social-share-btn.facebook {
-            background: #1877F2;
-        }
-
-        .social-share-btn.whatsapp {
-            background: #25D366;
-        }
-
-        .social-share-btn.twitter {
-            background: #1DA1F2;
-        }
-
-        .social-share-btn.telegram {
-            background: #0088cc;
-        }
-
-        .social-share-btn.email {
-            background: #EA4335;
-        }
-
-        .share-native-btn {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 16px;
-            background: linear-gradient(135deg, #2C5282 0%, #1B3A5C 100%);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.3s ease;
-            margin-top: 12px;
-        }
-
-        .share-native-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(44, 82, 130, 0.3);
         }
 
         .ref-final-row { margin-top: 14px; }
@@ -1495,7 +1135,7 @@
             color: #95A5A6;
             font-weight: 600;
             padding: 4px 8px;
-            background: #F8F9FA;
+            background: #FFFFFF;
             border-radius: 3px;
         }
 
@@ -1590,75 +1230,6 @@
         </div>
     </div>
 
-    <!-- রেফারেন্স পপআপ (আয়াত/হাদিস/কিতাব রেফারেন্স গোপন রেখে আইকনে ক্লিকে দেখানো হয়) -->
-    <div class="ref-modal-overlay" id="refModalOverlay" onclick="if(event.target.id === 'refModalOverlay') closeRefPopup(event)">
-        <div class="ref-modal" onclick="event.stopPropagation()">
-            <div class="ref-modal-header">
-                <span><i class="fas fa-book-quran"></i> রেফারেন্স</span>
-                <button class="ref-modal-close" onclick="document.getElementById('refModalOverlay').classList.remove('active')"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="ref-modal-body" id="refModalBody"></div>
-        </div>
-    </div>
-
-    <!-- শেয়ার মডাল -->
-    <div class="ref-modal-overlay" id="shareModalOverlay" onclick="if(event.target.id === 'shareModalOverlay') closeShareModal()">
-        <div class="ref-modal" onclick="event.stopPropagation()">
-            <div class="ref-modal-header">
-                <span><i class="fas fa-share-alt"></i> শেয়ার করুন</span>
-                <button class="ref-modal-close" onclick="closeShareModal()"><i class="fas fa-times"></i></button>
-            </div>
-            <div class="share-modal-body">
-                <div class="share-title-box">
-                    <h3 id="shareTitle"></h3>
-                </div>
-
-                <div class="share-section">
-                    <label class="share-label"><i class="fas fa-link"></i> লিংক কপি করুন</label>
-                    <div class="share-input-group">
-                        <input type="text" id="shareUrl" class="share-input" readonly>
-                        <button class="share-copy-btn" onclick="copyShareLink()" title="লিংক কপি করুন">
-                            <i class="fas fa-copy"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div class="share-section">
-                    <label class="share-label"><i class="fas fa-message"></i> সম্পূর্ণ টেক্সট কপি করুন</label>
-                    <div class="share-text-box" id="shareText"></div>
-                    <button class="share-text-copy-btn" onclick="copyShareText()">
-                        <i class="fas fa-copy"></i> টেক্সট কপি করুন
-                    </button>
-                </div>
-
-                <div class="share-section">
-                    <label class="share-label"><i class="fas fa-share-nodes"></i> অন্যান্য মাধ্যমে শেয়ার করুন</label>
-                    <div class="share-buttons">
-                        <button class="social-share-btn facebook" onclick="shareTo('facebook')" title="ফেসবুকে শেয়ার করুন">
-                            <i class="fab fa-facebook-f"></i>
-                        </button>
-                        <button class="social-share-btn whatsapp" onclick="shareTo('whatsapp')" title="হোয়াটসঅ্যাপে শেয়ার করুন">
-                            <i class="fab fa-whatsapp"></i>
-                        </button>
-                        <button class="social-share-btn twitter" onclick="shareTo('twitter')" title="টুইটারে শেয়ার করুন">
-                            <i class="fab fa-twitter"></i>
-                        </button>
-                        <button class="social-share-btn telegram" onclick="shareTo('telegram')" title="টেলিগ্রামে শেয়ার করুন">
-                            <i class="fab fa-telegram"></i>
-                        </button>
-                        <button class="social-share-btn email" onclick="shareTo('email')" title="ইমেইলে শেয়ার করুন">
-                            <i class="fas fa-envelope"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <button class="share-native-btn" id="nativeShareBtn" onclick="nativeShare()" style="display:none;">
-                    <i class="fas fa-share"></i> নেটিভ শেয়ার
-                </button>
-            </div>
-        </div>
-    </div>
-
     <script>
         // বাংলা সংখ্যা ডেটা
         const masailsData = [
@@ -1676,7 +1247,7 @@
                 likes: '28',
                 answerer: 'মুফতি ইউসুফ কাসেমী',
                 answererTitle: 'ইসলামী বিধান ও ফরায়েজ বিশেষজ্ঞ',
-                fullAnswer: '<div class="answer-with-refs"><h3>1. কার কত অংশ:</h3><p>মৃত ব্যক্তির ছেলে থাকার কারণে প্রত্যেকে নিম্নলিখিত অংশ পাবেন:</p><ul><li>মা: এক ষষ্ঠমাংশ বা ছয় ভাগের এক ভাগ পাবে। <span class="ref-inline-icon" onclick="openRefModal(\'ref1\')" title="রেফারেন্স দেখুন"><i class="fas fa-link"></i></span></li><li>স্ত্রী: এক অষ্টমাংশ বা আট ভাগের এক ভাগ পাবে। <span class="ref-inline-icon" onclick="openRefModal(\'ref2\')" title="রেফারেন্স দেখুন"><i class="fas fa-link"></i></span></li><li>1 ছেলে: আসাবাহ হিসেবে অবশিষ্ট সকল অংশ পাবে। <span class="ref-inline-icon" onclick="openRefModal(\'ref3\')" title="রেফারেন্স দেখুন"><i class="fas fa-link"></i></span></li><li>3 ভাই ও 1 বোন: মৃত ব্যক্তির ছেলে বিদ্যমান থাকায় ভাই ও বোন সম্পূর্ণ বঞ্চিত হবেন। তারা কোনো অংশ পাবেন না। <span class="ref-inline-icon" onclick="openRefModal(\'ref3\')" title="রেফারেন্স দেখুন"><i class="fas fa-link"></i></span></li></ul><p><strong>মোট সম্পত্তি বণ্টন:</strong> মোট সম্পত্তিকে 24 ভাগে ভাগ করে মা পাবেন 4 ভাগ, স্ত্রী পাবেন 3 ভাগ এবং ছেলে পাবেন 17 ভাগ।</p><h3>2. তিন লাখ টাকার বণ্টন:</h3><ul><li>মা: 50,000 টাকা</li><li>স্ত্রী: 37,500 টাকা</li><li>1 ছেলে: 2,12,500 টাকা</li><li>3 ভাই: 0 টাকা</li><li>1 বোন: 0 টাকা</li></ul><h3>3. দ্বিতীয় বিয়ের কারণে স্ত্রীর অংশের বিধান:</h3><p>স্বামীর মৃত্যুর সময় স্ত্রী জীবিত থাকলে মৃত স্বামীর সম্পত্তিতে স্ত্রীর অষ্টমাংশ পাওয়ার অধিকার স্থায়ীভাবে প্রতিষ্ঠিত হয়ে যায়। পরবর্তীতে ইদ্দত পালন শেষে তিনি অন্যত্র বিয়ে করলেও প্রথম স্বামীর সম্পত্তিতে তাঁর এই উত্তরাধিকার বাতিল হবে না। নির্ধারিত পুরো অংশই বহাল থাকবে। <span class="ref-inline-icon" onclick="openRefModal(\'ref4\')" title="রেফারেন্স দেখুন"><i class="fas fa-link"></i></span></p><p>কারণ, স্বামীর মৃত্যুর মাধ্যমে মিরাস প্রকাশ্যভাবে স্ত্রীর অধিকারে পরিণত হয়ে যায় এবং তা তাঁর জন্য স্থায়ীভাবে প্রতিষ্ঠিত হয়ে যায়। তাই দ্বিতীয় বিয়ের কারণে এই অধিকার বাতিল হবে না।</p></div>'
+                fullAnswer: '<div class="answer-with-refs"><h3>1. কার কত অংশ:</h3><p>মৃত ব্যক্তির ছেলে থাকার কারণে প্রত্যেকে নিম্নলিখিত অংশ পাবেন:</p><ul><li>মা: এক ষষ্ঠমাংশ বা ছয় ভাগের এক ভাগ পাবে। <i class="fa-solid fa-book-bookmark ref-icon" onclick="openRefModal(\'ref1\')" title="রেফারেন্স দেখুন"></i></li><li>স্ত্রী: এক অষ্টমাংশ বা আট ভাগের এক ভাগ পাবে। <i class="fa-solid fa-book-bookmark ref-icon" onclick="openRefModal(\'ref2\')" title="রেফারেন্স দেখুন"></i></li><li>1 ছেলে: আসাবাহ হিসেবে অবশিষ্ট সকল অংশ পাবে। <i class="fa-solid fa-book-bookmark ref-icon" onclick="openRefModal(\'ref3\')" title="রেফারেন্স দেখুন"></i></li><li>3 ভাই ও 1 বোন: মৃত ব্যক্তির ছেলে বিদ্যমান থাকায় ভাই ও বোন সম্পূর্ণ বঞ্চিত হবেন। তারা কোনো অংশ পাবেন না। <i class="fa-solid fa-book-bookmark ref-icon" onclick="openRefModal(\'ref3\')" title="রেফারেন্স দেখুন"></i></li></ul><p><strong>মোট সম্পত্তি বণ্টন:</strong> মোট সম্পত্তিকে 24 ভাগে ভাগ করে মা পাবেন 4 ভাগ, স্ত্রী পাবেন 3 ভাগ এবং ছেলে পাবেন 17 ভাগ।</p><h3>2. তিন লাখ টাকার বণ্টন:</h3><ul><li>মা: 50,000 টাকা</li><li>স্ত্রী: 37,500 টাকা</li><li>1 ছেলে: 2,12,500 টাকা</li><li>3 ভাই: 0 টাকা</li><li>1 বোন: 0 টাকা</li></ul><h3>3. দ্বিতীয় বিয়ের কারণে স্ত্রীর অংশের বিধান:</h3><p>স্বামীর মৃত্যুর সময় স্ত্রী জীবিত থাকলে মৃত স্বামীর সম্পত্তিতে স্ত্রীর অষ্টমাংশ পাওয়ার অধিকার স্থায়ীভাবে প্রতিষ্ঠিত হয়ে যায়। পরবর্তীতে ইদ্দত পালন শেষে তিনি অন্যত্র বিয়ে করলেও প্রথম স্বামীর সম্পত্তিতে তাঁর এই উত্তরাধিকার বাতিল হবে না। নির্ধারিত পুরো অংশই বহাল থাকবে। <i class="fa-solid fa-book-bookmark ref-icon" onclick="openRefModal(\'ref4\')" title="রেফারেন্স দেখুন"></i></p><p>কারণ, স্বামীর মৃত্যুর মাধ্যমে মিরাস প্রকাশ্যভাবে স্ত্রীর অধিকারে পরিণত হয়ে যায় এবং তা তাঁর জন্য স্থায়ীভাবে প্রতিষ্ঠিত হয়ে যায়। তাই দ্বিতীয় বিয়ের কারণে এই অধিকার বাতিল হবে না।</p></div>'
             },
             {
                 id: 22,
@@ -1864,46 +1435,44 @@
             return paragraphs.filter(Boolean).join('');
         }
 
-        // Modal বন্ধ করুন
-        function closeRefPopup(event) {
-            // যদি overlay এর উপর সরাসরি ক্লিক হয় তাহলেই বন্ধ করুন (modal এর উপর নয়)
-            if (event && event.target.id === 'refModalOverlay') {
-                document.getElementById('refModalOverlay').classList.remove('active');
-            } else if (!event) {
-                // ক্লোজ বাটন থেকে event ছাড়াই কল হলে
-                document.getElementById('refModalOverlay').classList.remove('active');
-            }
-        }
-
-        // পুরো উত্তরের সকল দলিল/হাওলা একসাথে পপআপে দেখানো (একদম শেষের একটিমাত্র রেফারেন্স আইকনে ক্লিক করলে)
-        function isArabicText(str) {
-            return /[\u0600-\u06FF\u0750-\u077F]/.test(str);
-        }
-
+        // পুরো উত্তরের সকল দলিল/হাওলা আইকনের পাশে টুলটিপ আকারে দেখানো (একদম শেষের একটিমাত্র রেফারেন্স আইকনে ক্লিক করলে)
         function openRefPopup() {
-            const body = document.getElementById('refModalBody');
+            const iconEl = (window.event && window.event.currentTarget) || null;
+            if (!iconEl) return;
 
+            if (currentRefTooltipIcon === iconEl && currentRefTooltipEl) {
+                closeRefTooltip();
+                return;
+            }
+            closeRefTooltip();
+
+            let html;
             if (!currentRefs.length) {
-                body.innerHTML = '<div class="ref-empty">এই উত্তরের জন্য কোনো রেফারেন্স যোগ করা হয়নি।</div>';
+                html = '<div class="ref-tooltip-empty">এই উত্তরের জন্য কোনো রেফারেন্স যোগ করা হয়নি।</div>';
             } else {
-                let refHtml = currentRefs.map((group, gIdx) => group.map((item, iIdx) => {
-                    const combined = item.arabic ? `${escapeHtml(item.arabic)}<br>${escapeHtml(item.source)}` : escapeHtml(item.source);
-                    const rtl = isArabicText(item.arabic || item.source);
-                    return `<div class="ref-item-text${rtl ? ' ref-item-text-rtl' : ''}">${combined}</div>`;
+                html = currentRefs.map(group => group.map(item => {
+                    const text = item.arabic || item.source;
+                    return `<div class="ref-tooltip-arabic">${escapeHtml(text)}</div>`;
                 }).join('')).join('');
-
-                refHtml += `
-                    <div class="ref-all-copy-container">
-                        <button type="button" class="ref-copy-all-btn" onclick="copyAllReferences()">
-                            <i class="fas fa-copy"></i><span>সকল রেফারেন্স কপি করুন</span>
-                        </button>
-                    </div>
-                `;
-
-                body.innerHTML = refHtml;
             }
 
-            document.getElementById('refModalOverlay').classList.add('active');
+            const tooltip = document.createElement('div');
+            tooltip.className = 'ref-tooltip-popup';
+            tooltip.innerHTML = html;
+            document.body.appendChild(tooltip);
+
+            currentRefTooltipEl = tooltip;
+            currentRefTooltipIcon = iconEl;
+
+            positionRefTooltip(tooltip, iconEl);
+            requestAnimationFrame(() => tooltip.classList.add('active'));
+
+            setTimeout(() => {
+                document.addEventListener('click', handleOutsideRefTooltipClick, true);
+            }, 0);
+            document.addEventListener('keydown', handleRefTooltipEscape);
+            window.addEventListener('scroll', repositionRefTooltip, true);
+            window.addEventListener('resize', repositionRefTooltip);
         }
 
         // সব রেফারেন্স একসাথে কপি করুন
@@ -2068,7 +1637,7 @@
                     </div>
                     <div class="answer-text">
                         ${answerParagraphs}
-                        <button class="ref-icon-btn" title="রেফারেন্স দেখুন" onclick="openRefPopup()"><i class="fas fa-book-quran"></i></button>
+                        <i class="fa-solid fa-book-bookmark ref-icon" title="রেফারেন্স দেখুন" onclick="openRefPopup()"></i>
                     </div>
 
                     <div class="info-footer">
@@ -2123,114 +1692,6 @@
             const masail = masailsData.find(m => m.id === id);
             if (!masail) return;
             
-            // প্রশ্নের জন্য সঠিক URL তৈরি করুন
-            const shareUrl = window.location.origin + basePath + `${encodeURIComponent(masail.number)}/${slugify(masail.title)}`;
-            const shareText = `${masail.title}\n\nপ্রশ্ন নম্বর: ${masail.number}\n\n${shareUrl}`;
-            
-            // শেয়ার মডাল খুলুন
-            openShareModal(masail.title, shareUrl, shareText);
-        }
-        
-        // শেয়ার মডাল খুলুন
-        function openShareModal(title, url, text) {
-            document.getElementById('shareModalOverlay').classList.add('active');
-            document.getElementById('shareTitle').textContent = title;
-            document.getElementById('shareUrl').value = url;
-            document.getElementById('shareText').textContent = text;
-        }
-        
-        // শেয়ার মডাল বন্ধ করুন
-        function closeShareModal() {
-            document.getElementById('shareModalOverlay').classList.remove('active');
-        }
-        
-        // লিংক কপি করুন
-        function copyShareLink() {
-            const url = document.getElementById('shareUrl').value;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(url).then(() => {
-                    const btn = event.target;
-                    const original = btn.innerHTML;
-                    btn.innerHTML = '<i class="fas fa-check"></i> কপি হয়েছে';
-                    setTimeout(() => {
-                        btn.innerHTML = original;
-                    }, 2000);
-                }).catch(() => {
-                    fallbackCopy(url);
-                });
-            } else {
-                fallbackCopy(url);
-            }
-        }
-        
-        // টেক্সট কপি করুন
-        function copyShareText() {
-            const text = document.getElementById('shareText').textContent;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(text).then(() => {
-                    const btn = event.target;
-                    const original = btn.innerHTML;
-                    btn.innerHTML = '<i class="fas fa-check"></i> কপি হয়েছে';
-                    setTimeout(() => {
-                        btn.innerHTML = original;
-                    }, 2000);
-                }).catch(() => {
-                    fallbackCopy(text);
-                });
-            } else {
-                fallbackCopy(text);
-            }
-        }
-        
-        // নেটিভ শেয়ার (যদি উপলব্ধ থাকে)
-        function nativeShare() {
-            const url = document.getElementById('shareUrl').value;
-            const title = document.getElementById('shareTitle').textContent;
-            if (navigator.share) {
-                navigator.share({
-                    title: title,
-                    url: url
-                }).catch(() => {});
-            }
-        }
-        
-        // সোশ্যাল মিডিয়ায় শেয়ার করুন
-        function shareTo(platform) {
-            const url = encodeURIComponent(document.getElementById('shareUrl').value);
-            const title = encodeURIComponent(document.getElementById('shareTitle').textContent);
-            let shareUrl = '';
-            
-            switch(platform) {
-                case 'facebook':
-                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
-                    break;
-                case 'whatsapp':
-                    const text = encodeURIComponent(document.getElementById('shareTitle').textContent + '\n' + document.getElementById('shareUrl').value);
-                    shareUrl = `https://wa.me/?text=${text}`;
-                    break;
-                case 'twitter':
-                    shareUrl = `https://twitter.com/intent/tweet?url=${url}&text=${title}`;
-                    break;
-                case 'telegram':
-                    shareUrl = `https://t.me/share/url?url=${url}&text=${title}`;
-                    break;
-                case 'email':
-                    shareUrl = `mailto:?subject=${title}&body=${document.getElementById('shareUrl').value}`;
-                    break;
-            }
-            
-            if (shareUrl) {
-                if (platform === 'email') {
-                    window.location.href = shareUrl;
-                } else {
-                    window.open(shareUrl, '_blank', 'width=600,height=400');
-                }
-            }
-        }
-        
-        // চেক করুন নেটিভ শেয়ার সাপোর্ট করে কিনা
-        if (navigator.share) {
-            document.getElementById('nativeShareBtn').style.display = 'block';
         }
 
         // ফিরে যান
@@ -2369,24 +1830,6 @@
         });
     </script>
 
-        <!-- রেফারেন্স মোডাল -->
-        <div id="refModalOverlay" class="ref-modal-overlay">
-            <div class="ref-modal">
-                <div class="ref-modal-header">
-                    <div class="ref-modal-title">
-                        <i class="fas fa-book"></i>
-                        রেফারেন্স তথ্য
-                    </div>
-                    <button class="ref-modal-close" onclick="closeRefModal()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="ref-modal-content" id="refModalContent">
-                    <!-- রেফারেন্স কন্টেন্ট এখানে লোড হবে -->
-                </div>
-            </div>
-        </div>
-
       <!-- Navbar Loader -->
 <script src="navbar/navbar-loader.js"></script>
 
@@ -2397,6 +1840,7 @@ const referenceData = {
         title: 'মায়ের অংশ (ষষ্ঠমাংশ)',
         type: 'কুরআন',
         source: 'সূরা আন-নিসা, আয়াত: ১১',
+        sourceAr: 'سورة النساء، الآية ١١',
         sourceText: 'وَلِأَبَوَيْهِ لِكُلِّ وَاحِدٍ مِنْهُمَا السُّدُسُ مِمَّا تَرَكَ إِنْ كَانَ لَهُ وَلَدٌ',
         transliteration: 'Wa-li-abawayhi likulli wahidin minhuma al-sudus mimma taraka in kana lahu walad',
         banglaTranslation: 'এবং তার উভয় পিতামাতার জন্য তাদের প্রত্যেকের জন্য যদি সন্তান থাকে তবে ছেড়ে যাওয়া সম্পত্তির ছয় ভাগের এক ভাগ।',
@@ -2407,6 +1851,7 @@ const referenceData = {
         title: 'স্ত্রীর অংশ (অষ্টমাংশ)',
         type: 'কুরআন',
         source: 'সূরা আন-নিসা, আয়াত: ১২',
+        sourceAr: 'سورة النساء، الآية ١٢',
         sourceText: 'فَإِنْ كَانَ لَكُمْ وَلَدٌ فَلَهُنَّ الثُّمُنُ مِمَّا تَرَكْتُمْ',
         transliteration: 'Fa-in kana lakum walad falahunna al-thumn mimma taraktum',
         banglaTranslation: 'এবং যদি তোমাদের সন্তান থাকে তবে তাদের (স্ত্রীদের) জন্য তোমরা যা রেখে যাও তার অষ্টমাংশ।',
@@ -2417,6 +1862,7 @@ const referenceData = {
         title: 'পুত্র এবং ভাই-বোনের অধিকার',
         type: 'হাদীস',
         source: 'সহীহ বুখারী - কিতাব আল-ফারায়েজ - ফ্রায়েজ অধ্যায়',
+        sourceAr: 'صحيح البخاري، كتاب الفرائض',
         sourceText: 'أَلْحِقُوا الْفَرَائِضَ بِأَهْلِهَا، فَمَا بَقِيَ فَهُوَ لِأَوْلَى رَجُلٍ ذَكَرٍ',
         transliteration: 'Alhaqu al-faraa\'id bi-ahliha, fa-ma baqiya fa-huwa li-awla rajul dhakr',
         banglaTranslation: 'নির্ধারিত অংশগুলি তাদের যাওয়ার যোগ্য মানুষদের দিয়ে দিন, আর যা বাকি থাকে তা নিকটতম পুরুষ পুত্রের জন্য।',
@@ -2427,42 +1873,123 @@ const referenceData = {
         title: 'দ্বিতীয় বিয়েতেও উত্তরাধিকার বহাল',
         type: 'ফিকহের নীতি',
         source: 'আল-মুহীত আল-বুরহানী - কতাব আল-রুজু',
+        sourceAr: 'المحيط البرهاني، كتاب الرجوع',
         sourceText: 'لأن الميراث صار حقًا لها بموت الزوج من حيث الظاهر، فاستقر لها بوفاته',
         detail: 'স্বামীর মৃত্যুর সাথে সাথে উত্তরাধিকার স্ত্রীর অধিকারে চলে যায় এবং স্থায়ী হয়। পরবর্তী বিয়ে এই অধিকারকে বাতিল করে না কারণ এটি প্রথম স্বামীর মৃত্যুর মাধ্যমে ইতিমধ্যে প্রতিষ্ঠিত হয়েছে।',
         banglaDetail: 'ইসলামী আইনে এটি একটি প্রতিষ্ঠিত নীতি যে উত্তরাধিকার একবার নির্ধারিত হলে দ্বিতীয় বিয়ে তা বাতিল করতে পারে না।'
     }
 };
-    // রেফারেন্স মোডাল খোলার ফাংশন
+    // ========== রেফারেন্স টুলটিপ (ক্লিক করা আইকনের পাশে ছোট বক্স হিসেবে দেখানো হয়) ==========
+    let currentRefTooltipEl = null;
+    let currentRefTooltipIcon = null;
+
+    function buildRefTooltipHTML(ref) {
+        if (!ref.sourceText) return '';
+        let html = `<div class="ref-tooltip-arabic">${ref.sourceText}</div>`;
+        if (ref.sourceAr) {
+            html += `<div class="ref-tooltip-source-ar">${ref.sourceAr}</div>`;
+        }
+        return html;
+    }
+
+    function positionRefTooltip(tooltip, iconEl) {
+        const rect = iconEl.getBoundingClientRect();
+        const scrollX = window.scrollX || window.pageXOffset;
+        const scrollY = window.scrollY || window.pageYOffset;
+        const margin = 12;
+
+        const tw = tooltip.offsetWidth;
+        const th = tooltip.offsetHeight;
+
+        let left = rect.left + scrollX + rect.width / 2 - tw / 2;
+        const minLeft = scrollX + margin;
+        const maxLeft = scrollX + window.innerWidth - tw - margin;
+        left = Math.max(minLeft, Math.min(left, maxLeft));
+
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const spaceAbove = rect.top;
+        let top, arrowClass;
+        if (spaceBelow >= th + 16 || spaceBelow >= spaceAbove) {
+            top = rect.bottom + scrollY + 10;
+            arrowClass = 'ref-arrow-top';
+        } else {
+            top = rect.top + scrollY - th - 10;
+            arrowClass = 'ref-arrow-bottom';
+        }
+
+        tooltip.classList.remove('ref-arrow-top', 'ref-arrow-bottom');
+        tooltip.classList.add(arrowClass);
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + 'px';
+
+        const iconCenter = rect.left + scrollX + rect.width / 2;
+        let arrowLeft = iconCenter - left;
+        arrowLeft = Math.max(18, Math.min(arrowLeft, tw - 18));
+        tooltip.style.setProperty('--ref-arrow-left', arrowLeft + 'px');
+    }
+
+    function handleOutsideRefTooltipClick(e) {
+        if (!currentRefTooltipEl) return;
+        if (currentRefTooltipEl.contains(e.target) || (currentRefTooltipIcon && currentRefTooltipIcon.contains(e.target))) {
+            return;
+        }
+        closeRefTooltip();
+    }
+
+    function repositionRefTooltip() {
+        if (currentRefTooltipEl && currentRefTooltipIcon) {
+            positionRefTooltip(currentRefTooltipEl, currentRefTooltipIcon);
+        }
+    }
+
+    function closeRefTooltip() {
+        if (currentRefTooltipEl) {
+            currentRefTooltipEl.remove();
+        }
+        currentRefTooltipEl = null;
+        currentRefTooltipIcon = null;
+        document.removeEventListener('click', handleOutsideRefTooltipClick, true);
+        document.removeEventListener('keydown', handleRefTooltipEscape);
+        window.removeEventListener('scroll', repositionRefTooltip, true);
+        window.removeEventListener('resize', repositionRefTooltip);
+    }
+
+    function handleRefTooltipEscape(e) {
+        if (e.key === 'Escape') closeRefTooltip();
+    }
+
+    // রেফারেন্স আইকনে ক্লিক করলে তার পাশে টুলটিপ খোলার ফাংশন
     function openRefModal(refId) {
-        const content = document.getElementById('refModalContent');
-        
-        let html = `
-            <div class="ref-type-badge">প্রিমিয়াম ফিচার</div>
-            <button class="ref-upgrade-btn" onclick="alert('আপগ্রেড পেজে যান')">আপগ্রেড করুন</button>
-        `;
+        const iconEl = (window.event && window.event.currentTarget) || null;
+        const ref = referenceData[refId];
+        if (!ref || !iconEl) return;
 
-        content.innerHTML = html;
-        document.getElementById('refModalOverlay').classList.add('active');
+        // একই আইকনে আবার ক্লিক করলে টুলটিপ বন্ধ হয়ে যাবে (টগল)
+        if (currentRefTooltipIcon === iconEl && currentRefTooltipEl) {
+            closeRefTooltip();
+            return;
+        }
+        closeRefTooltip();
+
+        const tooltip = document.createElement('div');
+        tooltip.className = 'ref-tooltip-popup';
+        tooltip.innerHTML = buildRefTooltipHTML(ref);
+        document.body.appendChild(tooltip);
+
+        currentRefTooltipEl = tooltip;
+        currentRefTooltipIcon = iconEl;
+
+        positionRefTooltip(tooltip, iconEl);
+        requestAnimationFrame(() => tooltip.classList.add('active'));
+
+        setTimeout(() => {
+            document.addEventListener('click', handleOutsideRefTooltipClick, true);
+        }, 0);
+        document.addEventListener('keydown', handleRefTooltipEscape);
+        window.addEventListener('scroll', repositionRefTooltip, true);
+        window.addEventListener('resize', repositionRefTooltip);
     }
 
-    // রেফারেন্স মোডাল বন্ধ করার ফাংশন
-    function closeRefModal() {
-        document.getElementById('refModalOverlay').classList.remove('active');
-    }
-
-    // ব্যাকগ্রাউন্ডে ক্লিক করলে মোডাল বন্ধ হবে
-    document.getElementById('refModalOverlay').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeRefModal();
-        }
-    });
-
-    // ESC কী চাপলে মোডাল বন্ধ হবে
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeRefModal();
-        }
-    });
 </script>
 
 </body>
