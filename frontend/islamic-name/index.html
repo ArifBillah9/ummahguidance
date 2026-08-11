@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ইসলামিক নাম</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kalpurush&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+
+                @font-face{
+    font-family:'Kalpurush';
+    src:url('islamic-name/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #2d5a3d;
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+        }
+
+        .back-btn.show {
+            visibility: visible;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            flex: 1;
+        }
+
+        .search-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toolbar {
+            background-color: white;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .settings-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .toolbar-title {
+            text-align: center;
+            flex: 1;
+            font-size: 16px;
+        }
+
+        .search-box {
+            background-color: white;
+            padding: 15px;
+            display: none;
+            border-bottom: 1px solid #eee;
+        }
+
+        .search-box.active {
+            display: block;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            font-size: 16px;
+        }
+
+        .container {
+            padding: 15px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        .name-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .name-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+
+        .name-card-arabic {
+            font-family: 'Amiri', serif !important;
+            font-size: 16px;
+            color: #2d5a3d;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .name-card-meaning {
+            font-size: 14px;
+            color: #666;
+            text-align: left;
+        }
+
+        .name-card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .name-icon {
+            width: 60px;
+            height: 60px;
+            background-color: #e8f4f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #2d5a3d;
+            flex-shrink: 0;
+        }
+
+        .gender-boys {
+            background-color: #fff3cd;
+            color: #ff6b35;
+        }
+
+        .gender-girls {
+            background-color: #fce4ec;
+            color: #e91e63;
+        }
+
+        .name-card-text {
+            flex: 1;
+        }
+
+        .name-card-text h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            font-family: 'Amiri', 'Kalpurush', sans-serif;
+        }
+
+        .name-card-text p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .category-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transform: translateY(-4px);
+        }
+
+        .category-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            color: #2d5a3d;
+        }
+
+        .category-text {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: white;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 15px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .tab.active {
+            border-bottom-color: #2d5a3d;
+            color: #2d5a3d;
+            font-weight: bold;
+        }
+
+        .letter-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .letter-btn {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            color: #2d5a3d;
+        }
+
+        .letter-btn:hover {
+            background-color: #e8f4f0;
+            border-color: #2d5a3d;
+        }
+
+        .name-details {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .name-details-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            font-family: 'Amiri', 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+        }
+
+        .name-details-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #2d5a3d;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: #666;
+            font-size: 14px;
+            font-family: 'Amiri', 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+        }
+
+        .arabic-name {
+            font-family: 'Amiri', serif !important;
+            font-size: 18px;
+            color: #2d5a3d;
+            direction: rtl;
+            text-align: right;
+        }
+
+        .english-name {
+            font-size: 16px;
+            color: #333;
+        }
+
+        .bangla-meaning {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 600px) {
+            .grid-container {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .letter-list {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .header-title {
+                font-size: 20px;
+            }
+
+            .name-card-header {
+                flex-direction: row;
+            }
+
+            .name-details-row {
+                grid-template-columns: 1fr;
+                gap: 5px;
+            }
+
+            .tabs {
+                flex-direction: row;
+            }
+
+            .tab {
+                border-bottom: 3px solid transparent;
+                padding: 15px;
+                flex: 1;
+            }
+
+            .tab.active {
+                border-bottom-color: #2d5a3d;
+                background-color: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <button class="back-btn" onclick="navigateBack()">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="header-title">ইসলামিক নাম</div>
+        <button class="search-btn" onclick="toggleSearch()">
+            <i class="fas fa-search"></i>
+        </button>
+    </header>
+
+    <!-- Search Box -->
+    <div class="search-box" id="searchBox">
+        <input type="text" id="searchInput" placeholder="নাম খুঁজুন..." onkeyup="performSearch()">
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <button class="settings-btn">
+            <i class="fas fa-cog"></i>
+        </button>
+        <div class="toolbar-title" id="toolbarTitle">ইসলামিক নাম</div>
+        <div style="width: 36px;"></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Screen 1: Main Menu -->
+        <div class="screen active" id="screen1">
+            <div class="grid-container">
+                <div class="category-card" onclick="goToScreen(2, 'boys')">
+                    <div class="category-icon gender-boys">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <div class="category-text">ছেলেদের নামের তালিকা।</div>
+                </div>
+                <div class="category-card" onclick="goToScreen(2, 'girls')">
+                    <div class="category-icon gender-girls">
+                        <i class="fas fa-child"></i>
+                    </div>
+                    <div class="category-text">মেয়েদের নামের তালিকা।</div>
+                </div>
+            </div>
+
+            <div class="name-card" style="margin-top: 15px;">
+                <div style="color: #666; font-size: 14px;">গর্ভাবস্থায় ১০টি পরামর্শ</div>
+            </div>
+
+            <div class="name-card">
+                <div style="color: #666; font-size: 14px;">শিশু ভুমিষ্ট হওয়ার পর করনীয়</div>
+            </div>
+
+            <div class="name-card">
+                <div style="color: #666; font-size: 14px;">নামকরণে গুরুত্বপূর্ণ দিক</div>
+            </div>
+        </div>
+
+        <!-- Screen 2: Category & Alphabet -->
+        <div class="screen" id="screen2">
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab(0)">By Category</div>
+                <div class="tab" onclick="switchTab(1)">By Alphabet</div>
+            </div>
+
+            <!-- By Category Tab -->
+            <div id="categoryTab">
+                <div class="name-card" onclick="loadCategory('allahNames')">
+                    <div style="color: #666; font-size: 14px;">আল্লাহ তা'আলার নামের পূর্ব "আদ" সহযোগে</div>
+                </div>
+
+                <div class="name-card" onclick="loadCategory('prophetNames')">
+                    <div style="color: #666; font-size: 14px;">রাসূলুল্লাহ ﷺ এর নাম</div>
+                </div>
+
+                <div class="name-card" onclick="loadCategory('companionNames')">
+                    <div style="color: #666; font-size: 14px;">সাহাবীদের নাম এবং অর্থ</div>
+                </div>
+
+                <div class="name-card" onclick="loadCategory('prophetFamily')">
+                    <div style="color: #666; font-size: 14px;">নবী-রাসূলদের পরিবারের নাম</div>
+                </div>
+
+                <div class="name-card" onclick="loadCategory('prophetSons')">
+                    <div style="color: #666; font-size: 14px;">রাসুলুল্লাহ ﷺ এর সন্তানদের নাম</div>
+                </div>
+
+                <div class="name-card" onclick="loadCategory('tenCompanions')">
+                    <div style="color: #666; font-size: 14px;">বেহেশ্বরের সুসংবাদপ্রাপ্ত দশজন</div>
+                </div>
+
+                <div class="name-card" onclick="loadCategory('femaleCompanions')">
+                    <div style="color: #666; font-size: 14px;">মহিলা সাহাবীদের নাম</div>
+                </div>
+
+                <div class="name-card" onclick="loadCategory('badriCompanions')">
+                    <div style="color: #666; font-size: 14px;">বদর যুদ্ধের সাহাবীদের নাম</div>
+                </div>
+            </div>
+
+            <!-- By Alphabet Tab -->
+            <div id="alphabetTab" style="display: none;">
+                <div class="letter-list" id="letterList"></div>
+            </div>
+        </div>
+
+        <!-- Screen 3: Alphabet Selection -->
+        <div class="screen" id="screen3">
+            <div class="letter-list" id="letterGrid"></div>
+        </div>
+
+        <!-- Screen 4: Names List by Letter -->
+        <div class="screen" id="screen4">
+            <div id="namesList"></div>
+        </div>
+
+        <!-- Screen 5: Name Details -->
+        <div class="screen" id="screen5">
+            <div id="nameDetailsContainer"></div>
+        </div>
+
+        <!-- Screen 6: Search Results -->
+        <div class="screen" id="screen6">
+            <div id="searchResults"></div>
+        </div>
+    </div>
+
+    <script>
+        const boysNames = {
+            'A': [
+                { arabic: 'عبد الله', english: 'Abdullah', meaning: 'আল্লাহর বান্দা' },
+                { arabic: 'عبد الرحمن', english: 'Abdur Rahman', meaning: 'পরম দয়ালুর বান্দা' },
+                { arabic: 'عبد الرحيم', english: 'Abdur Rahim', meaning: 'পরম করুণাময়ের বান্দা' },
+                { arabic: 'عبد المالك', english: 'Abdul Malik', meaning: 'মহাপ্রভুর বান্দা' },
+                { arabic: 'عبد القدوس', english: 'Abdul Qudus', meaning: 'পবিত্রতম এর বান্দা' },
+                { arabic: 'عبد السلام', english: 'Abdul Salam', meaning: 'শান্তিময়ের বান্দা' },
+                { arabic: 'عبد المومن', english: 'Abdul Momin', meaning: 'বিশ্বাসীদের রক্ষক এর বান্দা' },
+                { arabic: 'عبد العزيز', english: 'Abdul Aziz', meaning: 'শক্তিশালীর বান্দা' },
+                { arabic: 'عبد الحكيم', english: 'Abdul Hakim', meaning: 'জ্ঞানীর বান্দা' },
+                { arabic: 'عبد الجبار', english: 'Abdul Jabbar', meaning: 'পরাক্রমশালীর বান্দা' },
+                { arabic: 'أحمد', english: 'Ahmad', meaning: 'প্রশংসিত' },
+                { arabic: 'أسد', english: 'Asad', meaning: 'সিংহ' },
+                { arabic: 'أيمن', english: 'Ayman', meaning: 'মঙ্গলজনক' }
+            ],
+            'B': [
+                { arabic: 'بشير', english: 'Bashir', meaning: 'সুসংবাদ বহনকারী' },
+                { arabic: 'بلال', english: 'Bilal', meaning: 'তাজা জল' },
+                { arabic: 'بدر', english: 'Badr', meaning: 'পূর্ণচাঁদ' },
+                { arabic: 'باسل', english: 'Basil', meaning: 'সাহসী' },
+                { arabic: 'برهان', english: 'Burhan', meaning: 'প্রমাণ' },
+                { arabic: 'بكر', english: 'Bakr', meaning: 'প্রথম জন্ম' },
+                { arabic: 'بشر', english: 'Bashar', meaning: 'সুসংবাদ' },
+                { arabic: 'بشام', english: 'Bisham', meaning: 'সুগন্ধী' }
+            ],
+            'C': [
+                { arabic: 'قاسم', english: 'Qasim', meaning: 'ভাগ করে দেওয়ার ব্যক্তি' },
+                { arabic: 'قيس', english: 'Qais', meaning: 'পরিমাপ' },
+                { arabic: 'قارون', english: 'Qarun', meaning: 'শক্তিশালী' }
+            ],
+            'D': [
+                { arabic: 'داود', english: 'Dawood', meaning: 'প্রিয়, বন্ধু' },
+                { arabic: 'دانيال', english: 'Danial', meaning: 'আল্লাহ আমার বিচারক' },
+                { arabic: 'درويش', english: 'Derwish', meaning: 'দরবেশ' }
+            ],
+            'E': [
+                { arabic: 'إياس', english: 'Iyas', meaning: 'শক্তিশালী' },
+                { arabic: 'إسماعيل', english: 'Ismail', meaning: 'আল্লাহ শোনেন' },
+                { arabic: 'إبراهيم', english: 'Ibrahim', meaning: 'পিতা' }
+            ],
+            'F': [
+                { arabic: 'فارس', english: 'Faris', meaning: 'অশ্বারোহী' },
+                { arabic: 'فائز', english: 'Faiz', meaning: 'সফল' },
+                { arabic: 'فرحان', english: 'Farhan', meaning: 'আনন্দময়' },
+                { arabic: 'فاروق', english: 'Farooq', meaning: 'সত্য ও মিথ্যার পার্থক্যকারী' },
+                { arabic: 'فيصل', english: 'Faisal', meaning: 'সিদ্ধান্ত নির্ধারণকারী' }
+            ],
+            'G': [
+                { arabic: 'غازي', english: 'Ghazi', meaning: 'যোদ্ধা' },
+                { arabic: 'غيث', english: 'Ghaith', meaning: 'বৃষ্টি' }
+            ],
+            'H': [
+                { arabic: 'حسن', english: 'Hassan', meaning: 'সুন্দর' },
+                { arabic: 'حسين', english: 'Hussain', meaning: 'সুন্দর, ভালো' },
+                { arabic: 'حامد', english: 'Hamid', meaning: 'প্রশংসাকারী' },
+                { arabic: 'حكيم', english: 'Hakim', meaning: 'জ্ঞানী' },
+                { arabic: 'حسام', english: 'Hussam', meaning: 'তরবারি' },
+                { arabic: 'هاشم', english: 'Hashim', meaning: 'চূর্ণকারী' },
+                { arabic: 'هشام', english: 'Hisham', meaning: 'উদার' }
+            ],
+            'I': [
+                { arabic: 'إبراهيم', english: 'Ibrahim', meaning: 'পিতা' },
+                { arabic: 'إساق', english: 'Ishaq', meaning: 'হাসি' },
+                { arabic: 'إدريس', english: 'Idrees', meaning: 'শিক্ষিত' }
+            ],
+            'J': [
+                { arabic: 'جابر', english: 'Jabir', meaning: 'সান্ত্বনাদাতা' },
+                { arabic: 'جعفر', english: 'Jafar', meaning: 'স্রোত' },
+                { arabic: 'جمال', english: 'Jamal', meaning: 'সৌন্দর্য' }
+            ],
+            'K': [
+                { arabic: 'كريم', english: 'Karim', meaning: 'উদার, মহৎ' },
+                { arabic: 'كامل', english: 'Kamel', meaning: 'পূর্ণ' }
+            ],
+            'L': [
+                { arabic: 'ليث', english: 'Laith', meaning: 'সিংহ' },
+                { arabic: 'لقمان', english: 'Luqman', meaning: 'গ্রাসকারী' }
+            ],
+            'M': [
+                { arabic: 'محمد', english: 'Muhammad', meaning: 'প্রশংসিত' },
+                { arabic: 'مصطفى', english: 'Mustafa', meaning: 'নির্বাচিত' },
+                { arabic: 'مسلم', english: 'Muslim', meaning: 'আত্মসমর্পণকারী' },
+                { arabic: 'مجيب', english: 'Majib', meaning: 'প্রতিক্রিয়াশীল' },
+                { arabic: 'مرتضى', english: 'Mortaza', meaning: 'সন্তুষ্ট' },
+                { arabic: 'معروف', english: 'Maruf', meaning: 'পরিচিত' },
+                { arabic: 'مالك', english: 'Malik', meaning: 'রাজা' }
+            ],
+            'N': [
+                { arabic: 'نور', english: 'Nur', meaning: 'আলো' },
+                { arabic: 'نبيل', english: 'Nabil', meaning: 'মহৎ' },
+                { arabic: 'ناصر', english: 'Nasir', meaning: 'সহায়ক' }
+            ],
+            'P': [
+                { arabic: 'طاهر', english: 'Tahir', meaning: 'পবিত্র' },
+                { arabic: 'طريف', english: 'Tarif', meaning: 'বিরল' }
+            ],
+            'R': [
+                { arabic: 'راشد', english: 'Rashid', meaning: 'সঠিক পথে' },
+                { arabic: 'رضا', english: 'Rida', meaning: 'সন্তুষ্টি' },
+                { arabic: 'رحيم', english: 'Rahim', meaning: 'করুণাশীল' }
+            ],
+            'S': [
+                { arabic: 'سعد', english: 'Saad', meaning: 'সৌভাগ্য' },
+                { arabic: 'سليم', english: 'Salim', meaning: 'সুস্থ' },
+                { arabic: 'سعيد', english: 'Saeed', meaning: 'খুশি' },
+                { arabic: 'سامي', english: 'Sami', meaning: 'উচ্চ' }
+            ],
+            'T': [
+                { arabic: 'تمام', english: 'Tamam', meaning: 'সম্পূর্ণ' },
+                { arabic: 'توفيق', english: 'Taufiq', meaning: 'সাফল্য' }
+            ],
+            'U': [
+                { arabic: 'عثمان', english: 'Usman', meaning: 'হাড়ের মতো শক্ত' },
+                { arabic: 'عمر', english: 'Umar', meaning: 'জীবন' }
+            ],
+            'W': [
+                { arabic: 'واسع', english: 'Wasi', meaning: 'বিস্তৃত' },
+                { arabic: 'وسيم', english: 'Wasim', meaning: 'সুন্দর' }
+            ],
+            'Y': [
+                { arabic: 'ياسر', english: 'Yasir', meaning: 'সহজ' },
+                { arabic: 'يحيى', english: 'Yahya', meaning: 'জীবিত থাকবে' }
+            ],
+            'Z': [
+                { arabic: 'زايد', english: 'Zaid', meaning: 'বৃদ্ধি' },
+                { arabic: 'زاهر', english: 'Zaher', meaning: 'উজ্জ্বল' }
+            ]
+        };
+
+        const girlsNames = {
+            'A': [
+                { arabic: 'آمنة', english: 'Amina', meaning: 'নিরাপদ, শান্তিপূর্ণ' },
+                { arabic: 'أحلام', english: 'Ahlam', meaning: 'স্বপ্ন' },
+                { arabic: 'أسماء', english: 'Asma', meaning: 'নাম' },
+                { arabic: 'عائشة', english: 'Aisha', meaning: 'জীবন্ত' }
+            ],
+            'B': [
+                { arabic: 'بسمة', english: 'Basma', meaning: 'হাসি' },
+                { arabic: 'بيان', english: 'Bayan', meaning: 'স্পষ্টতা' }
+            ],
+            'F': [
+                { arabic: 'فاطمة', english: 'Fatima', meaning: 'যে বিস্তার করে' },
+                { arabic: 'فرح', english: 'Farah', meaning: 'আনন্দ' },
+                { arabic: 'فيروز', english: 'Firoz', meaning: 'মূল্যবান পাথর' }
+            ],
+            'G': [
+                { arabic: 'غيداء', english: 'Ghida', meaning: 'নমনীয় ডাল' },
+                { arabic: 'غريب', english: 'Gareeb', meaning: 'বিরল' }
+            ],
+            'H': [
+                { arabic: 'هدى', english: 'Huda', meaning: 'সঠিক পথ' },
+                { arabic: 'حنان', english: 'Hanan', meaning: 'স্নেহ' },
+                { arabic: 'حياة', english: 'Hayat', meaning: 'জীবন' },
+                { arabic: 'حليمة', english: 'Halima', meaning: 'ধৈর্যশীল' }
+            ],
+            'I': [
+                { arabic: 'إيمان', english: 'Iman', meaning: 'বিশ্বাস' },
+                { arabic: 'إستبرق', english: 'Istabraq', meaning: 'মখমল' }
+            ],
+            'J': [
+                { arabic: 'جميلة', english: 'Jamila', meaning: 'সুন্দর' },
+                { arabic: 'جنة', english: 'Janna', meaning: 'বাগান, স্বর্গ' }
+            ],
+            'K': [
+                { arabic: 'خديجة', english: 'Khadija', meaning: 'প্রথম' },
+                { arabic: 'كاملة', english: 'Kamila', meaning: 'পূর্ণ' }
+            ],
+            'L': [
+                { arabic: 'ليلى', english: 'Layla', meaning: 'রাত' },
+                { arabic: 'لما', english: 'Lama', meaning: 'চকচকে' }
+            ],
+            'M': [
+                { arabic: 'مريم', english: 'Mariam', meaning: 'সমুদ্রের তারকা' },
+                { arabic: 'مينا', english: 'Mina', meaning: 'স্বর্গীয়' },
+                { arabic: 'مرال', english: 'Maral', meaning: 'পরী' }
+            ],
+            'N': [
+                { arabic: 'نورا', english: 'Nora', meaning: 'আলো' },
+                { arabic: 'نبال', english: 'Nabil', meaning: 'মহৎ' }
+            ],
+            'R': [
+                { arabic: 'رقية', english: 'Ruqaya', meaning: 'উন্নত' },
+                { arabic: 'ريحانة', english: 'Rayhana', meaning: 'সুগন্ধী গাছ' }
+            ],
+            'S': [
+                { arabic: 'سارة', english: 'Sarah', meaning: 'রাজকুমারী' },
+                { arabic: 'سكينة', english: 'Sakina', meaning: 'শান্তি' },
+                { arabic: 'سلمى', english: 'Salma', meaning: 'নিরাপদ' }
+            ],
+            'U': [
+                { arabic: 'أم كلثوم', english: 'Umm Kulthum', meaning: 'মুখমন্ডল' }
+            ],
+            'Z': [
+                { arabic: 'زينب', english: 'Zainab', meaning: 'পূর্ণতা' }
+            ]
+        };
+
+        let currentGender = 'boys';
+        let screenHistory = [];
+        let allNames = boysNames;
+
+        function navigateBack() {
+            const closestScreen = document.querySelector('.screen.active');
+            const activeId = closestScreen ? closestScreen.id : 'screen1';
+            const currentNum = parseInt(activeId.replace('screen', ''));
+            
+            if (currentNum === 1) return;
+            
+            // এগিয়ে যাওয়ার আগের স্ক্রিনে ফিরে যান
+            const prevNum = currentNum - 1;
+            goToScreen(prevNum);
+        }
+
+        function goToScreen(screenNum, gender = null) {
+            if (gender) {
+                currentGender = gender;
+                allNames = gender === 'boys' ? boysNames : girlsNames;
+            }
+
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(`screen${screenNum}`).classList.add('active');
+            
+            const backBtn = document.querySelector('.back-btn');
+            if (screenNum > 1) {
+                backBtn.classList.add('show');
+            } else {
+                backBtn.classList.remove('show');
+            }
+
+            document.getElementById('searchBox').classList.remove('active');
+
+            if (screenNum === 2) {
+                updateToolbarTitle(`${currentGender === 'boys' ? 'ছেলেদের' : 'মেয়েদের'} নাম`);
+                initializeAlphabetTab();
+            } else if (screenNum === 3) {
+                updateToolbarTitle(`${currentGender === 'boys' ? 'ছেলেদের' : 'মেয়েদের'} নাম`);
+                generateLetterGrid();
+            } else if (screenNum === 4 || screenNum === 5) {
+                updateToolbarTitle(`${currentGender === 'boys' ? 'ছেলেদের' : 'মেয়েদের'} নাম`);
+            } else {
+                updateToolbarTitle('ইসলামিক নাম');
+            }
+        }
+
+        function updateToolbarTitle(title) {
+            document.getElementById('toolbarTitle').textContent = title;
+        }
+
+        function switchTab(tabIndex) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+            tabs[tabIndex].classList.add('active');
+
+            const categoryTab = document.getElementById('categoryTab');
+            const alphabetTab = document.getElementById('alphabetTab');
+
+            if (tabIndex === 0) {
+                categoryTab.style.display = 'block';
+                alphabetTab.style.display = 'none';
+            } else {
+                categoryTab.style.display = 'none';
+                alphabetTab.style.display = 'block';
+                initializeAlphabetTab();
+            }
+        }
+
+        function initializeAlphabetTab() {
+            const letterList = document.getElementById('letterList');
+            letterList.innerHTML = '';
+
+            Object.keys(allNames).sort().forEach(letter => {
+                const btn = document.createElement('div');
+                btn.className = 'letter-btn';
+                btn.textContent = letter;
+                btn.onclick = () => goToNamesByLetter(letter);
+                letterList.appendChild(btn);
+            });
+        }
+
+        function generateLetterGrid() {
+            const grid = document.getElementById('letterGrid');
+            grid.innerHTML = '';
+
+            Object.keys(allNames).sort().forEach(letter => {
+                const btn = document.createElement('div');
+                btn.className = 'letter-btn';
+                btn.textContent = `${letter} - দিয়ে শুরু নামের তালিকা`;
+                btn.onclick = () => goToNamesByLetter(letter);
+                grid.appendChild(btn);
+            });
+        }
+
+        function goToNamesByLetter(letter) {
+            const namesList = document.getElementById('namesList');
+            namesList.innerHTML = '';
+
+            const names = allNames[letter] || [];
+            names.forEach(name => {
+                const card = document.createElement('div');
+                card.className = 'name-card';
+                card.onclick = () => showNameDetails(name, letter);
+                card.innerHTML = `
+                    <div class="name-card-header">
+                        <div class="name-icon ${currentGender === 'boys' ? 'gender-boys' : 'gender-girls'}">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="name-card-text">
+                            <h3>${name.english}</h3>
+                            <p>${name.meaning}</p>
+                        </div>
+                    </div>
+                `;
+                namesList.appendChild(card);
+            });
+
+            goToScreen(4);
+        }
+
+        function showNameDetails(name, letter) {
+            const container = document.getElementById('nameDetailsContainer');
+            const genderText = currentGender === 'boys' ? 'ছেলে' : 'মেয়ে';
+            
+            container.innerHTML = `
+                <div class="name-details">
+                    <div class="name-details-row">
+                        <div>
+                            <div class="detail-label">${letter} - দিয়ে শুরু নামের তালিকা (${genderText})</div>
+                        </div>
+                        <div>
+                            <div class="detail-label" style="text-align: right;">আরবি: ${name.arabic}</div>
+                        </div>
+                    </div>
+                    <div class="name-details-row">
+                        <div>
+                            <div class="detail-label">আরবি:</div>
+                            <div class="detail-value arabic-name">${name.arabic}</div>
+                        </div>
+                        <div>
+                            <div class="detail-label" style="text-align: right;">ইংরেজি:</div>
+                            <div class="detail-value english-name" style="text-align: right;">${name.english}</div>
+                        </div>
+                    </div>
+                    <div class="name-details-row" style="grid-template-columns: 1fr;">
+                        <div>
+                            <div class="detail-label">অর্থ:</div>
+                            <div class="detail-value bangla-meaning">${name.meaning}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            goToScreen(5);
+        }
+
+        function loadCategory(category) {
+            alert('ক্যাটাগরি ফিচার শীঘ্রই আসবে');
+        }
+
+        function toggleSearch() {
+            const searchBox = document.getElementById('searchBox');
+            searchBox.classList.toggle('active');
+            if (searchBox.classList.contains('active')) {
+                document.getElementById('searchInput').focus();
+            }
+        }
+
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (query.length < 2) {
+                document.getElementById('screen6').style.display = 'none';
+                return;
+            }
+
+            let results = [];
+            const genderNames = currentGender === 'boys' ? boysNames : girlsNames;
+
+            Object.keys(genderNames).forEach(letter => {
+                genderNames[letter].forEach(name => {
+                    if (name.english.toLowerCase().includes(query) || 
+                        name.meaning.toLowerCase().includes(query)) {
+                        results.push(name);
+                    }
+                });
+            });
+
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = '';
+
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">কোন ফলাফল পাওয়া যায়নি</div>';
+            } else {
+                results.forEach(name => {
+                    const card = document.createElement('div');
+                    card.className = 'name-card';
+                    card.onclick = () => showNameDetails(name, name.english[0]);
+                    card.innerHTML = `
+                        <div class="name-card-header">
+                            <div class="name-icon ${currentGender === 'boys' ? 'gender-boys' : 'gender-girls'}">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="name-card-text">
+                                <h3>${name.english}</h3>
+                                <p>${name.meaning}</p>
+                            </div>
+                        </div>
+                    `;
+                    resultsContainer.appendChild(card);
+                });
+            }
+
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen6').classList.add('active');
+        }
+
+        // Initialize
+        initializeAlphabetTab();
+    </script>
+
+
+  <!-- Navbar Loader -->
+<script src="navbar/navbar-loader.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>মুসালিম বিবাহ - Ummah Guidance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* Header Styling */
+        .header {
+            background-color: #2d6e5f;
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-back {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .header-menu {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            cursor: pointer;
+        }
+
+        .header-menu span {
+            width: 100%;
+            height: 2px;
+            background: white;
+            border-radius: 1px;
+        }
+
+        .logo-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid #2d6e5f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* Screen Sections */
+        .screen {
+            display: none;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Home Screen */
+        .hero-banner {
+            background: linear-gradient(135deg, #4a9d8a 0%, #2d6e5f 100%);
+            padding: 40px 20px;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z" fill="%23ffffff" opacity="0.1"/></svg>');
+            background-size: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .heart-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .hearts {
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        .main-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            background: #2d6e5f;
+            border: 2px solid white;
+            border-radius: 25px;
+            padding: 12px 20px;
+            color: white;
+            width: 100%;
+            margin-bottom: 15px;
+            font-size: 14px;
+            cursor: pointer;
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .add-biodata-btn {
+            background: white;
+            color: #2d6e5f;
+            border: 2px solid white;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+        }
+
+        .add-biodata-btn:hover {
+            background: #f0f0f0;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 30px 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: #f0f7f5;
+            border: 2px solid #c9e4de;
+            border-radius: 15px;
+            padding: 25px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(45, 110, 95, 0.2);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: #d4f1ed;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            color: #2d6e5f;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2d6e5f;
+            margin-bottom: 5px;
+        }
+
+        .stat-text {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        /* Navigation Tabs */
+        .search-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        .search-tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab {
+            background: #e0e0e0;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 13px;
+            white-space: nowrap;
+            cursor: pointer;
+            color: #333;
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: #2d6e5f;
+            color: white;
+        }
+
+        /* Biodata Cards */
+        .biodata-cards {
+            padding: 20px;
+        }
+
+        .biodata-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .biodata-card:hover {
+            border-color: #2d6e5f;
+            box-shadow: 0 3px 10px rgba(45, 110, 95, 0.15);
+        }
+
+        .biodata-header {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: 3px solid #2d6e5f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .profile-avatar.female {
+            background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+            color: white;
+        }
+
+        .profile-avatar.male {
+            background: linear-gradient(135deg, #87ceeb 0%, #4169e1 100%);
+            color: white;
+        }
+
+        .checkmark {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 18px;
+            height: 18px;
+            background: #2d6e5f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            border: 2px solid white;
+        }
+
+        .biodata-info {
+            flex: 1;
+        }
+
+        .biodata-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .biodata-id {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+        }
+
+        .biodata-details {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .biodata-details span {
+            margin-right: 15px;
+        }
+
+        .biodata-footer {
+            display: flex;
+            gap: 10px;
+            font-size: 12px;
+            color: #888;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        /* Filter Dropdown */
+        .filter-section {
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .filter-btn {
+            background: #2d6e5f;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            background: #1f4a3f;
+        }
+
+        .dropdown {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 1000;
+            min-width: 280px;
+            max-width: 90%;
+        }
+
+        .dropdown-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+
+        .dropdown-overlay.active {
+            display: block;
+        }
+
+        .dropdown.active {
+            display: block;
+        }
+
+        .dropdown.hidden {
+            display: none;
+        }
+
+        .dropdown-title {
+            padding: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .close-btn {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #999;
+            font-size: 18px;
+        }
+
+        .dropdown-options {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .dropdown-option {
+            padding: 15px;
+            font-size: 13px;
+            color: #333;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+        }
+
+        .dropdown-option:hover {
+            background: #f5f5f5;
+        }
+
+        .dropdown-option:last-child {
+            border-bottom: none;
+        }
+
+        /* Add Biodata - "কার জন্য বায়োডাটা তৈরি করছেন?" Modal */
+        .relation-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            z-index: 1000;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+        }
+
+        .relation-modal.hidden {
+            display: none;
+        }
+
+        .relation-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .relation-modal-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #222;
+            line-height: 1.4;
+            padding-right: 10px;
+        }
+
+        .relation-select-wrapper {
+            position: relative;
+        }
+
+        .relation-select {
+            width: 100%;
+            padding: 14px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            background: white;
+        }
+
+        .relation-select.placeholder {
+            color: #999;
+        }
+
+        .relation-select-list {
+            position: absolute;
+            top: 0;
+            left: -20px;
+            right: -20px;
+            background: white;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 20;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-top: 10px;
+        }
+
+        .relation-select-list.hidden {
+            display: none;
+        }
+
+        .relation-option-item {
+            padding: 16px 20px;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            transition: background 0.2s;
+        }
+
+        .relation-option-item:first-child {
+            font-weight: 600;
+        }
+
+        .relation-option-item:hover {
+            background: #f5f5f5;
+        }
+
+        .relation-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .proceed-btn {
+            background: #2d6e5f;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+        }
+
+        .proceed-btn:hover {
+            background: #1f4a3f;
+        }
+
+        .proceed-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Form Section */
+        .form-section {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            color: #333;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #2d6e5f;
+            box-shadow: 0 0 5px rgba(45, 110, 95, 0.2);
+        }
+
+        .form-input::placeholder {
+            color: #999;
+        }
+
+        /* Main Content Padding */
+        .main-content {
+            padding-bottom: 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-back" onclick="goBack()">
+                ‹
+            </div>
+            <div class="header-title">বিবাহ</div>
+            <div class="header-menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+
+
+
+        <!-- Main Content -->
+        <div class="main-content">
+
+            <!-- Home Screen -->
+            <div id="home" class="screen active">
+                <div class="hero-banner">
+                    <div class="hero-content">
+                        <div style="margin-bottom: 15px;">
+                            <svg style="width: 28px; height: 28px; fill: #3b82f6; margin: 0 8px; display: inline-block; vertical-align: middle;" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            <svg style="width: 28px; height: 28px; fill: #d946ef; margin: 0 8px; display: inline-block; vertical-align: middle;" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            <svg style="width: 28px; height: 28px; fill: #ec4899; margin: 0 8px; display: inline-block; vertical-align: middle;" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <h1 class="main-title">মুসালিম বিবাহ</h1>
+                        <p class="subtitle">প্রত্যাশিত জীবনসঙ্গী খুঁজে নিন সহজেই</p>
+                        <input type="text" class="search-box" placeholder="পাত্র-পাত্রী খুঁজুন" onclick="showScreen('couples')">
+                        <button class="add-biodata-btn" onclick="openRelationModal()">
+                            <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                            বায়োডাটা যোগ করুন
+                        </button>
+                    </div>
+                </div>
+
+                <div class="stats-section">
+                    <div class="stat-card" onclick="showScreen('stats')">
+                        <div class="stat-icon">
+                            <svg style="width: 28px; height: 28px; fill: currentColor;" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        </div>
+                        <div class="stat-number">210+</div>
+                        <div class="stat-text">আল্লাহর রহমতে আমাদের মাধ্যমে সম্পন্ন পবিত্র বিবাহ দাম্পত্য</div>
+                    </div>
+                    <div class="stat-card" onclick="showScreen('stats')">
+                        <div class="stat-icon">
+                            <svg style="width: 28px; height: 28px; fill: currentColor;" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                        </div>
+                        <div class="stat-number">27,373</div>
+                        <div class="stat-text">শরীয়তসম্মত পদ্ধতি জীবনসঙ্গী খুঁজছেন এই মুসলিম</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Screen -->
+            <div id="stats" class="screen">
+                <div style="padding: 30px 20px; text-align: center;">
+                    <div style="width: 80px; height: 80px; background: #d4f1ed; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #2d6e5f;">
+                        <svg style="width: 40px; height: 40px; fill: currentColor;" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    </div>
+                    <h2 style="font-size: 18px; font-weight: 700; color: #333; margin-bottom: 15px;">পবিত্র বিবাহ সম্পন্ন</h2>
+                    <div style="font-size: 42px; font-weight: 700; color: #2d6e5f; margin-bottom: 15px;">210+</div>
+                    <p style="font-size: 13px; color: #666; line-height: 1.6;">আল্লাহর রহমতে আমাদের মাধ্যমে সম্পন্ন পবিত্র বিবাহ দাম্পত্য</p>
+                    <button class="add-biodata-btn" style="margin-top: 30px; width: auto;" onclick="showScreen('home')">বিস্তারিত দেখুন</button>
+                </div>
+
+                <div style="padding: 30px 20px; text-align: center;">
+                    <div style="width: 80px; height: 80px; background: #d4f1ed; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: #2d6e5f;">
+                        <svg style="width: 40px; height: 40px; fill: currentColor;" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    </div>
+                    <h2 style="font-size: 18px; font-weight: 700; color: #333; margin-bottom: 15px;">নিবন্ধিত বায়োডাটা</h2>
+                    <div style="font-size: 42px; font-weight: 700; color: #2d6e5f; margin-bottom: 15px;">27,373</div>
+                    <p style="font-size: 13px; color: #666; line-height: 1.6;">শরীয়তসম্মত পদ্ধতি জীবনসঙ্গী খুঁজছেন এই মুসলিম</p>
+                </div>
+            </div>
+
+            <!-- Couples Search Screen -->
+            <div id="couples" class="screen">
+                <div class="hero-banner" style="padding: 30px 20px; text-align: center;">
+                    <div class="hero-content">
+                        <div style="margin-bottom: 15px;">
+                            <svg style="width: 28px; height: 28px; fill: #3b82f6; margin: 0 8px; display: inline-block; vertical-align: middle;" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            <svg style="width: 28px; height: 28px; fill: #2d6e5f; margin: 0 8px; display: inline-block; vertical-align: middle;" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        </div>
+                        <h1 class="main-title">মুসালিম বিবাহ</h1>
+                    </div>
+                </div>
+
+                <div class="search-tabs">
+                    <button class="tab active" data-type="all" onclick="filterBiodata('all', event)">সকল বায়োডাটা</button>
+                    <button class="tab" data-type="male" onclick="filterBiodata('male', event)">পাত্রের বায়োডাটা</button>
+                    <button class="tab" data-type="female" onclick="filterBiodata('female', event)">পাত্রীর বায়োডাটা</button>
+                </div>
+
+                <div class="filter-section">
+                    <span class="filter-label" id="filterCountLabel">২৭৩৭টি বায়োডাটা পাওয়া গেছে</span>
+                    <button class="filter-btn" style="display: none;" onclick="toggleDropdown('filterDropdown')">
+                        <svg style="width: 14px; height: 14px; fill: currentColor; display: inline-block; margin-right: 5px;" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg> ফিল্টার
+                    </button>
+                </div>
+
+                <div class="biodata-cards" id="biodataList">
+                    <!-- Biodata cards will be generated here -->
+                </div>
+            </div>
+
+            <!-- Add Biodata Screen -->
+            <div id="addBiodata" class="screen">
+                <div style="padding: 20px; background: #f5f5f5;">
+                    <h2 style="font-size: 16px; font-weight: 700; color: #333; margin-bottom: 20px;">নতুন বায়োডাটা যোগ করুন</h2>
+
+                    <div class="form-section" style="background: white; border-radius: 10px;">
+                        <div class="form-group">
+                            <label class="form-label">পূর্ণ নাম</label>
+                            <input type="text" class="form-input" placeholder="আপনার পূর্ণ নাম">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">বয়স</label>
+                            <input type="number" class="form-input" placeholder="আপনার বয়স">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">পেশা</label>
+                            <select class="form-select" onclick="toggleDropdown('professionDropdown')">
+                                <option>পেশা নির্বাচন করুন</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">জেলা</label>
+                            <input type="text" class="form-input" placeholder="আপনার জেলা">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">ফটো</label>
+                            <input type="file" class="form-input" accept="image/*">
+                        </div>
+
+                        <button class="add-biodata-btn" style="margin-top: 20px; background: #2d6e5f; color: white; width: 100%;">
+                            জমা দিন
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Add Biodata - "কার জন্য বায়োডাটা তৈরি করছেন?" Modal -->
+        <div class="dropdown-overlay" id="relationOverlay" onclick="closeRelationModal()"></div>
+        <div class="relation-modal hidden" id="relationModal">
+            <div class="relation-modal-header">
+                <div class="relation-modal-title">কার জন্য বায়োডাটা তৈরি করছেন?</div>
+                <span class="close-btn" onclick="closeRelationModal()">✕</span>
+            </div>
+
+            <div class="relation-select-wrapper">
+                <div class="relation-select placeholder" id="relationSelectBox" onclick="toggleRelationOptions()">
+                    <span id="relationSelectText">নির্বাচন করুন</span>
+                    <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </div>
+
+                <div class="relation-select-list hidden" id="relationOptionsList">
+                    <div class="relation-option-item" onclick="selectRelation('নিজ')">নিজ</div>
+                    <div class="relation-option-item" onclick="selectRelation('আপনার ছেলে')">আপনার ছেলে</div>
+                    <div class="relation-option-item" onclick="selectRelation('আপনার মেয়ে')">আপনার মেয়ে</div>
+                    <div class="relation-option-item" onclick="selectRelation('আপনার ভাই')">আপনার ভাই</div>
+                    <div class="relation-option-item" onclick="selectRelation('আপনার বোন')">আপনার বোন</div>
+                    <div class="relation-option-item" onclick="selectRelation('আপনার ভাইয়ের ছেলে')">আপনার ভাইয়ের ছেলে</div>
+                    <div class="relation-option-item" onclick="selectRelation('আপনার ভাইয়ের মেয়ে')">আপনার ভাইয়ের মেয়ে</div>
+                </div>
+            </div>
+
+            <div class="relation-modal-footer">
+                <button class="proceed-btn" onclick="proceedRelationModal()">এগিয়ে যান</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Screen Navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            const screen = document.getElementById(screenId);
+            if (screen) {
+                screen.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // Back Navigation
+        function goBack() {
+            showScreen('home');
+        }
+
+        // Generic dropdown toggle (kept for future re-use; the filter button is
+        // currently hidden, see .filter-btn { display: none; } — turn it back on
+        // when the filter feature is ready)
+        function toggleDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            const overlay = document.getElementById('dropdownOverlay');
+
+            dropdown.classList.toggle('hidden');
+            overlay.classList.toggle('active');
+        }
+
+        function closeDropdown() {
+            const dropdown = document.getElementById('filterDropdown');
+            const overlay = document.getElementById('dropdownOverlay');
+
+            if (dropdown) dropdown.classList.add('hidden');
+            if (overlay) overlay.classList.remove('active');
+        }
+
+        // ---- Biodata data source ----
+        const allBiodataCards = [
+            { id: '৫৭৩৫৫', profession: 'ছাত্রী', age: '১৯', height: '৫ ফুট ৪ ইঞ্চি', time: '১০ মাস', score: '১০০/১০০', type: 'female' },
+            { id: '৫৬২২২', profession: 'ডাক্তার', age: '২২', height: '৫ ফুট ৫ ইঞ্চি', time: '৩ মাস', score: '১০০/১০০', type: 'female' },
+            { id: '৫৭৩৫৫', profession: 'ব্যবসায়ী চাকুরিজীবী', age: '১৯', height: '৫ ফুট ৮ ইঞ্চি', time: '১০ মাস', score: '১০০/১০০', type: 'male' },
+            { id: '৫৬৬৬৩', profession: 'ইঞ্জিনিয়ার', age: '২৪', height: '৫ ফুট ৯ ইঞ্চি', time: '৬ মাস', score: '১০০/১০০', type: 'male' }
+        ];
+
+        const biodataCounts = {
+            all: '২৭৩৭',
+            male: '১৯১৮',
+            female: '৮১৯'
+        };
+
+        // ---- Tabs: সকল / পাত্রের / পাত্রীর বায়োডাটা (now filters in place) ----
+        function filterBiodata(type, event) {
+            document.querySelectorAll('.search-tabs .tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            if (event && event.target) {
+                event.target.classList.add('active');
+            } else {
+                const target = document.querySelector(`.search-tabs .tab[data-type="${type}"]`);
+                if (target) target.classList.add('active');
+            }
+
+            generateBiodataCards(type);
+        }
+
+        // ---- Render biodata cards for the selected filter ----
+        function generateBiodataCards(type = 'all') {
+            const biodataList = document.getElementById('biodataList');
+            const countLabel = document.getElementById('filterCountLabel');
+            if (!biodataList) return;
+
+            const cards = type === 'all'
+                ? allBiodataCards
+                : allBiodataCards.filter(card => card.type === type);
+
+            if (countLabel) {
+                countLabel.textContent = `${biodataCounts[type] || biodataCounts.all}টি বায়োডাটা পাওয়া গেছে`;
+            }
+
+            biodataList.innerHTML = cards.map(card => `
+                <div class="biodata-card">
+                    <div class="biodata-header">
+                        <div class="profile-avatar ${card.type}">
+                            <svg style="width: 36px; height: 36px; fill: white;" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            <div class="checkmark">✓</div>
+                        </div>
+                        <div class="biodata-info">
+                            <div class="biodata-name">বায়োডাটা নং - ${card.id}</div>
+                            <div class="biodata-id">${card.profession}</div>
+                            <div class="biodata-details">
+                                <span>বয়স: ${card.age} বছর</span>
+                                <span>উচ্চতা: ${card.height}</span>
+                            </div>
+                            <div class="biodata-details">স্থান: ঢাকা</div>
+                            <div class="biodata-footer">
+                                <span>সময়: ${card.time}</span>
+                                <span>স্কোর: ${card.score}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ---- "বায়োডাটা যোগ করুন" -> "কার জন্য বায়োডাটা তৈরি করছেন?" modal ----
+        let selectedRelation = null;
+
+        function openRelationModal() {
+            const modal = document.getElementById('relationModal');
+            const overlay = document.getElementById('relationOverlay');
+            modal.classList.remove('hidden');
+            overlay.classList.add('active');
+        }
+
+        function closeRelationModal() {
+            const modal = document.getElementById('relationModal');
+            const overlay = document.getElementById('relationOverlay');
+            const optionsList = document.getElementById('relationOptionsList');
+
+            modal.classList.add('hidden');
+            overlay.classList.remove('active');
+            optionsList.classList.add('hidden');
+        }
+
+        function toggleRelationOptions() {
+            const optionsList = document.getElementById('relationOptionsList');
+            optionsList.classList.toggle('hidden');
+        }
+
+        function selectRelation(value) {
+            selectedRelation = value;
+            const selectText = document.getElementById('relationSelectText');
+            const selectBox = document.getElementById('relationSelectBox');
+            const optionsList = document.getElementById('relationOptionsList');
+
+            selectText.textContent = value;
+            selectBox.classList.remove('placeholder');
+            optionsList.classList.add('hidden');
+        }
+
+        function proceedRelationModal() {
+            if (!selectedRelation) {
+                // Nudge the user to make a selection first
+                const optionsList = document.getElementById('relationOptionsList');
+                optionsList.classList.remove('hidden');
+                return;
+            }
+            closeRelationModal();
+            showScreen('addBiodata');
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            generateBiodataCards('all');
+        });
+
+        // Prevent default form submission
+        document.addEventListener('submit', (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

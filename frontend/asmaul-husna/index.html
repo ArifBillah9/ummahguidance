@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আসমাউল হুসনা</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            overflow-x: hidden;
+            max-width: 100%;
+        }
+
+        body {
+            font-family: 'Kalpurush', 'Noto Sans Bengali', 'Hind Siliguri', sans-serif;
+            background-color: #f5f5f5;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2d5f4f 0%, #1a3a2f 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-back {
+            width: 40px;
+            height: 40px;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .header-back:hover {
+            background-color: rgba(255,255,255,0.1);
+            transform: scale(1.05);
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            text-align: center;
+            flex: 1;
+        }
+
+        .header-info {
+            width: 40px;
+            height: 40px;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .header-info:hover {
+            background-color: rgba(255,255,255,0.1);
+            transform: scale(1.05);
+        }
+
+        /* List Container */
+        .list-container {
+            max-width: 100%;
+            background: white;
+        }
+
+        .list-item {
+            display: flex;
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .list-item:hover {
+            background-color: #f9f9f9;
+            transform: translateX(2px);
+        }
+
+        .item-left {
+            flex: 1;
+            padding-right: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .item-number {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d5f4f;
+            margin-bottom: 8px;
+        }
+
+        .item-bengali-name {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .item-bengali-meaning {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .item-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-end;
+            padding-left: 15px;
+            border-left: 2px solid #e0e0e0;
+            text-align: right;
+        }
+
+        .item-arabic {
+            font-family: 'Amiri', serif;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d5f4f;
+            line-height: 1.8;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #2d5f4f 0%, #1a3a2f 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            sticky: top 0;
+            z-index: 10;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .modal-close:hover {
+            transform: scale(1.1);
+        }
+
+        .modal-body {
+            padding: 25px;
+            line-height: 1.8;
+        }
+
+        .modal-bengali-text {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 20px;
+            line-height: 1.9;
+        }
+
+        .modal-arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 20px;
+            color: #2d5f4f;
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            line-height: 2;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .modal-reference {
+            font-size: 14px;
+            color: #666;
+            font-weight: 600;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        /* Audio Player Section */
+        .audio-section {
+            display: none;
+            background: white;
+            padding: 30px 20px;
+            margin-top: 20px;
+        }
+
+        .audio-section.active {
+            display: block;
+        }
+
+        .audio-player {
+            background: linear-gradient(135deg, #2d5f4f 0%, #1a3a2f 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .audio-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .audio-btn {
+            background: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            color: #2d5f4f;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .audio-btn.play {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background-color: rgba(255,255,255,0.3);
+            margin: 15px 0;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: white;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .progress-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 12px 15px;
+            }
+
+            .header-title {
+                font-size: 18px;
+            }
+
+            .list-item {
+                padding: 15px;
+            }
+
+            .item-left {
+                padding-right: 15px;
+            }
+
+            .item-bengali-name {
+                font-size: 16px;
+            }
+
+            .item-arabic {
+                font-size: 20px;
+            }
+
+            .modal-content {
+                max-height: 95vh;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 10px 12px;
+            }
+
+            .header-title {
+                font-size: 16px;
+            }
+
+            .header-back, .header-info {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+
+            .list-item {
+                padding: 12px;
+                flex-direction: column;
+            }
+
+            .item-left {
+                padding-right: 0;
+                margin-bottom: 12px;
+            }
+
+            .item-right {
+                border-left: none;
+                border-top: 1px solid #e0e0e0;
+                padding-left: 0;
+                padding-top: 12px;
+            }
+
+            .item-bengali-name {
+                font-size: 15px;
+            }
+
+            .item-number {
+                font-size: 14px;
+            }
+
+            .item-arabic {
+                font-size: 18px;
+            }
+
+            .item-bengali-meaning {
+                font-size: 12px;
+            }
+
+            .modal-arabic-text {
+                font-size: 18px;
+            }
+
+            .modal-bengali-text {
+                font-size: 15px;
+            }
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-back" onclick="goBack()">
+            <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="header-title">আসমাউল হুসনা</div>
+        <div class="header-info" onclick="showInfo()">
+            <i class="fas fa-info"></i>
+        </div>
+    </header>
+
+    <!-- Main List -->
+    <div class="list-container" id="mainList">
+        <!-- Items will be dynamically inserted here -->
+    </div>
+
+    <!-- Audio Player Section -->
+    <div class="audio-section" id="audioSection">
+        <div class="audio-player">
+            <div style="margin-bottom: 15px; font-weight: 600;">আসমাউল হুসনা অডিও</div>
+            <div class="progress-bar" onclick="seekAudio(event)">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-time">
+                <span id="currentTime">0:00</span>
+                <span id="duration">0:00</span>
+            </div>
+            <div class="audio-controls">
+                <button class="audio-btn" onclick="previousTrack()">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button class="audio-btn play" id="playBtn" onclick="togglePlayPause()">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="audio-btn" onclick="nextTrack()">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+            <div style="font-size: 12px; opacity: 0.8;">
+                <span id="trackInfo">ট্র্যাক ১/৯৯</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Modal -->
+    <div class="modal" id="infoModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span style="flex: 1;"></span>
+                <span style="flex: 1; text-align: center; font-weight: 600;">বিস্তারিত তথ্য</span>
+                <button class="modal-close" onclick="closeModal('infoModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="infoContent">
+                <!-- Content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Modal -->
+    <div class="modal" id="detailsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span style="flex: 1;"></span>
+                <span style="flex: 1; text-align: center; font-weight: 600;">বিস্তারিত</span>
+                <button class="modal-close" onclick="closeModal('detailsModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="detailsContent">
+                <!-- Content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const asmaData = [
+            {
+                id: 1,
+                number: "১",
+                bengaliName: "আল্লাহ",
+                bengaliMeaning: "আল্লাহ্‌ - এক ও অদ্বিতীয় সত্তার নাম",
+                arabicName: "الله",
+                details: `আল্লাহ - আল্লাহ্‌ - এক ও অদ্বিতীয় সত্তার নাম\n\nআল্লাহ হলো মহান রবের সত্তাবাচক নাম, যা দ্বারা তাঁকে ছাড়া অন্য কাউকে ডাকা যায় না। এটি সকল সুন্দর নামের মূল উৎস।`
+            },
+            {
+                id: 2,
+                number: "২",
+                bengaliName: "আর-রাহমান",
+                bengaliMeaning: "পরম দয়ালু",
+                arabicName: "الرَّحْمَنُ",
+                details: `আর-রাহমান - পরম দয়ালু\n\nযিনি সকল সৃষ্টির প্রতি বিনা শর্তে অসীম দয়া ও করুণা প্রদর্শন করেন, মুমিন-কাফের নির্বিশেষে সকলের প্রতি।`
+            },
+            {
+                id: 3,
+                number: "৩",
+                bengaliName: "আর-রাহীম",
+                bengaliMeaning: "অতি মেহেরবান",
+                arabicName: "الرَّحِيمُ",
+                details: `আর-রাহীম - অতি মেহেরবান\n\nযিনি বিশেষভাবে মুমিন বান্দাদের প্রতি রহমত ও ক্ষমা প্রদর্শন করেন, বিশেষত পরকালে।`
+            },
+            {
+                id: 4,
+                number: "৪",
+                bengaliName: "আল-মালিক",
+                bengaliMeaning: "সর্বাধিপতি",
+                arabicName: "الْمَلِكُ",
+                details: `আল-মালিক - সর্বাধিপতি\n\nযিনি সমস্ত সৃষ্টিজগতের একচ্ছত্র মালিক ও নিয়ন্ত্রক, তাঁর অনুমতি ছাড়া কিছুই ঘটে না।`
+            },
+            {
+                id: 5,
+                number: "৫",
+                bengaliName: "আল-কুদ্দুস",
+                bengaliMeaning: "পরম পবিত্র",
+                arabicName: "الْقُدُّوسُ",
+                details: `আল-কুদ্দুস - পরম পবিত্র\n\nযিনি সকল প্রকার ত্রুটি, দুর্বলতা ও অসম্পূর্ণতা থেকে সম্পূর্ণ মুক্ত ও পবিত্র।`
+            },
+            {
+                id: 6,
+                number: "৬",
+                bengaliName: "আস-সালাম",
+                bengaliMeaning: "শান্তিদাতা",
+                arabicName: "السَّلَامُ",
+                details: `আস-সালাম - শান্তিদাতা\n\nযিনি নিজে সকল ত্রুটি থেকে নিরাপদ এবং তাঁর বান্দাদের নিরাপত্তা ও শান্তি দান করেন।`
+            },
+            {
+                id: 7,
+                number: "৭",
+                bengaliName: "আল-মু'মিন",
+                bengaliMeaning: "নিরাপত্তা দানকারী",
+                arabicName: "الْمُؤْمِنُ",
+                details: `আল-মু'মিন - নিরাপত্তা দানকারী\n\nযিনি তাঁর বান্দাদের নিরাপত্তা দেন এবং নিজের প্রতিশ্রুতি সত্যায়ন করেন।`
+            },
+            {
+                id: 8,
+                number: "৮",
+                bengaliName: "আল-মুহাইমিন",
+                bengaliMeaning: "রক্ষণাবেক্ষণকারী",
+                arabicName: "الْمُهَيْمِنُ",
+                details: `আল-মুহাইমিন - রক্ষণাবেক্ষণকারী\n\nযিনি সমস্ত সৃষ্টির উপর তত্ত্বাবধায়ক ও সাক্ষী এবং তাদের সংরক্ষণ করেন।`
+            },
+            {
+                id: 9,
+                number: "৯",
+                bengaliName: "আল-আযীয",
+                bengaliMeaning: "পরাক্রমশালী",
+                arabicName: "الْعَزِيزُ",
+                details: `আল-আযীয - পরাক্রমশালী\n\nযিনি অপরাজেয় ও সর্বশক্তিমান, যাঁকে কেউ পরাভূত করতে পারে না।`
+            },
+            {
+                id: 10,
+                number: "১০",
+                bengaliName: "আল-জাব্বার",
+                bengaliMeaning: "প্রবল পরাক্রান্ত",
+                arabicName: "الْجَبَّارُ",
+                details: `আল-জাব্বার - প্রবল পরাক্রান্ত\n\nযিনি নিজ ইচ্ছা বলপ্রয়োগে কার্যকর করেন এবং সৃষ্টির ত্রুটি সংশোধন করেন।`
+            },
+            {
+                id: 11,
+                number: "১১",
+                bengaliName: "আল-মুতাকাব্বির",
+                bengaliMeaning: "অহংকারের একমাত্র অধিকারী",
+                arabicName: "الْمُتَكَبِّرُ",
+                details: `আল-মুতাকাব্বির - অহংকারের একমাত্র অধিকারী\n\nযিনি একমাত্র মহত্ত্ব ও শ্রেষ্ঠত্বের অধিকারী, তাঁর সমকক্ষ কেউ নেই।`
+            },
+            {
+                id: 12,
+                number: "১২",
+                bengaliName: "আল-খালিক",
+                bengaliMeaning: "সৃষ্টিকর্তা",
+                arabicName: "الْخَالِقُ",
+                details: `আল-খালিক - সৃষ্টিকর্তা\n\nযিনি অস্তিত্বহীন থেকে সবকিছু সৃষ্টি করেছেন, কোনো নমুনা ছাড়াই।`
+            },
+            {
+                id: 13,
+                number: "১৩",
+                bengaliName: "আল-বারী",
+                bengaliMeaning: "সৃষ্টিকারী",
+                arabicName: "الْبَارِئُ",
+                details: `আল-বারী - সৃষ্টিকারী\n\nযিনি নিখুঁত পরিকল্পনা অনুযায়ী প্রতিটি সৃষ্টিকে বিশৃঙ্খলা ছাড়া অস্তিত্ব দান করেন।`
+            },
+            {
+                id: 14,
+                number: "১৪",
+                bengaliName: "আল-মুসাওবির",
+                bengaliMeaning: "রূপদানকারী",
+                arabicName: "الْمُصَوِّرُ",
+                details: `আল-মুসাওবির - রূপদানকারী\n\nযিনি প্রতিটি সৃষ্টিকে স্বতন্ত্র আকৃতি ও রূপ দান করেন।`
+            },
+            {
+                id: 15,
+                number: "১৫",
+                bengaliName: "আল-গাফফার",
+                bengaliMeaning: "ক্ষমাশীল",
+                arabicName: "الْغَفَّارُ",
+                details: `আল-গাফফার - ক্ষমাশীল\n\nযিনি বারবার তওবাকারী বান্দার গুনাহ বার বার ক্ষমা করেন।`
+            },
+            {
+                id: 16,
+                number: "১৬",
+                bengaliName: "আল-কাহহার",
+                bengaliMeaning: "পরাক্রমশালী দমনকারী",
+                arabicName: "الْقَهَّارُ",
+                details: `আল-কাহহার - পরাক্রমশালী দমনকারী\n\nযিনি সকল অহংকারী ও অবাধ্যকে পরাভূত করার ক্ষমতা রাখেন।`
+            },
+            {
+                id: 17,
+                number: "১৭",
+                bengaliName: "আল-ওয়াহহাব",
+                bengaliMeaning: "দানশীল",
+                arabicName: "الْوَهَّابُ",
+                details: `আল-ওয়াহহাব - দানশীল\n\nযিনি বিনিময় ছাড়াই বান্দাদের প্রচুর দান করেন।`
+            },
+            {
+                id: 18,
+                number: "১৮",
+                bengaliName: "আর-রাযযাক",
+                bengaliMeaning: "রিযিকদাতা",
+                arabicName: "الرَّزَّاقُ",
+                details: `আর-রাযযাক - রিযিকদাতা\n\nযিনি সকল সৃষ্টির জীবিকা ও প্রয়োজনীয় বস্তু সরবরাহ করেন।`
+            },
+            {
+                id: 19,
+                number: "১৯",
+                bengaliName: "আল-ফাত্তাহ",
+                bengaliMeaning: "বিজয়দানকারী",
+                arabicName: "الْفَتَّاحُ",
+                details: `আল-ফাত্তাহ - বিজয়দানকারী\n\nযিনি সকল সমস্যার সমাধান দেন এবং বন্ধ দরজা খুলে দেন।`
+            },
+            {
+                id: 20,
+                number: "২০",
+                bengaliName: "আল-আলীম",
+                bengaliMeaning: "সর্বজ্ঞ",
+                arabicName: "الْعَلِيمُ",
+                details: `আল-আলীম - সর্বজ্ঞ\n\nযিনি প্রকাশ্য-অপ্রকাশ্য, অতীত-বর্তমান-ভবিষ্যৎ সবকিছু সম্পর্কে সম্পূর্ণ অবগত।`
+            },
+            {
+                id: 21,
+                number: "২১",
+                bengaliName: "আল-কাবিদ",
+                bengaliMeaning: "সংকোচনকারী",
+                arabicName: "الْقَابِضُ",
+                details: `আল-কাবিদ - সংকোচনকারী\n\nযিনি ইচ্ছানুসারে রিযিক ও আত্মা সংকুচিত করেন।`
+            },
+            {
+                id: 22,
+                number: "২২",
+                bengaliName: "আল-বাসিত",
+                bengaliMeaning: "সম্প্রসারণকারী",
+                arabicName: "الْبَاسِطُ",
+                details: `আল-বাসিত - সম্প্রসারণকারী\n\nযিনি ইচ্ছানুসারে রিযিক ও দয়া প্রসারিত করেন।`
+            },
+            {
+                id: 23,
+                number: "২৩",
+                bengaliName: "আল-খাফিদ",
+                bengaliMeaning: "অবনতকারী",
+                arabicName: "الْخَافِضُ",
+                details: `আল-খাফিদ - অবনতকারী\n\nযিনি অহংকারীদের অপমানিত ও নীচু করেন।`
+            },
+            {
+                id: 24,
+                number: "২৪",
+                bengaliName: "আর-রাফি'",
+                bengaliMeaning: "উন্নতকারী",
+                arabicName: "الرَّافِعُ",
+                details: `আর-রাফি' - উন্নতকারী\n\nযিনি নম্র ও পরহেজগার বান্দাদের মর্যাদা উন্নীত করেন।`
+            },
+            {
+                id: 25,
+                number: "২৫",
+                bengaliName: "আল-মু'ইয",
+                bengaliMeaning: "সম্মানদাতা",
+                arabicName: "الْمُعِزُّ",
+                details: `আল-মু'ইয - সম্মানদাতা\n\nযিনি যাকে ইচ্ছা সম্মান ও ক্ষমতা দান করেন।`
+            },
+            {
+                id: 26,
+                number: "২৬",
+                bengaliName: "আল-মুযিল",
+                bengaliMeaning: "অপমানকারী",
+                arabicName: "الْمُذِلُّ",
+                details: `আল-মুযিল - অপমানকারী\n\nযিনি যাকে ইচ্ছা অপমানিত ও লাঞ্ছিত করেন।`
+            },
+            {
+                id: 27,
+                number: "২৭",
+                bengaliName: "আস-সামী'",
+                bengaliMeaning: "সর্বশ্রোতা",
+                arabicName: "السَّمِيعُ",
+                details: `আস-সামী' - সর্বশ্রোতা\n\nযিনি সমস্ত শব্দ, গোপন কথা ও প্রার্থনা শোনেন।`
+            },
+            {
+                id: 28,
+                number: "২৮",
+                bengaliName: "আল-বাসীর",
+                bengaliMeaning: "সর্বদ্রষ্টা",
+                arabicName: "الْبَصِيرُ",
+                details: `আল-বাসীর - সর্বদ্রষ্টা\n\nযিনি সবকিছু দেখেন, এমনকি সবচেয়ে গোপন বিষয়ও।`
+            },
+            {
+                id: 29,
+                number: "২৯",
+                bengaliName: "আল-হাকাম",
+                bengaliMeaning: "বিচারক",
+                arabicName: "الْحَكَمُ",
+                details: `আল-হাকাম - বিচারক\n\nযিনি চূড়ান্ত ও ন্যায্য ফয়সালা প্রদানকারী।`
+            },
+            {
+                id: 30,
+                number: "৩০",
+                bengaliName: "আল-আদল",
+                bengaliMeaning: "ন্যায়পরায়ণ",
+                arabicName: "الْعَدْلُ",
+                details: `আল-আদল - ন্যায়পরায়ণ\n\nযিনি সম্পূর্ণ ন্যায়বিচারক, কোনো অবিচার তাঁর কাছ থেকে আসে না।`
+            },
+            {
+                id: 31,
+                number: "৩১",
+                bengaliName: "আল-লতীফ",
+                bengaliMeaning: "সূক্ষ্মদর্শী",
+                arabicName: "اللَّطِيفُ",
+                details: `আল-লতীফ - সূক্ষ্মদর্শী\n\nযিনি অতি সূক্ষ্ম বিষয়াদি সম্পর্কে অবগত এবং বান্দাদের প্রতি স্নেহশীল।`
+            },
+            {
+                id: 32,
+                number: "৩২",
+                bengaliName: "আল-খাবীর",
+                bengaliMeaning: "সর্বজ্ঞাত",
+                arabicName: "الْخَبِيرُ",
+                details: `আল-খাবীর - সর্বজ্ঞাত\n\nযিনি সকল বিষয়ের অভ্যন্তরীণ ও প্রকৃত অবস্থা সম্পর্কে সম্পূর্ণ অবগত।`
+            },
+            {
+                id: 33,
+                number: "৩৩",
+                bengaliName: "আল-হালীম",
+                bengaliMeaning: "সহনশীল",
+                arabicName: "الْحَلِيمُ",
+                details: `আল-হালীম - সহনশীল\n\nযিনি অবাধ্যদের শাস্তি দিতে তাড়াহুড়ো করেন না, বরং সহনশীলতা প্রদর্শন করেন।`
+            },
+            {
+                id: 34,
+                number: "৩৪",
+                bengaliName: "আল-আযীম",
+                bengaliMeaning: "মহীয়ান",
+                arabicName: "الْعَظِيمُ",
+                details: `আল-আযীম - মহীয়ান\n\nযিনি সকল ক্ষেত্রে সীমাহীন মহত্ত্বের অধিকারী।`
+            },
+            {
+                id: 35,
+                number: "৩৫",
+                bengaliName: "আল-গাফূর",
+                bengaliMeaning: "ক্ষমাশীল",
+                arabicName: "الْغَفُورُ",
+                details: `আল-গাফূর - ক্ষমাশীল\n\nযিনি বান্দার গুনাহ ঢেকে রেখে ক্ষমা করে দেন।`
+            },
+            {
+                id: 36,
+                number: "৩৬",
+                bengaliName: "আশ-শাকূর",
+                bengaliMeaning: "গুণগ্রাহী",
+                arabicName: "الشَّكُورُ",
+                details: `আশ-শাকূর - গুণগ্রাহী\n\nযিনি সামান্য নেক আমলের বিনিময়েও প্রচুর পুরস্কার দান করেন।`
+            },
+            {
+                id: 37,
+                number: "৩৭",
+                bengaliName: "আল-আলী",
+                bengaliMeaning: "সমুন্নত",
+                arabicName: "الْعَلِيُّ",
+                details: `আল-আলী - সমুন্নত\n\nযিনি মর্যাদা ও অবস্থানে সর্বোচ্চ, তাঁর ঊর্ধ্বে কিছু নেই।`
+            },
+            {
+                id: 38,
+                number: "৩৮",
+                bengaliName: "আল-কাবীর",
+                bengaliMeaning: "মহান",
+                arabicName: "الْكَبِيرُ",
+                details: `আল-কাবীর - মহান\n\nযিনি সকল সৃষ্টি থেকে মহত্ত্বে ও শ্রেষ্ঠত্বে অনেক বড়।`
+            },
+            {
+                id: 39,
+                number: "৩৯",
+                bengaliName: "আল-হাফীজ",
+                bengaliMeaning: "রক্ষণাবেক্ষণকারী",
+                arabicName: "الْحَفِيظُ",
+                details: `আল-হাফীজ - রক্ষণাবেক্ষণকারী\n\nযিনি সৃষ্টিজগত ও তাদের আমল সংরক্ষণ করেন।`
+            },
+            {
+                id: 40,
+                number: "৪০",
+                bengaliName: "আল-মুকীত",
+                bengaliMeaning: "অন্নদাতা",
+                arabicName: "الْمُقِيتُ",
+                details: `আল-মুকীত - অন্নদাতা\n\nযিনি সকল সৃষ্টির জন্য প্রয়োজনীয় খাদ্য ও শক্তি যোগান দেন।`
+            },
+            {
+                id: 41,
+                number: "৪১",
+                bengaliName: "আল-হাসীব",
+                bengaliMeaning: "হিসাব গ্রহণকারী",
+                arabicName: "الْحَسِيبُ",
+                details: `আল-হাসীব - হিসাব গ্রহণকারী\n\nযিনি প্রতিটি বান্দার আমলের হিসাব রাখেন ও যথাযথ প্রতিদান দেন।`
+            },
+            {
+                id: 42,
+                number: "৪২",
+                bengaliName: "আল-জালীল",
+                bengaliMeaning: "মহিমান্বিত",
+                arabicName: "الْجَلِيلُ",
+                details: `আল-জালীল - মহিমান্বিত\n\nযিনি মহিমা, শ্রেষ্ঠত্ব ও পূর্ণতার অধিকারী।`
+            },
+            {
+                id: 43,
+                number: "৪৩",
+                bengaliName: "আল-কারীম",
+                bengaliMeaning: "দানশীল",
+                arabicName: "الْكَرِيمُ",
+                details: `আল-কারীম - দানশীল\n\nযিনি অতি উদার ও সম্মানিত, প্রার্থনা ছাড়াই দান করেন।`
+            },
+            {
+                id: 44,
+                number: "৪৪",
+                bengaliName: "আর-রাকীব",
+                bengaliMeaning: "প্রহরী",
+                arabicName: "الرَّقِيبُ",
+                details: `আর-রাকীব - প্রহরী\n\nযিনি সার্বক্ষণিকভাবে সবকিছুর তত্ত্বাবধান ও পর্যবেক্ষণ করেন।`
+            },
+            {
+                id: 45,
+                number: "৪৫",
+                bengaliName: "আল-মুজীব",
+                bengaliMeaning: "সাড়াদানকারী",
+                arabicName: "الْمُجِيبُ",
+                details: `আল-মুজীব - সাড়াদানকারী\n\nযিনি বান্দার দোয়া ও প্রার্থনায় সাড়া দেন।`
+            },
+            {
+                id: 46,
+                number: "৪৬",
+                bengaliName: "আল-ওয়াসি'",
+                bengaliMeaning: "প্রশস্ত",
+                arabicName: "الْوَاسِعُ",
+                details: `আল-ওয়াসি' - প্রশস্ত\n\nযিনি জ্ঞানে, রহমতে ও ক্ষমতায় সীমাহীন প্রশস্ততার অধিকারী।`
+            },
+            {
+                id: 47,
+                number: "৪৭",
+                bengaliName: "আল-হাকীম",
+                bengaliMeaning: "প্রজ্ঞাময়",
+                arabicName: "الْحَكِيمُ",
+                details: `আল-হাকীম - প্রজ্ঞাময়\n\nযিনি সকল কাজ পরম প্রজ্ঞা ও যথার্থতার সাথে সম্পাদন করেন।`
+            },
+            {
+                id: 48,
+                number: "৪৮",
+                bengaliName: "আল-ওয়াদূদ",
+                bengaliMeaning: "প্রেমময়",
+                arabicName: "الْوَدُودُ",
+                details: `আল-ওয়াদূদ - প্রেমময়\n\nযিনি তাঁর নেক বান্দাদের ভালোবাসেন এবং তাদের ভালোবাসা অর্জন করেন।`
+            },
+            {
+                id: 49,
+                number: "৪৯",
+                bengaliName: "আল-মাজীদ",
+                bengaliMeaning: "গৌরবান্বিত",
+                arabicName: "الْمَجِيدُ",
+                details: `আল-মাজীদ - গৌরবান্বিত\n\nযিনি মহিমা, মর্যাদা ও উদারতায় পরিপূর্ণ।`
+            },
+            {
+                id: 50,
+                number: "৫০",
+                bengaliName: "আল-বা'ইস",
+                bengaliMeaning: "পুনরুত্থানকারী",
+                arabicName: "الْبَاعِثُ",
+                details: `আল-বা'ইস - পুনরুত্থানকারী\n\nযিনি কিয়ামতের দিন মৃতদের পুনরুত্থিত করবেন।`
+            },
+            {
+                id: 51,
+                number: "৫১",
+                bengaliName: "আশ-শাহীদ",
+                bengaliMeaning: "সাক্ষী",
+                arabicName: "الشَّهِيدُ",
+                details: `আশ-শাহীদ - সাক্ষী\n\nযিনি সর্বত্র উপস্থিত থেকে সবকিছুর সাক্ষী।`
+            },
+            {
+                id: 52,
+                number: "৫২",
+                bengaliName: "আল-হাক্ক",
+                bengaliMeaning: "সত্য",
+                arabicName: "الْحَقُّ",
+                details: `আল-হাক্ক - সত্য\n\nযিনি চিরন্তন সত্য সত্তা, যাঁর অস্তিত্বে কোনো সন্দেহ নেই।`
+            },
+            {
+                id: 53,
+                number: "৫৩",
+                bengaliName: "আল-ওয়াকীল",
+                bengaliMeaning: "কর্মবিধায়ক",
+                arabicName: "الْوَكِيلُ",
+                details: `আল-ওয়াকীল - কর্মবিধায়ক\n\nযাঁর উপর ভরসা করলে তিনি বান্দার সকল কাজের যথাযথ ব্যবস্থাপনা করেন।`
+            },
+            {
+                id: 54,
+                number: "৫৪",
+                bengaliName: "আল-কাবী",
+                bengaliMeaning: "পরাক্রমশালী",
+                arabicName: "الْقَوِيُّ",
+                details: `আল-কাবী - পরাক্রমশালী\n\nযিনি অসীম শক্তির অধিকারী, তাঁর শক্তির কোনো সীমা নেই।`
+            },
+            {
+                id: 55,
+                number: "৫৫",
+                bengaliName: "আল-মাতীন",
+                bengaliMeaning: "সুদৃঢ়",
+                arabicName: "الْمَتِينُ",
+                details: `আল-মাতীন - সুদৃঢ়\n\nযিনি অত্যন্ত দৃঢ় ও অবিচল শক্তির অধিকারী।`
+            },
+            {
+                id: 56,
+                number: "৫৬",
+                bengaliName: "আল-ওয়ালী",
+                bengaliMeaning: "অভিভাবক",
+                arabicName: "الْوَلِيُّ",
+                details: `আল-ওয়ালী - অভিভাবক\n\nযিনি মুমিন বান্দাদের বন্ধু, সাহায্যকারী ও অভিভাবক।`
+            },
+            {
+                id: 57,
+                number: "৫৭",
+                bengaliName: "আল-হামীদ",
+                bengaliMeaning: "প্রশংসিত",
+                arabicName: "الْحَمِيدُ",
+                details: `আল-হামীদ - প্রশংসিত\n\nযিনি সকল প্রকার প্রশংসার একমাত্র উপযুক্ত।`
+            },
+            {
+                id: 58,
+                number: "৫৮",
+                bengaliName: "আল-মুহসী",
+                bengaliMeaning: "গণনাকারী",
+                arabicName: "الْمُحْصِي",
+                details: `আল-মুহসী - গণনাকারী\n\nযিনি সবকিছুর সংখ্যা ও পরিমাণ নির্ভুলভাবে গণনা করে রাখেন।`
+            },
+            {
+                id: 59,
+                number: "৫৯",
+                bengaliName: "আল-মুবদি'",
+                bengaliMeaning: "স্রষ্টা",
+                arabicName: "الْمُبْدِئُ",
+                details: `আল-মুবদি' - স্রষ্টা\n\nযিনি কোনো নমুনা ছাড়াই প্রথমবার সৃষ্টি করেছেন।`
+            },
+            {
+                id: 60,
+                number: "৬০",
+                bengaliName: "আল-মুঈদ",
+                bengaliMeaning: "পুনঃসৃষ্টিকারী",
+                arabicName: "الْمُعِيدُ",
+                details: `আল-মুঈদ - পুনঃসৃষ্টিকারী\n\nযিনি সৃষ্টির পর তা ধ্বংস করে পুনরায় সৃষ্টি করার ক্ষমতা রাখেন।`
+            },
+            {
+                id: 61,
+                number: "৬১",
+                bengaliName: "আল-মুহয়ী",
+                bengaliMeaning: "জীবনদাতা",
+                arabicName: "الْمُحْيِي",
+                details: `আল-মুহয়ী - জীবনদাতা\n\nযিনি প্রাণহীন বস্তুতে জীবন দান করেন।`
+            },
+            {
+                id: 62,
+                number: "৬২",
+                bengaliName: "আল-মুমীত",
+                bengaliMeaning: "মৃত্যুদাতা",
+                arabicName: "الْمُمِيتُ",
+                details: `আল-মুমীত - মৃত্যুদাতা\n\nযিনি জীবিতকে মৃত্যু দান করেন।`
+            },
+            {
+                id: 63,
+                number: "৬৩",
+                bengaliName: "আল-হাই",
+                bengaliMeaning: "চিরঞ্জীব",
+                arabicName: "الْحَيُّ",
+                details: `আল-হাই - চিরঞ্জীব\n\nযিনি চিরস্থায়ী জীবনের অধিকারী, তাঁর মৃত্যু নেই।`
+            },
+            {
+                id: 64,
+                number: "৬৪",
+                bengaliName: "আল-কাইয়ূম",
+                bengaliMeaning: "চিরস্থায়ী",
+                arabicName: "الْقَيُّومُ",
+                details: `আল-কাইয়ূম - চিরস্থায়ী\n\nযিনি নিজে স্বয়ংসম্পূর্ণ এবং সমগ্র সৃষ্টিজগত তাঁর উপর নির্ভরশীল।`
+            },
+            {
+                id: 65,
+                number: "৬৫",
+                bengaliName: "আল-ওয়াজিদ",
+                bengaliMeaning: "অভাবমুক্ত",
+                arabicName: "الْوَاجِدُ",
+                details: `আল-ওয়াজিদ - অভাবমুক্ত\n\nযিনি সবকিছুর অধিকারী এবং কোনো কিছুর অভাব নেই।`
+            },
+            {
+                id: 66,
+                number: "৬৬",
+                bengaliName: "আল-মাজিদ",
+                bengaliMeaning: "মহিমান্বিত",
+                arabicName: "الْمَاجِدُ",
+                details: `আল-মাজিদ - মহিমান্বিত\n\nযিনি মহত্ত্ব ও মর্যাদায় পরিপূর্ণ।`
+            },
+            {
+                id: 67,
+                number: "৬৭",
+                bengaliName: "আল-ওয়াহিদ",
+                bengaliMeaning: "এক",
+                arabicName: "الْوَاحِدُ",
+                details: `আল-ওয়াহিদ - এক\n\nযিনি সত্তা, গুণ ও কর্মে সম্পূর্ণ একক, তাঁর কোনো শরিক নেই।`
+            },
+            {
+                id: 68,
+                number: "৬৮",
+                bengaliName: "আস-সামাদ",
+                bengaliMeaning: "অমুখাপেক্ষী",
+                arabicName: "الصَّمَدُ",
+                details: `আস-সামাদ - অমুখাপেক্ষী\n\nযিনি কারো মুখাপেক্ষী নন, বরং সকলে তাঁর মুখাপেক্ষী।`
+            },
+            {
+                id: 69,
+                number: "৬৯",
+                bengaliName: "আল-কাদির",
+                bengaliMeaning: "ক্ষমতাবান",
+                arabicName: "الْقَادِرُ",
+                details: `আল-কাদির - ক্ষমতাবান\n\nযিনি সবকিছু করার পূর্ণ ক্ষমতা রাখেন।`
+            },
+            {
+                id: 70,
+                number: "৭০",
+                bengaliName: "আল-মুকতাদির",
+                bengaliMeaning: "পরম ক্ষমতাবান",
+                arabicName: "الْمُقْتَدِرُ",
+                details: `আল-মুকতাদির - পরম ক্ষমতাবান\n\nযিনি সীমাহীন ক্ষমতা প্রয়োগে সক্ষম।`
+            },
+            {
+                id: 71,
+                number: "৭১",
+                bengaliName: "আল-মুকাদ্দিম",
+                bengaliMeaning: "অগ্রবর্তীকারী",
+                arabicName: "الْمُقَدِّمُ",
+                details: `আল-মুকাদ্দিম - অগ্রবর্তীকারী\n\nযিনি যাকে ইচ্ছা মর্যাদায় অগ্রবর্তী করেন।`
+            },
+            {
+                id: 72,
+                number: "৭২",
+                bengaliName: "আল-মুআখখির",
+                bengaliMeaning: "পশ্চাদবর্তীকারী",
+                arabicName: "الْمُؤَخِّرُ",
+                details: `আল-মুআখখির - পশ্চাদবর্তীকারী\n\nযিনি যাকে ইচ্ছা পিছিয়ে দেন বা বিলম্বিত করেন।`
+            },
+            {
+                id: 73,
+                number: "৭৩",
+                bengaliName: "আল-আওয়াল",
+                bengaliMeaning: "অনাদি",
+                arabicName: "الْأَوَّلُ",
+                details: `আল-আওয়াল - অনাদি\n\nযাঁর কোনো শুরু নেই, তিনি সবকিছুর পূর্বে বিদ্যমান।`
+            },
+            {
+                id: 74,
+                number: "৭৪",
+                bengaliName: "আল-আখির",
+                bengaliMeaning: "অনন্ত",
+                arabicName: "الْآخِرُ",
+                details: `আল-আখির - অনন্ত\n\nযাঁর কোনো শেষ নেই, সবকিছু ধ্বংস হওয়ার পরও তিনি থাকবেন।`
+            },
+            {
+                id: 75,
+                number: "৭৫",
+                bengaliName: "আজ-জাহির",
+                bengaliMeaning: "প্রকাশমান",
+                arabicName: "الظَّاهِرُ",
+                details: `আজ-জাহির - প্রকাশমান\n\nযিনি তাঁর সৃষ্টি ও নিদর্শনের মাধ্যমে সুস্পষ্টভাবে প্রকাশিত।`
+            },
+            {
+                id: 76,
+                number: "৭৬",
+                bengaliName: "আল-বাতিন",
+                bengaliMeaning: "গোপন",
+                arabicName: "الْبَاطِنُ",
+                details: `আল-বাতিন - গোপন\n\nযাঁর প্রকৃত স্বরূপ মানুষের চিন্তার নাগালের বাইরে, অতি নিকটে থেকেও অদৃশ্য।`
+            },
+            {
+                id: 77,
+                number: "৭৭",
+                bengaliName: "আল-ওয়ালী",
+                bengaliMeaning: "অভিভাবক (কর্তা)",
+                arabicName: "الْوَالِي",
+                details: `আল-ওয়ালী - অভিভাবক (কর্তা)\n\nযিনি সৃষ্টিজগতের সার্বিক পরিচালনা ও কর্তৃত্বের অধিকারী।`
+            },
+            {
+                id: 78,
+                number: "৭৮",
+                bengaliName: "আল-মুতাআলী",
+                bengaliMeaning: "সর্বোচ্চ",
+                arabicName: "الْمُتَعَالِي",
+                details: `আল-মুতাআলী - সর্বোচ্চ\n\nযিনি সকল সৃষ্টির কল্পনা ও সীমাবদ্ধতার ঊর্ধ্বে।`
+            },
+            {
+                id: 79,
+                number: "৭৯",
+                bengaliName: "আল-বার্র",
+                bengaliMeaning: "কল্যাণকারী",
+                arabicName: "الْبَرُّ",
+                details: `আল-বার্র - কল্যাণকারী\n\nযিনি বান্দাদের প্রতি অসীম কল্যাণ ও অনুগ্রহ প্রদর্শন করেন।`
+            },
+            {
+                id: 80,
+                number: "৮০",
+                bengaliName: "আত-তাওয়াব",
+                bengaliMeaning: "তওবা কবুলকারী",
+                arabicName: "التَّوَّابُ",
+                details: `আত-তাওয়াব - তওবা কবুলকারী\n\nযিনি বারবার তওবাকারী বান্দার তওবা কবুল করেন।`
+            },
+            {
+                id: 81,
+                number: "৮১",
+                bengaliName: "আল-মুনতাকিম",
+                bengaliMeaning: "প্রতিশোধ গ্রহণকারী",
+                arabicName: "الْمُنْتَقِمُ",
+                details: `আল-মুনতাকিম - প্রতিশোধ গ্রহণকারী\n\nযিনি অপরাধীদের ন্যায্য প্রতিফল দেন।`
+            },
+            {
+                id: 82,
+                number: "৮২",
+                bengaliName: "আল-আফুও",
+                bengaliMeaning: "ক্ষমাকারী",
+                arabicName: "الْعَفُوُّ",
+                details: `আল-আফুও - ক্ষমাকারী\n\nযিনি বান্দার পাপ সম্পূর্ণরূপে মুছে দেন।`
+            },
+            {
+                id: 83,
+                number: "৮৩",
+                bengaliName: "আর-রাউফ",
+                bengaliMeaning: "স্নেহময়",
+                arabicName: "الرَّءُوفُ",
+                details: `আর-রাউফ - স্নেহময়\n\nযিনি বান্দাদের প্রতি অত্যন্ত স্নেহশীল ও কোমল।`
+            },
+            {
+                id: 84,
+                number: "৮৪",
+                bengaliName: "মালিকুল মুলক",
+                bengaliMeaning: "রাজ্যের অধিপতি",
+                arabicName: "مَالِكُ الْمُلْكِ",
+                details: `মালিকুল মুলক - রাজ্যের অধিপতি\n\nযিনি সমগ্র বিশ্বজগতের রাজত্বের একচ্ছত্র মালিক।`
+            },
+            {
+                id: 85,
+                number: "৮৫",
+                bengaliName: "যুল জালালি ওয়াল ইকরাম",
+                bengaliMeaning: "মহিমা ও মর্যাদার অধিকারী",
+                arabicName: "ذُو الْجَلَالِ وَالْإِكْرَامِ",
+                details: `যুল জালালি ওয়াল ইকরাম - মহিমা ও মর্যাদার অধিকারী\n\nযিনি মহিমা, শ্রদ্ধা ও সম্মানের একমাত্র অধিকারী।`
+            },
+            {
+                id: 86,
+                number: "৮৬",
+                bengaliName: "আল-মুকসিত",
+                bengaliMeaning: "ন্যায়বিচারক",
+                arabicName: "الْمُقْسِطُ",
+                details: `আল-মুকসিত - ন্যায়বিচারক\n\nযিনি সকল বিষয়ে পূর্ণ ন্যায়বিচার প্রতিষ্ঠা করেন।`
+            },
+            {
+                id: 87,
+                number: "৮৭",
+                bengaliName: "আল-জামি'",
+                bengaliMeaning: "সমবেতকারী",
+                arabicName: "الْجَامِعُ",
+                details: `আল-জামি' - সমবেতকারী\n\nযিনি কিয়ামতের দিন সকল সৃষ্টিকে একত্র করবেন।`
+            },
+            {
+                id: 88,
+                number: "৮৮",
+                bengaliName: "আল-গানী",
+                bengaliMeaning: "অভাবমুক্ত",
+                arabicName: "الْغَنِيُّ",
+                details: `আল-গানী - অভাবমুক্ত\n\nযিনি সম্পূর্ণ স্বয়ংসম্পূর্ণ, কারো সাহায্যের প্রয়োজন নেই।`
+            },
+            {
+                id: 89,
+                number: "৮৯",
+                bengaliName: "আল-মুগনী",
+                bengaliMeaning: "অভাবমোচনকারী",
+                arabicName: "الْمُغْنِي",
+                details: `আল-মুগনী - অভাবমোচনকারী\n\nযিনি বান্দাদের অভাব দূর করে সচ্ছলতা দান করেন।`
+            },
+            {
+                id: 90,
+                number: "৯০",
+                bengaliName: "আল-মানি'",
+                bengaliMeaning: "প্রতিরোধকারী",
+                arabicName: "الْمَانِعُ",
+                details: `আল-মানি' - প্রতিরোধকারী\n\nযিনি ক্ষতি ও অকল্যাণ থেকে বান্দাদের রক্ষা করেন।`
+            },
+            {
+                id: 91,
+                number: "৯১",
+                bengaliName: "আদ-দার্র",
+                bengaliMeaning: "ক্ষতিসাধনকারী",
+                arabicName: "الضَّارُّ",
+                details: `আদ-দার্র - ক্ষতিসাধনকারী\n\nযিনি তাঁর হিকমত অনুযায়ী ক্ষতি সৃষ্টি করতে সক্ষম।`
+            },
+            {
+                id: 92,
+                number: "৯২",
+                bengaliName: "আন-নাফি'",
+                bengaliMeaning: "উপকারকারী",
+                arabicName: "النَّافِعُ",
+                details: `আন-নাফি' - উপকারকারী\n\nযিনি বান্দাদের কল্যাণ ও উপকার সাধন করেন।`
+            },
+            {
+                id: 93,
+                number: "৯৩",
+                bengaliName: "আন-নূর",
+                bengaliMeaning: "আলো",
+                arabicName: "النُّورُ",
+                details: `আন-নূর - আলো\n\nযিনি আসমান ও জমিনের আলোর উৎস, হৃদয়কে হেদায়েতের আলোয় আলোকিত করেন।`
+            },
+            {
+                id: 94,
+                number: "৯৪",
+                bengaliName: "আল-হাদী",
+                bengaliMeaning: "পথপ্রদর্শক",
+                arabicName: "الْهَادِي",
+                details: `আল-হাদী - পথপ্রদর্শক\n\nযিনি বান্দাদের সঠিক পথের দিশা দেন।`
+            },
+            {
+                id: 95,
+                number: "৯৫",
+                bengaliName: "আল-বাদী'",
+                bengaliMeaning: "অনুপম স্রষ্টা",
+                arabicName: "الْبَدِيعُ",
+                details: `আল-বাদী' - অনুপম স্রষ্টা\n\nযিনি কোনো পূর্ব নমুনা ছাড়াই অভিনব সৃষ্টি করেন।`
+            },
+            {
+                id: 96,
+                number: "৯৬",
+                bengaliName: "আল-বাকী",
+                bengaliMeaning: "চিরস্থায়ী",
+                arabicName: "الْبَاقِي",
+                details: `আল-বাকী - চিরস্থায়ী\n\nযিনি চিরকাল থাকবেন, তাঁর কোনো ধ্বংস নেই।`
+            },
+            {
+                id: 97,
+                number: "৯৭",
+                bengaliName: "আল-ওয়ারিস",
+                bengaliMeaning: "উত্তরাধিকারী",
+                arabicName: "الْوَارِثُ",
+                details: `আল-ওয়ারিস - উত্তরাধিকারী\n\nযিনি সৃষ্টির ধ্বংসের পর একমাত্র অবশিষ্ট থাকবেন।`
+            },
+            {
+                id: 98,
+                number: "৯৮",
+                bengaliName: "আর-রাশীদ",
+                bengaliMeaning: "সৎপথ প্রদর্শক",
+                arabicName: "الرَّشِيدُ",
+                details: `আর-রাশীদ - সৎপথ প্রদর্শক\n\nযিনি সঠিক পথে পরিচালনা করেন এবং যাঁর প্রতিটি সিদ্ধান্ত যথার্থ।`
+            },
+            {
+                id: 99,
+                number: "৯৯",
+                bengaliName: "আস-সাবূর",
+                bengaliMeaning: "ধৈর্যশীল",
+                arabicName: "الصَّبُورُ",
+                details: `আস-সাবূর - ধৈর্যশীল\n\nযিনি অবাধ্যদের শাস্তি দিতে বিলম্ব করেন এবং পরম ধৈর্য প্রদর্শন করেন।`
+            }
+        ];
+
+        let currentTrack = 0;
+        let isPlaying = false;
+
+        // Initialize
+        function init() {
+            renderList();
+        }
+
+        // Render List
+        function renderList() {
+            const container = document.getElementById('mainList');
+            container.innerHTML = asmaData.map((item, index) => `
+                <div class="list-item" onclick="showDetails(${index})">
+                    <div class="item-left">
+                        <div class="item-number">${item.number} - ${item.bengaliName}</div>
+                        <div class="item-bengali-meaning">${item.bengaliMeaning}</div>
+                    </div>
+                    <div class="item-right">
+                        <div class="item-arabic">${item.arabicName}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Show Details Modal
+        function showDetails(index) {
+            const item = asmaData[index];
+            const detailsContent = document.getElementById('detailsContent');
+            detailsContent.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div class="item-arabic" style="font-size: 32px; margin-bottom: 10px;">${item.arabicName}</div>
+                    <div style="font-size: 18px; font-weight: 600; color: #2d5f4f;">${item.bengaliName}</div>
+                    <div style="font-size: 14px; color: #666; margin-top: 5px;">${item.bengaliMeaning}</div>
+                </div>
+                <div class="modal-bengali-text">
+                    ${item.details}
+                </div>
+            `;
+            openModal('detailsModal');
+        }
+
+        // Show Info
+        function showInfo() {
+            const infoContent = document.getElementById('infoContent');
+            infoContent.innerHTML = `
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 28px; font-weight: 600; color: #2d5f4f;">আসমাউল হুসনা</div>
+                    <div style="font-size: 14px; color: #666; margin-top: 10px;">আল্লাহর সুন্দর নামসমূহ</div>
+                </div>
+                
+                <div class="modal-bengali-text">
+                    <p>ফয়লাতের আলোকে আসমাউল হুসনা তথ্য আল্লাহ তাআলার পবিত্র নাম সমূহ:</p>
+                    
+                    <p style="margin-top: 15px; font-weight: 600;">কুরআনে করীমে ইরশাদ হয়েছে,</p>
+                </div>
+
+                <div class="modal-arabic-text">
+                    وَلِلَّهِ الْأَسْمَاءُ الْحُسْنَىٰ فَادْعُوهُ بِهَا ۖ وَذَرُوا الَّذِينَ يُلْحِدُونَ فِي أَسْمَائِهِ ۚ سَيُجْزَوْنَ مَا كَانُوا يَعْمَلُونَ
+                </div>
+
+                <div class="modal-bengali-text" style="margin-top: 20px;">
+                    <p>আর আল্লাহর জন্য রয়েছে সব উত্তম নাম। তাই সেই নামগুলি দ্বারা তাঁকে ডাক। আর তাদের বর্জন কর, যারা তাঁর নামের ব্যাপারে বিকৃতি ঘটায়। তারা যা করত তার জন্য শীঘ্রই তাদের প্রতিফল দেওয়া হবে।</p>
+                    
+                    <div class="modal-reference">— সুরা আল-আ'রাফ - ১৮০</div>
+                </div>
+
+                <div class="modal-arabic-text" style="margin-top: 20px;">
+                    قُلِ ادْعُوا اللَّهَ أَوِ ادْعُوا الرَّحْمَٰنَ ۖ أَيًّا مَّا تَدْعُوا فَلَهُ الْأَسْمَاءُ الْحُسْنَىٰ
+                </div>
+
+                <div class="modal-bengali-text" style="margin-top: 20px;">
+                    <p>বলুন: আল্লাহকে ডাক অথবা রহমানকে ডাক; যেই নামে ডাক না কেন, তার জন্য সব সুন্দর নাম রয়েছে।</p>
+                    
+                    <div class="modal-reference">— সুরা ইসরা - ১১০</div>
+                </div>
+            `;
+            openModal('infoModal');
+            document.getElementById('audioSection').classList.add('active');
+        }
+
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            if (modalId === 'infoModal') {
+                document.getElementById('audioSection').classList.remove('active');
+            }
+        }
+
+        // Audio Functions
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+            const btn = document.getElementById('playBtn');
+            if (isPlaying) {
+                btn.innerHTML = '<i class="fas fa-pause"></i>';
+            } else {
+                btn.innerHTML = '<i class="fas fa-play"></i>';
+            }
+        }
+
+        function previousTrack() {
+            currentTrack = currentTrack > 0 ? currentTrack - 1 : asmaData.length - 1;
+            updateTrackInfo();
+        }
+
+        function nextTrack() {
+            currentTrack = (currentTrack + 1) % asmaData.length;
+            updateTrackInfo();
+        }
+
+        function updateTrackInfo() {
+            document.getElementById('trackInfo').textContent = `${currentTrack + 1}/${asmaData.length}`;
+        }
+
+        function seekAudio(event) {
+            const bar = event.currentTarget;
+            const rect = bar.getBoundingClientRect();
+            const percent = (event.clientX - rect.left) / rect.width;
+            document.getElementById('progressFill').style.width = (percent * 100) + '%';
+        }
+
+        function goBack() {
+            // Handle back button
+            if (document.getElementById('infoModal').classList.contains('active')) {
+                closeModal('infoModal');
+            } else if (document.getElementById('detailsModal').classList.contains('active')) {
+                closeModal('detailsModal');
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', init);
+
+        // Close modal on outside click
+        window.addEventListener('click', function(event) {
+            const infoModal = document.getElementById('infoModal');
+            const detailsModal = document.getElementById('detailsModal');
+            
+            if (event.target === infoModal) {
+                closeModal('infoModal');
+            }
+            if (event.target === detailsModal) {
+                closeModal('detailsModal');
+            }
+        });
+    </script>
+</body>
+</html>

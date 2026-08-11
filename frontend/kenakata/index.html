@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>কেনাকাটা | মুসলিম পণ্য</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+                    @font-face{
+    font-family:'Kalpurush';
+    src:url('islamic-name/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+  :root{
+    --green-950:#0f2e20;
+    --green-900:#153c28;
+    --green-800:#1b4d31;
+    --green-700:#236339;
+    --green-600:#2f7d47;
+    --green-100:#eaf5ec;
+    --green-50:#f4faf5;
+    --red:#e0392b;
+    --gold:#f2a900;
+    --ink:#16241c;
+    --ink-soft:#5b6b61;
+    --line:#e2ece3;
+    --white:#ffffff;
+    --radius-lg:16px;
+    --radius-md:12px;
+    --radius-sm:8px;
+    --shadow:0 2px 10px rgba(15,46,32,.08);
+    --shadow-lg:0 8px 24px rgba(15,46,32,.14);
+  }
+
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    background:var(--green-50);
+    color:var(--ink);
+    padding-bottom:40px;
+    -webkit-font-smoothing:antialiased;
+  }
+  #nav-spacer{width:100%;}
+  img,svg{display:block;}
+  button{font-family:inherit;}
+  .icon{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+  .icon.fill{fill:currentColor;stroke:none;}
+
+  /* ===== Fixed nav wrapper (topbar + brandbar hide/show together) ===== */
+  .nav-wrap{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    transform:translateY(0);
+    transition:transform .28s ease, box-shadow .28s ease;
+    will-change:transform;
+  }
+  .nav-wrap.nav-hidden{transform:translateY(-100%);}
+  .nav-wrap.nav-scrolled{box-shadow:0 4px 16px rgba(15,46,32,.15);}
+
+  /* ===== Top bar ===== */
+  .topbar{
+    background:linear-gradient(135deg,var(--green-900),var(--green-800));
+    color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    padding:16px 16px;
+    position:relative;
+  }
+  .topbar .back{
+    position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    width:38px;height:38px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    border:1.5px solid rgba(255,255,255,.55);
+    background:transparent;color:#fff;cursor:pointer;
+  }
+  .topbar h1{font-size:19px;font-weight:700;margin:0;letter-spacing:.2px;}
+
+  /* ===== Brand / search bar ===== */
+  .brandbar{
+    background:var(--green-50);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:12px 16px;
+    border-bottom:1px solid var(--line);
+  }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-mark{
+    width:46px;height:46px;border-radius:50%;
+    border:2px solid var(--green-700);
+    display:flex;align-items:center;justify-content:center;
+    background:#fff;color:var(--green-700);
+  }
+  .brand-name{display:flex;flex-direction:column;line-height:1.1;}
+  .brand-name b{font-size:14px;color:var(--green-800);font-weight:700;}
+  .brand-name span{font-size:11px;color:var(--ink-soft);}
+  .brand-actions{display:flex;align-items:center;gap:10px;}
+  .icon-btn{
+    width:38px;height:38px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:#fff;border:1px solid var(--line);color:var(--green-800);
+    cursor:pointer;
+  }
+
+  /* ===== Promo banner ===== */
+  .promo{
+    margin:14px 16px 4px;
+    border-radius:var(--radius-lg);
+    background:linear-gradient(120deg,var(--green-700),var(--green-600));
+    color:#fff;
+    padding:20px 18px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:var(--shadow-lg);
+  }
+  .promo::after{
+    content:"";position:absolute;right:-30px;bottom:-40px;
+    width:150px;height:150px;border-radius:50%;
+    background:rgba(255,255,255,.08);
+  }
+  .promo-tag{
+    display:inline-flex;align-items:center;gap:6px;
+    background:#fff;color:var(--green-800);
+    font-size:11px;font-weight:700;
+    padding:5px 10px;border-radius:20px;margin-bottom:10px;
+  }
+  .promo h2{font-size:26px;margin:0 0 4px;font-weight:700;}
+  .promo p{margin:0;font-size:13px;color:rgba(255,255,255,.85);}
+  .promo b{color:var(--gold);}
+  .promo-icons{
+    display:flex;gap:10px;margin-top:14px;position:relative;z-index:1;
+  }
+  .promo-icons .pi{
+    width:40px;height:40px;border-radius:10px;
+    background:rgba(255,255,255,.14);
+    display:flex;align-items:center;justify-content:center;color:#fff;
+  }
+
+  /* ===== Popular search row ===== */
+  .popular{padding:20px 16px 6px;}
+  .popular h3{
+    font-size:13px;font-weight:700;color:var(--green-800);
+    display:flex;align-items:center;gap:6px;margin:0 0 14px;
+  }
+  .popular-row{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:8px;
+  }
+  .popular-item{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;}
+  .popular-circle{
+    width:56px;height:56px;border-radius:50%;
+    background:#fff;border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--green-700);box-shadow:var(--shadow);
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .popular-item:active .popular-circle{transform:scale(.94);}
+  .popular-item span{font-size:11.5px;color:var(--ink);text-align:center;font-weight:500;}
+
+  /* ===== Section header ===== */
+  .section{padding:22px 16px 6px;}
+  .section-head{margin-bottom:14px;display:flex;align-items:flex-end;justify-content:space-between;}
+  .eyebrow{
+    font-size:11.5px;font-weight:700;color:var(--green-600);
+    text-transform:uppercase;letter-spacing:.4px;margin:0 0 3px;
+  }
+  .section-title{font-size:21px;font-weight:700;margin:0;color:var(--ink);}
+  .menu-btn{
+    width:38px;height:38px;border-radius:50%;
+    background:var(--green-800);color:#fff;
+    display:flex;align-items:center;justify-content:center;border:none;cursor:pointer;
+  }
+
+  /* ===== Product grid ===== */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .card{
+    background:#fff;border-radius:var(--radius-md);
+    overflow:hidden;border:1px solid var(--line);
+    box-shadow:var(--shadow);
+    display:flex;flex-direction:column;
+    opacity:0; transform:translateY(14px);
+    animation:cardIn .5s ease forwards;
+  }
+  @keyframes cardIn{to{opacity:1;transform:translateY(0);}}
+  .card-media{
+    position:relative;aspect-ratio:1/0.95;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;
+  }
+  .card-media .icon{width:44px;height:44px;opacity:.92;}
+  .badge{
+    position:absolute;top:8px;right:8px;
+    background:var(--red);color:#fff;font-size:11px;font-weight:700;
+    padding:4px 7px;border-radius:20px;line-height:1;
+  }
+  .badge.stock{
+    right:auto;left:8px;background:var(--gold);color:var(--green-950);
+    font-size:10px;
+  }
+  .certified{
+    position:absolute;top:8px;left:8px;
+    width:20px;height:20px;border-radius:50%;background:#fff;
+    display:flex;align-items:center;justify-content:center;color:var(--green-700);
+  }
+  .order-strip{
+    position:absolute;left:0;right:0;bottom:0;
+    background:rgba(10,26,17,.82);color:#fff;
+    text-align:center;font-size:12.5px;font-weight:600;
+    padding:8px 0;letter-spacing:.2px;
+  }
+  .card-body{padding:10px 11px 12px;display:flex;flex-direction:column;gap:6px;flex:1;}
+  .card-name{
+    font-size:13px;font-weight:600;line-height:1.35;
+    display:flex; align-items:flex-start; gap:5px;
+    min-height:35px;
+  }
+  .origin-tag{
+    font-size:9.5px;font-weight:700;color:var(--green-700);
+    background:var(--green-100);border:1px solid var(--green-600);
+    border-radius:5px;padding:1px 5px;white-space:nowrap;margin-top:1px;
+  }
+  .card-rating{display:flex;align-items:center;gap:4px;font-size:11.5px;color:var(--ink-soft);}
+  .card-rating .stars{display:flex;gap:1px;color:var(--gold);}
+  .card-rating svg{width:12px;height:12px;}
+  .card-price-row{
+    display:flex;align-items:center;justify-content:space-between;margin-top:auto;
+  }
+  .price-group{display:flex;align-items:baseline;gap:6px;}
+  .price{font-size:15px;font-weight:700;color:var(--ink);}
+  .price-old{font-size:11.5px;color:#b3bdb5;text-decoration:line-through;}
+  .wish-btn{
+    width:28px;height:28px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--ink-soft);background:transparent;border:none;cursor:pointer;
+  }
+  .wish-btn.active{color:var(--red);}
+  .wish-btn .icon{width:17px;height:17px;}
+
+  .loadmore-wrap{display:flex;justify-content:center;margin:16px 0 4px;}
+  .loadmore{
+    display:flex;align-items:center;gap:6px;
+    background:#fff;border:1px solid var(--line);color:var(--green-800);
+    font-size:13px;font-weight:600;padding:10px 22px;border-radius:30px;
+    cursor:pointer;box-shadow:var(--shadow);
+  }
+  .loadmore .icon{width:16px;height:16px;transition:transform .25s ease;}
+  .loadmore.open .icon{transform:rotate(180deg);}
+
+  .divider-block{background:var(--green-100);margin:20px 0 0;}
+
+  /* ===== Category grid ===== */
+  .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .cat-card{
+    background:#fff;border-radius:var(--radius-lg);
+    border:1px solid var(--line);overflow:hidden;box-shadow:var(--shadow);
+    opacity:0;transform:translateY(14px);animation:cardIn .5s ease forwards;
+  }
+  .cat-media{
+    aspect-ratio:1/0.82;display:flex;align-items:center;justify-content:center;color:#fff;
+  }
+  .cat-media .icon{width:52px;height:52px;}
+  .cat-label{padding:12px 12px 14px;font-size:14.5px;font-weight:700;text-align:center;color:var(--ink);}
+
+  /* ===== Floating buttons ===== */
+  .fab-stack{position:fixed;right:16px;bottom:20px;display:flex;flex-direction:column;gap:12px;z-index:50;}
+  .fab{
+    width:52px;height:52px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 6px 18px rgba(0,0,0,.25);border:none;cursor:pointer;color:#fff;
+  }
+  .fab.whatsapp{background:#25D366;}
+  .fab.cart{background:var(--green-950);position:relative;}
+  .fab.cart .count{
+    position:absolute;top:-4px;right:-4px;background:var(--red);
+    color:#fff;font-size:10px;font-weight:700;
+    min-width:18px;height:18px;border-radius:9px;
+    display:flex;align-items:center;justify-content:center;padding:0 4px;
+  }
+
+  /* scroll edge fade for lazy section */
+  .section-observe{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease;}
+  .section-observe.visible{opacity:1;transform:translateY(0);}
+
+  .infinite-loader{
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    padding:26px 0 34px;color:var(--ink-soft);font-size:13px;
+  }
+  .spinner{
+    width:26px;height:26px;border-radius:50%;
+    border:3px solid var(--green-100);border-top-color:var(--green-700);
+    animation:spin .8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .end-note{
+    text-align:center;color:var(--ink-soft);font-size:13px;padding:20px 0 6px;
+  }
+
+  @media (min-width:560px){
+    .grid,.cat-grid{grid-template-columns:repeat(3,1fr);}
+    .popular-row{grid-template-columns:repeat(5,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<!-- SVG ICON DEFINITIONS (no emojis anywhere, icons only) -->
+<svg width="0" height="0" style="position:absolute">
+<defs>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.8-4 5-6 8-6s6.2 2 8 6"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4"/><line x1="12" y1="17" x2="12" y2="17.2"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.5-9C.6 7.5 3 4 6.5 4c2 0 3.4 1.1 4 2.2 0.6-1.1 2-2.2 4-2.2C18 4 20.4 7.5 18.5 11c-2.5 4.6-9.5 9-9.5 9z"/></symbol>
+  <symbol id="i-heart-fill" viewBox="0 0 24 24"><path class="fill" d="M12 20s-7-4.4-9.5-9C.6 7.5 3 4 6.5 4c2 0 3.4 1.1 4 2.2 0.6-1.1 2-2.2 4-2.2C18 4 20.4 7.5 18.5 11c-2.5 4.6-9.5 9-9.5 9z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path class="fill" d="M12 2l2.9 6.6 7.1.6-5.4 4.6 1.7 7-6.3-3.9L5.7 21l1.7-7L2 9.2l7.1-.6z"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1.4"/><circle cx="18" cy="21" r="1.4"/><path d="M2 3h2.4l2.6 12.4h11.2L21 7H6.2"/></symbol>
+  <symbol id="i-whatsapp" viewBox="0 0 24 24"><path class="fill" d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm5.6 14.2c-.2.7-1.4 1.3-2 1.4-.5.1-1.1.1-1.8-.1-.4-.1-1-.3-1.7-.6-3-1.3-4.9-4.3-5.1-4.5-.1-.2-1.2-1.6-1.2-3s.7-2.2 1-2.5c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5.2.5.7 1.8.8 1.9.1.2.1.3 0 .5-.1.2-.1.3-.3.5-.1.2-.3.4-.4.5-.1.1-.3.3-.1.6.2.3.9 1.5 1.9 2.4 1.3 1.2 2.4 1.5 2.7 1.7.3.2.5.1.7-.1.2-.2.8-.9 1-1.2.2-.3.4-.2.7-.1.3.1 1.7.8 2 .9.3.1.5.2.6.3.1.2.1.9-.1 1.6z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.2" class="fill"/></symbol>
+  <symbol id="i-check-shield" viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6z"/><path d="M9 12l2 2 4-4"/></symbol>
+  <!-- category icons -->
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5C4 4.1 5.1 3 6.5 3H20v15H6.5C5.1 18 4 19.1 4 20.5z"/><path d="M4 5.5v15"/></symbol>
+  <symbol id="i-bottle" viewBox="0 0 24 24"><path d="M9 2h6v3.5l2 3V20a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V8.5l2-3z"/><line x1="7" y1="12" x2="17" y2="12"/></symbol>
+  <symbol id="i-soap" viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M8 9V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3"/></symbol>
+  <symbol id="i-droplet" viewBox="0 0 24 24"><path d="M12 2s7 8 7 13a7 7 0 0 1-14 0c0-5 7-13 7-13z"/></symbol>
+  <symbol id="i-perfume" viewBox="0 0 24 24"><rect x="7" y="10" width="10" height="11" rx="2"/><path d="M10 10V6h4v4"/><path d="M9 3h6"/></symbol>
+  <symbol id="i-hijab" viewBox="0 0 24 24"><path d="M12 3c4 0 7 3 7 8v6a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3v-6c0-5 3-8 7-8z"/><circle cx="12" cy="10" r="2.4"/></symbol>
+  <symbol id="i-bowl" viewBox="0 0 24 24"><path d="M3 11h18a9 8 0 0 1-18 0z"/><path d="M8 11c0-3 1.5-6 4-7 2.5 1 4 4 4 7"/></symbol>
+  <symbol id="i-basket" viewBox="0 0 24 24"><path d="M4 9h16l-1.6 10.4A2 2 0 0 1 16.4 21H7.6a2 2 0 0 1-2-1.6z"/><path d="M8 9l2-5m6 5l-2-5M4 9h16"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M20 4C10 4 4 10 4 20c10 0 16-6 16-16z"/><path d="M4 20L20 4"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M9 2v6M15 2v6M6 8h12v4a6 6 0 0 1-12 0z"/><path d="M12 18v4"/></symbol>
+  <symbol id="i-honey" viewBox="0 0 24 24"><path d="M8 3h8l1 4-1 4H8l-1-4z"/><path d="M8 11h8l1 5-1 5H8l-1-5z"/></symbol>
+  <symbol id="i-cream" viewBox="0 0 24 24"><rect x="5" y="9" width="14" height="11" rx="2"/><ellipse cx="12" cy="9" rx="7" ry="2.4"/></symbol>
+  <symbol id="i-jar" viewBox="0 0 24 24"><path d="M8 2h8v3H8z"/><path d="M7 5h10l1 4v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9z"/></symbol>
+  <symbol id="i-nut" viewBox="0 0 24 24"><path d="M12 2l3 2v4l-3 2-3-2V4z"/><path d="M12 10c4 0 7 3 7 7 0 3-3 5-7 5s-7-2-7-5c0-4 3-7 7-7z"/></symbol>
+</defs>
+</svg>
+
+<!-- Fixed nav: hides on scroll-down, reappears at very top on scroll-up -->
+<div class="nav-wrap" id="navWrap">
+  <!-- Top bar -->
+  <header class="topbar">
+    <button class="back" aria-label="ফিরে যান" onclick="history.back()"><svg class="icon" style="width:18px;height:18px"><use href="#i-arrow-left"/></svg></button>
+    <h1>কেনাকাটা</h1>
+  </header>
+
+  <!-- Brand bar -->
+  <div class="brandbar">
+    <div class="brand">
+      <div class="brand-mark"><svg class="icon" style="width:24px;height:24px"><use href="#i-basket"/></svg></div>
+      <div class="brand-name"><b>মুসলিম পণ্য</b><span>বিশ্বস্ত কেনাকাটা</span></div>
+    </div>
+    <div class="brand-actions">
+      <button class="icon-btn" aria-label="সার্চ"><svg class="icon" style="width:19px;height:19px"><use href="#i-search"/></svg></button>
+      <button class="icon-btn" aria-label="প্রোফাইল"><svg class="icon" style="width:19px;height:19px"><use href="#i-user"/></svg></button>
+    </div>
+  </div>
+</div>
+<!-- Spacer keeps page content from jumping under the fixed nav; height set by JS to match nav's real height -->
+<div id="nav-spacer"></div>
+
+<!-- Promo banner -->
+<div class="promo">
+  <span class="promo-tag"><svg class="icon" style="width:13px;height:13px;color:var(--green-800)"><use href="#i-tag"/></svg>স্টক ক্লিয়ারেন্স</span>
+  <h2>অফার <b>৫৪%</b> পর্যন্ত ছাড়</h2>
+  <p>প্রিমিয়াম হারবাল ও নিত্যপণ্যে বিশেষ ছাড়, সীমিত সময়ের জন্য।</p>
+  <div class="promo-icons">
+    <span class="pi"><svg class="icon" style="width:20px;height:20px"><use href="#i-jar"/></svg></span>
+    <span class="pi"><svg class="icon" style="width:20px;height:20px"><use href="#i-bottle"/></svg></span>
+    <span class="pi"><svg class="icon" style="width:20px;height:20px"><use href="#i-cream"/></svg></span>
+    <span class="pi"><svg class="icon" style="width:20px;height:20px"><use href="#i-honey"/></svg></span>
+  </div>
+</div>
+
+<!-- Popular search -->
+<div class="popular">
+  <h3><svg class="icon" style="width:14px;height:14px"><use href="#i-tag"/></svg>জনপ্রিয় সার্চ</h3>
+  <div class="popular-row">
+    <div class="popular-item"><span class="popular-circle"><svg class="icon" style="width:24px;height:24px"><use href="#i-nut"/></svg></span><span>খেজুর</span></div>
+    <div class="popular-item"><span class="popular-circle"><svg class="icon" style="width:24px;height:24px"><use href="#i-droplet"/></svg></span><span>তেল</span></div>
+    <div class="popular-item"><span class="popular-circle"><svg class="icon" style="width:24px;height:24px"><use href="#i-leaf"/></svg></span><span>হারবাল</span></div>
+    <div class="popular-item"><span class="popular-circle"><svg class="icon" style="width:24px;height:24px"><use href="#i-soap"/></svg></span><span>সাবান</span></div>
+    <div class="popular-item"><span class="popular-circle"><svg class="icon" style="width:24px;height:24px"><use href="#i-jar"/></svg></span><span>আচার</span></div>
+  </div>
+</div>
+
+<!-- Product sections render here -->
+<div id="sections-root"></div>
+
+<!-- Category grid -->
+<section class="section section-observe" id="category-section">
+  <div class="section-head">
+    <div><p class="eyebrow">কালেকশন</p><h2 class="section-title">পণ্য ক্যাটেগরি</h2></div>
+    <button class="menu-btn" aria-label="মেনু"><svg class="icon" style="width:17px;height:17px;color:#fff"><use href="#i-menu"/></svg></button>
+  </div>
+  <div class="cat-grid" id="category-grid"></div>
+</section>
+
+<div class="infinite-loader" id="infinite-loader">
+  <div class="spinner"></div>
+  <span>আরও পণ্য লোড হচ্ছে…</span>
+</div>
+<p class="end-note" id="end-note" style="display:none;">সকল পণ্য দেখানো হয়েছে</p>
+
+<!-- Floating action buttons -->
+<div class="fab-stack">
+  <button class="fab whatsapp" aria-label="হোয়াটসঅ্যাপ"><svg class="icon fill" style="width:26px;height:26px;color:#fff"><use href="#i-whatsapp"/></svg></button>
+  <button class="fab cart" aria-label="কার্ট"><svg class="icon" style="width:23px;height:23px;color:#fff"><use href="#i-cart"/></svg><span class="count" id="cart-count">0</span></button>
+</div>
+
+<script>
+/* ---------- Icon + color palettes used for generated product thumbnails ---------- */
+const palettes = [
+  ['#2f7d47','#1b4d31'], ['#3f8f52','#236339'], ['#c98a2c','#8f5c14'],
+  ['#3a6b8a','#204a63'], ['#8a4b3a','#5e2f21'], ['#5b7a3a','#3a4f22'],
+  ['#7a4f9c','#4f2f66'], ['#2b8a7a','#175c4f']
+];
+function paletteFor(seed){ return palettes[seed % palettes.length]; }
+
+/* ---------- Data: sections & products (mirrors the reference app) ---------- */
+const sections = [
+ { eyebrow:'ফিচারড', title:'স্টক ক্লিয়ারেন্স', icon:'i-cream', products:[
+    {name:'মিল্ক ফেসওয়াশ | Mild Formula Deep Cleans', origin:null, discount:28, price:265, old:370, rating:null, icon:'i-bottle'},
+    {name:'মরিঙ্গা সিড ক্রিম | Anti-Aging, Acne, Dry', origin:null, discount:46, price:399, old:740, rating:null, icon:'i-cream'},
+    {name:'ব্ল্যাক সিড মাস্ক | Bamboo Charcoal', origin:null, discount:33, price:349, old:520, rating:5.0, icon:'i-jar'},
+    {name:'হেয়ার সিরাম | Nourish & Repair', origin:null, discount:22, price:459, old:590, rating:4.8, icon:'i-droplet'},
+ ]},
+ { eyebrow:'ফিচারড', title:'প্রসাধনী', icon:'i-cream', products:[
+    {name:'৩ বাটার ক্রিম | 3 IN 1 BUTTER CREAM', origin:'USA', discount:27, price:1095, old:1500, rating:null, icon:'i-cream'},
+    {name:'হার্বসইন্ডিয়া ৭ ভেষজ বীজ ও লবঙ্গ তেল', origin:'KSA', discount:18, price:1292, old:1500, rating:null, icon:'i-droplet'},
+    {name:'কোকোনাট শ্যাম্পু & কন্ডিশনার', origin:'USA', discount:8, price:1560, old:1700, rating:null, icon:'i-bottle'},
+    {name:'ফেস ওয়াশ-এলোভেরা | FACE WASH', origin:'USA', discount:2, price:755, old:770, rating:4.8, icon:'i-bottle'},
+    {name:'মিক্সড ড্রাই ফ্রুটস', origin:null, discount:6, price:470, old:500, rating:4.0, icon:'i-nut'},
+    {name:'নিম অ্যাডভান্স টুথপেস্ট | NEEM', origin:'USA', discount:26, price:595, old:800, rating:5.0, icon:'i-soap'},
+    {name:'চিংড়ীর বালাচাও', origin:null, discount:3, price:195, old:200, rating:null, icon:'i-jar'},
+    {name:'ঘরে বানানো খাঁটি নারিকেল তেল (৫০০ মি.লি.)', origin:null, discount:null, price:600, old:null, rating:5.0, icon:'i-droplet'},
+ ]},
+ { eyebrow:'ফিচারড', title:'মুদি গ্রোসারি', icon:'i-basket', products:[
+    {name:'গাওয়া ঘি ( সরের ) ৫০০ গ্রাম', origin:null, discount:3, price:873, old:900, rating:4.9, icon:'i-jar'},
+    {name:'সৌদি আলমারাই চিজ ৫০০ গ্রাম', origin:'KSA', discount:8, price:1193, old:1500, rating:null, icon:'i-cream'},
+    {name:'সৌদি জয়তুনের তেল | Saudi Olive Oil', origin:'KSA', discount:19, price:1495, old:1800, rating:5.0, icon:'i-bottle'},
+    {name:'চা পাতা | Leaf Tea ৫০০ গ্রাম', origin:null, discount:null, price:230, old:null, rating:null, icon:'i-leaf'},
+ ]},
+ { eyebrow:'ফিচারড', title:'কিতাবাদি', icon:'i-book', products:[
+    {name:'দুআ-ই রসুল', origin:null, discount:48, price:201, old:390, rating:5.0, icon:'i-book'},
+    {name:'গুনাহ থেকে বেঁচে থাকার ৭০টি উপায় ও কৌশল', origin:null, discount:50, price:150, old:300, rating:null, icon:'i-book'},
+    {name:'কিতাবুস সুন্নাহ', origin:null, discount:45, price:155, old:280, rating:null, icon:'i-book'},
+    {name:'ইশকুল অব লাভ', origin:null, discount:50, price:250, old:400, rating:5.0, icon:'i-book'},
+ ]},
+ { eyebrow:'ফিচারড', title:'ডিসকাউন্ট', icon:'i-tag', products:[
+    {name:'খেজুরের রসের চকলেট গুড় (চিনিছাড়া)', origin:null, discount:34, price:595, old:900, rating:5.0, icon:'i-jar'},
+    {name:'নামাজ রোজার স্থায়ী সময়সূচী - ক্যালেন্ডার', origin:null, discount:18, price:1290, old:1500, rating:5.0, icon:'i-book'},
+    {name:'ভেষজ স্পেশাল হালুয়া - গ্যাস্ট্রিক', origin:null, discount:11, price:443, old:500, rating:5.0, icon:'i-jar', stock:true},
+    {name:'সৌদি আলমারাই (Almarai) ২.২৫কেজি Milk', origin:'KSA', discount:8, price:3690, old:4000, rating:null, icon:'i-cream'},
+ ]},
+ { eyebrow:'ফিচারড', title:'ঘরে বানানো', icon:'i-jar', products:[
+    {name:'খেজুরের গুঁড়ের নাড়ু', origin:null, discount:5, price:95, old:100, rating:5.0, icon:'i-nut', stock:true},
+    {name:'মান্টার মারমারেইড জেলী', origin:null, discount:17, price:250, old:300, rating:5.0, icon:'i-jar'},
+    {name:'গরুর গোস্তের আচার', origin:null, discount:21, price:395, old:500, rating:5.0, icon:'i-jar'},
+    {name:'রসুনের আচার ( টক,ঝাল,মিষ্টি )', origin:null, discount:3, price:292, old:300, rating:5.0, icon:'i-jar'},
+ ]},
+ { eyebrow:'ফিচারড', title:'বেষ্ট সেলার', icon:'i-star', products:[
+    {name:'কালিজিরা ক্রিম | BLACK SEED CREAM', origin:'USA', discount:3, price:870, old:900, rating:4.7, icon:'i-cream'},
+    {name:'সুক্কারি খেজুর ৫০০ গ্রাম | Dates', origin:null, discount:11, price:485, old:600, rating:5.0, icon:'i-nut'},
+    {name:'5 Pieces Set Protect Fresh Stainless', origin:null, discount:9, price:499, old:650, rating:null, icon:'i-jar'},
+    {name:'সরিষা ফুলের মধু', origin:null, discount:7, price:260, old:280, rating:5.0, icon:'i-honey'},
+ ]},
+ { eyebrow:'ফিচারড', title:'ভেষজ হারবাল', icon:'i-leaf', products:[
+    {name:'ওয়েটলস ওজন কমানো সাপ্লিমেন্ট পাউডার', origin:null, discount:15, price:341, old:400, rating:5.0, icon:'i-jar'},
+    {name:'গ্যাস্ট্রিক সাপ্লিমেন্ট পাউডার (মেডিসিন নয়)', origin:null, discount:11, price:311, old:350, rating:null, icon:'i-jar'},
+    {name:'এলার্জি সাপ্লিমেন্ট পাউডার (মেডিসিন নয়)', origin:null, discount:11, price:311, old:350, rating:5.0, icon:'i-jar'},
+    {name:'ডায়াবেটিকস সাপ্লিমেন্ট পাউডার (মেডিসিন নয়)', origin:null, discount:11, price:311, old:350, rating:5.0, icon:'i-jar'},
+ ]},
+ { eyebrow:'ফিচারড', title:'লিমিটেড এডিশন', icon:'i-tag', products:[
+    {name:'উদ আতর গিফট বক্স', origin:null, discount:20, price:990, old:1240, rating:5.0, icon:'i-perfume'},
+    {name:'রামাদান স্পেশাল হ্যাম্পার', origin:null, discount:15, price:1690, old:1990, rating:4.9, icon:'i-basket'},
+    {name:'হজ্জ্ব ও উমরাহ প্রয়োজনীয় সেট', origin:null, discount:12, price:2250, old:2560, rating:5.0, icon:'i-hijab'},
+    {name:'কালোজিরা তেল গিফট প্যাক', origin:null, discount:18, price:790, old:965, rating:5.0, icon:'i-droplet'},
+ ]},
+];
+
+const categories = [
+  {label:'দ্বীনি কিতাবাদি', icon:'i-book'},
+  {label:'ফেসওয়াশ ও ক্রিম', icon:'i-bottle'},
+  {label:'সাবান জেল লোশন', icon:'i-soap'},
+  {label:'তেল, শ্যাম্পু, সিরাম', icon:'i-droplet'},
+  {label:'সুগন্ধি পারফিউম', icon:'i-perfume'},
+  {label:'সুন্নাহ ও লিবাস', icon:'i-hijab'},
+  {label:'খানা দানা', icon:'i-bowl'},
+  {label:'মুদি পণ্য', icon:'i-basket'},
+  {label:'ভেষজ হারবাল', icon:'i-leaf'},
+  {label:'ইলেকট্রনিক্স', icon:'i-plug'},
+];
+
+/* ---------- helpers ---------- */
+function fmtTaka(n){ return '৳' + n.toLocaleString('bn-BD'); }
+function stars(rating){
+  if(!rating) return '';
+  let full = Math.round(rating);
+  let s = '<span class="stars">';
+  for(let i=0;i<5;i++){
+    s += `<svg class="icon fill" style="opacity:${i<full?1:.28}"><use href="#i-star"/></svg>`;
+  }
+  s += `</span><span>${rating.toFixed(1)}/৫</span>`;
+  return s;
+}
+
+function productCard(p, seed){
+  const [c1,c2] = paletteFor(seed);
+  const badge = p.discount ? `<span class="badge">${p.discount}%</span>` : '';
+  const stockBadge = p.stock ? `<span class="badge stock">স্টক শেষ</span>` : '';
+  const origin = p.origin ? `<span class="origin-tag">${p.origin}</span>` : '';
+  const oldPrice = p.old ? `<span class="price-old">${fmtTaka(p.old)}</span>` : '';
+  const rating = p.rating ? `<div class="card-rating">${stars(p.rating)}</div>` : `<div class="card-rating">&nbsp;</div>`;
+  return `
+  <article class="card">
+    <div class="card-media" style="background:linear-gradient(135deg,${c1},${c2})">
+      ${stockBadge}${badge}
+      <span class="certified"><svg class="icon" style="width:12px;height:12px"><use href="#i-check-shield"/></svg></span>
+      <svg class="icon" style="width:44px;height:44px;color:#fff"><use href="#${p.icon}"/></svg>
+      <div class="order-strip">${p.stock ? 'রি-স্টকের জন্য অনুরোধ করুন' : 'অর্ডার করুন'}</div>
+    </div>
+    <div class="card-body">
+      <div class="card-name">${p.name}${origin}</div>
+      ${rating}
+      <div class="card-price-row">
+        <div class="price-group"><span class="price">${fmtTaka(p.price)}</span>${oldPrice}</div>
+        <button class="wish-btn" aria-label="পছন্দ" onclick="toggleWish(this)">
+          <svg class="icon"><use href="#i-heart"/></svg>
+        </button>
+      </div>
+    </div>
+  </article>`;
+}
+
+function toggleWish(btn){
+  btn.classList.toggle('active');
+  const use = btn.querySelector('use');
+  use.setAttribute('href', btn.classList.contains('active') ? '#i-heart-fill' : '#i-heart');
+}
+
+function buildSection(sec, idx){
+  const wrap = document.createElement('section');
+  wrap.className = 'section section-observe';
+  const visible = sec.products.slice(0,4);
+  const rest = sec.products.slice(4);
+  wrap.innerHTML = `
+    <div class="section-head">
+      <div><p class="eyebrow">${sec.eyebrow}</p><h2 class="section-title">${sec.title}</h2></div>
+      <button class="menu-btn" aria-label="মেনু"><svg class="icon" style="width:17px;height:17px;color:#fff"><use href="#i-menu"/></svg></button>
+    </div>
+    <div class="grid" data-grid></div>
+    ${rest.length ? `<div class="loadmore-wrap"><button class="loadmore" data-more><span>আরো দেখুন</span><svg class="icon"><use href="#i-chevron"/></svg></button></div>` : ''}
+  `;
+  const grid = wrap.querySelector('[data-grid]');
+  visible.forEach((p,i)=> grid.insertAdjacentHTML('beforeend', productCard(p, idx+i)));
+
+  const moreBtn = wrap.querySelector('[data-more]');
+  if(moreBtn){
+    let expanded = false;
+    moreBtn.addEventListener('click', ()=>{
+      expanded = !expanded;
+      moreBtn.classList.toggle('open', expanded);
+      moreBtn.querySelector('span').textContent = expanded ? 'কম দেখুন' : 'আরো দেখুন';
+      if(expanded){
+        rest.forEach((p,i)=> grid.insertAdjacentHTML('beforeend', productCard(p, idx+4+i)));
+      } else {
+        while(grid.children.length > 4) grid.removeChild(grid.lastChild);
+      }
+    });
+  }
+  return wrap;
+}
+
+function buildCategoryGrid(){
+  const grid = document.getElementById('category-grid');
+  categories.forEach((c,i)=>{
+    const [c1,c2] = paletteFor(i+2);
+    grid.insertAdjacentHTML('beforeend', `
+      <div class="cat-card">
+        <div class="cat-media" style="background:linear-gradient(135deg,${c1},${c2})">
+          <svg class="icon" style="color:#fff"><use href="#${c.icon}"/></svg>
+        </div>
+        <div class="cat-label">${c.label}</div>
+      </div>
+    `);
+  });
+}
+
+/* ---------- Progressive / infinite section loading on scroll ---------- */
+const root = document.getElementById('sections-root');
+let loadedCount = 0;
+const BATCH = 2;
+const loader = document.getElementById('infinite-loader');
+const endNote = document.getElementById('end-note');
+let loading = false;
+
+function loadNextBatch(){
+  if(loading || loadedCount >= sections.length) return;
+  loading = true;
+  loader.style.display = 'flex';
+  setTimeout(()=>{
+    const slice = sections.slice(loadedCount, loadedCount + BATCH);
+    slice.forEach((sec,i)=>{
+      const el = buildSection(sec, (loadedCount+i)*4);
+      root.appendChild(el);
+      observeReveal(el);
+    });
+    loadedCount += slice.length;
+    loading = false;
+    if(loadedCount >= sections.length){
+      loader.style.display = 'none';
+      endNote.style.display = 'block';
+    } else {
+      loader.style.display = 'none';
+    }
+  }, 450);
+}
+
+/* reveal-on-scroll animation */
+const revealObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, {threshold:.08, rootMargin:'0px 0px -40px 0px'});
+function observeReveal(el){ revealObserver.observe(el); }
+
+/* infinite scroll trigger */
+const scrollSentinel = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{ if(entry.isIntersecting) loadNextBatch(); });
+}, {rootMargin:'300px 0px 0px 0px'});
+
+/* ---------- Fixed nav: hide on scroll-down, show on scroll-up, always visible near top ---------- */
+const navWrap = document.getElementById('navWrap');
+const navSpacer = document.getElementById('nav-spacer');
+
+function syncSpacerHeight(){
+  navSpacer.style.height = navWrap.offsetHeight + 'px';
+}
+
+(function initNavScroll(){
+  let lastY = window.scrollY;
+  let ticking = false;
+  const HIDE_AFTER = 40; // don't hide until scrolled past this many px
+
+  function onScroll(){
+    const y = window.scrollY;
+
+    if(y <= 4){
+      // always show + no shadow right at the very top
+      navWrap.classList.remove('nav-hidden');
+      navWrap.classList.remove('nav-scrolled');
+    } else {
+      navWrap.classList.add('nav-scrolled');
+      if(y > lastY && y > HIDE_AFTER){
+        // scrolling down -> hide
+        navWrap.classList.add('nav-hidden');
+      } else if(y < lastY){
+        // scrolling up -> reveal
+        navWrap.classList.remove('nav-hidden');
+      }
+    }
+    lastY = y;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', ()=>{
+    if(!ticking){
+      requestAnimationFrame(onScroll);
+      ticking = true;
+    }
+  }, {passive:true});
+})();
+
+window.addEventListener('resize', syncSpacerHeight);
+window.addEventListener('load', syncSpacerHeight);
+
+/* init */
+document.addEventListener('DOMContentLoaded', ()=>{
+  buildCategoryGrid();
+  observeReveal(document.getElementById('category-section'));
+  loadNextBatch();
+  scrollSentinel.observe(loader);
+  syncSpacerHeight();
+
+  document.getElementById('cart-count').textContent = '0';
+});
+</script>
+
+
+
+<!-- Navbar Loader -->
+<script src="navbar/navbar-loader.js"></script>
+
+</body>
+</html>
