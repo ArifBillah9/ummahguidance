@@ -1429,6 +1429,11 @@
     box-sizing:border-box;
     overflow:hidden;
     position:relative;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    user-select:none;
+    -webkit-touch-callout:none;
+    -webkit-tap-highlight-color:transparent;
   }
   .menu-card:hover{
     transform:translateY(-6px) scale(1.02);
@@ -1453,6 +1458,10 @@
     flex-shrink:0;
     position:relative;
     overflow:visible;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    user-select:none;
+    pointer-events:none;
   }
   .menu-card .icon-box svg,
   .menu-card .icon-box img{
@@ -1464,6 +1473,11 @@
     position:relative;
     z-index:1;
     transition:transform 0.3s ease;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    user-select:none;
+    pointer-events:none;
+    -webkit-user-drag:none;
   }
   .menu-card:hover .icon-box svg,
   .menu-card:hover .icon-box img{
@@ -1481,6 +1495,9 @@
     padding:0 4px;
     text-shadow:0 1px 0 rgba(255,255,255,0.55), 0 0 4px rgba(255,255,255,0.35);
     transition:color 0.3s ease;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    user-select:none;
   }
   .menu-card:hover .lbl{
     color:#111111;
@@ -1567,10 +1584,10 @@
      ============================================================ */
   @media (max-width:400px){
     .menu-grid{grid-template-columns:repeat(4, minmax(0, 1fr)); gap:8px; padding:0;}
-    .menu-card .icon-box{width:36px; height:36px; min-width:36px; min-height:36px; max-width:36px; max-height:36px; flex:0 0 36px;}
+    .menu-card .icon-box{width:36px; height:36px; min-width:36px; min-height:36px; max-width:36px; max-height:36px; flex:0 0 36px; user-select:none; pointer-events:none;}
     .menu-card .icon-box svg,
-    .menu-card .icon-box img{width:100%; height:100%; object-fit:contain; object-position:center;}
-    .menu-card .lbl{font-size:12px; padding:0 3px;}
+    .menu-card .icon-box img{width:100%; height:100%; object-fit:contain; object-position:center; user-select:none; pointer-events:none;}
+    .menu-card .lbl{font-size:12px; padding:0 3px; user-select:none;}
     .menu-card:nth-child(8n+1):not(:nth-child(-n+4)),.menu-card:nth-child(8n+2):not(:nth-child(-n+4)),.menu-card:nth-child(8n+3):not(:nth-child(-n+4)),.menu-card:nth-child(8n+4):not(:nth-child(-n+4)){margin-top:0;}
   }
 
@@ -1595,11 +1612,11 @@
     .card{padding:8px 32px 30px;}
     .app-menu{padding:20px 32px 100px;}
     .menu-grid{grid-template-columns:repeat(4, minmax(0, 1fr)); gap:16px;}
-    .menu-card{padding:18px 8px 26px;}
-    .menu-card .icon-box{width:40px; height:40px; min-width:40px; min-height:40px; max-width:40px; max-height:40px; flex:0 0 40px;}
+    .menu-card{padding:18px 8px 26px; user-select:none;}
+    .menu-card .icon-box{width:40px; height:40px; min-width:40px; min-height:40px; max-width:40px; max-height:40px; flex:0 0 40px; user-select:none; pointer-events:none;}
     .menu-card .icon-box svg,
-    .menu-card .icon-box img{width:100%; height:100%; object-fit:contain; object-position:center;}
-    .menu-card .lbl{font-size:13px; padding:0 3px;}
+    .menu-card .icon-box img{width:100%; height:100%; object-fit:contain; object-position:center; user-select:none; pointer-events:none;}
+    .menu-card .lbl{font-size:13px; padding:0 3px; user-select:none;}
     .menu-card:nth-child(8n+1):not(:nth-child(-n+4)),.menu-card:nth-child(8n+2):not(:nth-child(-n+4)),.menu-card:nth-child(8n+3):not(:nth-child(-n+4)),.menu-card:nth-child(8n+4):not(:nth-child(-n+4)){margin-top:0;}
   }
 
@@ -1625,11 +1642,11 @@
     .card{padding:8px 36px 30px;}
     .app-menu{padding:24px 36px 100px;}
     .menu-grid{grid-template-columns:repeat(4, minmax(0, 1fr)); gap:18px;}
-    .menu-card{padding:12px 6px 14px;}
-    .menu-card .icon-box{width:33px; height:33px; min-width:33px; min-height:33px; max-width:33px; max-height:33px; flex:0 0 33px;}
+    .menu-card{padding:12px 6px 14px; user-select:none;}
+    .menu-card .icon-box{width:33px; height:33px; min-width:33px; min-height:33px; max-width:33px; max-height:33px; flex:0 0 33px; user-select:none; pointer-events:none;}
     .menu-card .icon-box svg,
-    .menu-card .icon-box img{width:100%; height:100%; object-fit:contain; object-position:center;}
-    .menu-card .lbl{font-size:13px; padding:0 2px;}
+    .menu-card .icon-box img{width:100%; height:100%; object-fit:contain; object-position:center; user-select:none; pointer-events:none;}
+    .menu-card .lbl{font-size:13px; padding:0 2px; user-select:none;}
     .menu-card:nth-child(8n+1):not(:nth-child(-n+4)),.menu-card:nth-child(8n+2):not(:nth-child(-n+4)),.menu-card:nth-child(8n+3):not(:nth-child(-n+4)),.menu-card:nth-child(8n+4):not(:nth-child(-n+4)){margin-top:0;}
     .menu-card{cursor:pointer; transition:transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;}
     .menu-card:hover{transform:translateY(-6px) scale(1.02); box-shadow:0 12px 26px rgba(0,0,0,0.22);}
@@ -4746,7 +4763,90 @@
 })();
 </script>
 
-<!-- ===== Sticky Navbar Script ===== -->
+<!-- ===== MENU CARD SELECTION FIX ===== -->
+<script>
+(function(){
+  'use strict';
+  
+  // সমস্ত মেনু কার্ড খুঁজুন
+  const menuCards = document.querySelectorAll('.menu-card');
+  
+  menuCards.forEach(card => {
+    // নিশ্চিত করুন icon-box এবং ছবিগুলি ক্লিক করা যায় না (তারা পিতামাতায় ক্লিক করায়)
+    const iconBox = card.querySelector('.icon-box');
+    const images = card.querySelectorAll('img');
+    const labels = card.querySelectorAll('.lbl');
+    
+    if(iconBox) {
+      iconBox.style.pointerEvents = 'none';
+    }
+    
+    images.forEach(img => {
+      img.style.pointerEvents = 'none';
+      img.draggable = false;
+      img.style.userSelect = 'none';
+    });
+    
+    labels.forEach(label => {
+      label.style.userSelect = 'none';
+      label.style.pointerEvents = 'none';
+    });
+    
+    // মেনু কার্ড নিজেই non-selectable করুন কিন্তু লিঙ্ক কাজ করবে
+    card.style.userSelect = 'none';
+    card.style.WebkitUserSelect = 'none';
+    
+    // শুধুমাত্র লিঙ্ক ক্লিক করা সম্ভব করুন (পুরো কার্ড)
+    card.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      // লিঙ্কে যান
+      const href = this.getAttribute('href');
+      if(href) {
+        window.location.href = href;
+      }
+    }, { capture: true });
+    
+    // ডাবল-ক্লিক সিলেকশন প্রতিরোধ করুন
+    card.addEventListener('dblclick', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }, false);
+    
+    // টাচ সিলেকশন প্রতিরোধ করুন
+    card.addEventListener('touchstart', function(e) {
+      // সিলেকশন রোধ করুন
+      if(e.touches.length === 1) {
+        document.getSelection().removeAllRanges();
+      }
+    }, { passive: true });
+    
+    card.addEventListener('touchend', function(e) {
+      // সিলেকশন রোধ করুন
+      document.getSelection().removeAllRanges();
+    }, { passive: true });
+  });
+  
+  // গ্লোবাল সিলেকশন ইভেন্ট প্রতিরোধ করুন menu-card উপাদানে
+  document.addEventListener('selectstart', function(e) {
+    let target = e.target;
+    
+    // পিতামাতা .menu-card খুঁজুন
+    while(target && target !== document) {
+      if(target.classList && target.classList.contains('menu-card')) {
+        e.preventDefault();
+        return false;
+      }
+      target = target.parentNode;
+    }
+  }, false);
+  
+  console.log('✓ মেনু কার্ড সিলেকশন ফিক্স প্রয়োগ করা হয়েছে - শুধুমাত্র সম্পূর্ণ কার্ড নির্বাচনযোগ্য');
+  
+})();
+</script>
 <script>
 (function(){
   'use strict';
