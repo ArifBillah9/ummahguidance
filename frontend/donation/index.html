@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>উম্মাহ গাইডেন্স - বিনিয়োগ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+
+
+                @font-face{
+    font-family:'Kalpurush';
+    src:url('donation/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        .header {
+            background-color: #2d5a4d;
+            color: white;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+        }
+
+        .back-btn, .menu-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        .menu-icon span {
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: white;
+        }
+
+        .container {
+            margin-top: 65px;
+            padding: 0;
+            min-height: calc(100vh - 65px);
+        }
+
+        .page {
+            display: none;
+            padding: 15px;
+            min-height: calc(100vh - 65px);
+            background-color: #f0f0f0;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .hero-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px 20px;
+            margin: 15px 0;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .hero-icon-box {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 15px;
+            background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .heart-svg {
+            width: 45px;
+            height: 45px;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+        }
+
+        .money-bag {
+            width: 70px;
+            height: 70px;
+        }
+
+        .hero-text {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .section-title {
+            font-size: 15px;
+            color: #333;
+            font-weight: 600;
+            margin: 18px 0 12px 0;
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 12px 0 20px 0;
+        }
+
+        .payment-item {
+            background: white;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            cursor: pointer;
+        }
+
+        .payment-logo {
+            width: 45px;
+            height: 45px;
+            margin: 0 auto 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 600;
+            color: #2d5a4d;
+        }
+
+        .payment-name {
+            font-size: 11px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 10px;
+            padding: 12px 15px;
+            margin: 10px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .info-icon-box {
+            width: 35px;
+            height: 35px;
+            background-color: #e8f5e9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .menu-list {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-top: 10px;
+        }
+
+        .menu-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #e8f5e9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .arrow-icon {
+            margin-left: auto;
+            font-size: 18px;
+            color: #999;
+        }
+
+        .about-header {
+            background: white;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .about-icon-box {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #2d5a4d 0%, #4a7c6f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 28px;
+            margin: 0 auto 12px;
+        }
+
+        .about-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .content-section {
+            background: white;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .content-section h3 {
+            font-size: 15px;
+            color: #2d5a4d;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .content-section p {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .diagram-box {
+            background: white;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 15px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .diagram-title {
+            text-align: center;
+            font-size: 15px;
+            font-weight: 600;
+            color: #2d5a4d;
+            padding: 12px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .diagram-circle {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #2d5a4d 0%, #4a7c6f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            margin: 0 auto 15px;
+            font-size: 28px;
+        }
+
+        .activity-text {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.7;
+            text-align: left;
+            margin: 12px 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .stat-box {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2d5a4d;
+            margin-bottom: 6px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .category-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2d5a4d;
+            padding: 12px;
+            background-color: #fff9e6;
+            border-radius: 8px;
+            margin: 18px 0 12px 0;
+            text-align: center;
+        }
+
+        .report-list {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            margin: 15px 0;
+        }
+
+        .report-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .report-item:last-child {
+            border-bottom: none;
+        }
+
+        .report-note {
+            background-color: #f0f7f6;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #555;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+
+        .monthly-title {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2d5a4d;
+            padding: 16px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .pdf-link {
+            background: white;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin: 12px 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            text-align: center;
+            font-size: 13px;
+            color: #2d5a4d;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="back-btn" onclick="goBack()" id="backBtn" style="display:none;">‹</button>
+        <div class="header-title" id="pageTitle">বিনিয়োগ</div>
+        <button class="menu-btn" onclick="toggleMenu()" id="menuBtn">
+            <div class="menu-icon">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+    </div>
+
+    <div class="container">
+        <!-- Page 1: Main Page -->
+        <div class="page active" id="page1">
+            <div class="hero-section">
+                <div class="hero-icon-box">
+                    <svg class="heart-svg" viewBox="0 0 24 24" fill="#e53935">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                    </svg>
+                    <svg class="money-bag" viewBox="0 0 100 100">
+                        <rect x="20" y="25" width="60" height="55" fill="#ffc107" rx="8"></rect>
+                        <circle cx="50" cy="52" r="14" fill="white"></circle>
+                        <text x="50" y="58" text-anchor="middle" font-size="20" font-weight="bold" fill="#27AE60">$</text>
+                    </svg>
+                </div>
+                <div class="hero-text">
+                    সদকায় জারিয়ার মাধ্যমে আখিরাতের জন্য স্থায়ী সম্পদ করুন
+                </div>
+            </div>
+
+            <div class="section-title">বিনিয়োগের মাধ্যম নির্বাচন করুন</div>
+            <div class="payment-grid">
+                <div class="payment-item" onclick="alert('bKash: 01XXXXXXXXX')">
+                    <div class="payment-logo">bK</div>
+                    <div class="payment-name">bKash</div>
+                </div>
+                <div class="payment-item" onclick="alert('Nagad: 01XXXXXXXXX')">
+                    <div class="payment-logo">NG</div>
+                    <div class="payment-name">নগদ</div>
+                </div>
+                <div class="payment-item" onclick="alert('Rocket: 01XXXXXXXXX')">
+                    <div class="payment-logo">RK</div>
+                    <div class="payment-name">রকেট</div>
+                </div>
+                <div class="payment-item" onclick="alert('VISA/MasterCard')">
+                    <div class="payment-logo">V/M</div>
+                    <div class="payment-name">কার্ড</div>
+                </div>
+                <div class="payment-item" onclick="alert('Cellfin')">
+                    <div class="payment-logo">CF</div>
+                    <div class="payment-name">সেলফিন</div>
+                </div>
+                <div class="payment-item" onclick="alert('Upay')">
+                    <div class="payment-logo">UP</div>
+                    <div class="payment-name">উপায়</div>
+                </div>
+                <div class="payment-item" onclick="alert('Bank Transfer')">
+                    <div class="payment-logo">BP</div>
+                    <div class="payment-name">ব্যাংক</div>
+                </div>
+                <div class="payment-item" onclick="alert('Anana')">
+                    <div class="payment-logo">AN</div>
+                    <div class="payment-name">অনলাইন</div>
+                </div>
+                <div class="payment-item" onclick="alert('Cheque')">
+                    <div class="payment-logo">CK</div>
+                    <div class="payment-name">চেক</div>
+                </div>
+            </div>
+
+            <div class="section-title">আরও অপশন</div>
+            <div class="info-section" onclick="navigateTo(3)">
+                <div class="info-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#2d5a4d" stroke-width="2" style="width:20px;height:20px;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 16v-4"></path>
+                        <path d="M12 8h.01"></path>
+                    </svg>
+                </div>
+                <div class="info-text">বিনিয়োগের ইতিহাস</div>
+            </div>
+            <div class="info-section" onclick="navigateTo(7)">
+                <div class="info-icon-box">
+                    <svg viewBox="0 0 24 24" fill="#2d5a4d" style="width:20px;height:20px;">
+                        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"></path>
+                    </svg>
+                </div>
+                <div class="info-text">যাকাত, ফিতরার খাত</div>
+            </div>
+            <div class="info-section" onclick="navigateTo(8)">
+                <div class="info-icon-box">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#2d5a4d" stroke-width="2" style="width:20px;height:20px;">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="info-text">মাসিক রিপোর্ট</div>
+            </div>
+        </div>
+
+        <!-- Page 2: Menu -->
+        <div class="page" id="page2">
+            <div class="menu-list">
+                <div class="menu-item" onclick="navigateTo(3)">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#2d5a4d" stroke-width="2" style="width:18px;height:18px;">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 16v-4"></path>
+                            <path d="M12 8h.01"></path>
+                        </svg>
+                    </div>
+                    <div>উম্মাহ গাইডেন্সয় কেন দান করবেন?</div>
+                    <div class="arrow-icon">›</div>
+                </div>
+                <div class="menu-item" onclick="navigateTo(4)">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" fill="#2d5a4d" style="width:18px;height:18px;">
+                            <path d="M3 9h18v12H3z"></path>
+                            <path d="M12 2v7"></path>
+                        </svg>
+                    </div>
+                    <div>উম্মাহ গাইডেন্স পরিচিতি</div>
+                    <div class="arrow-icon">›</div>
+                </div>
+                <div class="menu-item" onclick="navigateTo(5)">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" fill="#2d5a4d" style="width:18px;height:18px;">
+                            <circle cx="12" cy="12" r="2"></circle>
+                            <circle cx="19" cy="12" r="2"></circle>
+                            <circle cx="5" cy="12" r="2"></circle>
+                        </svg>
+                    </div>
+                    <div>উম্মাহ গাইডেন্সর কার্যক্রম</div>
+                    <div class="arrow-icon">›</div>
+                </div>
+                <div class="menu-item" onclick="navigateTo(6)">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#2d5a4d" stroke-width="2" style="width:18px;height:18px;">
+                            <line x1="12" y1="2" x2="12" y2="22"></line>
+                            <path d="M17 5H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"></path>
+                        </svg>
+                    </div>
+                    <div>উম্মাহ গাইডেন্সয় খরচের খাত</div>
+                    <div class="arrow-icon">›</div>
+                </div>
+                <div class="menu-item" onclick="navigateTo(7)">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" fill="#2d5a4d" style="width:18px;height:18px;">
+                            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"></path>
+                        </svg>
+                    </div>
+                    <div>যাকাত, ফিতরার খাত</div>
+                    <div class="arrow-icon">›</div>
+                </div>
+                <div class="menu-item" onclick="navigateTo(8)">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#2d5a4d" stroke-width="2" style="width:18px;height:18px;">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                    <div>উম্মাহ গাইডেন্সর মাসিক রিপোর্ট</div>
+                    <div class="arrow-icon">›</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 3: Why Donate -->
+        <div class="page" id="page3">
+            <div class="about-header">
+                <div class="about-icon-box">
+                    <svg viewBox="0 0 24 24" fill="white" style="width:28px;height:28px;">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 16v-4" stroke="white" stroke-width="2" fill="none"></path>
+                        <path d="M12 8h.01" stroke="white" stroke-width="2" fill="none"></path>
+                    </svg>
+                </div>
+                <div class="about-title">উম্মাহ গাইডেন্সয় কেন দান করবেন?</div>
+            </div>
+
+            <div class="content-section">
+                <h3>লক্ষ্য</h3>
+                <p>আমাদের মূল উদ্দেশ্য হল সমাজের প্রতিটি স্তরের মানুষের জীবনযাত্রার মান উন্নয়ন এবং তাদের স্বাবলম্বী করা। আমরা বিশ্বাস করি যে শিক্ষা, স্বাস্থ্য এবং অর্থনৈতিক সহায়তার মাধ্যমে আমরা একটি সুন্দর ভবিষ্যৎ গড়তে পারি।</p>
+            </div>
+
+            <div class="content-section">
+                <h3>আমাদের প্রতিশ্রুতি</h3>
+                <p>প্রতিটি টাকা সর্বোচ্চ স্বচ্ছতা এবং জবাবদিহিতার সাথে ব্যয় করা হয়। আমরা নিয়মিত আমাদের কর্মসূচি এবং খরচের খাত সম্পর্কে বিস্তারিত রিপোর্ট প্রকাশ করি।</p>
+            </div>
+        </div>
+
+        <!-- Page 4: About Organization -->
+        <div class="page" id="page4">
+            <div class="about-header">
+                <div class="about-icon-box">
+                    <svg viewBox="0 0 24 24" fill="white" style="width:28px;height:28px;">
+                        <path d="M3 9h18v12H3z"></path>
+                        <path d="M12 2v7"></path>
+                    </svg>
+                </div>
+                <div class="about-title">উম্মাহ গাইডেন্স পরিচিতি</div>
+            </div>
+
+            <div class="diagram-box">
+                <div class="diagram-title">উম্মাহ গাইডেন্স কি?</div>
+                <div class="diagram-circle">💚</div>
+                <div class="activity-text">
+                    <strong>উম্মাহ গাইডেন্স</strong> একটি দাতব্য সংস্থা যা সারাদেশে বিভিন্ন সামাজিক কল্যাণমূলক কাজ করে চলেছে। আমরা শিক্ষা, স্বাস্থ্য, দারিদ্র্য বিমোচন এবং সমাজ উন্নয়নে নিবেদিত।
+                </div>
+            </div>
+
+            <div class="content-section">
+                <h3>আমাদের উপস্থিতি</h3>
+                <p>সারা বাংলাদেশে আমাদের কার্যক্রম বিস্তৃত রয়েছে। প্রতিটি বিভাগে আমরা স্থানীয় সম্প্রদায়ের সাথে কাজ করে তাদের প্রকৃত চাহিদা বুঝে তা পূরণের চেষ্টা করি।</p>
+            </div>
+
+            <div class="content-section">
+                <h3>সহযোগিতা</h3>
+                <p>আমরা বিভিন্ন এনজিও এবং সামাজিক সংস্থার সাথে কাজ করি যাতে আমাদের পৌঁছানো আরও কার্যকর হয়। একসাথে আমরা আরও বেশি মানুষের জীবন পরিবর্তন করতে পারি।</p>
+            </div>
+        </div>
+
+        <!-- Page 5: Activities -->
+        <div class="page" id="page5">
+            <div class="about-header">
+                <div class="about-icon-box">
+                    <svg viewBox="0 0 24 24" fill="white" style="width:28px;height:28px;">
+                        <circle cx="12" cy="12" r="2"></circle>
+                        <circle cx="19" cy="12" r="2"></circle>
+                        <circle cx="5" cy="12" r="2"></circle>
+                    </svg>
+                </div>
+                <div class="about-title">উম্মাহ গাইডেন্সর কার্যক্রম</div>
+            </div>
+
+            <div class="diagram-box">
+                <div class="diagram-title">আমরা কী কী করি?</div>
+                <div class="activity-text">
+                    <strong>শিক্ষা কার্যক্রম:</strong> আমরা সুবিধাবঞ্চিত শিশুদের জন্য বৃত্তি প্রদান করি এবং স্কুল পরিচালনা করি যাতে প্রতিটি শিশু মানসম্পন্ন শিক্ষা পায়।
+                </div>
+
+                <div class="activity-text">
+                    <strong>স্বাস্থ্য সেবা:</strong> চিকিৎসা ক্যাম্প এবং স্বাস্থ্য সচেতনতা কর্মসূচির মাধ্যমে আমরা মানুষের স্বাস্থ্য সেবা নিশ্চিত করি।
+                </div>
+
+                <div class="activity-text">
+                    <strong>দারিদ্র্য বিমোচন:</strong> ক্ষুদ্র ব্যবসায় সহায়তা এবং কর্মসংস্থান সৃষ্টির মাধ্যমে আমরা মানুষকে আত্মনির্ভরশীল করে তুলি।
+                </div>
+
+                <div class="activity-text">
+                    <strong>আশ্রয় প্রদান:</strong> অসহায় এবং গৃহহীন মানুষদের জন্য আমরা আবাসন সুবিধা প্রদান করি।
+                </div>
+
+                <div class="activity-text">
+                    <strong>প্রশিক্ষণ কর্মসূচি:</strong> বিভিন্ন পেশায় প্রশিক্ষণ প্রদানের মাধ্যমে আমরা যুবকদের দক্ষতা বৃদ্ধি করি।
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 6: Expense Categories -->
+        <div class="page" id="page6">
+            <div class="about-header">
+                <div class="about-icon-box">
+                    <svg viewBox="0 0 24 24" fill="white" style="width:28px;height:28px;">
+                        <line x1="12" y1="2" x2="12" y2="22" stroke="white" stroke-width="2"></line>
+                        <path d="M17 5H9a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z" stroke="white" stroke-width="2" fill="none"></path>
+                    </svg>
+                </div>
+                <div class="about-title">উম্মাহ গাইডেন্সয় খরচের খাত</div>
+            </div>
+
+            <div class="category-title">উম্মাহ গাইডেন্সর কার্যক্রম - 1</div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">1.5</div>
+                    <div class="stat-label">লক্ষ+</div>
+                    <div class="stat-label">মাস্আলা উদ্ধার</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">90,234</div>
+                    <div class="stat-label">হালিলের অনুবাদ</div>
+                    <div class="stat-label">ও বাঁচা</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">6,221</div>
+                    <div class="stat-label">কিতাব</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">42</div>
+                    <div class="stat-label">আয়ায়</div>
+                    <div class="stat-label">120টি কুরআনধারী</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">3408</div>
+                    <div class="stat-label">বয়স্ক</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">457</div>
+                    <div class="stat-label">প্রবন্ধ</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">15টি</div>
+                    <div class="stat-label">দেশের নামায়ের সময়</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">দু'আ</div>
+                </div>
+            </div>
+
+            <div class="category-title">উম্মাহ গাইডেন্সর কার্যক্রম - 2</div>
+
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">800+</div>
+                    <div class="stat-label">অনলাইন দরস</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">8টি</div>
+                    <div class="stat-label">কোর্স</div>
+                    <div class="stat-label">কুরআনধারী শিক্ষা</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">2017</div>
+                    <div class="stat-label">সাল থেকে</div>
+                    <div class="stat-label">চাঁদ দেওয়া কমিটি</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">19,66,020</div>
+                    <div class="stat-label">টাকা ও আ'আব</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">21টি</div>
+                    <div class="stat-label">কুইজ পর্ব</div>
+                    <div class="stat-label">লক্ষ্য প্রাইয়োগী</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">17,02,191</div>
+                    <div class="stat-label">টাকা</div>
+                    <div class="stat-label">সাপোর্ট</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">2,24,800</div>
+                    <div class="stat-label">টাকা</div>
+                    <div class="stat-label">কিতাব বিত্রয়</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">68</div>
+                    <div class="stat-label">জেলায়</div>
+                    <div class="stat-label">500+ নমাজের</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page 7: Zakat & Fitr -->
+        <div class="page" id="page7">
+            <div class="about-header">
+                <div class="about-icon-box">
+                    <svg viewBox="0 0 24 24" fill="white" style="width:28px;height:28px;">
+                        <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"></path>
+                    </svg>
+                </div>
+                <div class="about-title">যাকাত, ফিতরার খাত</div>
+            </div>
+
+            <div class="report-list">
+                <div class="report-item">1. কুরআন বিভাগ</div>
+                <div class="report-item">2. হাদিস বিভাগ</div>
+                <div class="report-item">3. ইফতা বিভাগ</div>
+                <div class="report-item">4. নামাজের সময় বিভাগ</div>
+                <div class="report-item">5. দাওয়াহ বিভাগ</div>
+                <div class="report-item">6. কিতাব বিভাগ</div>
+                <div class="report-item">7. সূরাহ ও সীরাত বিভাগ</div>
+                <div class="report-item">8. মারকাজ ও প্রশিক্ষণ বিভাগ</div>
+                <div class="report-item">9. বিবাহ বিভাগ</div>
+                <div class="report-item">10. কেনাকাটা সেকশন</div>
+                <div class="report-item">11. কারিগরি বিভাগ</div>
+                <div class="report-item">12. বিপন্ন ও পরিবেশনা বিভাগ</div>
+                <div class="report-item">13. পরিচালনা ও সমন্বয় বিভাগ</div>
+                <div class="report-item">14. অন্তর্জাতিক বিভাগ</div>
+                <div class="report-item">15. মিডিয়া বিভাগ</div>
+            </div>
+
+            <div class="report-note">
+                উপরোক্ত 15টি বিভাগে 30 জন (13 জন আলেম ও 17 জন প্রকাশনী, স্টাফ) নিয়োজিত রয়েছেন। প্রতি মাসে উপরোক্ত বিভাগগুলোতে 50,000 টাকা খরচ হচ্ছে।
+            </div>
+
+            <div class="content-section">
+                <h3>ধর্মীয় জীবনের গুরুত্ব</h3>
+                <p>উম্মাহ গাইডেন্স একটি অলাভজনক দীনি প্রতিষ্ঠান যা বাংলাদেশের গণ্ডি পেরিয়ে 100+ দেশে অবস্থানকারী বাংলাভাষী মুসলিমদের দীনি চাহিদা পূরণে সাহায্য করে চলেছে।</p>
+            </div>
+        </div>
+
+        <!-- Page 8: Monthly Report -->
+        <div class="page" id="page8">
+            <div class="monthly-title">
+                মাসিক রিপোর্ট
+            </div>
+
+            <div class="monthly-title" style="background: linear-gradient(135deg, #2d5a4d 0%, #4a7c6f 100%); color: white;">
+                May 2026
+            </div>
+
+            <div class="report-note">
+                আমাদের সর্বশেষ মাসিক রিপোর্ট ডাউনলোড করুন এবং বিস্তারিত তথ্য জেনে নিন।
+            </div>
+
+            <div class="pdf-link" onclick="alert('রিপোর্ট পিডিএফ খোলা হচ্ছে...')">
+                মাসিক রিপোর্ট ডাউনলোড করুন
+            </div>
+
+            <div class="pdf-link" onclick="alert('মাসিক বিপণন রিপোর্ট খোলা হচ্ছে...')">
+                মাসিক বিপণন রিপোর্ট
+            </div>
+
+            <div class="content-section">
+                <h3>রিপোর্ট সম্পর্কে</h3>
+                <p>প্রতিটি মাসে আমরা আমাদের কাজের একটি বিস্তারিত বিবরণ প্রকাশ করি। এতে অন্তর্ভুক্ত থাকে আমাদের বিভিন্ন বিভাগের কার্যক্রম, আর্থিক লেনদেন এবং ভবিষ্যৎ পরিকল্পনা। এর মাধ্যমে আমরা আমাদের দাতাদের সম্পূর্ণ স্বচ্ছতা প্রদান করি।</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const pages = ['page1', 'page2', 'page3', 'page4', 'page5', 'page6', 'page7', 'page8'];
+        const titles = ['বিনিয়োগ', 'পরিচিতি ও কার্যক্রম', 'কেন দান করবেন?', 'পরিচিতি ও কার্যক্রম', 'কার্যক্রম', 'খরচের খাত', 'যাকাত, ফিতরা', 'মাসিক রিপোর্ট'];
+        let currentPage = 0;
+
+        function navigateTo(pageNum) {
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('menuBtn').style.display = 'block';
+
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pages[pageNum - 1]).classList.add('active');
+            currentPage = pageNum - 1;
+
+            document.getElementById('pageTitle').textContent = titles[currentPage];
+            
+            if (currentPage === 0) {
+                document.getElementById('backBtn').style.display = 'none';
+                document.getElementById('menuBtn').style.display = 'block';
+            } else {
+                document.getElementById('backBtn').style.display = 'flex';
+                document.getElementById('menuBtn').style.display = 'none';
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        function toggleMenu() {
+            const menuPage = document.getElementById('page2');
+            const allPages = document.querySelectorAll('.page');
+            
+            if (menuPage.classList.contains('active')) {
+                allPages.forEach(p => p.classList.remove('active'));
+                document.getElementById(pages[currentPage]).classList.add('active');
+                document.getElementById('menuBtn').style.display = 'block';
+                document.getElementById('backBtn').style.display = currentPage === 0 ? 'none' : 'flex';
+            } else {
+                allPages.forEach(p => p.classList.remove('active'));
+                menuPage.classList.add('active');
+                document.getElementById('pageTitle').textContent = 'পরিচিতি ও কার্যক্রম';
+                document.getElementById('menuBtn').style.display = 'block';
+                document.getElementById('backBtn').style.display = 'flex';
+                currentPage = -1;
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function goBack() {
+            if (currentPage === -1) {
+                toggleMenu();
+            } else if (currentPage > 0) {
+                navigateTo(1);
+            }
+        }
+
+        window.addEventListener('load', function() {
+            navigateTo(1);
+        });
+    </script>
+
+
+
+  <!-- Navbar Loader -->
+<script src="navbar/navbar-loader.js"></script>
+</body>
+</html>

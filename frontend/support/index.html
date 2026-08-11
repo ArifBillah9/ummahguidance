@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সাপোর্ট - চ্যাট সেবা</title>
+    <style>
+    @font-face{
+    font-family:'Kalpurush';
+    src:url('support/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1b6947 0%, #2a8c5f 100%);
+            color: white;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Support Center Screen */
+        .support-center-screen {
+            flex: 1;
+            overflow-y: auto;
+            padding-bottom: 20px;
+            display: block;
+        }
+
+        .support-center-screen.hidden {
+            display: none;
+        }
+
+        .banner {
+            background: linear-gradient(135deg, #1b6947 0%, #2a8c5f 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin: 20px;
+            box-shadow: 0 4px 12px rgba(27, 105, 71, 0.2);
+        }
+
+        .banner-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .banner-subtitle {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        /* Section */
+        .section {
+            margin: 20px;
+            background: white;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .section-title {
+            padding: 12px 20px;
+            background-color: #f8f8f8;
+            font-size: 13px;
+            color: #999;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background-color: #f9f9f9;
+            transform: translateX(4px);
+        }
+
+        .menu-item.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .menu-item.disabled:hover {
+            background-color: white;
+            transform: none;
+        }
+
+        .menu-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            flex-shrink: 0;
+            background-color: #f0f0f0;
+        }
+
+        .menu-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .menu-content {
+            flex: 1;
+        }
+
+        .menu-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .menu-subtitle {
+            font-size: 12px;
+            color: #999;
+            font-weight: 400;
+        }
+
+        .menu-arrow {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 18px;
+        }
+
+        /* Chat Screen */
+        .chat-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+        }
+
+        .chat-screen.active {
+            display: flex;
+        }
+
+        .chat-header {
+            background: white;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-header-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .chat-header-subtitle {
+            font-size: 13px;
+            color: #999;
+            font-weight: 400;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .chat-placeholder {
+            text-align: center;
+            color: #999;
+        }
+
+        .chat-placeholder-icon {
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-placeholder-text {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .chat-input-container {
+            padding: 16px 20px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 2px solid #e0e0e0;
+            padding: 12px 16px;
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            font-size: 14px;
+            resize: none;
+            max-height: 80px;
+            transition: border-color 0.2s ease;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: #1b6947;
+        }
+
+        .send-btn {
+            width: 40px;
+            height: 40px;
+            background: #1b6947;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover {
+            background: #2a8c5f;
+            transform: scale(1.05);
+        }
+
+        .send-btn:active {
+            transform: scale(0.95);
+        }
+
+        .send-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .tab-selector {
+            display: flex;
+            gap: 8px;
+            background: white;
+            padding: 12px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .tab {
+            padding: 8px 12px;
+            border: none;
+            background: #f0f0f0;
+            cursor: pointer;
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            color: #666;
+        }
+
+        .tab.active {
+            background: #1b6947;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                max-width: 100%;
+            }
+
+            .header {
+                padding: 12px 16px;
+            }
+
+            .header-title {
+                font-size: 18px;
+            }
+
+            .back-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .menu-item {
+                padding: 14px 16px;
+            }
+
+            .menu-icon {
+                width: 44px;
+                height: 44px;
+                margin-right: 12px;
+            }
+
+            .banner {
+                margin: 16px;
+                padding: 32px 16px;
+            }
+
+            .section {
+                margin: 16px;
+            }
+
+            .chat-input {
+                font-size: 13px;
+                padding: 10px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="back-btn" onclick="showScreen('support-center')">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </div>
+            <div class="header-title">সাপোর্ট</div>
+        </div>
+
+        <!-- Support Center Screen -->
+        <div class="support-center-screen" id="support-center">
+            <div class="banner">
+                <div class="banner-title">সাপোর্ট সেন্টার</div>
+                <div class="banner-subtitle">আপনার সমস্যার সমাধান পান আরও দ্রুত</div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="section">
+                <div class="section-title">সাপোর্ট</div>
+
+                <!-- Masaala - Written Question -->
+                <div class="menu-item disabled">
+                    <div class="menu-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"></path>
+                        </svg>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-title">মাসআলা - লিখিত প্রশ্ন</div>
+                        <div class="menu-subtitle">লিখিত প্রশ্নের মাধ্যমে সমাধান নিন</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+
+                <!-- Masaala - Voice Call -->
+                <div class="menu-item disabled">
+                    <div class="menu-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-title">মাসআলা - ভয়েস কল</div>
+                        <div class="menu-subtitle">ভয়েস কলের মাধ্যমে সমাধান নিন</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+
+                <!-- Technical Support -->
+                <div class="menu-item" onclick="openChat('টেকনিক্যাল সাপোর্ট', 'প্রযুক্তিগত সমস্যার সমাধান')">
+                    <div class="menu-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#1b6947" stroke-width="2">
+                            <circle cx="12" cy="12" r="1"></circle>
+                            <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m6.08 0l4.24 4.24"></path>
+                        </svg>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-title">টেকনিক্যাল সাপোর্ট</div>
+                        <div class="menu-subtitle">প্রযুক্তিগত সমস্যা সমাধান</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+
+                <!-- Product Issue -->
+                <div class="menu-item" onclick="openChat('পণ্য বিষয়', 'পণ্য সংক্রান্ত সমস্যা সমাধান')">
+                    <div class="menu-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#ff6b6b" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-title">পণ্য বিষয়</div>
+                        <div class="menu-subtitle">পণ্য সংক্রান্ত প্রশ্ন</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+
+                <!-- Marriage Issues -->
+                <div class="menu-item" onclick="openChat('বিবাহ বিষয়', 'বিবাহ সংক্রান্ত পরামর্শ')">
+                    <div class="menu-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#ff69b4" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-title">বিবাহ বিষয়</div>
+                        <div class="menu-subtitle">বিবাহ পরামর্শ ও সহায়তা</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+
+                <!-- Zakat/Fitra -->
+                <div class="menu-item" onclick="openChat('যাকাত/ফিতরা', 'যাকাত ফিতরা সংক্রান্ত তথ্য')">
+                    <div class="menu-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#ffc107" stroke-width="2">
+                            <circle cx="12" cy="12" r="1"></circle>
+                            <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m6.08 0l4.24-4.24M1 12h6m6 0h6M4.22 19.78l4.24-4.24m6.08 0l4.24 4.24"></path>
+                        </svg>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-title">যাকাত/ফিতরা</div>
+                        <div class="menu-subtitle">যাকাত ফিতরা সংক্রান্ত তথ্য</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+
+                <!-- Payment & Donation -->
+                <div class="menu-item" onclick="openChat('পেমেন্ট ও দান', 'পেমেন্ট ও দান সংক্রান্ত তথ্য')">
+                    <div class="menu-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <path d="M1 10h22"></path>
+                        </svg>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-title">পেমেন্ট ও দান</div>
+                        <div class="menu-subtitle">পেমেন্ট ও দান সংক্রান্ত তথ্য</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+
+                <!-- Hajj Support -->
+                <div class="menu-item" onclick="openChat('হজ্জ সাপোর্ট', 'হজ্জ সংক্রান্ত তথ্য ও সহায়তা')">
+                    <div class="menu-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#9c27b0" stroke-width="2">
+                            <path d="M12 2L2 7v5c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"></path>
+                            <polyline points="10 17 14 13 8 7"></polyline>
+                        </svg>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-title">হজ্জ সাপোর্ট</div>
+                        <div class="menu-subtitle">হজ্জ সংক্রান্ত তথ্য ও সহায়তা</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+
+            <!-- Community Section -->
+            <div class="section">
+                <div class="section-title">কমিউনিটি ও যোগাযোগ</div>
+
+                <!-- Facebook Group -->
+                <div class="menu-item" onclick="openChat('ফেসবুক গ্রুপ', 'সুসলিম বাংলা কমিউনিটি গ্রুপ')">
+                    <div class="menu-icon">
+                        <svg viewBox="0 0 24 24" fill="#1877f2">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"></path>
+                        </svg>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-title">ফেসবুক গ্রুপ</div>
+                        <div class="menu-subtitle">সুসলিম বাংলা কমিউনিটি গ্রুপ</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+
+                <!-- Email -->
+                <div class="menu-item" onclick="openChat('ইমেইল', 'muslimbangla.app@gmail.com')">
+                    <div class="menu-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#00a86b" stroke-width="2">
+                            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                            <path d="m22 7-10 5L2 7"></path>
+                        </svg>
+                    </div>
+                    <div class="menu-content">
+                        <div class="menu-title">ইমেইল</div>
+                        <div class="menu-subtitle">muslimbangla.app@gmail.com</div>
+                    </div>
+                    <div class="menu-arrow">›</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Screen -->
+        <div class="chat-screen" id="chat-screen">
+            <div class="chat-header">
+                <div>
+                    <div class="chat-header-title" id="chat-title">টেকনিক্যাল সাপোর্ট</div>
+                    <div class="chat-header-subtitle" id="chat-subtitle">অনলাইন</div>
+                </div>
+            </div>
+
+            <div class="tab-selector">
+                <button class="tab active" onclick="switchTab('general', this)">General</button>
+            </div>
+
+            <div class="chat-messages">
+                <div class="chat-placeholder">
+                    <div class="chat-placeholder-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2" style="width: 48px; height: 48px;">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                    </div>
+                    <div class="chat-placeholder-text">কথোপকথন শুরু করুন</div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="message-input" placeholder="একটি বার্তা লিখুন..." />
+                <button class="send-btn" onclick="sendMessage()">
+                    <svg viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showScreen(screenId) {
+            document.getElementById('support-center').classList.remove('hidden');
+            document.getElementById('chat-screen').classList.remove('active');
+        }
+
+        function openChat(title, subtitle) {
+            document.getElementById('support-center').classList.add('hidden');
+            document.getElementById('chat-screen').classList.add('active');
+            document.getElementById('chat-title').textContent = title;
+            document.getElementById('chat-subtitle').textContent = subtitle;
+            document.getElementById('message-input').focus();
+        }
+
+        function switchTab(tabName, element) {
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value.trim();
+            
+            if (message !== '') {
+                input.value = '';
+                console.log('বার্তা পাঠানো হয়েছে:', message);
+            }
+        }
+
+        // Enter কী দিয়ে বার্তা পাঠান
+        document.getElementById('message-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+
+
+      <!-- Navbar Loader -->
+<script src="navbar/navbar-loader.js"></script>
+</body>
+</html>
