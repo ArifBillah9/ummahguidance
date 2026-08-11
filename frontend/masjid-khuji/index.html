@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, minimum-scale=1, maximum-scale=5">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>মসজিদ খুঁজি</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kalpurush&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            background: #f8f9fa;
+            overflow: hidden;
+        }
+
+        body {
+            padding-top: env(safe-area-inset-top);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .app-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2D5016 0%, #1B3A0F 100%);
+            color: white;
+            padding: 12px 16px;
+            padding-top: calc(12px + env(safe-area-inset-top));
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            gap: 12px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+            flex: 1;
+            text-align: center;
+            letter-spacing: -0.5px;
+        }
+
+        .header-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .header-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .header-btn:active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0.95);
+        }
+
+        .header-btn.loading svg {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Main Content */
+        .content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            flex-direction: column;
+            animation: slideIn 0.3s ease;
+        }
+
+        .screen.active {
+            display: flex;
+            position: relative;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Screen 1: Welcome */
+        #screen1 {
+            background: linear-gradient(135deg, #2D5016 0%, #1B3A0F 100%);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .welcome-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 24px;
+            max-width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, #2D5016 0%, #1B3A0F 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .welcome-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+
+        .welcome-desc {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #2D5016 0%, #1B3A0F 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .start-btn:active {
+            transform: scale(0.98);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .start-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Screen 2: Map */
+        #screen2 {
+            flex-direction: column;
+        }
+
+        #mapFrame {
+            flex: 1;
+            width: 100%;
+            border: 0;
+        }
+
+        .map-status {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            right: 12px;
+            background: white;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-size: 12px;
+            color: #333;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 20;
+        }
+
+        .map-status svg {
+            width: 16px;
+            height: 16px;
+            color: #2D5016;
+            flex-shrink: 0;
+        }
+
+        .fab {
+            position: absolute;
+            right: 16px;
+            bottom: 16px;
+            background: linear-gradient(135deg, #2D5016 0%, #1B3A0F 100%);
+            color: white;
+            border: none;
+            border-radius: 999px;
+            padding: 14px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+            cursor: pointer;
+            z-index: 20;
+        }
+
+        .fab svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .fab:active {
+            transform: scale(0.97);
+        }
+
+        .loading-overlay {
+            position: absolute;
+            inset: 0;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            z-index: 30;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .loading-overlay.hidden {
+            display: none;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #2D5016;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @media (max-width: 600px) {
+            .header-title {
+                font-size: 16px;
+            }
+
+            .welcome-title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <button class="header-btn" id="externalBtn" onclick="openInGoogleMaps()" title="গুগল ম্যাপ অ্যাপে খুলুন">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <polyline points="15 3 21 3 21 9"></polyline>
+                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+            </button>
+            <div class="header-title">মসজিদ খুঁজি</div>
+            <button class="header-btn" id="refreshBtn" onclick="refreshLocation()" title="অবস্থান রিফ্রেশ করুন">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 4v6h-6"></path>
+                    <path d="M20.49 15a9 9 0 1 1-2-8.83"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Screens -->
+        <div class="content">
+            <!-- Screen 1: Location Permission -->
+            <div class="screen active" id="screen1">
+                <div class="welcome-card">
+                    <div class="welcome-icon">
+                        <svg width="50" height="50" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm0 22c-5.5 0-10-4.5-10-10S6.5 2 12 2s10 4.5 10 10-4.5 10-10 10z"/>
+                            <circle cx="12" cy="8" r="2" fill="currentColor"/>
+                            <path d="M12 11c-2.2 0-4 1.8-4 4v5h8v-5c0-2.2-1.8-4-4-4z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <div class="welcome-title">আপনার অবস্থান</div>
+                    <p class="welcome-desc">পৃথিবীর যেকোনো প্রান্ত থেকে আপনার কাছাকাছি বাস্তব মসজিদ খুঁজে পেতে অবস্থান শেয়ার করুন — সরাসরি গুগল ম্যাপ থেকে</p>
+
+                    <div style="text-align: left; margin: 24px 0; background: #F5F5F5; padding: 16px; border-radius: 12px; border-left: 4px solid #2D5016;">
+                        <div style="font-size: 13px; color: #333; line-height: 1.6;">
+                            <strong>কেন আমরা আপনার অবস্থান প্রয়োজন?</strong>
+                            <div style="margin-top: 10px; color: #666;">
+                                আমরা গুগল ম্যাপের সাহায্যে আপনার চারপাশের প্রকৃত মসজিদগুলো দেখাতে আপনার অবস্থান ব্যবহার করি। এটি সম্পূর্ণ নিরাপদ এবং গোপনীয়, বিশ্বের যেকোনো স্থান থেকেই কাজ করে।
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <button class="start-btn" id="shareLocationBtn" onclick="requestLocation()" style="background: linear-gradient(135deg, #2D5016 0%, #1B3A0F 100%); margin: 0;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; margin-right: 8px;">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            অবস্থান শেয়ার করুন
+                        </button>
+                        <button class="start-btn" id="autoLocationBtn" onclick="useAutoLocation()" style="background: #757575; margin: 0;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; margin-right: 8px;">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="2" y1="12" x2="22" y2="12"></line>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                            </svg>
+                            স্বয়ংক্রিয়ভাবে সনাক্ত করুন
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Screen 2: Real Google Map -->
+            <div class="screen" id="screen2">
+                <div class="map-status" id="mapStatus">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <span id="mapStatusText">আপনার কাছাকাছি মসজিদ খোঁজা হচ্ছে...</span>
+                </div>
+
+                <iframe id="mapFrame" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                <div class="loading-overlay" id="loadingOverlay">
+                    <div class="spinner"></div>
+                    <span>গুগল ম্যাপ থেকে মসজিদ লোড হচ্ছে...</span>
+                </div>
+
+                <button class="fab" onclick="openInGoogleMaps()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    গুগল ম্যাপে খুলুন
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLocation = null;
+        // মক্কা, সৌদি আরব — সব ধরনের অবস্থান শনাক্তকরণ ব্যর্থ হলে চূড়ান্ত ফলব্যাক
+        const FALLBACK_LOCATION = { lat: 21.4225, lng: 39.8262, label: 'মক্কা, সৌদি আরব' };
+
+        // লোকেশন অনুমতি চান (GPS)
+        function requestLocation() {
+            const btn = document.getElementById('shareLocationBtn');
+            btn.disabled = true;
+            btn.textContent = 'অবস্থান সংগ্রহ করছি...';
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        currentLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        startApp();
+                    },
+                    error => {
+                        btn.disabled = false;
+                        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: inline; margin-right: 8px;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>অবস্থান শেয়ার করুন';
+                        alert('অবস্থান অ্যাক্সেস ব্যর্থ। দয়া করে ব্রাউজার সেটিংস চেক করুন, অথবা "স্বয়ংক্রিয়ভাবে সনাক্ত করুন" ব্যবহার করুন।');
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            } else {
+                btn.disabled = false;
+                alert('আপনার ব্রাউজার জিওলোকেশন সমর্থন করে না। "স্বয়ংক্রিয়ভাবে সনাক্ত করুন" ব্যবহার করুন।');
+            }
+        }
+
+        // GPS ছাড়াই, IP এর মাধ্যমে আনুমানিক অবস্থান সনাক্ত করুন (বিশ্বের যেকোনো স্থান থেকে কাজ করে)
+        async function useAutoLocation() {
+            const btn = document.getElementById('autoLocationBtn');
+            btn.disabled = true;
+            btn.textContent = 'অবস্থান সনাক্ত করা হচ্ছে...';
+
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                if (!res.ok) throw new Error('lookup failed');
+                const data = await res.json();
+                if (data.latitude && data.longitude) {
+                    currentLocation = { lat: data.latitude, lng: data.longitude };
+                } else {
+                    throw new Error('no coordinates');
+                }
+            } catch (e) {
+                currentLocation = { lat: FALLBACK_LOCATION.lat, lng: FALLBACK_LOCATION.lng };
+            }
+            startApp();
+        }
+
+        // অ্যাপ শুরু করুন
+        function startApp() {
+            hideScreen(1);
+            showScreen(2);
+            loadMap();
+        }
+
+        // স্ক্রিন ম্যানেজমেন্ট
+        function showScreen(num) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(`screen${num}`).classList.add('active');
+        }
+
+        function hideScreen(num) {
+            document.getElementById(`screen${num}`).classList.remove('active');
+        }
+
+        // আসল গুগল ম্যাপ এমবেড করুন — এখানে সত্যিকারের মসজিদ দেখাবে, কোনো ডেমো ডেটা নেই
+        function loadMap() {
+            if (!currentLocation) return;
+
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.classList.remove('hidden');
+
+            const { lat, lng } = currentLocation;
+            const src = `https://maps.google.com/maps?q=mosque&ll=${lat},${lng}&z=15&output=embed`;
+
+            const frame = document.getElementById('mapFrame');
+            frame.onload = () => overlay.classList.add('hidden');
+            frame.src = src;
+
+            document.getElementById('mapStatusText').textContent = 'আপনার কাছাকাছি বাস্তব মসজিদ — গুগল ম্যাপ থেকে';
+        }
+
+        // অবস্থান রিফ্রেশ করুন
+        function refreshLocation() {
+            const btn = document.getElementById('refreshBtn');
+            btn.classList.add('loading');
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        currentLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        loadMap();
+                        btn.classList.remove('loading');
+                    },
+                    () => {
+                        // GPS না পেলে বর্তমান অবস্থান দিয়েই আবার লোড করুন
+                        if (currentLocation) loadMap();
+                        btn.classList.remove('loading');
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            } else {
+                if (currentLocation) loadMap();
+                btn.classList.remove('loading');
+            }
+        }
+
+        // সম্পূর্ণ গুগল ম্যাপ অ্যাপ/ওয়েবসাইটে খুলুন — বাস্তব তালিকা, রিভিউ ও দিকনির্দেশনাসহ
+        function openInGoogleMaps() {
+            const loc = currentLocation || FALLBACK_LOCATION;
+            const url = `https://www.google.com/maps/search/mosque/@${loc.lat},${loc.lng},15z`;
+            window.open(url, '_blank');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>রোজা - রমজান গাইড</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background-color: #4a7366;
+            color: white;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        /* Back Button */
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        /* Banner Section */
+        .banner {
+            background: linear-gradient(135deg, rgba(42, 70, 60, 0.85), rgba(60, 100, 80, 0.85)),
+                        url('https://media.istockphoto.com/id/2018101881/photo/ramadan-kareem-photography-lantern-with-crescent-moon-shape-on-the-beach.jpg?s=612x612&w=0&k=20&c=smrH2rAlHH3wkflwk7kQrKRfvQXYKmOf8NEhYpfxL8I=') center/cover;
+            background-blend-mode: overlay;
+            color: white;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .banner-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 8px;
+        }
+
+        .banner-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .location-date {
+            font-size: 13px;
+            margin: 0;
+            opacity: 0.95;
+        }
+
+        .hijri-date {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .prayer-times {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 0;
+            font-size: 13px;
+        }
+
+        .prayer-time-item {
+            text-align: center;
+        }
+
+        .prayer-time-label {
+            opacity: 0.8;
+            font-size: 11px;
+            margin-bottom: 2px;
+        }
+
+        .prayer-time-value {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        /* Menu Grid */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 20px;
+            background-color: white;
+        }
+
+        .menu-item {
+            background: #f9f9f9;
+            border: none;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item:hover {
+            background: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-item:active {
+            transform: translateY(-1px);
+        }
+
+        .menu-icon {
+            font-size: 32px;
+            color: #4a7366;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .menu-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #333;
+            word-break: break-word;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            min-height: calc(100vh - 250px);
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #4a7366;
+        }
+
+        /* Fawail Section */
+        .fawail-list {
+            list-style: none;
+        }
+
+        .fawail-item {
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .fawail-item:hover {
+            background: #f0f0f0;
+            padding-left: 18px;
+        }
+
+        .fawail-item-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        /* Hadith/Dua Content */
+        .hadith-box {
+            background: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .hadith-box .hadith-arabic {
+            font-family: 'Amiri', serif !important;
+        }
+
+        .hadith-arabic {
+            font-size: 16px;
+            text-align: right;
+            direction: rtl;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 500;
+            font-family: 'Amiri', serif;
+        }
+
+        .hadith-translation {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+            background: white;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .hadith-reference {
+            font-size: 12px;
+            color: #888;
+            font-style: italic;
+        }
+
+        /* Dua Details */
+        .dua-item {
+            background: #f9f9f9;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-top: 3px solid #4a7366;
+        }
+
+        .dua-number {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+
+        .dua-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .dua-arabic {
+            font-size: 15px;
+            text-align: right;
+            direction: rtl;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 12px;
+            font-weight: 500;
+            font-family: 'Amiri', serif;
+        }
+
+        .dua-translation {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #666;
+            background: white;
+            padding: 8px;
+            margin-bottom: 8px;
+        }
+
+        .dua-meaning {
+            font-size: 12px;
+            color: #888;
+            font-style: italic;
+        }
+
+        .controls {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: #4a7366;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 4px 8px;
+            transition: color 0.2s;
+        }
+
+        .control-btn:hover {
+            color: #c2894a;
+        }
+
+        /* Reference Tooltip */
+        .ref-tooltip-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .ref-icon {
+            cursor: pointer;
+            color: #4a7366;
+            font-size: 14px;
+            margin-left: 5px;
+            transition: color 0.2s;
+        }
+
+        .ref-icon:hover {
+            color: #c2894a;
+        }
+
+        .ref-tooltip {
+            visibility: hidden;
+            width: max-content;
+            max-width: min(280px, calc(100vw - 32px));
+            box-sizing: border-box;
+            background-color: #333;
+            color: #fff;
+            text-align: left;
+            padding: 12px;
+            position: absolute;
+            z-index: 10;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 12px;
+            line-height: 1.5;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            word-wrap: break-word;
+        }
+
+        .ref-tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: var(--arrow-left, 50%);
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
+        }
+
+        .ref-tooltip-container:hover .ref-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .ref-tooltip.bottom {
+            bottom: auto;
+            top: 125%;
+        }
+
+        .ref-tooltip.bottom::after {
+            top: auto;
+            bottom: 100%;
+            left: var(--arrow-left, 50%);
+            border-color: transparent transparent #333 transparent;
+        }
+
+        /* Home Section */
+        .home-section {
+            display: block;
+        }
+
+        .home-section.hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .banner {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .banner-content {
+                text-align: center;
+                gap: 5px;
+            }
+
+            .banner-title {
+                font-size: 24px;
+            }
+
+            .location-date {
+                font-size: 12px;
+            }
+
+            .hijri-date {
+                font-size: 12px;
+            }
+
+            .prayer-times {
+                justify-content: center;
+                gap: 20px;
+            }
+
+            .prayer-time-label {
+                font-size: 10px;
+            }
+
+            .prayer-time-value {
+                font-size: 14px;
+            }
+
+            .menu-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+                padding: 15px;
+            }
+
+            .menu-icon {
+                font-size: 28px;
+            }
+
+            .menu-label {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <button class="back-btn" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <span class="header-title">রোজা</span>
+    </div>
+
+    <!-- Home Section -->
+    <div id="homeSection" class="home-section">
+        <!-- Banner -->
+        <div class="banner">
+            <div class="banner-content">
+                <div class="banner-title">রোজা</div>
+                <div class="location-date">ঢাকা, বাংলাদেশ • 11 আগস্ট, 2026</div>
+                <div class="hijri-date">সফর, 1448 হিজরী</div>
+                <div class="prayer-times">
+                    <div class="prayer-time-item">
+                        <div class="prayer-time-label">সাহরি শেষ</div>
+                        <div class="prayer-time-value">8:06</div>
+                    </div>
+                    <div class="prayer-time-item">
+                        <div class="prayer-time-label">ইফতার</div>
+                        <div class="prayer-time-value">6:08</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Menu Grid -->
+        <div class="menu-grid">
+            <button class="menu-item" onclick="showSection('fawail')">
+                <div class="menu-icon"><i class="fas fa-award"></i></div>
+                <div class="menu-label">ফাযায়েল</div>
+            </button>
+
+            <button class="menu-item" onclick="showSection('dua')">
+                <div class="menu-icon"><i class="fas fa-hands-praying"></i></div>
+                <div class="menu-label">দু'আ</div>
+            </button>
+
+            <button class="menu-item" onclick="showSection('hadith')">
+                <div class="menu-icon"><i class="fas fa-book"></i></div>
+                <div class="menu-label">হাদীস</div>
+            </button>
+
+            <button class="menu-item" onclick="showSection('masail')">
+                <div class="menu-icon"><i class="fas fa-question-circle"></i></div>
+                <div class="menu-label">মাসাইল</div>
+            </button>
+
+            <button class="menu-item" onclick="showSection('articles')">
+                <div class="menu-icon"><i class="fas fa-newspaper"></i></div>
+                <div class="menu-label">প্রবন্ধ</div>
+            </button>
+
+            <button class="menu-item" onclick="showSection('books')">
+                <div class="menu-icon"><i class="fas fa-book-open"></i></div>
+                <div class="menu-label">কিতাব</div>
+            </button>
+
+            <button class="menu-item" onclick="showSection('video')">
+                <div class="menu-icon"><i class="fas fa-video"></i></div>
+                <div class="menu-label">মাসাইল ভিডিও</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- ফাযায়েল Section -->
+    <div id="fawailSection" class="content-section">
+        <div style="padding: 15px;">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <div class="section-title">রোজার ফাযায়েল</div>
+        <ul class="fawail-list">
+            <li class="fawail-item" onclick="showSection('fawailDetail')">
+                <div class="fawail-item-title">রমজানের ফাযায়েল</div>
+            </li>
+            <li class="fawail-item">
+                <div class="fawail-item-title">চাঁদ দেখা</div>
+            </li>
+            <li class="fawail-item">
+                <div class="fawail-item-title">তারাবীর নামায</div>
+            </li>
+            <li class="fawail-item">
+                <div class="fawail-item-title">সাইয়াম</div>
+            </li>
+            <li class="fawail-item">
+                <div class="fawail-item-title">রোজার নিয়াত</div>
+            </li>
+            <li class="fawail-item">
+                <div class="fawail-item-title">ইফতার</div>
+            </li>
+            <li class="fawail-item">
+                <div class="fawail-item-title">ইফতারের সময় দু'আ</div>
+            </li>
+            <li class="fawail-item">
+                <div class="fawail-item-title">যে সমস্ত কারণে রোজা ভেঙ্গে যায়</div>
+            </li>
+            <li class="fawail-item">
+                <div class="fawail-item-title">যাদের জন্য রোজা না রাখার অনুমতি রয়েছে</div>
+            </li>
+        </ul>
+    </div>
+
+    <!-- রমজানের ফাযায়েল Detail Section -->
+    <div id="fawailDetailSection" class="content-section">
+        <div style="padding: 15px;">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <div class="section-title">রমজানের ফাযায়েল</div>
+        <div class="hadith-box">
+            <div class="hadith-arabic">يَا أَيُّهَا الَّذِينَ آمَنُوا كُتِبَ عَلَيْكُمُ الصِّيَامُ كَمَا كُتِبَ عَلَى الَّذِينَ مِنْ قَبْلِكُمْ لَعَلَّكُمْ تَتَّقُونَ</div>
+            <div class="hadith-translation">হে ঈমানদারগণ! তোমাদের উপর রোজা ফরজ করা হয়েছে যেভাবে তা তোমাদের পূর্ববর্তীদের উপর ফরজ করা হয়েছিল, যাতে তোমরা মুত্তাকী হতে পার।<span class="ref-tooltip-container">
+                    <i class="fa-solid fa-book-bookmark ref-icon" title="রেফারেন্স"></i>
+                    <span class="ref-tooltip">সূরা বাকারা, আয়াত:183। এই আয়াতটি কুরআনের দ্বিতীয় সূরা বাকারার 183 নম্বর আয়াত। এই আয়াতে আল্লাহ তায়ালা স্পষ্টভাবে রোজা পালনের নির্দেশ দিয়েছেন এবং এর উদ্দেশ্য হল তাকওয়া (খোদাভীতি) অর্জন করা।</span>
+                </span></div>
+        </div>
+        <p style="line-height: 1.8; color: #555; margin-bottom: 15px;">ইমাম আদ-দারাকুতনী বলেছেন, তোমাদের উপর রোজা ফরজ করা হয়েছে, যেরূপ ফরজ করা হয়েছিল তোমাদের পূর্ববর্তী লোকদের উপর, যেন তোমরা পরহেজগার অর্থাৎ আল্লাহকে ভয় করে চলতে পার।</p>
+        <p style="line-height: 1.8; color: #555;">এই আয়াত থেকে বোঝা যায় যে, রোজা একটি মহান ইবাদত এবং এটি আত্মসংযম ও খোদাভীতি অর্জনের মাধ্যম।</p>
+    </div>
+
+    <!-- দু'আ Section -->
+    <div id="duaSection" class="content-section">
+        <div style="padding: 15px;">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <div class="section-title">দু'আ</div>
+        
+        <div class="dua-item">
+            <div class="dua-number">1. রজব ও শাবান মাসের দু'আ</div>
+            <div class="dua-title">রজব ও শাবান মাসের দু'আ<span class="ref-tooltip-container">
+                    <i class="fa-solid fa-book-bookmark ref-icon" title="রেফারেন্স"></i>
+                    <span class="ref-tooltip">এই দু'আটি রজব এবং শাবান মাসে পড়া সুন্নত। রাসূল (সা.) রমজান মাসে পৌঁছানোর জন্য আল্লাহর কাছে এভাবে দু'আ করতেন এবং এটি আমাদের আমল করার জন্য শিক্ষা দিয়েছেন।</span>
+                </span>
+            </div>
+            <div class="dua-arabic">اللَّهُمَّ بَارِكْ لَنَا فِي رَجَبٍ وَشَعْبَانَ وَبَلِّغْنَا رَمَضَانَ</div>
+            <div class="dua-translation">উচ্চারণ: আল্লাহুম্মা বারিক লানা ফি রজব ওয়া শাবান ওয়া বাল্লিগনা রমাদান।</div>
+            <div class="dua-meaning">অর্থ: হে আল্লাহ! আপনি আমাদের জন্য রজব ও শাবান মাসে বরকত দিন এবং আমাদের রমজান পর্যন্ত পৌঁছে দিন।</div>
+            <div class="controls">
+                <button class="control-btn" title="শোনুন"><i class="fas fa-volume-up"></i></button>
+                <button class="control-btn" title="কপি করুন"><i class="fas fa-copy"></i></button>
+            </div>
+        </div>
+
+        <div class="dua-item">
+            <div class="dua-number">2. ইফতারের সময় পড়বে</div>
+            <div class="dua-title">ইফতারের সময় পড়বে<span class="ref-tooltip-container">
+                    <i class="fa-solid fa-book-bookmark ref-icon" title="রেফারেন্স"></i>
+                    <span class="ref-tooltip">ইফতারের সময় এই দু'আ পড়া একটি গুরুত্বপূর্ণ সুন্নত। এই সময় আল্লাহর কাছে প্রার্থনা করা হয় কারণ আল্লাহ ইফতারকারীর দু'আ কখনো ফেরত দেন না।</span>
+                </span>
+            </div>
+            <div class="dua-arabic">يَا وَاسِعَ الْمَغْفِرَةِ اغْفِرْ لِي</div>
+            <div class="dua-translation">উচ্চারণ: ইয়া ওয়াসিআল মাগফিরাহি ইগফির লি।</div>
+            <div class="dua-meaning">অর্থ: হে মহান ক্ষমাশীল! আমাকে ক্ষমা করুন।</div>
+            <div class="controls">
+                <button class="control-btn" title="শোনুন"><i class="fas fa-volume-up"></i></button>
+                <button class="control-btn" title="কপি করুন"><i class="fas fa-copy"></i></button>
+            </div>
+        </div>
+
+        <div class="dua-item">
+            <div class="dua-number">3. ইফতারের সময় এ দু'আ পড়বে</div>
+            <div class="dua-title">ইফতারের সময় এ দু'আ পড়বে<span class="ref-tooltip-container">
+                    <i class="fa-solid fa-book-bookmark ref-icon" title="রেফারেন্স"></i>
+                    <span class="ref-tooltip">এই দু'আটি ইফতারের সময় পড়া অত্যন্ত গুরুত্বপূর্ণ এবং সুন্নত। এতে বান্দা আল্লাহর কাছে নিজের রোজার কথা মনে করিয়ে দেয় এবং তাঁর দয়া প্রার্থনা করে।</span>
+                </span>
+            </div>
+            <div class="dua-arabic">اللَّهُمَّ لَكَ صُمْتُ وَعَلَى رِزْقِكَ أَفْطَرْتُ</div>
+            <div class="dua-translation">উচ্চারণ: আল্লাহুম্মা লাকা সুম্তু ওয়া আলা রিজকিকা আফতারতু।</div>
+            <div class="dua-meaning">অর্থ: হে আল্লাহ! আমি আপনার জন্য রোজা রেখেছি এবং আপনার রিজকের মাধ্যমে ইফতার করছি।</div>
+            <div class="controls">
+                <button class="control-btn" title="শোনুন"><i class="fas fa-volume-up"></i></button>
+                <button class="control-btn" title="কপি করুন"><i class="fas fa-copy"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- হাদীস Section -->
+    <div id="hadithSection" class="content-section">
+        <div style="padding: 15px;">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <div class="section-title">রমজানের হাদীস</div>
+        <div class="hadith-box">
+            <div style="font-weight: 600; margin-bottom: 10px; color: #4a7366;">
+                <i class="fas fa-book-quran"></i> দিনের বেলা রোজা রাখাকে ফরজ করে পবিত্র কুরআন:
+            </div>
+            <div class="hadith-arabic">يَا أَيُّهَا الَّذِينَ آمَنُوا كُتِبَ عَلَيْكُمُ الصِّيَامُ كَمَا كُتِبَ عَلَى الَّذِينَ مِنْ قَبْلِكُمْ لَعَلَّكُمْ تَتَّقُونَ</div>
+            <div class="hadith-translation">হে ঈমানদারগণ! তোমাদের উপর রোজা ফরজ করা হয়েছে যেভাবে তা তোমাদের পূর্ববর্তীদের উপর ফরজ করা হয়েছিল, যাতে তোমরা মুত্তাকী হতে পার।<span class="ref-tooltip-container">
+                    <i class="fa-solid fa-book-bookmark ref-icon" title="রেফারেন্স"></i>
+                    <span class="ref-tooltip">সূরা বাকারা, আয়াত:183। এই আয়াতটি কুরআনের দ্বিতীয় সূরা বাকারার 183 নম্বর আয়াত। এতে মহান আল্লাহ তায়ালা রোজার ফরজিয়াত সম্পর্কে স্পষ্ট নির্দেশনা প্রদান করেছেন।</span>
+                </span></div>
+        </div>
+
+        <div class="hadith-box">
+            <div style="font-weight: 600; margin-bottom: 10px; color: #4a7366;">
+                <i class="fas fa-mosque"></i> রাসূল সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম এর হাদীস:
+            </div>
+            <div class="hadith-arabic">عن أبي هريرة أن رسول الله صلى الله عليه وسلم قال من صام رمضان إيماناً واحتساباً غُفرَ له ما تقدم من ذنبه</div>
+            <div class="hadith-translation">আবু হুরায়রা (রা.) থেকে বর্ণিত, রাসূলুল্লাহ (সা.) বলেছেন: যে ব্যক্তি রমজানের সম্পূর্ণ মাস ঈমান এবং সওয়াব অর্জনের নিয়তে রোজা রাখবে, তার সমস্ত পূর্বেকৃত পাপ মাফ করে দেওয়া হবে। - সহীহ বুখারী ও মুসলিম<span class="ref-tooltip-container">
+                    <i class="fa-solid fa-book-bookmark ref-icon" title="রেফারেন্স"></i>
+                    <span class="ref-tooltip">এটি একটি সহীহ (প্রামাণিক) হাদীস যা বুখারী এবং মুসলিম উভয়েই সংকলন করেছেন। এই হাদীসে নবী মুহাম্মদ (সা.) রমজান মাসে রোজা রাখার অসাধারণ ফযিলত বর্ণনা করেছেন।</span>
+                </span></div>
+        </div>
+    </div>
+
+    <!-- মাসাইল Section -->
+    <div id="masailSection" class="content-section">
+        <div style="padding: 15px;">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <div class="section-title">মাসাইল (সমস্যা ও সমাধান)</div>
+        <div class="hadith-box">
+            <div style="font-weight: 600; color: #4a7366; margin-bottom: 10px;">
+                <i class="fas fa-question-circle"></i> রোজার সময় ভুল করে কিছু খেয়ে ফেলা
+            </div>
+            <p style="color: #666; margin-bottom: 10px;">যদি কেউ রোজার সময় ভুল করে বা ভুলে গিয়ে কিছু খেয়ে ফেলে, তবে তার রোজা বৈধ থাকে। তবে সচেতনভাবে খাওয়া হলে রোজা ভেঙ্গে যায়।</p>
+            <p style="font-size: 12px; color: #888; font-style: italic;">সূত্র: সহীহ বুখারী ও মুসলিম</p>
+        </div>
+
+        <div class="hadith-box">
+            <div style="font-weight: 600; color: #4a7366; margin-bottom: 10px;">
+                <i class="fas fa-question-circle"></i> মহিলাদের ঋতুকাল এবং রোজা
+            </div>
+            <p style="color: #666; margin-bottom: 10px;">মহিলাদের ঋতুকাল চলাকালীন সময়ে রোজা রাখা নিষিদ্ধ। পরবর্তীতে ঐ দিনগুলোর কাজা আদায় করতে হবে।</p>
+            <p style="font-size: 12px; color: #888; font-style: italic;">সূত্র: সহীহ মুসলিম</p>
+        </div>
+    </div>
+
+    <!-- প্রবন্ধ Section -->
+    <div id="articlesSection" class="content-section">
+        <div style="padding: 15px;">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <div class="section-title">প্রবন্ধ ও নিবন্ধ</div>
+        <div style="color: #666; font-size: 14px; line-height: 1.8;">
+            <h3 style="color: #4a7366; margin: 15px 0 10px 0;">রমজান মাসের গুরুত্ব ও তাৎপর্য</h3>
+            <p>রমজান হল ইসলামী বছরের নবম মাস, যা হাজার মাসের চেয়ে উত্তম। এই মাসে কুরআন শরীফ অবতীর্ণ হয়েছিল। প্রতিটি মুসলমানের জন্য এই মাসে রোজা রাখা ফরজ, যা মুসলমানের পাঁচটি স্তম্ভের অন্যতম।</p>
+            
+            <h3 style="color: #4a7366; margin: 15px 0 10px 0;">রোজার উপকারিতা</h3>
+            <p>রোজা শুধুমাত্র একটি ধর্মীয় বিধান নয়, এটি স্বাস্থ্য ও মানসিক উন্নয়নের জন্যও অত্যন্ত উপকারী। রোজা মানুষের মধ্যে ধৈর্য, সংযম এবং আত্মনিয়ন্ত্রণ বৃদ্ধি করে।</p>
+        </div>
+    </div>
+
+    <!-- কিতাব Section -->
+    <div id="booksSection" class="content-section">
+        <div style="padding: 15px;">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <div class="section-title">ইসলামিক কিতাব ও সংস্থান</div>
+        <div class="fawail-list">
+            <li class="fawail-item">
+                <div class="fawail-item-title">সহীহ বুখারী</div>
+                <p style="font-size: 12px; color: #888; margin-top: 5px;">ইমাম বুখারী সংকলিত হাদীসের সবচেয়ে বিশ্বস্ত সংগ্রহ</p>
+            </li>
+            <li class="fawail-item">
+                <div class="fawail-item-title">সহীহ মুসলিম</div>
+                <p style="font-size: 12px; color: #888; margin-top: 5px;">ইমাম মুসলিম সংকলিত হাদীসের বিশ্বস্ত সংগ্রহ</p>
+            </li>
+            <li class="fawail-item">
+                <div class="fawail-item-title">সুনান আবু দাউদ</div>
+                <p style="font-size: 12px; color: #888; margin-top: 5px;">ইমাম আবু দাউদ সংকলিত হাদীসের গ্রন্থ</p>
+            </li>
+            <li class="fawail-item">
+                <div class="fawail-item-title">সুনান নাসায়ী</div>
+                <p style="font-size: 12px; color: #888; margin-top: 5px;">ইমাম নাসায়ী সংকলিত হাদীসের সংগ্রহ</p>
+            </li>
+        </div>
+    </div>
+
+    <!-- ভিডিও Section -->
+    <div id="videoSection" class="content-section">
+        <div style="padding: 15px;">
+            <button class="back-btn" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <div class="section-title">শিক্ষামূলক ভিডিও</div>
+        <div style="text-align: center; color: #888; padding: 40px 20px;">
+            <i class="fas fa-video" style="font-size: 48px; margin-bottom: 20px;"></i>
+            <p>ভিডিও কন্টেন্ট শীঘ্রই যোগ করা হবে</p>
+            <p style="font-size: 12px; margin-top: 10px;">আমাদের শিক্ষামূলক ভিডিও গুলি আপনার রোজা সম্পর্কিত বিভিন্ন প্রশ্নের উত্তর দিতে সাহায্য করবে।</p>
+        </div>
+    </div>
+
+    <script>
+        let navigationStack = [];
+
+        function showSection(sectionId) {
+            document.getElementById('homeSection').classList.add('hidden');
+
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            if (sectionId === 'fawail') {
+                navigationStack.push('fawail');
+                document.getElementById('fawailSection').classList.add('active');
+            } else if (sectionId === 'fawailDetail') {
+                navigationStack.push('fawailDetail');
+                document.getElementById('fawailDetailSection').classList.add('active');
+            } else if (sectionId === 'dua') {
+                navigationStack.push('dua');
+                document.getElementById('duaSection').classList.add('active');
+            } else if (sectionId === 'hadith') {
+                navigationStack.push('hadith');
+                document.getElementById('hadithSection').classList.add('active');
+            } else if (sectionId === 'masail') {
+                navigationStack.push('masail');
+                document.getElementById('masailSection').classList.add('active');
+            } else if (sectionId === 'articles') {
+                navigationStack.push('articles');
+                document.getElementById('articlesSection').classList.add('active');
+            } else if (sectionId === 'books') {
+                navigationStack.push('books');
+                document.getElementById('booksSection').classList.add('active');
+            } else if (sectionId === 'video') {
+                navigationStack.push('video');
+                document.getElementById('videoSection').classList.add('active');
+            }
+        }
+
+        function goHome() {
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            document.getElementById('homeSection').classList.remove('hidden');
+            navigationStack = [];
+        }
+
+        function goBack() {
+            if (navigationStack.length > 0) {
+                navigationStack.pop();
+                
+                const sections = document.querySelectorAll('.content-section');
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById('homeSection').classList.add('hidden');
+
+                if (navigationStack.length === 0) {
+                    goHome();
+                } else {
+                    const previousSection = navigationStack[navigationStack.length - 1];
+                    
+                    if (previousSection === 'fawail') {
+                        document.getElementById('fawailSection').classList.add('active');
+                    } else if (previousSection === 'fawailDetail') {
+                        document.getElementById('fawailDetailSection').classList.add('active');
+                    } else if (previousSection === 'dua') {
+                        document.getElementById('duaSection').classList.add('active');
+                    } else if (previousSection === 'hadith') {
+                        document.getElementById('hadithSection').classList.add('active');
+                    } else if (previousSection === 'masail') {
+                        document.getElementById('masailSection').classList.add('active');
+                    } else if (previousSection === 'articles') {
+                        document.getElementById('articlesSection').classList.add('active');
+                    } else if (previousSection === 'books') {
+                        document.getElementById('booksSection').classList.add('active');
+                    } else if (previousSection === 'video') {
+                        document.getElementById('videoSection').classList.add('active');
+                    }
+                }
+            } else {
+                goHome();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyBtns = document.querySelectorAll('.control-btn');
+            copyBtns.forEach(btn => {
+                if (btn.title === 'কপি করুন') {
+                    btn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const duaItem = this.closest('.dua-item');
+                        const duaArabic = duaItem.querySelector('.dua-arabic').textContent;
+                        navigator.clipboard.writeText(duaArabic);
+                        alert('দু\'আ কপি করা হয়েছে!');
+                    });
+                }
+            });
+
+            const tooltipContainers = document.querySelectorAll('.ref-tooltip-container');
+            tooltipContainers.forEach(container => {
+                const tooltip = container.querySelector('.ref-tooltip');
+                const icon = container.querySelector('.ref-icon');
+                if (!tooltip || !icon) return;
+
+                function positionTooltip() {
+                    const margin = 12;
+                    const arrowClearance = 10;
+
+                    // Reset to default centered position before measuring
+                    tooltip.style.transform = 'translateX(-50%)';
+                    tooltip.style.setProperty('--arrow-left', '50%');
+                    tooltip.classList.remove('bottom');
+
+                    let rect = tooltip.getBoundingClientRect();
+                    let shiftX = 0;
+
+                    if (rect.left < margin) {
+                        shiftX = margin - rect.left;
+                    } else if (rect.right > window.innerWidth - margin) {
+                        shiftX = (window.innerWidth - margin) - rect.right;
+                    }
+
+                    if (shiftX !== 0) {
+                        tooltip.style.transform = `translateX(calc(-50% + ${shiftX}px))`;
+                    }
+
+                    rect = tooltip.getBoundingClientRect();
+
+                    // Point the arrow at the icon regardless of how the tooltip box shifted
+                    const iconRect = icon.getBoundingClientRect();
+                    const iconCenterX = iconRect.left + iconRect.width / 2;
+                    let arrowLeft = iconCenterX - rect.left;
+                    arrowLeft = Math.max(arrowClearance, Math.min(rect.width - arrowClearance, arrowLeft));
+                    tooltip.style.setProperty('--arrow-left', `${arrowLeft}px`);
+
+                    if (rect.top < margin) {
+                        tooltip.classList.add('bottom');
+                    }
+                }
+
+                container.addEventListener('mouseenter', positionTooltip);
+                container.addEventListener('touchstart', positionTooltip, { passive: true });
+                container.addEventListener('focus', positionTooltip, true);
+            });
+        });
+    </script>
+</body>
+</html>

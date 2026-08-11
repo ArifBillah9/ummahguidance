@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>নামাজের সময়সূচি — আগস্ট ২০২৬</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!--
+  'Kalpurush' is a locally-installed Bengali system font (not hosted on Google
+  Fonts / any public CDN — it ships with Bijoy/Avro-style Bengali typing
+  packages on Bangladeshi machines). It cannot be @font-face-loaded from the
+  web, so it is listed FIRST in the stack below: browsers that have it
+  installed will render with it automatically, everyone else falls through
+  to the web-loaded 'Hind Siliguri' / 'Noto Sans Bengali', so the page always
+  renders correctly either way.
+-->
+<style>
+  :root{
+    --ink:#1c2620;
+    --ink-soft:#4b5750;
+    --paper:#f6f1e4;
+    --paper-deep:#efe7d3;
+    --card:#fffdf6;
+    --card-line:#e7ddc4;
+    --green-950:#0a2e22;
+    --green-900:#0e3b2a;
+    --green-800:#134a35;
+    --green-700:#1a5e43;
+    --gold:#c39a3c;
+    --gold-soft:#e3c777;
+    --gold-line:#d8bb6b;
+    --maroon:#8f3327;
+    --maroon-soft:#f4e2dc;
+    --dusk-1:#0e3b2a;
+    --dusk-2:#3a6b52;
+    --dusk-3:#c9a24b;
+    --dusk-4:#f0d9a0;
+    --dusk-5:#3a6b52;
+    --dusk-6:#0e3b2a;
+    --shadow: 0 1px 2px rgba(20,20,10,.04), 0 8px 24px -12px rgba(20,20,10,.18);
+    --font-bn:'Kalpurush','Hind Siliguri','Noto Sans Bengali', sans-serif;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 600px at 50% -200px, rgba(195,154,60,.10), transparent 60%),
+      var(--paper);
+    color:var(--ink);
+    font-family:var(--font-bn);
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- decorative geometric motif (subtle, used sparingly) ---------- */
+  .motif{
+    position:absolute; inset:0; pointer-events:none; opacity:.10;
+    background-image:
+      radial-gradient(circle at 10% 20%, var(--gold) 0 1.5px, transparent 1.6px),
+      radial-gradient(circle at 30% 60%, var(--gold) 0 1.5px, transparent 1.6px),
+      radial-gradient(circle at 55% 15%, var(--gold) 0 1.5px, transparent 1.6px),
+      radial-gradient(circle at 80% 45%, var(--gold) 0 1.5px, transparent 1.6px),
+      radial-gradient(circle at 90% 80%, var(--gold) 0 1.5px, transparent 1.6px),
+      radial-gradient(circle at 15% 85%, var(--gold) 0 1.5px, transparent 1.6px);
+    background-size:100% 100%;
+  }
+
+  /* ---------- header ---------- */
+  header.top{
+    position:sticky; top:0; z-index:50;
+    background:linear-gradient(180deg, var(--green-900), var(--green-950));
+    color:#f4ead0;
+    padding:18px 16px 16px;
+    box-shadow:0 10px 30px -14px rgba(0,0,0,.5);
+    overflow:hidden;
+  }
+  header.top .row{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    position:relative; z-index:2;
+  }
+  header.top .crescent{
+    width:20px; height:20px; flex:none;
+    color:var(--gold-soft);
+  }
+  header.top h1{
+    font-family:var(--font-bn);
+    font-weight:700;
+    font-size:1.5rem;
+    letter-spacing:.02em;
+    margin:0;
+    text-align:center;
+  }
+  header.top .sub{
+    text-align:center;
+    font-size:.78rem;
+    letter-spacing:.14em;
+    color:var(--gold-soft);
+    margin-top:4px;
+    text-transform:uppercase;
+    position:relative; z-index:2;
+  }
+  .nav-arrows{
+    position:absolute; top:18px; display:flex; gap:0; z-index:3;
+  }
+  .nav-arrows.left{left:12px;}
+  .nav-arrows.right{right:12px;}
+  .arrow-btn{
+    background:rgba(244,234,208,.08);
+    border:1px solid rgba(244,234,208,.18);
+    color:#f4ead0; width:34px; height:34px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+  .arrow-btn:hover{background:rgba(244,234,208,.16);}
+
+  .jump-bar{
+    margin-top:14px;
+    display:flex; gap:6px; overflow-x:auto; padding:2px 2px 6px;
+    scrollbar-width:none; position:relative; z-index:2;
+  }
+  .jump-bar::-webkit-scrollbar{display:none;}
+  .jump-pill{
+    flex:none; min-width:40px; text-align:center;
+    padding:7px 4px 6px; border-radius:10px;
+    border:1px solid rgba(244,234,208,.14);
+    background:rgba(0,0,0,.12);
+    font-size:.8rem; font-weight:600; color:#e7dcbb;
+    cursor:pointer;
+  }
+  .jump-pill.today{
+    background:var(--gold); color:var(--green-950); border-color:var(--gold);
+  }
+  .jump-pill.active{
+    outline:2px solid var(--gold-soft); outline-offset:1px;
+  }
+
+  /* ---------- location strip ---------- */
+  .loc-strip{
+    max-width:640px; margin:14px auto 0; padding:0 16px;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    color:var(--ink-soft); font-size:.82rem;
+  }
+  .loc-strip svg{width:14px; height:14px; color:var(--gold);}
+
+  main{max-width:640px; margin:0 auto; padding:18px 14px 60px;}
+
+  /* ---------- day card ---------- */
+  .day-card{
+    background:var(--card);
+    border:1px solid var(--card-line);
+    border-radius:18px;
+    margin-bottom:18px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    scroll-margin-top:190px;
+  }
+  .day-card.is-today{
+    border-color:var(--gold-line);
+    box-shadow:0 0 0 2px rgba(195,154,60,.28), var(--shadow);
+  }
+
+  .day-head{
+    padding:16px 18px 12px;
+    text-align:center;
+    border-bottom:1px dashed var(--card-line);
+    position:relative;
+  }
+  .day-head .weekday-date{
+    font-family:var(--font-bn);
+    font-weight:700;
+    font-size:1.18rem;
+    color:var(--green-900);
+    margin:0 0 3px;
+  }
+  .day-head .today-tag{
+    display:inline-block;
+    font-size:.66rem; font-weight:700; letter-spacing:.08em;
+    background:var(--gold); color:var(--green-950);
+    padding:2px 8px; border-radius:999px;
+    margin-left:8px; vertical-align:middle;
+    transform:translateY(-2px);
+  }
+  .day-head .dates{
+    font-size:.82rem; color:var(--ink-soft); line-height:1.6;
+  }
+  .day-head .dates .divider-dot{color:var(--gold); margin:0 6px;}
+
+  /* signature: day-arc timeline */
+  .day-arc-wrap{ padding:14px 18px 4px; }
+  .day-arc{ position:relative; height:34px; }
+  .day-arc svg{ display:block; width:100%; height:100%; overflow:visible; }
+  .arc-label{
+    position:absolute; top:36px; transform:translateX(-50%);
+    font-size:.62rem; color:var(--ink-soft); white-space:nowrap;
+  }
+
+  /* prayer grid */
+  .grid2{
+    display:grid; grid-template-columns:1fr 1fr;
+    border-top:1px solid var(--card-line);
+  }
+  .cell{
+    padding:12px 10px; text-align:center;
+    border-right:1px solid var(--card-line);
+    border-bottom:1px solid var(--card-line);
+  }
+  .cell:nth-child(2n){border-right:none;}
+  .cell .p-name{
+    font-family:var(--font-bn);
+    font-weight:600; font-size:.92rem; color:var(--green-800);
+    margin-bottom:3px;
+  }
+  .cell .p-name small{
+    display:block; font-family:var(--font-bn); font-weight:500;
+    font-size:.68rem; color:var(--ink-soft); margin-top:1px;
+  }
+  .cell .p-time{
+    font-size:.95rem; font-weight:600; color:var(--ink);
+    letter-spacing:.01em;
+  }
+
+  /* forbidden times */
+  .section-label{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    padding:12px 10px 8px;
+    font-family:var(--font-bn);
+    font-weight:700; font-size:.95rem;
+  }
+  .section-label.forbid{ color:var(--maroon); background:var(--maroon-soft); }
+  .section-label.nafl{ color:var(--green-800); background:#eaf0e2; }
+  .section-label svg{width:15px;height:15px;}
+
+  .grid3{
+    display:grid; grid-template-columns:1fr 1fr 1fr;
+  }
+  .grid3 .cell{ padding:10px 6px; }
+  .grid3.forbid .cell{ background:#fdf6f3; }
+  .grid3.nafl .cell{ background:#f6f9f1; }
+  .grid3 .p-name{ font-size:.78rem; }
+  .grid3 .p-time{ font-size:.86rem; }
+  .grid3 .cell:last-child{border-right:none;}
+
+  footer{
+    text-align:center; padding:22px 16px 40px;
+    color:var(--ink-soft); font-size:.78rem; line-height:1.8;
+  }
+  footer .fname{
+    font-family:var(--font-bn); color:var(--green-800);
+    font-weight:700; font-size:.95rem; display:block; margin-bottom:4px;
+  }
+  footer .note{
+    max-width:440px; margin:10px auto 0;
+    font-size:.72rem; color:#8b8271; font-style:italic;
+    font-family:var(--font-bn); font-style:normal;
+  }
+
+  @media (max-width:380px){
+    header.top h1{font-size:1.28rem;}
+    .cell .p-time{font-size:.86rem;}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="motif"></div>
+  <div class="nav-arrows left">
+    <button class="arrow-btn" aria-label="আগের মাস">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+  <div class="row">
+    <svg class="crescent" viewBox="0 0 24 24" fill="currentColor"><path d="M14.5 3a9 9 0 1 0 0 18 8.98 8.98 0 0 0 6.36-2.64A8 8 0 0 1 14.5 3z"/></svg>
+    <h1>আগস্ট, ২০২৬</h1>
+  </div>
+  <div class="sub">নামাজের সময়সূচি · ঢাকা</div>
+  <div class="nav-arrows right">
+    <button class="arrow-btn" aria-label="পরের মাস">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+  <div class="jump-bar" id="jumpBar"></div>
+</header>
+
+<div class="loc-strip">
+  <svg viewBox="0 0 24 24" fill="none"><path d="M12 22s7-7.58 7-13a7 7 0 1 0-14 0c0 5.42 7 13 7 13z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="9" r="2.4" stroke="currentColor" stroke-width="1.6"/></svg>
+  ঢাকা, বাংলাদেশের সময় অনুযায়ী
+</div>
+
+<main id="main"></main>
+
+<footer>
+  <span class="fname">নামাজের সময়সূচি</span>
+  ফজর · যুহর · আসর · মাগরিব · ইশা — প্রতিদিনের নামাজ ও নিষিদ্ধ সময়সূচি
+  <div class="note">দ্রষ্টব্য: এই পাতার সময়গুলো নমুনা হিসেবে দুটি প্রকৃত দিনের তথ্য থেকে সাদৃশ্যপূর্ণভাবে তৈরি। সঠিক ও হালনাগাদ সময়সূচির জন্য স্থানীয় মসজিদ বা নির্ভরযোগ্য উৎস যাচাই করুন।</div>
+</footer>
+
+<script>
+/* ---------------- Bengali numeral + formatting helpers ---------------- */
+const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+function toBn(n){
+  return String(n).replace(/\d/g, d => bnDigits[d]);
+}
+function fmtTime(totalMin){
+  totalMin = ((totalMin % 1440) + 1440) % 1440;
+  let h = Math.floor(totalMin/60);
+  let m = totalMin%60;
+  let hh = h===0?12:(h>12?h-12:h);
+  return toBn(String(hh).padStart(2,'0')) + ':' + toBn(String(m).padStart(2,'0'));
+}
+function parseHM(s){
+  const [h,m] = s.split(':').map(Number);
+  return h*60+m;
+}
+
+const weekdayNames = ['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
+const bnMonthNamesGregorian = ['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+const hijriMonths = ['মুহররম','সফর','রবিউল আউয়াল','রবিউস সানি','জমাদিউল আউয়াল','জমাদিউস সানি','রজব','শাবান','রমজান','শাওয়াল','জিলক্বদ','জিলহজ্ব'];
+const bengaliMonths = ['বৈশাখ','জ্যৈষ্ঠ','আষাঢ়','শ্রাবণ','ভাদ্র','আশ্বিন','কার্তিক','অগ্রহায়ণ','পৌষ','মাঘ','ফাল্গুন','চৈত্র'];
+
+/* Anchors taken directly from the source schedule (Aug 1 & Aug 2, 2026) */
+const anchors = {
+  fajrStart:[245,246], fajrEnd:[327,328],
+  zuhrStart:[726,726], zuhrEnd:[1002,1002],
+  asrHanafiStart:[283,283], asrHanafiEnd:[401,401], // stored as +720 offset below via raw min-of-day
+  asrShafiiStart:[210,210], asrShafiiEnd:[401,401],
+  maghribStart:[405,405], maghribEnd:[488,483],
+  ishaStart:[485,484], ishaEnd:[240,241]
+};
+
+/* Build 31 days of August 2026 with a smooth, gentle extrapolation
+   anchored to the two real sample days from the source image. */
+const daysInMonth = 31;
+const startHijriDay = 17, startHijriMonthIdx = 1;   // ১৭ সফর ১৪৪৮
+const hijriYear = 1448;
+const startBengaliDay = 17, startBengaliMonthIdx = 3; // ১৭ শ্রাবণ ১৪৩৩
+const bengaliYear = 1433;
+const hijriMonthLengths = [30,29,30,29,30,29,30,29,30,29,30,29];
+const bengaliMonthLengths = [31,31,32,31,31,30,29,30,30,29,30,30];
+
+function fT(base, delta, i){ return base + delta*i; }
+
+const data = [];
+let hDay = startHijriDay, hMonth = startHijriMonthIdx;
+let bDay = startBengaliDay, bMonth = startBengaliMonthIdx;
+
+for(let i=0;i<daysInMonth;i++){
+  // gentle per-day drift derived from the two anchor days
+  const fajrS = 245 + i*1;                 // 04:05 -> drifts +1min/day
+  const fajrE = 327 + i*1;                 // 05:27 -> drifts +1min/day
+  const zuhrS = 726;                       // 12:06 constant (per sample)
+  const zuhrE = 1002 - Math.floor(i*0.3);  // 04:42pm slow drift
+  const asrHS = 283+720;                   // 04:43 pm constant
+  const asrHE = 401+720;                   // 06:41 pm constant
+  const asrSS = 210+720;                   // 03:30 pm constant
+  const asrSE = 401+720;                   // 06:41 pm constant
+  const maghribS = 405+720;                // 06:45 pm constant
+  const maghribE = 488+720 - i*1;          // 08:08pm -> drifts -1min/day (per sample delta)
+  const ishaS = 485+720 - i*1;             // 08:05pm -> drifts -1min/day
+  const ishaE = 240+1440;                  // 04:00am next day, kept stable
+
+  const sunriseS = fajrE+1, sunriseE = fajrE+15;
+  const noonS = zuhrS-6, noonE = zuhrS-1;
+  const sunsetS = maghribS-2, sunsetE = maghribS+13;
+  const tahajjudEnd = ishaE-1440;
+  const ishraqS = sunriseE+1, ishraqE = zuhrS-7;
+  const chashtS = 8*60+52, chashtE = zuhrS-7;
+
+  data.push({
+    dayNum:i+1,
+    weekday: weekdayNames[(0 + i) % 7], // Aug 1 2026 is Saturday -> index 6
+    hijri: `${toBn(hDay)} ${hijriMonths[hMonth]} ${toBn(hijriYear)} হিজরী`,
+    bengali: `${toBn(bDay)} ${bengaliMonths[bMonth]}, বর্ষাকাল, ${toBn(bengaliYear)} বঙ্গাব্দ`,
+    fajr:[fajrS,fajrE], zuhr:[zuhrS,zuhrE],
+    asrH:[asrHS,asrHE], asrS:[asrSS,asrSE],
+    maghrib:[maghribS,maghribE], isha:[ishaS,ishaE],
+    sunrise:[sunriseS,sunriseE], noon:[noonS,noonE], sunset:[sunsetS,sunsetE],
+    tahajjud:tahajjudEnd, ishraq:[ishraqS,ishraqE], chasht:[chashtS,chashtE]
+  });
+
+  hDay++; if(hDay>hijriMonthLengths[hMonth]){hDay=1; hMonth=(hMonth+1)%12;}
+  bDay++; if(bDay>bengaliMonthLengths[bMonth]){bDay=1; bMonth=(bMonth+1)%12;}
+}
+
+/* Aug 1, 2026 is a Saturday */
+const weekdayFix = ['শনিবার','রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার'];
+data.forEach((d,i)=>{ d.weekday = weekdayFix[i%7]; });
+
+const TODAY_DAY = 11; // Aug 11, 2026
+
+/* ---------------- render ---------------- */
+const main = document.getElementById('main');
+const jumpBar = document.getElementById('jumpBar');
+
+function arcSvg(d){
+  const W=320,H=34, minX=4*60, maxX=24*60+30; // 4:00am to 12:30am window
+  const scale = v => ((v-minX)/(maxX-minX))*(W-8)+4;
+  const markers = [
+    {t:d.fajr[0], label:'ফজর', color:'var(--dusk-1)'},
+    {t:d.sunrise[0], label:'', color:'var(--gold)'},
+    {t:d.zuhr[0], label:'যুহর', color:'var(--dusk-3)'},
+    {t:d.asrH[0], label:'আসর', color:'var(--dusk-3)'},
+    {t:d.maghrib[0], label:'মাগরিব', color:'var(--dusk-5)'},
+    {t:d.isha[0], label:'ইশা', color:'var(--dusk-6)'},
+  ];
+  let dots='', labels='';
+  markers.forEach(m=>{
+    const x = scale(m.t);
+    dots += `<circle cx="${x}" cy="17" r="4" fill="#fffdf6" stroke="${m.color}" stroke-width="2.4"/>`;
+    if(m.label){
+      labels += `<div class="arc-label" style="left:${(x/W)*100}%">${m.label}</div>`;
+    }
+  });
+  return {
+    svg: `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="dg${d.dayNum}" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#0e3b2a"/>
+          <stop offset="18%" stop-color="#a97a3a"/>
+          <stop offset="32%" stop-color="#f0d9a0"/>
+          <stop offset="55%" stop-color="#f7ecc9"/>
+          <stop offset="72%" stop-color="#e3a95f"/>
+          <stop offset="86%" stop-color="#5c3a55"/>
+          <stop offset="100%" stop-color="#0e3b2a"/>
+        </linearGradient>
+      </defs>
+      <rect x="4" y="13" width="${W-8}" height="8" rx="4" fill="url(#dg${d.dayNum})"/>
+      ${dots}
+    </svg>`,
+    labels
+  };
+}
+
+function dayCard(d){
+  const isToday = d.dayNum === TODAY_DAY;
+  const arc = arcSvg(d);
+  return `
+  <section class="day-card ${isToday?'is-today':''}" id="day-${d.dayNum}">
+    <div class="day-head">
+      <p class="weekday-date">${d.weekday}, ${toBn(d.dayNum)} আগস্ট, ২০২৬ ${isToday?'<span class="today-tag">আজ</span>':''}</p>
+      <div class="dates">${d.hijri}<span class="divider-dot">•</span>${d.bengali}</div>
+    </div>
+
+    <div class="day-arc-wrap">
+      <div class="day-arc">${arc.svg}${arc.labels}</div>
+    </div>
+
+    <div class="grid2" style="margin-top:22px;">
+      <div class="cell"><div class="p-name">ফজর</div><div class="p-time">${fmtTime(d.fajr[0])} - ${fmtTime(d.fajr[1])}</div></div>
+      <div class="cell"><div class="p-name">যুহর</div><div class="p-time">${fmtTime(d.zuhr[0])} - ${fmtTime(d.zuhr[1])}</div></div>
+      <div class="cell"><div class="p-name">আসর <small>(হানাফি)</small></div><div class="p-time">${fmtTime(d.asrH[0])} - ${fmtTime(d.asrH[1])}</div></div>
+      <div class="cell"><div class="p-name">আসর <small>(শাফেয়ী/মালিকি/হাম্বলি)</small></div><div class="p-time">${fmtTime(d.asrS[0])} - ${fmtTime(d.asrS[1])}</div></div>
+      <div class="cell"><div class="p-name">মাগরিব</div><div class="p-time">${fmtTime(d.maghrib[0])} - ${fmtTime(d.maghrib[1])}</div></div>
+      <div class="cell"><div class="p-name">ইশা</div><div class="p-time">${fmtTime(d.isha[0])} - ${fmtTime(d.isha[1])}</div></div>
+    </div>
+
+    <div class="section-label forbid">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v6l4 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      নামাজের নিষিদ্ধ সময়
+    </div>
+    <div class="grid3 forbid">
+      <div class="cell"><div class="p-name">সূর্যোদয়কালীন</div><div class="p-time">${fmtTime(d.sunrise[0])} - ${fmtTime(d.sunrise[1])}</div></div>
+      <div class="cell"><div class="p-name">দুপুর</div><div class="p-time">${fmtTime(d.noon[0])} - ${fmtTime(d.noon[1])}</div></div>
+      <div class="cell"><div class="p-name">সূর্যাস্তকালীন</div><div class="p-time">${fmtTime(d.sunset[0])} - ${fmtTime(d.sunset[1])}</div></div>
+    </div>
+
+    <div class="section-label nafl">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.2H22l-6 4.6L18.4 21 12 16.5 5.6 21l2.4-7.2L2 9.2h7.6L12 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      নফল নামাজ সমূহ
+    </div>
+    <div class="grid3 nafl">
+      <div class="cell"><div class="p-name">তাহাজ্জুদ শেষ</div><div class="p-time">${fmtTime(d.tahajjud)}</div></div>
+      <div class="cell"><div class="p-name">ইশরাক</div><div class="p-time">${fmtTime(d.ishraq[0])} - ${fmtTime(d.ishraq[1])}</div></div>
+      <div class="cell"><div class="p-name">চাশত</div><div class="p-time">${fmtTime(d.chasht[0])} - ${fmtTime(d.chasht[1])}</div></div>
+    </div>
+  </section>`;
+}
+
+main.innerHTML = data.map(dayCard).join('');
+
+jumpBar.innerHTML = data.map(d => `
+  <div class="jump-pill ${d.dayNum===TODAY_DAY?'today':''}" data-day="${d.dayNum}">${toBn(d.dayNum)}</div>
+`).join('');
+
+jumpBar.addEventListener('click', e=>{
+  const pill = e.target.closest('.jump-pill');
+  if(!pill) return;
+  document.querySelectorAll('.jump-pill').forEach(p=>p.classList.remove('active'));
+  pill.classList.add('active');
+  document.getElementById('day-'+pill.dataset.day).scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+/* land on today by default */
+window.addEventListener('load', ()=>{
+  const todayEl = document.getElementById('day-'+TODAY_DAY);
+  if(todayEl) todayEl.scrollIntoView({block:'start'});
+});
+</script>
+</body>
+</html>

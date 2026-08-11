@@ -49,6 +49,19 @@
   html,body{
     margin:0;padding:0;
     font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    position:relative;
+    width:100%;
+  }
+  html{
+    overflow-y:scroll;
+  }
+  body{
+    overflow-x:hidden;
+  }
+  body.menu-open{
+    overflow:hidden;
+    position:fixed;
+    width:100%;
   }
   /* left-pane is a transparent wrapper on mobile/tablet: it doesn't affect
      layout there, children behave exactly as if not wrapped. On desktop it
@@ -256,17 +269,33 @@
     width:40px;height:40px;
     cursor:pointer;
     -webkit-tap-highlight-color:transparent;
+    -webkit-touch-callout:none;
     user-select:none;
-    transition:opacity 0.15s ease;
     border-radius:0;
     background:transparent;
+    border:none;
+    padding:0;
+    transition:transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change:transform;
+    touch-action:manipulation;
   }
   .menu-toggle:hover{
-    background:transparent;
-    opacity:0.8;
+    background:rgba(0, 0, 0, 0.04);
+    opacity:1;
   }
-  .menu-toggle:active{transform:scale(0.95);}
-  .menu-toggle svg{width:24px;height:24px;opacity:1;}
+  .menu-toggle:active{
+    transform:scale(0.92);
+  }
+  .menu-toggle:focus-visible{
+    outline:2px solid var(--active-green);
+    outline-offset:2px;
+  }
+  .menu-toggle svg{
+    width:24px;height:24px;
+    opacity:1;
+    display:block;
+    transition:transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
   .topbar .search-btn svg circle,
   .topbar .search-btn svg path,
@@ -292,12 +321,14 @@
     z-index:150;
     opacity:0;
     visibility:hidden;
-    transition:opacity .28s ease, visibility 0s linear .28s;
+    transition:opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0.3s;
+    backface-visibility:hidden;
+    perspective:1000px;
   }
   .nav-overlay.open{
     opacity:1;
     visibility:visible;
-    transition:opacity .28s ease, visibility 0s linear 0s;
+    transition:opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s linear 0s;
   }
   .nav-drawer{
     position:absolute;
@@ -616,10 +647,13 @@
     top:0;left:0;
     width:100%;
     height:100vh;
+    height:100dvh;
     background:rgba(0,0,0,0);
     z-index:9000;
     pointer-events:none;
-    transition:all 0.3s ease;
+    transition:background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change:background-color;
+    backface-visibility:hidden;
   }
   .mobile-menu.active{
     background:rgba(0,0,0,0.4);
@@ -633,6 +667,8 @@
     width:100%;
     height:100%;
     cursor:pointer;
+    -webkit-touch-callout:none;
+    user-select:none;
   }
 
   .mobile-menu-panel{
@@ -641,12 +677,18 @@
     left:0;
     width:280px;
     height:100vh;
+    height:100dvh;
     background:var(--menu-bg);
     z-index:9001;
     transform:translateX(-100%);
-    transition:transform 0.3s ease;
+    transition:transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y:auto;
+    overflow-x:hidden;
     box-shadow:2px 0 8px rgba(0,0,0,0.15);
+    will-change:transform;
+    backface-visibility:hidden;
+    perspective:1000px;
+    contain:layout style paint;
   }
 
   .mobile-menu.active .mobile-menu-panel{
@@ -658,24 +700,47 @@
     color:var(--menu-text-green);
     border-bottom:1px solid rgba(0,0,0,0.05);
     cursor:pointer;
-    transition:background 0.2s ease;
     display:block;
     width:100%;
     text-align:left;
-    background:none;
+    background:transparent;
     border:none;
     font-family:inherit;
     font-size:14px;
     user-select:none;
     -webkit-tap-highlight-color:transparent;
+    -webkit-touch-callout:none;
+    transition:background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change:background-color;
+    touch-action:manipulation;
+    position:relative;
+    overflow:hidden;
+    min-height:50px;
+    display:flex;
+    align-items:center;
   }
 
-  .menu-item:hover{
+  .menu-item::before{
+    content:'';
+    position:absolute;
+    inset:0;
     background:rgba(31,138,95,0.08);
+    opacity:0;
+    transition:opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events:none;
+    will-change:opacity;
+  }
+
+  .menu-item:hover::before{
+    opacity:1;
   }
 
   .menu-item:active{
-    background:rgba(31,138,95,0.12);
+    background-color:rgba(31,138,95,0.04);
+  }
+
+  .menu-item:active::before{
+    opacity:1;
   }
   
   /* Responsive improvements for ring-center */
@@ -4735,7 +4800,7 @@
     .catch(err => console.log('ℹ navbar-loader.js লোড ব্যর্থ (ঐচ্ছিক)'));
 </script>
 
-<!-- ===== MOBILE MENU FIX SCRIPT ===== -->
+<!-- ===== MOBILE MENU FIX SCRIPT (SMOOTH & STABLE) ===== -->
 <script>
 (function(){
   'use strict';
@@ -4747,17 +4812,17 @@
   const closeBtn = document.querySelector('#menuClose');
   const menuItems = document.querySelectorAll('.menu-item:not(.mobile-menu-close)');
   
-  // Menu state - 🔑 CRITICAL
+  // Menu state
   let menuOpen = false;
   let isTransitioning = false;
   
-  // Initialize - শুরুতে state সঠিক করুন
+  // Initialize
   if(mobileMenu) {
     mobileMenu.classList.remove('active');
   }
   
   /**
-   * মেনু খুলুন - একবার শুধু
+   * মেনু খুলুন - মসৃণভাবে
    */
   function openMenu() {
     if(menuOpen || isTransitioning) return;
@@ -4768,15 +4833,19 @@
     if(mobileMenu) {
       mobileMenu.classList.add('active');
     }
-    document.body.style.overflow = 'hidden';
+    
+    // Prevent body scroll - smooth way
+    const scrollY = window.scrollY;
+    document.body.classList.add('menu-open');
+    document.body.style.top = (-scrollY) + 'px';
     
     setTimeout(() => {
       isTransitioning = false;
-    }, 300);
+    }, 350);
   }
   
   /**
-   * মেনু বন্ধ করুন - একবার শুধু
+   * মেনু বন্ধ করুন - মসৃণভাবে
    */
   function closeMenu() {
     if(!menuOpen || isTransitioning) return;
@@ -4787,11 +4856,16 @@
     if(mobileMenu) {
       mobileMenu.classList.remove('active');
     }
-    document.body.style.overflow = '';
+    
+    // Restore scroll position - smooth way
+    const scrollY = parseInt(document.body.style.top || 0) * -1;
+    document.body.classList.remove('menu-open');
+    document.body.style.top = '';
+    window.scrollTo(0, scrollY);
     
     setTimeout(() => {
       isTransitioning = false;
-    }, 300);
+    }, 350);
   }
   
   /**
@@ -4812,41 +4886,46 @@
   
   // ===== EVENT LISTENERS =====
   
-  // Remove duplicate listeners - Clone করুন
+  // Menu toggle button
   if(menuToggle) {
     const newToggle = menuToggle.cloneNode(true);
     menuToggle.parentNode.replaceChild(newToggle, menuToggle);
     
     const updatedToggle = document.querySelector('.menu-toggle');
-    updatedToggle.addEventListener('click', toggleMenu, false);
+    updatedToggle.addEventListener('click', toggleMenu, { passive: false });
+    updatedToggle.addEventListener('touchstart', function() {
+      this.style.opacity = '0.7';
+    }, { passive: true });
+    updatedToggle.addEventListener('touchend', function() {
+      this.style.opacity = '';
+    }, { passive: true });
   }
   
   // Overlay click
   if(menuOverlay) {
-    menuOverlay.addEventListener('click', closeMenu, false);
+    menuOverlay.addEventListener('click', closeMenu, { passive: true });
   }
   
   // Close button
   if(closeBtn) {
-    closeBtn.addEventListener('click', closeMenu, false);
+    closeBtn.addEventListener('click', closeMenu, { passive: false });
   }
   
-  // Menu items
+  // Menu items - smooth click handling
   menuItems.forEach(item => {
     item.addEventListener('click', function(e) {
       e.stopPropagation();
       
-      // Link থাকলে navigate করুন
       const link = this.getAttribute('data-link');
       if(link) {
         closeMenu();
         setTimeout(() => {
           window.location.href = link;
-        }, 150);
+        }, 175);
       } else {
         closeMenu();
       }
-    }, false);
+    }, { passive: false });
   });
   
   // Escape key
@@ -4854,21 +4933,21 @@
     if(e.key === 'Escape' && menuOpen && !isTransitioning) {
       closeMenu();
     }
-  }, false);
+  }, { passive: true });
   
-  // Panel click propagation বন্ধ করুন
+  // Panel click - stop propagation
   if(mobileMenu) {
     const panel = mobileMenu.querySelector('.mobile-menu-panel');
     if(panel) {
       panel.addEventListener('click', function(e) {
         e.stopPropagation();
-      }, false);
+      }, { passive: false });
     }
   }
   
-  console.log('✓ মোবাইল মেনু ফিক্স সফল - প্রথম ক্লিকে কাজ করবে!');
+  console.log('✓ মোবাইল মেনু আপডেট সফল - মসৃণ ক্লিক প্রতিক্রিয়া চালু হয়েছে!');
   
-  // Debug mode
+  // Debug
   window.MobileMenuDebug = {
     isOpen: () => menuOpen,
     open: () => openMenu(),
