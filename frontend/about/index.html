@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আমাদের উম্মাহ গাইডেন্স অ্যাপস</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kalpurush&family=Noto+Sans+Bengali:wght@400;500;700&family=Hind+Siliguri:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-back {
+            position: absolute;
+            left: 20px;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .header-back:hover {
+            transform: scale(1.1);
+        }
+
+        .header-title {
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Features Grid for App Features */
+        .app-features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .app-feature-item {
+            background: #f9f9f9;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .app-feature-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .app-feature-item h5 {
+            font-size: 12px;
+            font-weight: 600;
+            color: #2d5016;
+            margin-bottom: 3px;
+        }
+        
+        .app-feature-item p {
+            font-size: 11px;
+            color: #777;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-icon svg {
+            width: 50px;
+            height: 50px;
+            stroke: white;
+        }
+
+        .hero h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 14px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #2d5016;
+        }
+
+        .section-title svg {
+            width: 28px;
+            height: 28px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .section-content {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .feature-item {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2d5016;
+        }
+
+        .feature-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .feature-item h4 {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #2d5016;
+        }
+
+        .feature-item p {
+            font-size: 12px;
+            color: #777;
+            line-height: 1.5;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .team-member {
+            background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+
+        .team-member-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+        }
+
+        .team-member-avatar svg {
+            width: 35px;
+            height: 35px;
+            fill: white;
+        }
+
+        .team-member h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #2d5016;
+        }
+
+        .team-member p {
+            font-size: 12px;
+            color: #777;
+        }
+
+        /* Contact Section */
+        .contact-list {
+            list-style: none;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .contact-item:last-child {
+            border-bottom: none;
+        }
+
+        .contact-item svg {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+            flex-shrink: 0;
+            color: #2d5016;
+        }
+
+        .contact-info {
+            flex: 1;
+        }
+
+        .contact-label {
+            font-size: 12px;
+            color: #999;
+            font-weight: 600;
+        }
+
+        .contact-value {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        /* Social Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            background: #f0f0f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: #2d5016;
+            transform: translateY(-3px);
+        }
+
+        .social-link svg {
+            width: 24px;
+            height: 24px;
+            stroke: #2d5016;
+            fill: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover svg {
+            stroke: white;
+        }
+
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #2d5016 0%, #3d6b1f 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .header-title {
+                font-size: 20px;
+            }
+
+            .hero {
+                padding: 30px 15px;
+            }
+
+            .hero h1 {
+                font-size: 24px;
+            }
+
+            .section {
+                padding: 20px;
+                margin-bottom: 15px;
+            }
+
+            .section-title {
+                font-size: 16px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 360px) {
+            .container {
+                padding: 15px;
+            }
+
+            .hero {
+                padding: 25px 15px;
+            }
+
+            .section {
+                padding: 15px;
+            }
+
+            .hero-icon {
+                width: 70px;
+                height: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-back">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+        <div class="header-title">উম্মাহ গাইডেন্স অ্যাপস</div>
+    </div>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-icon">
+                <i class="fas fa-clock" style="color: white;"></i>
+            </div>
+            <h1>উম্মাহ গাইডেন্স</h1>
+            <p>ইসলামী জ্ঞান, নামাজের সময়, হাদিস, এবং দৈনন্দিন ইসলামী পরামর্শের জন্য আপনার বিশ্বস্ত সঙ্গী। সঠিক ইসলামী নির্দেশনা সবার জন্য সহজ এবং অ্যাক্সেসযোগ্য।</p>
+        </div>
+
+        <!-- Mission Section -->
+        <div class="section">
+            <div class="section-title">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2L2 7v10c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-10-5z"/>
+                </svg>
+                আমাদের মিশন
+            </div>
+            <div class="section-content">
+                আমাদের মূল লক্ষ্য হল প্রতিটি মুসলমানকে বিশুদ্ধ এবং সঠিক ইসলামী জ্ঞান প্রদান করা। আমরা বিশ্বাস করি যে শিক্ষা এবং সঠিক নির্দেশনার মাধ্যমে আমরা একটি শক্তিশালী উম্মাহ গড়তে পারি। আমাদের অ্যাপ্লিকেশন নামাজের সময়, ইসলামী পরামর্শ, হাদিস এবং কুরআনের আয়াত সহ সম্পূর্ণ ইসলামী নির্দেশনা প্রদান করে।
+            </div>
+        </div>
+
+        <!-- Vision Section -->
+        <div class="section">
+            <div class="section-title">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+                </svg>
+                আমাদের ভিশন
+            </div>
+            <div class="section-content">
+                আমাদের দৃষ্টিভঙ্গি হল এমন একটি বিশ্ব তৈরি করা যেখানে প্রতিটি মুসলমান সহজেই সঠিক ইসলামী নির্দেশনা পেতে পারে। প্রযুক্তির মাধ্যমে ইসলামী শিক্ষা ছড়িয়ে দেওয়ার মাধ্যমে আমরা একটি শিক্ষিত এবং সচেতন উম্মাহ গড়তে প্রতিশ্রুতিবদ্ধ।
+            </div>
+        </div>
+
+        <!-- Key Features -->
+        <div class="section">
+            <div class="section-title">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                আমাদের বৈশিষ্ট্য
+            </div>
+            <div class="app-features-grid">
+                <div class="app-feature-item">
+                    <div class="app-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width: 28px; height: 28px; color: #2d5016;">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                        </svg>
+                    </div>
+                    <h5>নামাজের সময়</h5>
+                    <p>সকল শহরের নামাজের সঠিক সময়</p>
+                </div>
+                <div class="app-feature-item">
+                    <div class="app-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width: 28px; height: 28px; color: #2d5016;">
+                            <path d="M19 3h-4V1h-2v2H9V1H7v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zm-5-5h-3v3h3v-3zm4 0h-3v3h3v-3zm-4-4h-3v3h3V7zm4 0h-3v3h3V7zm-8-2h3v3H7V5z"/>
+                        </svg>
+                    </div>
+                    <h5>কুরআন এবং হাদিস</h5>
+                    <p>শুদ্ধ ইসলামী জ্ঞান এবং শিক্ষা</p>
+                </div>
+                <div class="app-feature-item">
+                    <div class="app-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width: 28px; height: 28px; color: #2d5016;">
+                            <path d="M12 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm9 7h-6v13h-2v-6h-2v6H9V9H3V7h18v2z"/>
+                        </svg>
+                    </div>
+                    <h5>বিবাহ নির্দেশনা</h5>
+                    <p>ইসলামী পদ্ধতিতে বিবাহ পরিচালনা</p>
+                </div>
+                <div class="app-feature-item">
+                    <div class="app-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width: 28px; height: 28px; color: #2d5016;">
+                            <path d="M9.37,5.51C9.9,9.85 13.95,13.12 18.3,13.12c-4.08,0 -7.69,-3.28 -8.3,-7.49C10.47,10.5 6.3,14.6 2,14.6c0.33,-2.22 1.85,-4.15 3.96,-5.34C4.78,8.65 5,7.31 5,6c0,-2.64 -2.05,-4.78 -4.65,-4.78c0.5,1.32 0.72,2.72 0.72,4.18C0.72,11.65 5.14,16.29 10.74,16.29c0.72,0 1.42,-0.08 2.1,-0.23C11.18,15.28 9.89,10.93 9.37,5.51zM19,6.41C19,4.38 17.4,2.8 15.42,2.8C13.44,2.8 11.85,4.38 11.85,6.35c0,1.95 1.6,3.55 3.57,3.55C17.4,9.9 19,8.35 19,6.41z"/>
+                        </svg>
+                    </div>
+                    <h5>রমজান এবং ঈদ</h5>
+                    <p>সম্পূর্ণ রমজান ক্যালেন্ডার ও নিয়মাবলী</p>
+                </div>
+                <div class="app-feature-item">
+                    <div class="app-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width: 28px; height: 28px; color: #2d5016;">
+                            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                        </svg>
+                    </div>
+                    <h5>পবিত্রতা এবং স্বাস্থ্য</h5>
+                    <p>ইসলামী পদ্ধতিতে পবিত্রতা নিয়ম</p>
+                </div>
+                <div class="app-feature-item">
+                    <div class="app-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width: 28px; height: 28px; color: #2d5016;">
+                            <path d="M17 2H7c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 18H7V4h10v16zm-2.5-1h-5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z"/>
+                        </svg>
+                    </div>
+                    <h5>দৈনন্দিন পরামর্শ</h5>
+                    <p>প্রতিদিন নতুন ইসলামী নির্দেশনা</p>
+                </div>
+                <div class="app-feature-item">
+                    <div class="app-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width: 28px; height: 28px; color: #2d5016;">
+                            <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-2.7 0-5.8 1.29-6 2v2h12v-2c-.2-.71-3.3-2-6-2z"/>
+                        </svg>
+                    </div>
+                    <h5>হজ এবং উমরা</h5>
+                    <p>হজ ও উমরা সম্পর্কিত সম্পূর্ণ গাইড</p>
+                </div>
+                <div class="app-feature-item">
+                    <div class="app-feature-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor" style="width: 28px; height: 28px; color: #2d5016;">
+                            <path d="M15.5 1h-8C6.12 1 5 2.12 5 3.5v17C5 21.88 6.12 23 7.5 23h8c1.38 0 2.5-1.12 2.5-2.5v-17C18 2.12 16.88 1 15.5 1zm-4 21c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4.5-4H7V4h9v14z"/>
+                        </svg>
+                    </div>
+                    <h5>ইসলামী পরামর্শ</h5>
+                    <p>বিশুদ্ধ ইসলামী সমাধান এবং নির্দেশনা</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="section">
+            <div class="section-title">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2V17zm4 0h-2V7h2V17zm4 0h-2v-4h2V17z"/>
+                </svg>
+                আমাদের অর্জন
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">১০০+</div>
+                    <div class="stat-label">ফতোয়া এবং উত্তর</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">৫০K+</div>
+                    <div class="stat-label">সক্রিয় ব্যবহারকারী</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">৯৮%</div>
+                    <div class="stat-label">নির্ভুলতা রেটিং</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Section -->
+        <div class="section">
+            <div class="section-title">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                </svg>
+                আমাদের টিম
+            </div>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="team-member-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                    <h4>মুফতি নাজমুল ইসলাম</h4>
+                    <p>ইসলামী পরামর্শ বিশেষজ্ঞ</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-member-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                    <h4>মুফতি ইউসুফ আহমাদ</h4>
+                    <p>হাদিস এবং ফিকহ বিশেষজ্ঞ</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-member-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                    <h4>মুফতি রায়হান মাহবুব</h4>
+                    <p>কুরআন এবং সীরাত বিশেষজ্ঞ</p>
+                </div>
+                <div class="team-member">
+                    <div class="team-member-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </div>
+                    <h4>মুফতি আব্দুল করিম</h4>
+                    <p>আক্বীদা এবং ইসলামী আইন বিশেষজ্ঞ</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="section">
+            <div class="section-title">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/>
+                </svg>
+                যোগাযোগ করুন
+            </div>
+            <ul class="contact-list">
+                <li class="contact-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    <div class="contact-info">
+                        <div class="contact-label">ফোন</div>
+                        <div class="contact-value">+880 1234-567890</div>
+                    </div>
+                </li>
+                <li class="contact-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <div class="contact-info">
+                        <div class="contact-label">ইমেইল</div>
+                        <div class="contact-value">info@example.com</div>
+                    </div>
+                </li>
+                <li class="contact-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <div class="contact-info">
+                        <div class="contact-label">ঠিকানা</div>
+                        <div class="contact-value">ঢাকা, বাংলাদেশ</div>
+                    </div>
+                </li>
+                <li class="contact-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6v6l4 2"></polyline>
+                    </svg>
+                    <div class="contact-info">
+                        <div class="contact-label">কার্যসময়</div>
+                        <div class="contact-value">সোম-শুক্র, ৯:০০-১৮:০০</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Social Links -->
+        <div class="section">
+            <div class="section-title">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.39v-1.2h-2.5v8.5h2.5v-4.42c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.42h2.5M6.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M5 20h3V9H5v11z"/>
+                </svg>
+                আমাদের সোশ্যাল মিডিয়া
+            </div>
+            <div class="social-links">
+                <a href="#" class="social-link" title="ফেসবুক">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M18 2h-3a6 6 0 0 0-6 6v3H7v4h2v8h4v-8h3l1-4h-4V8a2 2 0 0 1 2-2h1z"/>
+                    </svg>
+                </a>
+                <a href="#" class="social-link" title="টুইটার">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2s9 5 20 5a9.5 9.5 0 00-9-5.5c4.75 2.25 7-7 7-7"/>
+                    </svg>
+                </a>
+                <a href="#" class="social-link" title="ইউটিউব">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.54c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.33zM9.75 15.02v-6.3l5.63 3.15z"/>
+                    </svg>
+                </a>
+                <a href="#" class="social-link" title="লিংকডইন">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+                        <circle cx="4" cy="4" r="2"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Back button functionality
+        document.querySelector('.header-back').addEventListener('click', function() {
+            window.history.back();
+        });
+
+        // Smooth scroll animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const sections = document.querySelectorAll('.section');
+            sections.forEach((section, index) => {
+                section.style.animation = `fadeInUp 0.6s ease forwards`;
+                section.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+
+        // Add animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
