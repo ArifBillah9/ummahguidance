@@ -7,16 +7,16 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<!--
-  'Kalpurush' is a locally-installed Bengali system font (not hosted on Google
-  Fonts / any public CDN — it ships with Bijoy/Avro-style Bengali typing
-  packages on Bangladeshi machines). It cannot be @font-face-loaded from the
-  web, so it is listed FIRST in the stack below: browsers that have it
-  installed will render with it automatically, everyone else falls through
-  to the web-loaded 'Hind Siliguri' / 'Noto Sans Bengali', so the page always
-  renders correctly either way.
--->
+
 <style>
+
+                @font-face{
+    font-family:'Kalpurush';
+    src:url('calendar/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
   :root{
     --ink:#1c2620;
     --ink-soft:#4b5750;
@@ -499,5 +499,9 @@ window.addEventListener('load', ()=>{
   if(todayEl) todayEl.scrollIntoView({block:'start'});
 });
 </script>
+
+
+  <!-- Navbar Loader -->
+<script src="navbar/navbar-loader.js"></script>
 </body>
 </html>
