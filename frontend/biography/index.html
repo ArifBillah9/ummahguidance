@@ -74,19 +74,25 @@
             transform: translateY(-5px);
         }
 
+        .menu-card {
+            padding: 0;
+            overflow: hidden;
+        }
+
         .menu-card-icon {
-            width: 60px;
-            height: 60px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 100%;
+            height: 160px;
+            margin-bottom: 0;
         }
 
         .menu-card-icon img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
+        }
+
+        .menu-card-body {
+            padding: 20px 30px 30px;
         }
 
         .menu-card-title {
@@ -113,15 +119,16 @@
         }
 
         .category-header-icon {
-            width: 80px;
-            height: 80px;
+            width: 120px;
+            height: 120px;
             flex-shrink: 0;
+            overflow: hidden;
         }
 
         .category-header-icon img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
         }
 
         .category-header-content h1 {
@@ -208,15 +215,16 @@
         }
 
         .bio-icon {
-            width: 100px;
-            height: 100px;
+            width: 130px;
+            height: 130px;
             flex-shrink: 0;
+            overflow: hidden;
         }
 
         .bio-icon img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover;
         }
 
         .bio-header-content h1 {
@@ -309,7 +317,7 @@
         const scholarsData = {
             'ইমাম ও ফকিহ': {
                 description: 'ইসলামী আইনশাস্ত্রের প্রতিষ্ঠাতা এবং মহান ফকিহগণ',
-                icon: 'assets/moslem.png',
+                icon: 'https://cdn.pixabay.com/photo/2022/01/30/12/12/architecture-6980615_1280.jpg',
                 scholars: [
                     {
                         name: 'ইমাম আবু হানিফা',
@@ -369,7 +377,7 @@
             },
             'মুহাদ্দিস': {
                 description: 'হাদীস সংকলনের মহান বিশারদরা',
-                icon: 'https://cdn-icons-png.flaticon.com/512/1524/1524926.png',
+                icon: 'https://commons.wikimedia.org/wiki/Special:FilePath/Hadith%20Books.jpg',
                 scholars: [
                     {
                         name: 'ইমাম বুখারী',
@@ -441,7 +449,7 @@
             },
             'মুফাসির': {
                 description: 'কুরআন ব্যাখ্যাকারী মহান আলেমরা',
-                icon: 'https://cdn-icons-png.flaticon.com/512/3050/3050159.png',
+                icon: 'https://commons.wikimedia.org/wiki/Special:FilePath/Holy%20Quran%20Manuscript.jpg',
                 scholars: [
                     {
                         name: 'ইমাম তাবারী',
@@ -495,7 +503,7 @@
             },
             'আকীদা ও তাসাউফ': {
                 description: 'ইসলামী বিশ্বাস এবং দর্শনের মনীষী',
-                icon: 'https://cdn-icons-png.flaticon.com/512/1995/1995467.png',
+                icon: 'https://commons.wikimedia.org/wiki/Special:FilePath/Sheikh%20lotfollah%20mosque%20-%20interior%20viwe%20of%20the%20dome.jpg',
                 scholars: [
                     {
                         name: 'ইমাম আবুল হাসান আল-আশ\'আরী',
@@ -549,7 +557,7 @@
             },
             'সাহাবি': {
                 description: 'নবী করীমের সঙ্গী ও সঙ্গিনীরা',
-                icon: 'https://cdn-icons-png.flaticon.com/512/3556/3556057.png',
+                icon: 'https://png.pngtree.com/png-vector/20240204/ourmid/pngtree-imam-reza-shrine-roza-imam-ali-raza-mashhad-iran-png-image_11539689.png',
                 scholars: [
                     {
                         name: 'আবু বকর আস-সিদ্দীক',
@@ -615,7 +623,7 @@
             },
             'পরবর্তী যুগের আলেম': {
                 description: 'তাবেঈ এবং পরবর্তী প্রজন্মের বিখ্যাত শেখরা',
-                icon: 'https://cdn-icons-png.flaticon.com/512/3556/3556091.png',
+                icon: 'https://commons.wikimedia.org/wiki/Special:FilePath/Suleymaniye%20Mosque%205441.jpg',
                 scholars: [
                     {
                         name: 'ইমাম নববী',
@@ -690,8 +698,10 @@
                     <div class="menu-card-icon">
                         <img src="${data.icon}" alt="${category}">
                     </div>
-                    <div class="menu-card-title">${category}</div>
-                    <div class="menu-card-count">${data.scholars.length} জন আলেম</div>
+                    <div class="menu-card-body">
+                        <div class="menu-card-title">${category}</div>
+                        <div class="menu-card-count">${data.scholars.length} জন আলেম</div>
+                    </div>
                 `;
                 card.onclick = () => goToCategory(category);
                 container.appendChild(card);
@@ -729,7 +739,7 @@
             currentCategory = category;
             const scholar = scholarsData[category].scholars.find(s => s.name === scholarName);
             
-            document.getElementById('bioIcon').innerHTML = `<img src="https://cdn-icons-png.flaticon.com/512/1524/1524926.png" alt="Biography">`;
+            document.getElementById('bioIcon').innerHTML = `<img src="${scholarsData[category].icon}" alt="${scholar.name}">`;
             document.getElementById('bioName').textContent = scholar.name;
             document.getElementById('bioArabic').textContent = scholar.arabic;
             document.getElementById('bioEra').textContent = scholar.era;

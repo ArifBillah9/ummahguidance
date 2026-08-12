@@ -151,6 +151,20 @@
             color: #1a1a1a;
         }
 
+        .info-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #2563eb;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+        }
+
         .map-container {
             flex: 1;
             overflow: hidden;
@@ -162,30 +176,57 @@
             height: 100%;
         }
 
-        .info-panel {
+        /* ======== তথ্য বিস্তারিত পেজ ======== */
+        .info-detail-page {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .info-detail-page.active {
+            display: flex;
+        }
+
+        .info-header {
             background: #ffffff;
-            border-top: 1px solid #e0e0e0;
-            max-height: 40%;
-            overflow-y: auto;
             padding: 15px 20px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .info-header h2 {
+            flex: 1;
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .info-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
         }
 
         .info-section {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .info-section h3 {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
             color: #1a1a1a;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             gap: 8px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #2563eb;
         }
 
         .info-text {
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.8;
             color: #555;
             margin-bottom: 12px;
@@ -193,56 +234,52 @@
 
         .info-box {
             background: #f9f9f9;
-            padding: 10px;
-            margin-bottom: 8px;
-            border-left: 3px solid #2563eb;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #2563eb;
         }
 
         .info-box strong {
             display: block;
             color: #2563eb;
-            font-size: 13px;
+            font-size: 14px;
             margin-bottom: 3px;
+            font-weight: 600;
         }
 
         .info-box span {
-            font-size: 12px;
+            font-size: 13px;
             color: #666;
+            line-height: 1.6;
         }
 
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .stat-box {
             background: #f0f4ff;
-            padding: 12px;
+            padding: 15px;
             text-align: center;
         }
 
         .stat-number {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
             color: #2563eb;
             display: block;
         }
 
         .stat-label {
-            font-size: 11px;
+            font-size: 12px;
             color: #888;
-            margin-top: 3px;
+            margin-top: 4px;
         }
 
         /* ======== রেসপন্সিভ ======== */
-        @media (max-height: 700px) {
-            .info-panel {
-                max-height: 30%;
-            }
-        }
-
         .hide {
             display: none !important;
         }
@@ -309,38 +346,12 @@
                     <i class="fas fa-arrow-left"></i>
                 </button>
                 <h2>ইসলামীক মানচিত্র</h2>
+                <button class="info-btn" onclick="openInfo('islamic')">
+                    <i class="fas fa-circle-info"></i>
+                </button>
             </div>
             <div class="map-container">
                 <div id="islamicMap" class="map"></div>
-            </div>
-            <div class="info-panel">
-                <div class="info-section">
-                    <h3><i class="fas fa-mosque"></i> ইসলামী বিশ্ব</h3>
-                    <div class="info-text">ইসলাম বিশ্বের দ্বিতীয় বৃহত্তম ধর্ম। বর্তমানে বিশ্বজুড়ে প্রায় ২ বিলিয়ন মুসলিম রয়েছে।</div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <span class="stat-number">2B+</span>
-                        <span class="stat-label">মুসলিম জনসংখ্যা</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-number">57</span>
-                        <span class="stat-label">মুসলিম দেশ</span>
-                    </div>
-                </div>
-
-                <div class="info-section">
-                    <h3><i class="fas fa-map-marker-alt"></i> প্রধান অঞ্চল</h3>
-                    <div class="info-box">
-                        <strong>মধ্যপ্রাচ্য</strong>
-                        <span>ইসলামের উৎপত্তিস্থান এবং ধর্মের কেন্দ্রবিন্দু</span>
-                    </div>
-                    <div class="info-box">
-                        <strong>এশিয়া</strong>
-                        <span>বৃহত্তম মুসলিম জনসংখ্যা সহ অঞ্চল</span>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -351,38 +362,12 @@
                     <i class="fas fa-arrow-left"></i>
                 </button>
                 <h2>বিশ্ব মানচিত্র</h2>
+                <button class="info-btn" onclick="openInfo('world')">
+                    <i class="fas fa-circle-info"></i>
+                </button>
             </div>
             <div class="map-container">
                 <div id="worldMap" class="map"></div>
-            </div>
-            <div class="info-panel">
-                <div class="info-section">
-                    <h3><i class="fas fa-globe"></i> বিশ্ব তথ্য</h3>
-                    <div class="info-text">পৃথিবী সাতটি মহাদেশ এবং ছয়টি মহাসাগর নিয়ে গঠিত। বর্তমান সময়ে ১৯৫টি স্বাধীন দেশ রয়েছে।</div>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <span class="stat-number">8B+</span>
-                        <span class="stat-label">জনসংখ্যা</span>
-                    </div>
-                    <div class="stat-box">
-                        <span class="stat-number">195</span>
-                        <span class="stat-label">দেশ</span>
-                    </div>
-                </div>
-
-                <div class="info-section">
-                    <h3><i class="fas fa-layer-group"></i> মহাদেশ</h3>
-                    <div class="info-box">
-                        <strong>এশিয়া</strong>
-                        <span>সবচেয়ে বড় এবং জনবহুল মহাদেশ</span>
-                    </div>
-                    <div class="info-box">
-                        <strong>আফ্রিকা</strong>
-                        <span>দ্বিতীয় বৃহত্তম মহাদেশ</span>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -393,14 +378,198 @@
                     <i class="fas fa-arrow-left"></i>
                 </button>
                 <h2>বাংলাদেশ</h2>
+                <button class="info-btn" onclick="openInfo('bangladesh')">
+                    <i class="fas fa-circle-info"></i>
+                </button>
             </div>
             <div class="map-container">
                 <div id="bangladeshMap" class="map"></div>
             </div>
-            <div class="info-panel">
+        </div>
+
+        <!-- ======== ঢাকা মানচিত্র পেজ ======== -->
+        <div class="map-page" id="dhakaPage">
+            <div class="map-header">
+                <button class="back-btn" onclick="backToHome()">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>ঢাকা শহর</h2>
+                <button class="info-btn" onclick="openInfo('dhaka')">
+                    <i class="fas fa-circle-info"></i>
+                </button>
+            </div>
+            <div class="map-container">
+                <div id="dhakaMap" class="map"></div>
+            </div>
+        </div>
+
+        <!-- ======== ইসলামীক তথ্য বিস্তারিত পেজ ======== -->
+        <div class="info-detail-page" id="islamicInfoPage">
+            <div class="info-header">
+                <button class="back-btn" onclick="backToMap('islamic')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>ইসলামীক মানচিত্র</h2>
+            </div>
+            <div class="info-content">
                 <div class="info-section">
-                    <h3><i class="fas fa-map"></i> বাংলাদেশ</h3>
-                    <div class="info-text">বাংলাদেশ দক্ষিণ এশিয়ায় অবস্থিত একটি স্বাধীন দেশ। এটি প্রাকৃতিক সৌন্দর্য এবং সমৃদ্ধ সংস্কৃতির জন্য পরিচিত।</div>
+                    <h3><i class="fas fa-mosque"></i> ইসলামী বিশ্ব</h3>
+                    <div class="info-text">ইসলাম বিশ্বের দ্বিতীয় বৃহত্তম ধর্ম। বর্তমানে বিশ্বজুড়ে প্রায় ২ বিলিয়ন মুসলিম রয়েছে। এটি একটি একেশ্বরবাদী ধর্ম যা ৭ম শতাব্দীতে আরব উপদ্বীপে প্রতিষ্ঠিত হয়েছিল।</div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-number">২B+</span>
+                        <span class="stat-label">মুসলিম জনসংখ্যা</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">৫৭</span>
+                        <span class="stat-label">মুসলিম দেশ</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3><i class="fas fa-map-marker-alt"></i> প্রধান অঞ্চল এবং শহর</h3>
+                    
+                    <div class="info-box">
+                        <strong>মধ্যপ্রাচ্য</strong>
+                        <span>ইসলামের উৎপত্তিস্থান এবং ধর্মের কেন্দ্রবিন্দু। এখানে রয়েছে মক্কা এবং মদিনা - ইসলামের সবচেয়ে পবিত্র স্থান। সৌদি আরব, ইরান, ইরাক, মিশর এবং আরও অনেক গুরুত্বপূর্ণ দেশ।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>এশিয়া</strong>
+                        <span>বৃহত্তম মুসলিম জনসংখ্যা সহ অঞ্চল। ইন্দোনেশিয়া, বাংলাদেশ, পাকিস্তান এবং মালয়েশিয়া এখানে অবস্থিত। এশিয়ায় বিশ্বের প্রায় ৬২% মুসলিম জনসংখ্যা বাস করে।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>আফ্রিকা</strong>
+                        <span>দ্রুত বর্ধনশীল মুসলিম সম্প্রদায় সহ মহাদেশ। মিশর, আলজেরিয়া, নাইজেরিয়া এবং সুদান এখানে প্রধান মুসলিম দেশ।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>ইউরোপ এবং আমেরিকা</strong>
+                        <span>দ্রুত বর্ধনশীল মুসলিম সম্প্রদায় যেখানে ইমিগ্রেশনের মাধ্যমে জনসংখ্যা বৃদ্ধি পাচ্ছে।</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3><i class="fas fa-book"></i> ইসলামের মূলনীতি</h3>
+                    
+                    <div class="info-box">
+                        <strong>পাঁচটি স্তম্ভ</strong>
+                        <span>শাহাদা (বিশ্বাস স্বীকার), সালাত (প্রার্থনা), জাকাত (দান), সাওম (রোজা) এবং হজ (মক্কায় তীর্থ)</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>পবিত্র গ্রন্থ</strong>
+                        <span>কোরান ইসলামের সবচেয়ে গুরুত্বপূর্ণ ধর্মগ্রন্থ যা আল্লাহর বাণী হিসেবে বিবেচনা করা হয়। নবী মুহাম্মদ (সাঃ) এর হাদিস এবং সুন্নাহ অনুসরণ করাও ইসলামের গুরুত্বপূর্ণ অংশ।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>পবিত্র শহর</strong>
+                        <span>মক্কা, মদিনা এবং জেরুসালেম ইসলামে অত্যন্ত গুরুত্বপূর্ণ এবং পবিত্র শহর হিসেবে বিবেচিত হয়।</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======== বিশ্ব তথ্য বিস্তারিত পেজ ======== -->
+        <div class="info-detail-page" id="worldInfoPage">
+            <div class="info-header">
+                <button class="back-btn" onclick="backToMap('world')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>বিশ্ব মানচিত্র</h2>
+            </div>
+            <div class="info-content">
+                <div class="info-section">
+                    <h3><i class="fas fa-globe"></i> বিশ্ব তথ্য</h3>
+                    <div class="info-text">পৃথিবী সাতটি মহাদেশ এবং ছয়টি মহাসাগর নিয়ে গঠিত। বর্তমান সময়ে ১৯৫টি স্বাধীন দেশ রয়েছে যাদের নিজস্ব সরকার ব্যবস্থা রয়েছে। পৃথিবীর মোট জনসংখ্যা ৮ বিলিয়নের উপরে।</div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-number">8B+</span>
+                        <span class="stat-label">বিশ্ব জনসংখ্যা</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">195</span>
+                        <span class="stat-label">দেশ সমূহ</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3><i class="fas fa-layer-group"></i> সাত মহাদেশ</h3>
+                    
+                    <div class="info-box">
+                        <strong>এশিয়া</strong>
+                        <span>বিশ্বের সবচেয়ে বড় এবং জনবহুল মহাদেশ। এখানে বিশ্বের ৬০% মানুষ বাস করে। চীন, ভারত, জাপান, দক্ষিণ কোরিয়া সহ প্রধান অর্থনৈতিক শক্তি রয়েছে।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>আফ্রিকা</strong>
+                        <span>দ্বিতীয় বৃহত্তম মহাদেশ যা ৫৪টি স্বাধীন দেশ নিয়ে গঠিত। এখানে অত্যন্ত বৈচিত্র্যময় সংস্কৃতি এবং প্রাকৃতিক সম্পদ রয়েছে।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>ইউরোপ</strong>
+                        <span>বিশ্বের সবচেয়ে উন্নত এবং শিল্পোন্নত অঞ্চল। ৪৪টি স্বাধীন দেশ নিয়ে গঠিত। ফ্রান্স, জার্মানি, ইংল্যান্ড প্রধান শক্তি।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>উত্তর আমেরিকা</strong>
+                        <span>তিনটি প্রধান দেশ - যুক্তরাষ্ট্র, কানাডা এবং মেক্সিকো। এটি বিশ্বের অর্থনৈতিকভাবে সবচেয়ে শক্তিশালী অঞ্চল।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>দক্ষিণ আমেরিকা</strong>
+                        <span>১২টি স্বাধীন দেশ এবং ফ্রান্সের একটি অঞ্চল নিয়ে গঠিত। ব্রাজিল, আর্জেন্টিনা এবং চিলি প্রধান দেশ।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>ওশেনিয়া</strong>
+                        <span>অস্ট্রেলিয়া, নিউজিল্যান্ড এবং প্রশান্ত মহাসাগরের হাজারো দ্বীপ নিয়ে গঠিত। এটি বিশ্বের সবচেয়ে ছোট মহাদেশ।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>এন্টার্কটিকা</strong>
+                        <span>দক্ষিণ মেরুতে অবস্থিত এবং কোনো স্থায়ী জনসংখ্যা নেই। এখানে গবেষণা স্টেশন রয়েছে।</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3><i class="fas fa-water"></i> মহাসাগর</h3>
+                    
+                    <div class="info-box">
+                        <strong>প্রশান্ত মহাসাগর</strong>
+                        <span>বিশ্বের সবচেয়ে বড় এবং গভীরতম মহাসাগর। এর ক্ষেত্রফল সকল মহাসাগরের চেয়ে বেশি।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>আটলান্টিক মহাসাগর</strong>
+                        <span>ইউরোপ এবং আমেরিকাকে বিভক্ত করে। বাণিজ্যের জন্য অত্যন্ত গুরুত্বপূর্ণ।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>ভারত মহাসাগর</strong>
+                        <span>তিনটি মহাদেশকে ঘিরে রেখেছে এবং অত্যন্ত বৈচিত্র্যময় সামুদ্রিক জীবন রয়েছে।</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ======== বাংলাদেশ তথ্য বিস্তারিত পেজ ======== -->
+        <div class="info-detail-page" id="bangladeshInfoPage">
+            <div class="info-header">
+                <button class="back-btn" onclick="backToMap('bangladesh')">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2>বাংলাদেশ</h2>
+            </div>
+            <div class="info-content">
+                <div class="info-section">
+                    <h3><i class="fas fa-map"></i> বাংলাদেশ পরিচিতি</h3>
+                    <div class="info-text">বাংলাদেশ দক্ষিণ এশিয়ায় অবস্থিত একটি স্বাধীন এবং সার্বভৌম দেশ। এটি প্রাকৃতিক সৌন্দর্য, সমৃদ্ধ সংস্কৃতি এবং ঐতিহ্যের জন্য পরিচিত। দেশটি গঙ্গা, ব্রহ্মপুত্র এবং মেঘনা নদীর ডেল্টা অঞ্চলে অবস্থিত।</div>
                 </div>
 
                 <div class="stats-grid">
@@ -415,38 +584,86 @@
                 </div>
 
                 <div class="info-section">
-                    <h3><i class="fas fa-info-circle"></i> তথ্য</h3>
+                    <h3><i class="fas fa-info-circle"></i> মৌলিক তথ্য</h3>
+                    
                     <div class="info-box">
                         <strong>রাজধানী</strong>
-                        <span>ঢাকা (জনসংখ্যা: ২০+ মিলিয়ন)</span>
+                        <span>ঢাকা - জনসংখ্যা ২০+ মিলিয়ন এবং দক্ষিণ এশিয়ার দ্রুততম বর্ধনশীল শহর</span>
                     </div>
+
                     <div class="info-box">
-                        <strong>প্রধান নদী</strong>
-                        <span>গঙ্গা, ব্রহ্মপুত্র, মেঘনা</span>
+                        <strong>প্রধান শহর</strong>
+                        <span>চট্টগ্রাম, খুলনা, রাজশাহী, সিলেট এবং বরিশাল</span>
                     </div>
+
                     <div class="info-box">
-                        <strong>প্রতিষ্ঠা দিবস</strong>
-                        <span>১৬ ডিসেম্বর ১৯৭১</span>
+                        <strong>প্রধান নদীসমূহ</strong>
+                        <span>গঙ্গা (পদ্মা), ব্রহ্মপুত্র (যমুনা), মেঘনা, তিস্তা এবং সুরমা</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>স্বাধীনতা দিবস</strong>
+                        <span>১৬ ডিসেম্বর ১৯৭১ - বাংলাদেশ পাকিস্তান থেকে স্বাধীনতা লাভ করে</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>রাষ্ট্রভাষা</strong>
+                        <span>বাংলা - একমাত্র দেশ যেখানে বাংলা ভাষা সংগ্রাম দিবস আন্তর্জাতিক স্বীকৃতি পেয়েছে</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>মুদ্রা</strong>
+                        <span>বাংলাদেশী টাকা (BDT)</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3><i class="fas fa-landmark"></i> ঐতিহ্য এবং সংস্কৃতি</h3>
+                    
+                    <div class="info-box">
+                        <strong>ঐতিহাসিক স্থান</strong>
+                        <span>লালবাগ দুর্গ, আহসান মঞ্জিল, ষাটগম্বুজ মসজিদ, বাঘা মসজিদ প্রভৃতি মুঘল এবং ঔপনিবেশিক আমলের স্থাপনা</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>প্রাকৃতিক সৌন্দর্য</strong>
+                        <span>সুন্দরবন (বিশ্ব বৃহত্তম ম্যানগ্রোভ ফরেস্ট), সিলেটের চা বাগান, কক্সবাজারের সৈকত</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>উৎসব</strong>
+                        <span>পহেলা বৈশাখ, ঈদ, পূজা এবং দুর্গা পূজা বড় উৎসব হিসেবে পালিত হয়</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3><i class="fas fa-industry"></i> অর্থনীতি</h3>
+                    
+                    <div class="info-box">
+                        <strong>প্রধান শিল্প</strong>
+                        <span>পোশাক শিল্প, কৃষি, পর্যটন এবং জাহাজ নির্মাণ</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>উদীয়মান শক্তি</strong>
+                        <span>বাংলাদেশ বিশ্বের দ্রুততম অর্থনৈতিক বৃদ্ধির দেশগুলির মধ্যে একটি</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ======== ঢাকা মানচিত্র পেজ ======== -->
-        <div class="map-page" id="dhakaPage">
-            <div class="map-header">
-                <button class="back-btn" onclick="backToHome()">
+        <!-- ======== ঢাকা তথ্য বিস্তারিত পেজ ======== -->
+        <div class="info-detail-page" id="dhakaInfoPage">
+            <div class="info-header">
+                <button class="back-btn" onclick="backToMap('dhaka')">
                     <i class="fas fa-arrow-left"></i>
                 </button>
                 <h2>ঢাকা শহর</h2>
             </div>
-            <div class="map-container">
-                <div id="dhakaMap" class="map"></div>
-            </div>
-            <div class="info-panel">
+            <div class="info-content">
                 <div class="info-section">
-                    <h3><i class="fas fa-city"></i> ঢাকা</h3>
-                    <div class="info-text">ঢাকা বাংলাদেশের রাজধানী এবং বৃহত্তম শহর। এটি সমৃদ্ধ ঐতিহ্য এবং আধুনিক সভ্যতার সংমিশ্রণ।</div>
+                    <h3><i class="fas fa-city"></i> ঢাকা পরিচিতি</h3>
+                    <div class="info-text">ঢাকা বাংলাদেশের রাজধানী এবং বৃহত্তম শহর। এটি সমৃদ্ধ ঐতিহ্য এবং আধুনিক সভ্যতার অনন্য সংমিশ্রণ। শহরটি গঙ্গা নদীর তীরে অবস্থিত এবং ১৫০০ বছরের পুরানো ইতিহাস নিয়ে গর্বিত।</div>
                 </div>
 
                 <div class="stats-grid">
@@ -461,18 +678,83 @@
                 </div>
 
                 <div class="info-section">
-                    <h3><i class="fas fa-landmark"></i> বিখ্যাত স্থান</h3>
+                    <h3><i class="fas fa-landmark"></i> ঐতিহাসিক স্থান</h3>
+                    
                     <div class="info-box">
                         <strong>লালবাগ দুর্গ</strong>
-                        <span>মোঘল আমলের ঐতিহাসিক দুর্গ</span>
+                        <span>মোঘল আমলের নির্মিত দুর্গ যা ১৬৬০ সালে প্রিন্স মোহাম্মদ আজম শাহ দ্বারা নির্মাণ শুরু হয়। এটি একটি অসম্পূর্ণ দুর্গ কিন্তু স্থাপত্যের দিক থেকে অত্যন্ত গুরুত্বপূর্ণ।</span>
                     </div>
+
                     <div class="info-box">
                         <strong>জাতীয় সংসদ ভবন</strong>
-                        <span>আধুনিক স্থাপত্যের নিদর্শন</span>
+                        <span>আধুনিক স্থাপত্যের এক অনন্য নিদর্শন যা বিখ্যাত স্থপতি লুই আই কান দ্বারা ডিজাইন করা হয়েছে। এটি আন্তর্জাতিক স্বীকৃতি পেয়েছে।</span>
                     </div>
+
                     <div class="info-box">
                         <strong>আহসান মঞ্জিল</strong>
-                        <span>ঐতিহ্যবাহী প্যালেস</span>
+                        <span>১৮ শতকের একটি ঐতিহ্যবাহী প্যালেস যা ঢাকার স্থাপত্য ঐতিহ্যের প্রতীক। এখন যাদুঘর হিসেবে ব্যবহৃত হয়।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>জন্মতলী মন্দির এবং স্টার মসজিদ</strong>
+                        <span>ধর্মীয় স্থাপত্যের সুন্দর উদাহরণ যা ঢাকার সাংস্কৃতিক বৈচিত্র্য প্রতিফলিত করে।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>ঢাকেশ্বরী মন্দির</strong>
+                        <span>একটি হিন্দু মন্দির যা ঢাকার পূর্ব জনপদ হিসেবে অত্যন্ত পবিত্র এবং গুরুত্বপূর্ণ।</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3><i class="fas fa-map-marker-alt"></i> প্রধান এলাকা</h3>
+                    
+                    <div class="info-box">
+                        <strong>গুলশান এবং বনানী</strong>
+                        <span>আধুনিক এবং উন্নত আবাসিক এলাকা যেখানে অনেক বহুজাতিক কোম্পানি এবং দূতাবাস অবস্থিত।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>ধানমণ্ডি</strong>
+                        <span>ঐতিহাসিক এবং সাংস্কৃতিকভাবে গুরুত্বপূর্ণ এলাকা যেখানে অনেক বিশিষ্ট ব্যক্তি বাস করেন।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>পল্লবী এবং মিরপুর</strong>
+                        <span>পরিকল্পিত আবাসিক এলাকা যা পরিবারের জন্য উপযুক্ত।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>বসুন্ধরা এবং ধাপা</strong>
+                        <span>বাণিজ্যিক এবং কেনাকাটার কেন্দ্র যেখানে বড় শপিং মল এবং বাজার রয়েছে।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>পুরান ঢাকা</strong>
+                        <span>ঢাকার সবচেয়ে পুরানো এবং ঐতিহাসিক অংশ যেখানে জাঁকজমকপূর্ণ পুরান দিনের ঐতিহ্য এখনও বিদ্যমান।</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3><i class="fas fa-utensils"></i> খাবার এবং সংস্কৃতি</h3>
+                    
+                    <div class="info-box">
+                        <strong>ঐতিহ্যবাহী খাবার</strong>
+                        <span>মোগলাই পরোটা, ফিরনি, বসুন্ধরা মিষ্টি এবং দোকানি পান ঢাকার বিখ্যাত খাবার।</span>
+                    </div>
+
+                    <div class="info-box">
+                        <strong>বাজার এবং কেনাকাটা</strong>
+                        <span>নিউমার্কেট, বারিধারা মার্কেট এবং গ্রিন রোড বিখ্যাত শপিং গন্তব্য।</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3><i class="fas fa-cloud"></i> জলবায়ু</h3>
+                    
+                    <div class="info-box">
+                        <strong>আবহাওয়ার বৈশিষ্ট্য</strong>
+                        <span>উষ্ণ এবং আর্দ্র জলবায়ু সহ মৌসুমী বায়ু। গ্রীষ্মকালে তাপমাত্রা ২৫-৩৫°C এবং শীতকালে ১৫-২৫°C থাকে।</span>
                     </div>
                 </div>
             </div>
@@ -482,6 +764,7 @@
     <script>
         const maps = {};
         let currentPage = 'home';
+        let currentMapType = '';
 
         // ইসলামীক মানচিত্র ইনিশিয়ালাইজ
         function initIslamicMap() {
@@ -575,6 +858,7 @@
             const pageId = mapType + 'Page';
             document.getElementById(pageId).classList.add('active');
             currentPage = mapType;
+            currentMapType = mapType;
 
             setTimeout(() => {
                 if (mapType === 'islamic') {
@@ -593,16 +877,31 @@
             }, 50);
         }
 
+        // তথ্য বিস্তারিত খুলুন
+        function openInfo(mapType) {
+            document.getElementById(mapType + 'Page').classList.remove('active');
+            document.getElementById(mapType + 'InfoPage').classList.add('active');
+            currentPage = mapType + 'Info';
+        }
+
+        // মানচিত্রে ফিরে যান
+        function backToMap(mapType) {
+            document.getElementById(mapType + 'InfoPage').classList.remove('active');
+            document.getElementById(mapType + 'Page').classList.add('active');
+            currentPage = mapType;
+        }
+
         // হোমে ফিরে যান
         function backToHome() {
             document.getElementById('homePage').classList.remove('hide');
             document.querySelectorAll('.map-page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.info-detail-page').forEach(page => page.classList.remove('active'));
             currentPage = 'home';
         }
 
         // প্রথম লোডিং
         window.addEventListener('load', () => {
-            // কিছু করার দরকার নেই, ডাইনামিক লোডিং ব্যবহার করছি
+            // ডাইনামিক লোডিং ব্যবহার করছি
         });
     </script>
 </body>
