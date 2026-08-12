@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>মিফতাহুল ইলম — ইসলামী জ্ঞানভাণ্ডার</title>
+<meta name="theme-color" content="#173832">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    @font-face{
+    font-family:'Kalpurush';
+    src:url('qibla/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+  :root{
+    --ink:#173832;
+    --ink-2:#0e2420;
+    --parchment:#F7F1E1;
+    --parchment-2:#EFE4C7;
+    --card:#FFFCF4;
+    --gold:#A9782F;
+    --gold-2:#C9A227;
+    --maroon:#7B2E2E;
+    --teal-deep:#0F3D37;
+    --text:#2A2318;
+    --muted:#6E6350;
+    --line:rgba(42,35,24,0.13);
+    --radius:16px;
+    --shadow:0 8px 24px rgba(23,56,50,0.10);
+    --font-bn:'Kalpurush','Hind Siliguri','Noto Sans Bengali', sans-serif;
+    --tabbar-h:74px;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    font-family:var(--font-bn);
+    background:var(--parchment);
+    color:var(--text);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,p,ul{margin:0;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;}
+  img{max-width:100%;display:block;}
+
+  .icon{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+  .icon.filled{fill:currentColor;stroke:none;}
+
+  /* ---------- Header ---------- */
+  header{
+    position:relative;
+    background-image:url("https://as1.ftcdn.net/v2/jpg/04/27/06/72/1000_F_427067284_yIPir9dIZX7ZLuhmEqLA9QCbGEKO6rcu.jpg");
+    background-size:cover;
+    background-position:center;
+    color:var(--parchment);
+    padding:34px 20px 46px;
+    overflow:hidden;
+    text-align:center;
+  }
+  header::before{
+    content:"";
+    position:absolute;inset:0;
+    opacity:0.14;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 24 24'><path fill='none' stroke='%23C9A227' stroke-width='0.8' d='M12 2 L14 9 L21 8 L15.5 12.5 L21 17 L14 15 L12 22 L10 15 L3 17 L8.5 12.5 L3 8 L10 9 Z'/></svg>");
+    background-size:90px 90px;
+    pointer-events:none;
+  }
+  .brand{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;}
+  .brand .mark{
+    width:52px;height:52px;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid rgba(201,162,39,0.55);
+    border-radius:0;
+    color:var(--gold-2);
+  }
+  .brand .mark .icon{width:26px;height:26px;}
+  .brand h1{font-size:1.5rem;font-weight:700;letter-spacing:0.3px;text-shadow:0 2px 10px rgba(0,0,0,0.55);}
+  .brand p{font-size:0.86rem;color:rgba(247,241,225,0.88);max-width:320px;text-shadow:0 1px 8px rgba(0,0,0,0.55);}
+
+  /* ---------- Main / panels ---------- */
+  main{
+    max-width:960px;
+    margin:0 auto;
+    padding:26px 16px calc(var(--tabbar-h) + 34px);
+  }
+  .panel{padding-top:6px;}
+  .panel[hidden]{display:none;}
+  .panel.fade{animation:fadeUp .38s ease both;}
+  @media (prefers-reduced-motion:reduce){
+    .panel.fade{animation:none;}
+  }
+  @keyframes fadeUp{
+    from{opacity:0;transform:translateY(8px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  .section-head{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+  .section-head .icon{width:20px;height:20px;color:var(--gold);}
+  .section-head h2{font-size:1.28rem;font-weight:700;color:var(--ink);}
+  .section-intro{color:var(--muted);font-size:0.92rem;margin:8px 0 20px;max-width:62ch;}
+
+  .divider{
+    display:flex;align-items:center;justify-content:center;
+    margin:6px 0 18px;color:var(--gold);opacity:0.65;
+  }
+  .divider .icon{width:16px;height:16px;}
+
+  /* ---------- Cards & grids ---------- */
+  .grid{display:grid;gap:14px;grid-template-columns:1fr;}
+  @media (min-width:560px){ .grid.g2{grid-template-columns:1fr 1fr;} }
+  @media (min-width:760px){ .grid.g3{grid-template-columns:repeat(3,1fr);} }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:0;
+    box-shadow:var(--shadow);
+    padding:18px;
+  }
+
+  /* links */
+  .link-card{display:flex;flex-direction:column;gap:10px;}
+  .link-card .top{display:flex;align-items:center;gap:12px;}
+  .link-card .top .ico-wrap{
+    width:44px;height:44px;border-radius:0;
+    background:var(--parchment-2);color:var(--ink);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .link-card h3{font-size:1.05rem;font-weight:700;color:var(--ink);}
+  .link-card .url{font-size:0.78rem;color:var(--gold);word-break:break-all;}
+  .link-card p{font-size:0.88rem;color:var(--muted);}
+  .link-card .go{
+    align-self:flex-start;
+    display:inline-flex;align-items:center;gap:6px;
+    margin-top:4px;padding:8px 14px;
+    border-radius:0;background:var(--ink);color:var(--parchment);
+    font-size:0.85rem;font-weight:600;
+  }
+  .link-card .go .icon{width:15px;height:15px;}
+
+  /* funun */
+  .fann-card{display:flex;gap:12px;align-items:flex-start;}
+  .fann-card .ico-wrap{
+    width:38px;height:38px;border-radius:0;
+    background:var(--teal-deep);color:var(--gold-2);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .fann-card .ico-wrap .icon{width:19px;height:19px;}
+  .fann-card h3{font-size:0.98rem;font-weight:700;color:var(--ink);margin-bottom:4px;}
+  .fann-card p{font-size:0.84rem;color:var(--muted);}
+
+  /* kitab */
+  .kitab-card{display:flex;gap:14px;}
+  .kitab-card .spine{
+    width:10px;border-radius:0;
+    flex-shrink:0;
+  }
+  .kitab-card .body{flex:1;}
+  .kitab-card h3{font-size:1.02rem;font-weight:700;color:var(--ink);}
+  .kitab-card .author{font-size:0.8rem;color:var(--gold);margin:2px 0 6px;}
+  .kitab-card p{font-size:0.86rem;color:var(--muted);}
+  .tag{
+    display:inline-block;margin-top:8px;
+    font-size:0.72rem;color:var(--maroon);
+    border:1px solid rgba(123,46,46,0.3);
+    border-radius:0;padding:2px 10px;
+  }
+
+  /* lekhak */
+  .author-card{text-align:center;padding:22px 16px;}
+  .author-card .avatar{
+    width:58px;height:58px;border-radius:0;
+    background:var(--parchment-2);color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 12px;
+  }
+  .author-card .avatar .icon{width:26px;height:26px;}
+  .author-card h3{font-size:1rem;font-weight:700;color:var(--ink);}
+  .author-card .dates{font-size:0.76rem;color:var(--gold);margin:2px 0 8px;}
+  .author-card p{font-size:0.85rem;color:var(--muted);}
+
+  /* institutions */
+  .inst-card{display:flex;gap:12px;align-items:flex-start;}
+  .inst-card .ico-wrap{
+    width:40px;height:40px;border-radius:0;
+    background:var(--maroon);color:var(--parchment);
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .inst-card .ico-wrap .icon{width:20px;height:20px;}
+  .inst-card h3{font-size:0.98rem;font-weight:700;color:var(--ink);}
+  .inst-card .loc{font-size:0.76rem;color:var(--gold);margin:2px 0 6px;}
+  .inst-card p{font-size:0.85rem;color:var(--muted);}
+  .inst-group h4{
+    font-size:0.86rem;color:var(--muted);font-weight:600;
+    margin:22px 0 10px;padding-bottom:6px;border-bottom:1px dashed var(--line);
+  }
+  .inst-group:first-of-type h4{margin-top:4px;}
+
+  /* library */
+  .shelf{display:grid;gap:14px;grid-template-columns:repeat(2,1fr);}
+  @media (min-width:520px){ .shelf{grid-template-columns:repeat(3,1fr);} }
+  @media (min-width:760px){ .shelf{grid-template-columns:repeat(4,1fr);} }
+  .cover{
+    aspect-ratio:3/4;
+    border-radius:0;
+    display:flex;flex-direction:column;justify-content:space-between;
+    padding:14px 12px;
+    color:var(--parchment);
+    box-shadow:var(--shadow);
+    position:relative;
+    overflow:hidden;
+  }
+  .cover::after{
+    content:"";position:absolute;inset:6px;
+    border:1px solid rgba(247,241,225,0.35);
+    border-radius:0;pointer-events:none;
+  }
+  .cover .icon{width:16px;height:16px;color:var(--gold-2);opacity:0.9;}
+  .cover .title{font-size:0.86rem;font-weight:700;line-height:1.35;}
+  .cover .by{font-size:0.68rem;opacity:0.8;}
+  .cover.c1{background:linear-gradient(160deg,var(--ink),var(--ink-2));}
+  .cover.c2{background:linear-gradient(160deg,var(--maroon),#5c2222);}
+  .cover.c3{background:linear-gradient(160deg,var(--teal-deep),#0a2b26);}
+  .cover.c4{background:linear-gradient(160deg,#5a4420,var(--gold));}
+
+  /* ---------- Tab bar ---------- */
+  nav.tabbar{
+    position:fixed;left:0;right:0;bottom:0;
+    height:calc(var(--tabbar-h) + env(safe-area-inset-bottom));
+    padding-bottom:env(safe-area-inset-bottom);
+    background:var(--ink-2);
+    border-top:1px solid rgba(201,162,39,0.25);
+    display:flex;
+    z-index:50;
+  }
+  .tabbar-inner{
+    display:flex;width:100%;max-width:760px;margin:0 auto;
+  }
+  .tab-btn{
+    flex:1;
+    background:none;border:none;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:4px;color:rgba(247,241,225,0.55);
+    cursor:pointer;padding:8px 2px;position:relative;
+  }
+  .tab-btn .icon{width:21px;height:21px;}
+  .tab-btn span{font-size:0.66rem;font-weight:600;}
+  .tab-btn.active{color:var(--gold-2);}
+  .tab-btn.active::before{
+    content:"";position:absolute;top:2px;left:50%;
+    width:18px;height:2px;border-radius:0;
+    background:var(--gold-2);transform:translateX(-50%);
+  }
+  .tab-btn:focus-visible{outline:2px solid var(--gold-2);outline-offset:2px;border-radius:0;}
+
+  @media (min-width:720px){
+    :root{--tabbar-h:70px;}
+    header{padding:44px 20px 56px;}
+    .brand h1{font-size:1.75rem;}
+    .tab-btn{flex-direction:row;gap:8px;padding:10px 6px;}
+    .tab-btn span{font-size:0.82rem;}
+  }
+</style>
+</head>
+<body>
+
+<svg style="display:none" aria-hidden="true">
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2 L14 9 L21 8 L15.5 12.5 L21 17 L14 15 L12 22 L10 15 L3 17 L8.5 12.5 L3 8 L10 9 Z"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M9 15l6-6M8 16.5a3.5 3.5 0 010-5l2-2a3.5 3.5 0 015 5M16 7.5a3.5 3.5 0 010 5l-2 2a3.5 3.5 0 01-5-5"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5C4 4.67 4.67 4 5.5 4H12v16H5.5A1.5 1.5 0 014 18.5v-13z"/><path d="M20 5.5c0-.83-.67-1.5-1.5-1.5H12v16h6.5a1.5 1.5 0 001.5-1.5v-13z"/><path d="M12 4v16"/></symbol>
+  <symbol id="i-shelf" viewBox="0 0 24 24"><rect x="3" y="4" width="4" height="16" rx="0.6"/><rect x="8" y="6" width="4" height="14" rx="0.6"/><rect x="13" y="3" width="4" height="17" rx="0.6"/><rect x="18" y="7" width="3" height="13" rx="0.6"/></symbol>
+  <symbol id="i-quill" viewBox="0 0 24 24"><path d="M20 4c-4 0-9 2-12 7-2 3-3 6-3 9 3 0 6-1 9-3 5-3 7-8 7-12 0-.5-.5-1-1-1z"/><path d="M9 15L4 20"/><path d="M13.5 8.5c-2 1-3.5 2.5-4.5 4.5"/></symbol>
+  <symbol id="i-inst" viewBox="0 0 24 24"><path d="M4 21h16"/><path d="M6 21V10l6-5 6 5v11"/><path d="M9 21v-6h6v6"/></symbol>
+  <symbol id="i-external" viewBox="0 0 24 24"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></symbol>
+</svg>
+
+<header>
+  <div class="brand">
+    <h1>মিফতাহুল ইলম</h1>
+    <p>ইসলামী জ্ঞান-চর্চার একটি ছোট্ট জানালা — লিংক, ফুনুন, কিতাব, লেখক, শিক্ষা প্রতিষ্ঠান ও লাইব্রেরি একসাথে।</p>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ১. লিংক -->
+  <section class="panel fade" id="links" role="tabpanel" aria-labelledby="tab-links">
+    <div class="section-head"><svg class="icon"><use href="#i-link"/></svg><h2>গুরুত্বপূর্ণ লিংক</h2></div>
+    <p class="section-intro">গবেষণা ও অধ্যয়নের জন্য নির্ভরযোগ্য দুটি অনলাইন প্ল্যাটফর্ম, যেখানে হাদীস, ফিকহ ও হাজারো ইসলামী কিতাব হাতের নাগালে পাওয়া যায়।</p>
+    <div class="grid g2">
+      <div class="card link-card">
+        <div class="top">
+          <div class="ico-wrap"><svg class="icon"><use href="#i-book"/></svg></div>
+          <div>
+            <h3>দুরার (Dorar)</h3>
+            <div class="url">dorar.net</div>
+          </div>
+        </div>
+        <p>হাদীস, ফিকহ ও আকীদা বিষয়ক বিশ্বকোষ ও গবেষণা প্ল্যাটফর্ম। হাদীসের তাখরীজ ও বিভিন্ন মাযহাবভিত্তিক ফিকহী মাসআলা সহজে খুঁজে পাওয়া যায়।</p>
+        <a class="go" href="https://dorar.net/" target="_blank" rel="noopener">ভিজিট করুন <svg class="icon"><use href="#i-external"/></svg></a>
+      </div>
+      <div class="card link-card">
+        <div class="top">
+          <div class="ico-wrap"><svg class="icon"><use href="#i-shelf"/></svg></div>
+          <div>
+            <h3>তুরাস (Turath)</h3>
+            <div class="url">app.turath.io</div>
+          </div>
+        </div>
+        <p>হাজারো ইসলামী কিতাবের অনলাইন লাইব্রেরি ও রিডার। মূল আরবি পাণ্ডুলিপি ও প্রকাশিত সংস্করণ একসাথে পড়া ও অনুসন্ধান করার সুবিধা।</p>
+        <a class="go" href="https://app.turath.io/" target="_blank" rel="noopener">ভিজিট করুন <svg class="icon"><use href="#i-external"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ২. ফুনুন -->
+  <section class="panel" id="funun" role="tabpanel" aria-labelledby="tab-funun" hidden>
+    <div class="section-head"><svg class="icon"><use href="#i-star"/></svg><h2>ফুনুন (জ্ঞানশাখা)</h2></div>
+    <p class="section-intro">ইসলামী জ্ঞানের বিভিন্ন শাস্ত্র বা শাখা — প্রতিটি শাস্ত্রের নিজস্ব পরিধি ও গুরুত্ব রয়েছে দ্বীন বোঝা ও চর্চার ক্ষেত্রে।</p>
+    <div class="grid g2">
+      <div class="card fann-card"><div class="ico-wrap"><svg class="icon"><use href="#i-book"/></svg></div><div><h3>তাফসীর</h3><p>কুরআনের অর্থ, শানে নুযূল ও ব্যাখ্যা নিয়ে আলোচনার শাস্ত্র।</p></div></div>
+      <div class="card fann-card"><div class="ico-wrap"><svg class="icon"><use href="#i-star"/></svg></div><div><h3>উলূমুল কুরআন</h3><p>কুরআনের নাযিল, সংকলন ও পাঠ-বিষয়ক জ্ঞানশাখা।</p></div></div>
+      <div class="card fann-card"><div class="ico-wrap"><svg class="icon"><use href="#i-shelf"/></svg></div><div><h3>হাদীস</h3><p>রাসূলুল্লাহ ﷺ-এর বাণী, কর্ম ও অনুমোদন সংকলনের শাস্ত্র।</p></div></div>
+      <div class="card fann-card"><div class="ico-wrap"><svg class="icon"><use href="#i-quill"/></svg></div><div><h3>উসূলে হাদীস</h3><p>হাদীসের সনদ যাচাই ও গ্রহণযোগ্যতা নির্ণয়ের মূলনীতি।</p></div></div>
+      <div class="card fann-card"><div class="ico-wrap"><svg class="icon"><use href="#i-inst"/></svg></div><div><h3>ফিকহ</h3><p>ইবাদত ও লেনদেনের ব্যবহারিক শরয়ী বিধিবিধান।</p></div></div>
+      <div class="card fann-card"><div class="ico-wrap"><svg class="icon"><use href="#i-link"/></svg></div><div><h3>উসূলে ফিকহ</h3><p>শরয়ী দলিল থেকে বিধান নির্ণয়ের পদ্ধতি ও মূলনীতি।</p></div></div>
+      <div class="card fann-card"><div class="ico-wrap"><svg class="icon"><use href="#i-book"/></svg></div><div><h3>আকীদা</h3><p>ঈমান ও বিশ্বাসগত মৌলিক বিষয়াদির শাস্ত্র।</p></div></div>
+      <div class="card fann-card"><div class="ico-wrap"><svg class="icon"><use href="#i-star"/></svg></div><div><h3>ইলমুল কালাম</h3><p>যুক্তি-প্রমাণসহ আকীদা প্রতিষ্ঠা ও রক্ষার শাস্ত্র।</p></div></div>
+      <div class="card fann-card"><div class="ico-wrap"><svg class="icon"><use href="#i-shelf"/></svg></div><div><h3>সীরাত ও ইতিহাস</h3><p>নবীজীবনী ও ইসলামের ঐতিহাসিক ঘটনাপ্রবাহ।</p></div></div>
+      <div class="card fann-card"><div class="ico-wrap"><svg class="icon"><use href="#i-quill"/></svg></div><div><h3>আরবি ভাষা ও সাহিত্য</h3><p>নাহু, সরফ ও বালাগাতসহ ভাষাগত মূল বিষয়াদি।</p></div></div>
+      <div class="card fann-card"><div class="ico-wrap"><svg class="icon"><use href="#i-inst"/></svg></div><div><h3>তাসাউফ</h3><p>আত্মশুদ্ধি, ইখলাস ও চারিত্রিক উৎকর্ষের শাস্ত্র।</p></div></div>
+      <div class="card fann-card"><div class="ico-wrap"><svg class="icon"><use href="#i-link"/></svg></div><div><h3>ইলমুল ফারায়েজ</h3><p>ইসলামী উত্তরাধিকার বণ্টনের সুনির্দিষ্ট বিধান।</p></div></div>
+    </div>
+  </section>
+
+  <!-- ৩. কিতাব পরিচিতি -->
+  <section class="panel" id="kitab" role="tabpanel" aria-labelledby="tab-kitab" hidden>
+    <div class="section-head"><svg class="icon"><use href="#i-book"/></svg><h2>কিতাব পরিচিতি</h2></div>
+    <p class="section-intro">ইসলামী জ্ঞানভাণ্ডারের কিছু মৌলিক ও প্রসিদ্ধ গ্রন্থের সংক্ষিপ্ত পরিচিতি।</p>
+    <div class="grid g2">
+      <div class="card kitab-card"><div class="spine"></div><div class="body"><h3>সহীহ বুখারী</h3><div class="author">ইমাম মুহাম্মদ ইবনু ইসমাঈল আল-বুখারী</div><p>হাদীসশাস্ত্রের সর্বাধিক নির্ভরযোগ্য গ্রন্থ, প্রায় সাত হাজারের বেশি সহীহ হাদীস সংকলিত।</p><span class="tag">হাদীস</span></div></div>
+      <div class="card kitab-card"><div class="spine"></div><div class="body"><h3>সহীহ মুসলিম</h3><div class="author">ইমাম মুসলিম ইবনুল হাজ্জাজ</div><p>সহীহ বুখারীর পাশাপাশি হাদীসশাস্ত্রের দ্বিতীয় সর্বাধিক নির্ভরযোগ্য গ্রন্থ।</p><span class="tag">হাদীস</span></div></div>
+      <div class="card kitab-card"><div class="spine"></div><div class="body"><h3>ফাতহুল বারী</h3><div class="author">ইবনু হাজার আল-আসকালানী</div><p>সহীহ বুখারীর সর্বাধিক প্রসিদ্ধ ও বিস্তারিত ব্যাখ্যাগ্রন্থ (শরাহ)।</p><span class="tag">শরাহ</span></div></div>
+      <div class="card kitab-card"><div class="spine"></div><div class="body"><h3>আল-মুওয়াত্তা</h3><div class="author">ইমাম মালিক ইবনু আনাস</div><p>প্রাচীনতম হাদীস ও ফিকহ সংকলনগুলোর অন্যতম মৌলিক গ্রন্থ।</p><span class="tag">হাদীস ও ফিকহ</span></div></div>
+      <div class="card kitab-card"><div class="spine"></div><div class="body"><h3>তাফসীরে ইবনে কাসীর</h3><div class="author">ইমাম ইসমাঈল ইবনু কাসীর</div><p>কুরআনের অন্যতম জনপ্রিয়, সহজবোধ্য ও গ্রহণযোগ্য তাফসীরগ্রন্থ।</p><span class="tag">তাফসীর</span></div></div>
+      <div class="card kitab-card"><div class="spine"></div><div class="body"><h3>রিয়াদুস সালেহীন</h3><div class="author">ইমাম নববী</div><p>আমল, আখলাক ও আত্মশুদ্ধি বিষয়ক বহুল পঠিত হাদীস সংকলন।</p><span class="tag">হাদীস</span></div></div>
+      <div class="card kitab-card"><div class="spine"></div><div class="body"><h3>ইহইয়া উলূমিদ্দীন</h3><div class="author">ইমাম আবু হামিদ আল-গাযালী</div><p>তাসাউফ ও আত্মশুদ্ধি বিষয়ক বিশ্বকোষীয় গুরুত্বপূর্ণ গ্রন্থ।</p><span class="tag">তাসাউফ</span></div></div>
+      <div class="card kitab-card"><div class="spine"></div><div class="body"><h3>যাদুল মাআ'দ</h3><div class="author">ইবনুল কাইয়্যিম আল-জাওযিয়্যাহ</div><p>সীরাত ও ফিকহভিত্তিক গভীর বিশ্লেষণধর্মী গ্রন্থ।</p><span class="tag">সীরাত</span></div></div>
+    </div>
+  </section>
+
+  <!-- ৪. লেখক পরিচিতি -->
+  <section class="panel" id="lekhak" role="tabpanel" aria-labelledby="tab-lekhak" hidden>
+    <div class="section-head"><svg class="icon"><use href="#i-quill"/></svg><h2>লেখক পরিচিতি</h2></div>
+    <p class="section-intro">ইসলামী জ্ঞানভাণ্ডার সমৃদ্ধকারী কিছু প্রসিদ্ধ ইমাম ও লেখকের সংক্ষিপ্ত পরিচিতি।</p>
+    <div class="grid g3">
+      <div class="card author-card"><div class="avatar"><svg class="icon"><use href="#i-quill"/></svg></div><h3>ইমাম বুখারী</h3><div class="dates">১৯৪ – ২৫৬ হিজরি</div><p>মুহাদ্দিসদের আমীর নামে খ্যাত, সহীহ বুখারীর সংকলক।</p></div>
+      <div class="card author-card"><div class="avatar"><svg class="icon"><use href="#i-quill"/></svg></div><h3>ইমাম নববী</h3><div class="dates">৬৩১ – ৬৭৬ হিজরি</div><p>শাফেয়ী ফিকহ ও হাদীস শাস্ত্রের অন্যতম শীর্ষ পণ্ডিত।</p></div>
+      <div class="card author-card"><div class="avatar"><svg class="icon"><use href="#i-quill"/></svg></div><h3>ইবনু হাজার আসকালানী</h3><div class="dates">৭৭৩ – ৮৫২ হিজরি</div><p>হাদীসশাস্ত্রের শায়খুল ইসলাম, ফাতহুল বারীর রচয়িতা।</p></div>
+      <div class="card author-card"><div class="avatar"><svg class="icon"><use href="#i-quill"/></svg></div><h3>ইবনু তাইমিয়া</h3><div class="dates">৬৬১ – ৭২৮ হিজরি</div><p>আকীদা, ফিকহ ও উসূলে বিশাল মৌলিক অবদানের অধিকারী।</p></div>
+      <div class="card author-card"><div class="avatar"><svg class="icon"><use href="#i-quill"/></svg></div><h3>ইমাম গাযালী</h3><div class="dates">৪৫০ – ৫০৫ হিজরি</div><p>হুজ্জাতুল ইসলাম, তাসাউফ ও দর্শনে গভীর পাণ্ডিত্যের অধিকারী।</p></div>
+      <div class="card author-card"><div class="avatar"><svg class="icon"><use href="#i-quill"/></svg></div><h3>ইবনুল কাইয়্যিম</h3><div class="dates">৬৯১ – ৭৫১ হিজরি</div><p>ইবনু তাইমিয়ার শিষ্য, ফিকহ ও তাসাউফে বহু গ্রন্থ রচয়িতা।</p></div>
+    </div>
+  </section>
+
+  <!-- ৫. শিক্ষা প্রতিষ্ঠান -->
+  <section class="panel" id="institution" role="tabpanel" aria-labelledby="tab-institution" hidden>
+    <div class="section-head"><svg class="icon"><use href="#i-inst"/></svg><h2>শিক্ষা প্রতিষ্ঠান</h2></div>
+    <p class="section-intro">দেশে-বিদেশে ইসলামী শিক্ষার কিছু প্রসিদ্ধ কেন্দ্র, যেখানে দ্বীনি জ্ঞানার্জনের সুযোগ রয়েছে।</p>
+
+    <div class="inst-group">
+      <h4>আন্তর্জাতিক প্রতিষ্ঠান</h4>
+      <div class="grid g2">
+        <div class="card inst-card"><div class="ico-wrap"><svg class="icon"><use href="#i-inst"/></svg></div><div><h3>জামিয়া আল-আজহার</h3><div class="loc">কায়রো, মিশর</div><p>বিশ্বের অন্যতম প্রাচীন ও প্রসিদ্ধ ইসলামী শিক্ষাপ্রতিষ্ঠান।</p></div></div>
+        <div class="card inst-card"><div class="ico-wrap"><svg class="icon"><use href="#i-inst"/></svg></div><div><h3>মদীনা ইসলামী বিশ্ববিদ্যালয়</h3><div class="loc">মদীনা, সৌদি আরব</div><p>বিশ্বজুড়ে শিক্ষার্থীদের জন্য উন্মুক্ত প্রসিদ্ধ শিক্ষাকেন্দ্র।</p></div></div>
+        <div class="card inst-card"><div class="ico-wrap"><svg class="icon"><use href="#i-inst"/></svg></div><div><h3>উম্মুল কুরা বিশ্ববিদ্যালয়</h3><div class="loc">মক্কা, সৌদি আরব</div><p>শরীয়াহ ও আরবি ভাষা শিক্ষায় প্রসিদ্ধ বিশ্ববিদ্যালয়।</p></div></div>
+        <div class="card inst-card"><div class="ico-wrap"><svg class="icon"><use href="#i-inst"/></svg></div><div><h3>দারুল উলুম দেওবন্দ</h3><div class="loc">উত্তরপ্রদেশ, ভারত</div><p>উপমহাদেশের অন্যতম প্রাচীন ও প্রভাবশালী দ্বীনি প্রতিষ্ঠান।</p></div></div>
+      </div>
+    </div>
+
+    <div class="inst-group">
+      <h4>বাংলাদেশের প্রতিষ্ঠান</h4>
+      <div class="grid g2">
+        <div class="card inst-card"><div class="ico-wrap"><svg class="icon"><use href="#i-inst"/></svg></div><div><h3>আল-জামিয়াতুল আহলিয়া দারুল উলুম মঈনুল ইসলাম</h3><div class="loc">হাটহাজারী, চট্টগ্রাম</div><p>দেশের অন্যতম প্রাচীন ও প্রসিদ্ধ কওমি মাদরাসা।</p></div></div>
+        <div class="card inst-card"><div class="ico-wrap"><svg class="icon"><use href="#i-inst"/></svg></div><div><h3>জামিয়া ইসলামিয়া পটিয়া</h3><div class="loc">পটিয়া, চট্টগ্রাম</div><p>হাদীস ও ফিকহ শিক্ষায় সুপরিচিত ঐতিহ্যবাহী মাদরাসা।</p></div></div>
+        <div class="card inst-card"><div class="ico-wrap"><svg class="icon"><use href="#i-inst"/></svg></div><div><h3>জামিয়া রাহমানিয়া আরাবিয়া</h3><div class="loc">মোহাম্মদপুর, ঢাকা</div><p>রাজধানীর অন্যতম প্রসিদ্ধ কওমি দ্বীনি শিক্ষাপ্রতিষ্ঠান।</p></div></div>
+        <div class="card inst-card"><div class="ico-wrap"><svg class="icon"><use href="#i-inst"/></svg></div><div><h3>ইসলামিক বিশ্ববিদ্যালয়</h3><div class="loc">কুষ্টিয়া, বাংলাদেশ</div><p>ইসলামী শিক্ষায় দেশের সরকারি বিশ্ববিদ্যালয়পর্যায়ের প্রতিষ্ঠান।</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ৬. লাইব্রেরী -->
+  <section class="panel" id="library" role="tabpanel" aria-labelledby="tab-library" hidden>
+    <div class="section-head"><svg class="icon"><use href="#i-shelf"/></svg><h2>লাইব্রেরি</h2></div>
+    <p class="section-intro">ইসলামী বইয়ের একটি ছোট প্রদর্শনী তাক — আপাতত এখানে কিছু কিতাবের প্রচ্ছদ যুক্ত করা হলো।</p>
+    <div class="shelf">
+      <div class="cover c1"><svg class="icon"><use href="#i-star"/></svg><div><div class="title">সহীহ বুখারী</div><div class="by">ইমাম বুখারী</div></div></div>
+      <div class="cover c2"><svg class="icon"><use href="#i-star"/></svg><div><div class="title">সহীহ মুসলিম</div><div class="by">ইমাম মুসলিম</div></div></div>
+      <div class="cover c3"><svg class="icon"><use href="#i-star"/></svg><div><div class="title">জামে তিরমিযী</div><div class="by">ইমাম তিরমিযী</div></div></div>
+      <div class="cover c4"><svg class="icon"><use href="#i-star"/></svg><div><div class="title">সুনানে আবু দাউদ</div><div class="by">ইমাম আবু দাউদ</div></div></div>
+      <div class="cover c2"><svg class="icon"><use href="#i-star"/></svg><div><div class="title">সুনানে নাসাঈ</div><div class="by">ইমাম নাসাঈ</div></div></div>
+      <div class="cover c1"><svg class="icon"><use href="#i-star"/></svg><div><div class="title">সুনানে ইবনে মাজাহ</div><div class="by">ইমাম ইবনে মাজাহ</div></div></div>
+      <div class="cover c3"><svg class="icon"><use href="#i-star"/></svg><div><div class="title">আল-মুওয়াত্তা</div><div class="by">ইমাম মালিক</div></div></div>
+      <div class="cover c4"><svg class="icon"><use href="#i-star"/></svg><div><div class="title">রিয়াদুস সালেহীন</div><div class="by">ইমাম নববী</div></div></div>
+      <div class="cover c1"><svg class="icon"><use href="#i-star"/></svg><div><div class="title">তাফসীরে ইবনে কাসীর</div><div class="by">ইবনু কাসীর</div></div></div>
+      <div class="cover c2"><svg class="icon"><use href="#i-star"/></svg><div><div class="title">ফাতহুল বারী</div><div class="by">ইবনু হাজার</div></div></div>
+      <div class="cover c3"><svg class="icon"><use href="#i-star"/></svg><div><div class="title">ইহইয়া উলূমিদ্দীন</div><div class="by">ইমাম গাযালী</div></div></div>
+      <div class="cover c4"><svg class="icon"><use href="#i-star"/></svg><div><div class="title">যাদুল মাআ'দ</div><div class="by">ইবনুল কাইয়্যিম</div></div></div>
+    </div>
+  </section>
+
+</main>
+
+<nav class="tabbar" role="tablist" aria-label="প্রধান মেনু">
+  <div class="tabbar-inner">
+    <button class="tab-btn active" role="tab" id="tab-links" data-tab="links" aria-selected="true" aria-controls="links">
+      <svg class="icon"><use href="#i-link"/></svg><span>লিংক</span>
+    </button>
+    <button class="tab-btn" role="tab" id="tab-funun" data-tab="funun" aria-selected="false" aria-controls="funun">
+      <svg class="icon"><use href="#i-star"/></svg><span>ফুনুন</span>
+    </button>
+    <button class="tab-btn" role="tab" id="tab-kitab" data-tab="kitab" aria-selected="false" aria-controls="kitab">
+      <svg class="icon"><use href="#i-book"/></svg><span>কিতাব</span>
+    </button>
+    <button class="tab-btn" role="tab" id="tab-lekhak" data-tab="lekhak" aria-selected="false" aria-controls="lekhak">
+      <svg class="icon"><use href="#i-quill"/></svg><span>লেখক</span>
+    </button>
+    <button class="tab-btn" role="tab" id="tab-institution" data-tab="institution" aria-selected="false" aria-controls="institution">
+      <svg class="icon"><use href="#i-inst"/></svg><span>প্রতিষ্ঠান</span>
+    </button>
+    <button class="tab-btn" role="tab" id="tab-library" data-tab="library" aria-selected="false" aria-controls="library">
+      <svg class="icon"><use href="#i-shelf"/></svg><span>লাইব্রেরি</span>
+    </button>
+  </div>
+</nav>
+
+<script>
+  const tabs = Array.from(document.querySelectorAll('.tab-btn'));
+  const panels = Array.from(document.querySelectorAll('.panel'));
+  const main = document.getElementById('main');
+
+  function activate(id, focusTab){
+    tabs.forEach(t=>{
+      const on = t.dataset.tab === id;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      if(on && focusTab) t.focus();
+    });
+    panels.forEach(p=>{
+      const on = p.id === id;
+      p.hidden = !on;
+      if(on){
+        p.classList.remove('fade');
+        void p.offsetWidth;
+        p.classList.add('fade');
+      }
+    });
+    main.scrollTo({top:0, behavior:'smooth'});
+    history.replaceState(null, '', '#' + id);
+  }
+
+  tabs.forEach((t, i)=>{
+    t.addEventListener('click', ()=> activate(t.dataset.tab));
+    t.addEventListener('keydown', (e)=>{
+      if(e.key === 'ArrowRight' || e.key === 'ArrowLeft'){
+        e.preventDefault();
+        const dir = e.key === 'ArrowRight' ? 1 : -1;
+        const next = tabs[(i + dir + tabs.length) % tabs.length];
+        activate(next.dataset.tab, true);
+      }
+    });
+  });
+
+  const startId = location.hash.replace('#','');
+  activate(document.getElementById(startId) ? startId : 'links');
+</script>
+
+
+  <!-- Navbar Loader -->
+<script src="navbar/navbar-loader.js"></script>
+
+</body>
+</html>
