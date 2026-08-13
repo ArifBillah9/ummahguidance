@@ -78,6 +78,15 @@
   .top-sub{
     color:rgba(255,255,255,.72); font-size:15px; margin-bottom:34px;
   }
+  .tilawat-link{
+    display:inline-block; margin-top:20px;
+    padding:12px 28px; background:var(--gold); color:var(--deep-teal);
+    border-radius:999px; text-decoration:none; font-weight:600;
+    transition:background .2s, transform .2s;
+    font-size:15px;
+  }
+  .tilawat-link:hover{background:#d4b04f; transform:scale(1.05);}
+  a.tilawat-link{border:none;}
   .search-wrap{
     max-width:560px; margin:0 auto; position:relative;
   }
@@ -1404,7 +1413,7 @@
   <h1 class="m-title" id="mTitle">কুরআন</h1>
   <div class="m-appbar-actions">
     <button class="m-icon-btn" id="mTilawatBtn" aria-label="তিলাওয়াত">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v6m0 6v4m5.09-8.56L17.6 7.4M7.91 16.64l1.41-1.41M18.34 12c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6 6 2.69 6 6z"/></svg>
     </button>
     <button class="m-icon-btn" id="mBookmarkBtn" aria-label="বুকমার্ক">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
@@ -1449,7 +1458,7 @@
   </a>
   <div class="nav-links">
     <a class="current" id="navQuranLink">কুরআন</a>
-    <a id="navTilawatLink">তিলাওয়াত</a>
+    <a id="navTilawatLink" href="tilawat.html">🎙️ তিলাওয়াত</a>
     <a id="navHadithLink">হাদীস</a>
     <a>নামাজের সময়</a>
     <a>মাসায়েল</a>
@@ -1461,9 +1470,6 @@
   <div class="nav-actions">
     <button class="nav-btn donate">🎁 ডোনেশন</button>
     <button class="nav-btn download">ডাউনলোড ↗</button>
-    <button class="nav-icon-btn" id="navTilawatBtn" title="তিলাওয়াত">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>
-    </button>
     <button class="nav-icon-btn">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       <span class="nav-dot"></span>
@@ -1484,6 +1490,7 @@
       <input id="searchInput" type="text" placeholder="সূরার নাম লিখে খুঁজুন... (বাংলা বা আরবি)">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </div>
+    <a href="tilawat.html" class="tilawat-link">🎙️ তিলাওয়াত শুনুন</a>
   </div>
 </header>
 
@@ -1815,21 +1822,6 @@
     <span style="width:32px;"></span>
   </div>
   <div class="bm-body" id="bmBody"></div>
-</div>
-
-<!-- ============ তিলাওয়াত (TILAWAT) PAGE ============
-     Loaded in an isolated iframe so its own full-page CSS/JS never collides
-     with the কুরআন page's styles/scripts. This lets a single page (this file)
-     serve as the entry point for both কুরআন এবং তিলাওয়াত. -->
-<div id="tilawatPageView" style="display:none; position:fixed; inset:0; z-index:200; background:#fdfaf3; flex-direction:column;">
-  <div class="tp-appbar">
-    <button class="m-back" id="tilawatBackBtn" title="ফিরে যান">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-    </button>
-    <h1 class="m-title">তিলাওয়াত</h1>
-    <span style="width:32px;"></span>
-  </div>
-  <iframe id="tilawatFrame" title="তিলাওয়াত" style="flex:1; width:100%; border:none; display:block;"></iframe>
 </div>
 
 <!-- ============ 'MORE' BOTTOM SHEET (mimics native app screenshot) ============ -->
@@ -2656,7 +2648,6 @@ function showListing(){
   if(typeof stopAyahAudioPlayback === 'function') stopAyahAudioPlayback();
   readerView.style.display = 'none';
   hideHadithViews();
-  closeTilawatView();
   heroSection.style.display = '';
   viewTabsEl.style.display = '';
   listingMain.style.display = '';
@@ -2665,41 +2656,6 @@ function showListing(){
   mPanel.style.display = '';
   window.scrollTo(0,0);
 }
-
-/* ---------- তিলাওয়াত (TILAWAT) overlay ---------- */
-const tilawatPageView = document.getElementById('tilawatPageView');
-const tilawatFrame = document.getElementById('tilawatFrame');
-let tilawatFrameLoaded = false;
-
-function openTilawatView(){
-  if(typeof stopAyahAudioPlayback === 'function') stopAyahAudioPlayback();
-  if(!tilawatFrameLoaded){
-    tilawatFrame.src = 'tilawat.html';
-    tilawatFrameLoaded = true;
-  }
-  readerView.style.display = 'none';
-  hideHadithViews();
-  heroSection.style.display = 'none';
-  viewTabsEl.style.display = 'none';
-  listingMain.style.display = 'none';
-  siteFooter.style.display = 'none';
-  mAppbar.style.display = 'none';
-  mPanel.style.display = 'none';
-  bookmarksPageView.style.display = 'none';
-  tafsirPageView.style.display = 'none';
-  tafsirSelectPageView.style.display = 'none';
-  tilawatPageView.style.display = 'flex';
-  window.scrollTo(0,0);
-}
-
-function closeTilawatView(){
-  tilawatPageView.style.display = 'none';
-}
-
-document.getElementById('navTilawatBtn').addEventListener('click', openTilawatView);
-document.getElementById('mTilawatBtn').addEventListener('click', openTilawatView);
-document.getElementById('navTilawatLink').addEventListener('click', openTilawatView);
-document.getElementById('tilawatBackBtn').addEventListener('click', showListing);
 
 function openReader(mode, num){
   heroSection.style.display = 'none';
@@ -4805,6 +4761,11 @@ function closeBookmarksPage(){
 
 mBookmarkBtn.addEventListener('click', openBookmarksPage);
 bmBackBtn.addEventListener('click', closeBookmarksPage);
+
+// তিলাওয়াত বাটন ক্লিক করলে tilawat.html এ নেভিগেট করে
+document.getElementById('mTilawatBtn').addEventListener('click', function(){
+  window.location.href = 'tilawat.html';
+});
 
 // Wire the real "বুকমার্ক" toggle in both the per-ayah action row and the ayah tap sheet
 // to persistent storage (they previously only flipped a CSS class).
