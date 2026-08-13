@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ওয়াক্তভিত্তিক আমল — আমল ট্র্যাকার</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --header-dark: #163524;
+    --header-mid: #1d4530;
+    --brand-green: #1f7a45;
+    --brand-green-light: #e8f5ee;
+    --brand-green-soft: #d9f0e3;
+    --accent-blue: #6366f1;
+    --bg: #f3f5f3;
+    --card: #ffffff;
+    --text-dark: #16241c;
+    --text-muted: #6b7a72;
+    --text-faint: #9aa6a0;
+    --border: #e7ece8;
+    --star-amber: #f5b942;
+    --radius-lg: 18px;
+    --radius-md: 14px;
+    --radius-sm: 10px;
+    --shadow: 0 2px 10px rgba(20,50,35,0.06);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+  html,body{margin:0; padding:0;}
+  body{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    background:var(--bg);
+    color:var(--text-dark);
+    display:flex;
+    justify-content:center;
+  }
+  .phone{
+    width:100%;
+    max-width:430px;
+    min-height:100vh;
+    background:var(--bg);
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+
+  header.topbar{
+    background:var(--header-dark);
+    color:#fff;
+    padding:18px 16px 16px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .icon-btn{
+    width:34px; height:34px;
+    border-radius:50%;
+    border:1.5px solid rgba(255,255,255,0.35);
+    background:transparent;
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    cursor:pointer;
+    text-decoration:none;
+  }
+  header.topbar h1{
+    font-size:17px;
+    font-weight:600;
+    margin:0;
+    flex:1;
+    text-align:center;
+    margin-right:34px;
+  }
+
+  .hero{
+    background:linear-gradient(160deg, var(--header-mid), var(--header-dark) 85%);
+    color:#fff;
+    padding:16px 16px 18px;
+    border-radius:0 0 22px 22px;
+    margin-bottom:14px;
+  }
+  .hero h2{ font-size:16.5px; margin:0 0 6px; font-weight:700; }
+  .hero p{ font-size:12.5px; line-height:1.6; margin:0; color:rgba(255,255,255,0.78); }
+
+  /* Waqt tab strip */
+  .waqt-scroller{
+    display:flex; gap:8px;
+    padding:0 16px 14px;
+    overflow-x:auto;
+    scrollbar-width:none;
+  }
+  .waqt-scroller::-webkit-scrollbar{ display:none; }
+  .waqt-tab{
+    flex-shrink:0;
+    display:flex; align-items:center; gap:6px;
+    padding:10px 14px;
+    border-radius:12px;
+    border:1.5px solid var(--border);
+    background:var(--card);
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--text-muted);
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .waqt-tab.active{
+    border-color:var(--brand-green);
+    color:var(--brand-green);
+    background:var(--brand-green-light);
+  }
+  /* Auto highlight for the waqt currently running (real time), independent of which tab user has opened */
+  .waqt-tab.now{
+    border-color:var(--brand-green);
+    box-shadow:0 0 0 1.5px var(--brand-green);
+  }
+  .waqt-tab .now-dot{
+    display:none;
+    width:7px; height:7px; border-radius:50%;
+    background:var(--brand-green);
+    flex-shrink:0;
+    animation:pulse-dot 1.6s ease-in-out infinite;
+  }
+  .waqt-tab.now .now-dot{ display:inline-block; }
+  @keyframes pulse-dot{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:.4; transform:scale(0.7); }
+  }
+
+  .now-status{
+    display:flex; align-items:center; gap:8px;
+    margin:0 16px 14px;
+    padding:10px 14px;
+    background:var(--brand-green-light);
+    border:1px solid var(--brand-green-soft);
+    border-radius:12px;
+    font-size:13px; font-weight:600;
+    color:var(--brand-green);
+  }
+  .now-status .dot{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--brand-green); flex-shrink:0;
+    animation:pulse-dot 1.6s ease-in-out infinite;
+  }
+
+  main{ padding:0 16px 40px; flex:1; }
+  .view{ display:none; }
+  .view.active{ display:block; animation:fadein .25s ease; }
+  @keyframes fadein{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;} }
+
+  .card{
+    background:var(--card);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow);
+    border:1px solid var(--border);
+    padding:18px 16px 16px;
+    margin-bottom:14px;
+  }
+  .card-head{ display:flex; align-items:center; gap:12px; margin-bottom:4px; }
+  .card-ico{
+    width:38px; height:38px; border-radius:11px;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; font-size:18px;
+  }
+  .card-ico.green{ background:var(--brand-green-soft); color:var(--brand-green); }
+  .card-title-wrap{ flex:1; }
+  .card-title-wrap h3{ margin:0; font-size:16px; font-weight:700; }
+  .card-title-wrap .time{ font-size:12px; color:var(--text-muted); margin-top:2px; }
+
+  .progress-row{
+    display:flex; justify-content:flex-end; margin:12px 0 6px;
+    font-size:13px; font-weight:600; color:var(--text-muted);
+  }
+  .progress-track{
+    height:7px; background:#eef1ee; border-radius:99px; overflow:hidden; margin-bottom:12px;
+  }
+  .progress-fill{
+    height:100%; background:var(--brand-green); border-radius:99px; width:0%;
+    transition:width .3s ease;
+  }
+  .card-desc{ font-size:13px; color:var(--text-muted); line-height:1.6; margin:0 0 10px; }
+
+  .amol-list{ display:flex; flex-direction:column; gap:8px; }
+  .amol-row{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:11px 12px; border:1px solid var(--border); border-radius:12px;
+    cursor:pointer;
+  }
+  .amol-row.done{ background:var(--brand-green-light); border-color:var(--brand-green-soft); }
+  .amol-row .name{ font-size:13.5px; font-weight:600; line-height:1.4; }
+  .check{
+    width:22px; height:22px; border-radius:6px; border:1.5px solid #cdd6d0;
+    display:flex; align-items:center; justify-content:center; color:#fff; flex-shrink:0;
+  }
+  .amol-row.done .check{ background:var(--brand-green); border-color:var(--brand-green); }
+  .amol-row.done .check svg{ display:block; }
+  .check svg{ display:none; }
+
+  footer.credit{
+    text-align:center; font-size:11px; color:var(--text-faint); padding:14px 0 6px;
+  }
+</style>
+</head>
+<body>
+<div class="phone">
+
+  <header class="topbar">
+    <a class="icon-btn" href="index.html" aria-label="ফিরে যান">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 19l-7-7 7-7"/></svg>
+    </a>
+    <h1>ওয়াক্তভিত্তিক আমল</h1>
+  </header>
+
+  <div class="hero">
+    <h2>প্রতিটি ওয়াক্তের আমলের তালিকা</h2>
+    <p>ফজর, দুহা, যোহর, আছর, মাগরিব ও ইশার সময় অনুযায়ী কোন কোন আমল করবেন তা এখানে ধাপে ধাপে দেখুন এবং চিহ্নিত করুন।</p>
+  </div>
+
+  <div class="waqt-scroller" id="waqtTabs">
+    <div class="waqt-tab active" data-waqt="fajr"><span class="now-dot"></span>ফজর</div>
+    <div class="waqt-tab" data-waqt="duha"><span class="now-dot"></span>দুহা / চাশত</div>
+    <div class="waqt-tab" data-waqt="zuhr"><span class="now-dot"></span>যোহর</div>
+    <div class="waqt-tab" data-waqt="asr"><span class="now-dot"></span>আছর</div>
+    <div class="waqt-tab" data-waqt="maghrib"><span class="now-dot"></span>মাগরিব</div>
+    <div class="waqt-tab" data-waqt="isha"><span class="now-dot"></span>ইশা</div>
+  </div>
+
+  <div class="now-status" id="nowStatus">
+    <span class="dot"></span>
+    <span id="nowStatusText">এখনকার ওয়াক্ত হিসাব করা হচ্ছে…</span>
+  </div>
+
+  <main>
+
+    <!-- ===== ফজর ===== -->
+    <section class="view active" id="view-fajr">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-ico green">🌅</div>
+          <div class="card-title-wrap">
+            <h3>ফজরের আমল</h3>
+            <div class="time">সুবহে সাদিক থেকে সূর্যোদয় পর্যন্ত</div>
+          </div>
+        </div>
+        <div class="progress-row"><span class="p-label">০/৭</span></div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <p class="card-desc">ফজরের সময় করণীয় আমলগুলোর তালিকা — প্রতিটি সম্পন্ন হলে চিহ্নিত করুন</p>
+        <div class="amol-list">
+          <div class="amol-row"><span class="name">তাহাজ্জুদ নামাজ (রাতের শেষভাগে)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">ফজরের সুন্নত নামাজ (২ রাকাত)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">ফজরের ফরজ নামাজ (জামাতে)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">সকালের মাসনূন যিকির-দোয়া (আয়াতুল কুরসি, তিন কুল)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">কুরআন তেলাওয়াত</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">ইশরাকের নামাজ (সূর্যোদয়ের প্রায় ২০ মিনিট পর)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">১০০ বার সুবহানাল্লাহি ওয়া বিহামদিহি</span><span class="check">✓</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== দুহা / চাশত ===== -->
+    <section class="view" id="view-duha">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-ico green">☀️</div>
+          <div class="card-title-wrap">
+            <h3>দুহা / চাশতের আমল</h3>
+            <div class="time">সূর্য কিছুটা উপরে ওঠা থেকে যোহরের আগ পর্যন্ত</div>
+          </div>
+        </div>
+        <div class="progress-row"><span class="p-label">০/৪</span></div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <p class="card-desc">দুহার সময় করণীয় আমলগুলোর তালিকা</p>
+        <div class="amol-list">
+          <div class="amol-row"><span class="name">চাশতের নামাজ (২ থেকে ৮ রাকাত)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">দোয়া-দরূদ পাঠ</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">সাদাকা প্রদান</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">হালাল রিজিকের নিয়তে কাজ/জীবিকা অন্বেষণ</span><span class="check">✓</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== যোহর ===== -->
+    <section class="view" id="view-zuhr">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-ico green">🕛</div>
+          <div class="card-title-wrap">
+            <h3>যোহরের আমল</h3>
+            <div class="time">সূর্য হেলে পড়া থেকে আছরের আগ পর্যন্ত</div>
+          </div>
+        </div>
+        <div class="progress-row"><span class="p-label">০/৫</span></div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <p class="card-desc">যোহরের সময় করণীয় আমলগুলোর তালিকা</p>
+        <div class="amol-list">
+          <div class="amol-row"><span class="name">যোহরের পূর্বে সুন্নত নামাজ (৪ রাকাত)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">যোহরের ফরজ নামাজ (জামাতে)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">যোহরের পরে সুন্নত নামাজ (২ রাকাত)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">দুপুরের দোয়া-যিকির</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">কুরআন তেলাওয়াত</span><span class="check">✓</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== আছর ===== -->
+    <section class="view" id="view-asr">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-ico green">🌤️</div>
+          <div class="card-title-wrap">
+            <h3>আছরের আমল</h3>
+            <div class="time">যোহরের পর থেকে সূর্যাস্তের আগ পর্যন্ত</div>
+          </div>
+        </div>
+        <div class="progress-row"><span class="p-label">০/৩</span></div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <p class="card-desc">আছরের সময় করণীয় আমলগুলোর তালিকা</p>
+        <div class="amol-list">
+          <div class="amol-row"><span class="name">আছরের ফরজ নামাজ (জামাতে)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">বিকেলের মাসনূন আযকার</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">ইস্তিগফার পাঠ</span><span class="check">✓</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== মাগরিব ===== -->
+    <section class="view" id="view-maghrib">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-ico green">🌇</div>
+          <div class="card-title-wrap">
+            <h3>মাগরিবের আমল</h3>
+            <div class="time">সূর্যাস্ত থেকে সন্ধ্যার লালিমা মেলানো পর্যন্ত</div>
+          </div>
+        </div>
+        <div class="progress-row"><span class="p-label">০/৪</span></div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <p class="card-desc">মাগরিবের সময় করণীয় আমলগুলোর তালিকা</p>
+        <div class="amol-list">
+          <div class="amol-row"><span class="name">মাগরিবের ফরজ নামাজ (জামাতে)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">মাগরিবের পরে সুন্নত নামাজ (২ রাকাত)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">সন্ধ্যার মাসনূন আযকার</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">ইফতারের দোয়া (রোজা থাকলে)</span><span class="check">✓</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ইশা ===== -->
+    <section class="view" id="view-isha">
+      <div class="card">
+        <div class="card-head">
+          <div class="card-ico green">🌙</div>
+          <div class="card-title-wrap">
+            <h3>ইশার আমল</h3>
+            <div class="time">রাতের লালিমা মেলানো থেকে মধ্যরাত পর্যন্ত</div>
+          </div>
+        </div>
+        <div class="progress-row"><span class="p-label">০/৬</span></div>
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <p class="card-desc">ইশার সময় করণীয় আমলগুলোর তালিকা</p>
+        <div class="amol-list">
+          <div class="amol-row"><span class="name">ইশার ফরজ নামাজ (জামাতে)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">ইশার পরে সুন্নত নামাজ (২ রাকাত)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">বিতর নামাজ (৩ রাকাত)</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">ঘুমানোর পূর্বের দোয়া-যিকির</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">দৈনিক কুরআন তেলাওয়াতের কোটা পূরণ</span><span class="check">✓</span></div>
+          <div class="amol-row"><span class="name">দিনের মুহাসাবাহ ও আগামীকালের পরিকল্পনা</span><span class="check">✓</span></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="credit">আমল ট্র্যাকার (মুহাসাবাহ) — ওয়াক্তভিত্তিক আমলের তালিকা</footer>
+</div>
+
+<script>
+  // Tab switching between waqt sections
+  const waqtTabs = document.querySelectorAll('.waqt-tab');
+  const views = document.querySelectorAll('.view');
+  waqtTabs.forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      waqtTabs.forEach(t=>t.classList.remove('active'));
+      views.forEach(v=>v.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('view-'+tab.dataset.waqt).classList.add('active');
+      tab.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+    });
+  });
+
+  const bnDigits = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+  function toBn(n){ return String(n).split('').map(d=> bnDigits[+d] ?? d).join(''); }
+
+  // ===== এখন কোন ওয়াক্ত চলছে তা স্বয়ংক্রিয়ভাবে বের করা =====
+  // (সূর্যের অবস্থান হিসাব করে ফজর/সূর্যোদয়/যোহর/আছর/মাগরিব/ইশার সময় বের করা হয়, তারপর
+  //  বর্তমান সময়ের সাথে মিলিয়ে সংশ্লিষ্ট ওয়াক্তের ট্যাব হাইলাইট করা হয়)
+  (function(){
+    const dsin = d => Math.sin(d*Math.PI/180);
+    const dcos = d => Math.cos(d*Math.PI/180);
+    const dtan = d => Math.tan(d*Math.PI/180);
+    const darcsin = x => Math.asin(x)*180/Math.PI;
+    const darccos = x => Math.acos(x)*180/Math.PI;
+    const darccot = x => Math.atan(1/x)*180/Math.PI;
+    const darctan2 = (y,x) => Math.atan2(y,x)*180/Math.PI;
+    const fixAngle = a => { a = a % 360; return a < 0 ? a + 360 : a; };
+    const fixHour = h => { h = h % 24; return h < 0 ? h + 24 : h; };
+
+    function julianDate(year, month, day){
+      if (month <= 2) { year -= 1; month += 12; }
+      const A = Math.floor(year/100);
+      const B = 2 - A + Math.floor(A/4);
+      return Math.floor(365.25*(year+4716)) + Math.floor(30.6001*(month+1)) + day + B - 1524.5;
+    }
+    function sunPosition(jd){
+      const D = jd - 2451545.0;
+      const g = fixAngle(357.529 + 0.98560028*D);
+      const q = fixAngle(280.459 + 0.98564736*D);
+      const L = fixAngle(q + 1.915*dsin(g) + 0.020*dsin(2*g));
+      const e = 23.439 - 0.00000036*D;
+      const RA = darctan2(dcos(e)*dsin(L), dcos(L)) / 15;
+      const eqt = q/15 - fixHour(RA);
+      const decl = darcsin(dsin(e)*dsin(L));
+      return { declination: decl, equation: eqt };
+    }
+    // ফজর কোণ ১৮°, ইশার কোণ ১৭°, আসর হানাফি হিসাব (factor 2) — বাংলাদেশে প্রচলিত মান অনুযায়ী
+    function computeTimes(year, month, day, lat, lng, tz, fajrAngle, ishaAngle){
+      const jd = julianDate(year, month, day) - lng/(15*24);
+      function midDay(t){ return fixHour(12 - sunPosition(jd+t).equation); }
+      function sunAngleTime(angle, t, ccw){
+        const decl = sunPosition(jd+t).declination;
+        const noon = midDay(t);
+        const T = 1/15 * darccos((-dsin(angle) - dsin(decl)*dsin(lat)) / (dcos(decl)*dcos(lat)));
+        return noon + (ccw ? -T : T);
+      }
+      function asrTime(factor, t){
+        const decl = sunPosition(jd+t).declination;
+        const angle = -darccot(factor + dtan(Math.abs(lat - decl)));
+        return sunAngleTime(angle, t, false);
+      }
+      const toTZ = t => t + tz - lng/15;
+      return {
+        fajr: toTZ(sunAngleTime(fajrAngle, 0.25, true)),
+        sunrise: toTZ(sunAngleTime(0.833, 0.25, true)),
+        dhuhr: toTZ(midDay(0.5)),
+        asr: toTZ(asrTime(2, 0.5714)),
+        maghrib: toTZ(sunAngleTime(0.833, 0.75, false)),
+        isha: toTZ(sunAngleTime(ishaAngle, 0.75, false))
+      };
+    }
+    function fmtBn(t){
+      t = ((t%24)+24)%24;
+      let h = Math.floor(t), m = Math.round((t-h)*60);
+      if(m===60){ m=0; h+=1; }
+      const ampm = h>=12 ? 'PM' : 'AM';
+      let h12 = h%12; if(h12===0) h12=12;
+      return toBn(h12)+':'+toBn(String(m).padStart(2,'0'))+' '+ampm;
+    }
+
+    const waqtLabel = { fajr:'ফজর', duha:'দুহা / চাশত', zuhr:'যোহর', asr:'আছর', maghrib:'মাগরিব', isha:'ইশা' };
+    let initialViewSet = false;
+
+    function applyCurrentWaqt(lat, lng){
+      const now = new Date();
+      const times = computeTimes(now.getFullYear(), now.getMonth()+1, now.getDate(), lat, lng, -now.getTimezoneOffset()/60, 18, 17);
+      const nowHour = now.getHours() + now.getMinutes()/60;
+      const duhaStart = times.sunrise + (20/60); // সূর্যোদয়ের প্রায় ২০ মিনিট পর দুহা শুরু
+
+      let current;
+      if(nowHour < times.fajr) current = 'isha';               // মধ্যরাত থেকে ফজরের আগ পর্যন্ত — গতকালের ইশার সময়
+      else if(nowHour < times.sunrise) current = 'fajr';
+      else if(nowHour < times.dhuhr) current = 'duha';
+      else if(nowHour < times.asr) current = 'zuhr';
+      else if(nowHour < times.maghrib) current = 'asr';
+      else if(nowHour < times.isha) current = 'maghrib';
+      else current = 'isha';
+
+      document.querySelectorAll('.waqt-tab').forEach(t=>{
+        t.classList.toggle('now', t.dataset.waqt === current);
+      });
+      const statusText = document.getElementById('nowStatusText');
+      if(statusText){
+        statusText.textContent = '🕌 এখন ' + waqtLabel[current] + 'ের ওয়াক্ত চলছে';
+      }
+
+      // পেজ প্রথম লোড হওয়ার সময় বর্তমান ওয়াক্তের সেকশন অটো-ওপেন করা (এরপর ব্যবহারকারী যেকোনো ট্যাবে যেতে পারবেন)
+      if(!initialViewSet){
+        initialViewSet = true;
+        const tab = document.querySelector('.waqt-tab[data-waqt="'+current+'"]');
+        if(tab) tab.click();
+      }
+    }
+
+    // ডিফল্ট অবস্থান: ঢাকা, বাংলাদেশ (ব্রাউজার লোকেশন অনুমতি না দিলে এটি ব্যবহার হবে)
+    const DHAKA = { lat: 23.8103, lng: 90.4125 };
+
+    function start(lat, lng){
+      applyCurrentWaqt(lat, lng);
+      setInterval(()=>applyCurrentWaqt(lat, lng), 60*1000); // প্রতি মিনিটে হালনাগাদ
+    }
+
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(
+        pos => start(pos.coords.latitude, pos.coords.longitude),
+        () => start(DHAKA.lat, DHAKA.lng),
+        { timeout: 4000 }
+      );
+    } else {
+      start(DHAKA.lat, DHAKA.lng);
+    }
+  })();
+
+  // Checklist toggling + per-card progress
+  document.querySelectorAll('.card').forEach(card=>{
+    const rows = card.querySelectorAll('.amol-row');
+    const fill = card.querySelector('.progress-fill');
+    const label = card.querySelector('.p-label');
+    const total = rows.length;
+    function update(){
+      const done = card.querySelectorAll('.amol-row.done').length;
+      fill.style.width = (done/total*100)+'%';
+      label.textContent = toBn(done)+'/'+toBn(total);
+    }
+    rows.forEach(row=>{
+      row.addEventListener('click', ()=>{
+        row.classList.toggle('done');
+        update();
+      });
+    });
+  });
+</script>
+
+  <!-- Navbar Loader -->
+<script src="navbar/navbar-loader.js"></script>
+</body>
+</html>
