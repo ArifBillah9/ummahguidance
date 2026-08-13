@@ -3015,7 +3015,7 @@
       </svg>
       <span>চলতি আমল</span>
     </div>
-    <div class="nav-item" data-target="sec-seba">
+    <div class="nav-item" data-target="sec-seba" id="bottomNavNotif">
       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:24px;height:24px;">
         <circle cx="18" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/>
         <path d="M18 9C19.6569 9 21 10.3431 21 12V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V12C5 10.3431 6.34315 9 8 9M12 13V19M9 13V19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -3250,6 +3250,19 @@
       if(bell) bell.addEventListener('click', openScreen);
       if(backBtn) backBtn.addEventListener('click', closeScreen);
 
+      // টপবারে বেল আইকনটি পরে (যেমন navbar-loader.js দিয়ে) যোগ হলেও যেন কাজ করে,
+      // তাই ডকুমেন্ট লেভেলে ডেলিগেশন রাখা হলো
+      document.addEventListener('click', function(e){
+        var target = e.target.closest('#notifBell, .bell-wrap');
+        if(target){
+          e.preventDefault();
+          openScreen();
+        }
+      });
+
+      // অন্য বাটন (হ্যামবার্গার মেনু, মোবাইল মেনু) থেকেও নোটিফিকেশন স্ক্রিন খোলার জন্য গ্লোবালি এক্সপোজ করা হলো
+      window.openNotifScreen = openScreen;
+
       updateBadge();
     })();
   </script>
@@ -3344,6 +3357,13 @@
     // Click a bottom-nav item -> smooth scroll to matching app-menu section
     navItems.forEach(function(item){
       item.addEventListener('click', function(){
+        // "নোটিফিকেশন" আইটেম হলে সেকশনে স্ক্রল না করে নোটিফিকেশন স্ক্রিন খুলুন
+        if(item.id === 'bottomNavNotif'){
+          if(typeof window.openNotifScreen === 'function'){
+            window.openNotifScreen();
+          }
+          return;
+        }
         var targetId = item.getAttribute('data-target');
         var targetEl = document.getElementById(targetId);
         if(!targetEl) return;
@@ -3916,8 +3936,12 @@
     navNotifLink.addEventListener('click', function(e){
       e.preventDefault();
       closeNavDrawer();
-      var bellEl = document.getElementById('notifBell');
-      if(bellEl) bellEl.click();
+      if(typeof window.openNotifScreen === 'function'){
+        window.openNotifScreen();
+      } else {
+        var bellEl = document.getElementById('notifBell');
+        if(bellEl) bellEl.click();
+      }
     });
   }
 
@@ -5005,6 +5029,17 @@
   menuItems.forEach(item => {
     item.addEventListener('click', function(e) {
       e.stopPropagation();
+      
+      // নোটিফিকেশন আইটেম হলে পেজ পরিবর্তন না করে নোটিফিকেশন স্ক্রিন খুলুন
+      if(this.id === 'navNotifLink2') {
+        closeMenu();
+        setTimeout(() => {
+          if(typeof window.openNotifScreen === 'function') {
+            window.openNotifScreen();
+          }
+        }, 175);
+        return;
+      }
       
       const link = this.getAttribute('data-link');
       if(link) {
