@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নবীজি সা. এর জীবনী</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+
+              @font-face{
+    font-family:'Kalpurush';
+    src:url('nobiji/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header .header-content {
+            flex: 1;
+        }
+
+        header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            display: none;
+            padding: 0 10px;
+        }
+
+        .back-btn.show {
+            display: block;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .intro-section {
+            background-color: white;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .intro-section h2 {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .intro-section h2 i {
+            color: #27ae60;
+            font-size: 24px;
+        }
+
+        .intro-section p {
+            font-size: 15px;
+            color: #555;
+            text-align: justify;
+        }
+
+        .options-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin: 30px 0 20px 0;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .options-title i {
+            color: #e74c3c;
+            font-size: 22px;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            padding: 0 20px;
+        }
+
+        .option-card {
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .option-card:hover {
+            background-color: #ecf0f1;
+        }
+
+        .option-icon {
+            width: 50px;
+            height: 50px;
+            background-color: #3498db;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .option-card:nth-child(2) .option-icon {
+            background-color: #27ae60;
+        }
+
+        .option-card:nth-child(3) .option-icon {
+            background-color: #e74c3c;
+        }
+
+        .option-card:nth-child(4) .option-icon {
+            background-color: #f39c12;
+        }
+
+        .option-card:nth-child(5) .option-icon {
+            background-color: #9b59b6;
+        }
+
+        .option-text h3 {
+            font-size: 16px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .option-text p {
+            font-size: 13px;
+            color: #7f8c8d;
+        }
+
+        .sub-page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .chapters-list {
+            padding: 0 20px;
+        }
+
+        .chapter-item {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .chapter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px 0;
+        }
+
+        .chapter-header:hover {
+            opacity: 0.8;
+        }
+
+        .chapter-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .toggle-icon {
+            font-size: 18px;
+            color: #7f8c8d;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-icon.open {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 0;
+            color: #3498db;
+            cursor: pointer;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f0f0;
+            transition: color 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            color: #2980b9;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .content-page {
+            padding: 20px;
+        }
+
+        .content-page h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+
+        .content-page .content-text {
+            background-color: white;
+            padding: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: justify;
+            line-height: 1.8;
+            color: #555;
+            font-size: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            header {
+                padding: 25px 15px;
+                margin-bottom: 20px;
+            }
+
+            header h1 {
+                font-size: 24px;
+            }
+
+            .intro-section {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .intro-section p {
+                font-size: 14px;
+            }
+
+            .options-title {
+                font-size: 16px;
+                padding: 0 15px;
+                margin: 20px 0 15px 0;
+            }
+
+            .options-grid {
+                padding: 0 15px;
+                gap: 12px;
+            }
+
+            .option-card {
+                padding: 18px;
+                gap: 12px;
+            }
+
+            .option-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+
+            .option-text h3 {
+                font-size: 15px;
+            }
+
+            .option-text p {
+                font-size: 12px;
+            }
+
+            .sub-page-title {
+                font-size: 18px;
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+
+            .chapters-list {
+                padding: 0 15px;
+            }
+
+            .chapter-item {
+                padding: 15px;
+                margin-bottom: 12px;
+            }
+
+            .chapter-title {
+                font-size: 15px;
+            }
+
+            .content-page {
+                padding: 15px;
+            }
+
+            .content-page h1 {
+                font-size: 18px;
+            }
+
+            .content-page .content-text {
+                padding: 20px;
+                font-size: 14px;
+            }
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #7f8c8d;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <button class="back-btn" id="backBtn">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="header-content">
+            <h1>নবীজি সা. এর জীবনী</h1>
+            <p>হযরত মুহাম্মদ সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- মূল পেজ -->
+        <div id="mainPage" class="page active">
+            <div class="intro-section">
+                <h2>
+                    <i class="fas fa-book"></i>
+                    পরিচয়
+                </h2>
+                <p>হযরত মুহাম্মদ সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম ইসলাম ধর্মের প্রবর্তক এবং সর্বশেষ নবী ও রাসূল। তিনি আরবের মক্কা নগরে জন্মগ্রহণ করেন এবং সমগ্র মানবতার জন্য আল্লাহর বার্তা নিয়ে আসেন। তার জীবন ছিল সততা, দয়া এবং ন্যায়বিচারের অনন্য নিদর্শন।</p>
+            </div>
+
+            <div class="options-title">
+                <i class="fas fa-list"></i>
+                গুরুত্বপূর্ণ বিষয়সমূহ
+            </div>
+
+            <div class="options-grid">
+                <div class="option-card" data-page="sirat">
+                    <div class="option-icon">
+                        <i class="fas fa-scroll"></i>
+                    </div>
+                    <div class="option-text">
+                        <h3>সিরাতুন নাবী সা.</h3>
+                        <p>নবী সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম এর সম্পূর্ণ জীবনী এবং তার প্রচেষ্টার বিবরণ।</p>
+                    </div>
+                </div>
+
+                <div class="option-card" data-page="shamail">
+                    <div class="option-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="option-text">
+                        <h3>শামায়েলুন নবী সা.</h3>
+                        <p>নবীর সা. চারিত্রিক বৈশিষ্ট্য, গুণাবলী এবং নৈতিক শিক্ষা সম্পর্কে আলোচনা।</p>
+                    </div>
+                </div>
+
+                <div class="option-card" data-page="dalaail">
+                    <div class="option-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="option-text">
+                        <h3>দালায়েলুন নবী সা.</h3>
+                        <p>নবীত্বের প্রমাণ এবং অলৌকিক নিদর্শনসমূহ যা তার সত্যতার সাক্ষ্য বহন করে।</p>
+                    </div>
+                </div>
+
+                <div class="option-card" data-page="khasa">
+                    <div class="option-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <div class="option-text">
+                        <h3>খাসাইসুন নবী সা.</h3>
+                        <p>নবী সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম এর বিশেষ অধিকার এবং অনন্য গুণাবলী সম্পর্কে জ্ঞান।</p>
+                    </div>
+                </div>
+
+                <div class="option-card" data-page="books">
+                    <div class="option-icon">
+                        <i class="fas fa-library"></i>
+                    </div>
+                    <div class="option-text">
+                        <h3>নবী সম্পর্কিত বই</h3>
+                        <p>নবী সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম সম্পর্কে লিখিত গুরুত্বপূর্ণ ইসলামিক গ্রন্থসমূহ।</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- সিরাতুন নাবী সা. পেজ -->
+        <div id="siratPage" class="page">
+            <div class="sub-page-title">সিরাতুন নাবী সা.</div>
+            <div class="chapters-list" id="siratChapters"></div>
+        </div>
+
+        <!-- শামায়েলুন নবী সা. পেজ -->
+        <div id="shamailPage" class="page">
+            <div class="sub-page-title">শামায়েলুন নবী সা.</div>
+            <div class="chapters-list" id="shamailChapters"></div>
+        </div>
+
+        <!-- দালায়েলুন নবী সা. পেজ -->
+        <div id="dalaailPage" class="page">
+            <div class="sub-page-title">দালায়েলুন নবী সা.</div>
+            <div class="chapters-list" id="dalaailChapters"></div>
+        </div>
+
+        <!-- খাসাইসুন নবী সা. পেজ -->
+        <div id="khasaPage" class="page">
+            <div class="sub-page-title">খাসাইসুন নবী সা.</div>
+            <div class="chapters-list" id="khasaChapters"></div>
+        </div>
+
+        <!-- নবী সম্পর্কিত বই পেজ -->
+        <div id="booksPage" class="page">
+            <div class="sub-page-title">নবী সম্পর্কিত বই</div>
+            <div class="chapters-list" id="booksChapters"></div>
+        </div>
+
+        <!-- কন্টেন্ট পেজ -->
+        <div id="contentPage" class="page">
+            <div class="content-page">
+                <h1 id="contentTitle"></h1>
+                <div class="content-text" id="contentText"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>সমস্ত প্রশংসা আল্লাহর জন্য যিনি সকল জগতের রব</p>
+    </footer>
+
+    <script>
+        // ডেটা স্ট্রাকচার
+        const contentData = {
+            sirat: {
+                title: 'সিরাতুন নাবী সা.',
+                chapters: [
+                    { name: 'বৈশিষ্ট্য ও বংশ পরিচয়', topics: ['জন্ম স্থান', 'বংশ তালিকা', 'জন্মের সময়', 'শারীরিক বৈশিষ্ট্য'] },
+                    { name: 'শৈশব ও যৌবন', topics: ['মাতৃ দুধ পান', 'অভিভাবকদের সাথে সম্পর্ক', 'ব্যবসায়িক জীবন', 'বিবাহ'] },
+                    { name: 'নবুওয়তের আগমন', topics: ['প্রথম ওহি', 'দাওয়াতের শুরু', 'প্রথম মুসলিমরা', 'মক্কার বিরোধিতা'] },
+                    { name: 'হিজরত', topics: ['মদিনায় যাত্রা', 'আনসার ও মুহাজির', 'মদিনার সনদ', 'প্রথম মসজিদ'] },
+                    { name: 'বিভিন্ন যুদ্ধ', topics: ['বদর যুদ্ধ', 'উহুদ যুদ্ধ', 'খন্দক যুদ্ধ', 'খাইবার অভিযান'] }
+                ]
+            },
+            shamail: {
+                title: 'শামায়েলুন নবী সা.',
+                chapters: [
+                    { name: 'নৈতিক গুণাবলী', topics: ['সততা ও সত্যবাদিতা', 'আমানত রক্ষা', 'ন্যায়পরায়ণতা', 'দয়া ও মমতা'] },
+                    { name: 'সামাজিক আচরণ', topics: ['পরিবার পরিজনের সাথে আচরণ', 'প্রতিবেশীদের সাথে সম্পর্ক', 'শিষ্যদের সাথে মেওয়াশি', 'গরীব ও অসহায়দের প্রতি দায়বদ্ধতা'] },
+                    { name: 'শারীরিক বৈশিষ্ট্য', topics: ['উচ্চতা ও আকৃতি', 'চেহারার বর্ণনা', 'পোশাক পরিধান', 'সুগন্ধি ব্যবহার'] },
+                    { name: 'দৈনন্দিন জীবন', topics: ['খাদ্য অভ্যাস', 'নিদ্রার পদ্ধতি', 'ব্যক্তিগত পরিচর্যা', 'অবকাশ যাপন'] },
+                    { name: 'শিক্ষণ পদ্ধতি', topics: ['কোরআন শিক্ষা', 'হাদিস শিক্ষা', 'আচরণগত শিক্ষা', 'প্রশ্নের উত্তর দেওয়ার পদ্ধতি'] }
+                ]
+            },
+            dalaail: {
+                title: 'দালায়েলুন নবী সা.',
+                chapters: [
+                    { name: 'পূর্ববর্তী নবীদের সুসংবাদ', topics: ['তাওরাতে উল্লেখ', 'ইনজিলে উল্লেখ', 'অন্যান্য গ্রন্থে উল্লেখ', 'পূর্ববর্তী নবীদের বার্তা'] },
+                    { name: 'অলৌকিক নিদর্শন', topics: ['চাঁদ দ্বিখণ্ডিত হওয়া', 'বৃক্ষের সাড়া দেওয়া', 'পাথরের অভিবাদন', 'প্রাণীদের কথা বলা'] },
+                    { name: 'কোরআনের মুজিযা', topics: ['ভাষাগত সৌন্দর্য', 'বৈজ্ঞানিক তথ্য', 'অদৃশ্য বিষয়ের বর্ণনা', 'ভবিষ্যদ্বাণী'] },
+                    { name: 'সাহাবীদের সাক্ষ্য', topics: ['সাহাবীদের ঈমান', 'তাদের ত্যাগ', 'তাদের প্রশংসাপত্র', 'ঐতিহাসিক বর্ণনা'] },
+                    { name: 'ঐতিহাসিক প্রমাণ', topics: ['প্রাচীন লেখকদের বর্ণনা', 'অধর্মী লেখকদের স্বীকৃতি', 'প্রত্নতাত্ত্বিক প্রমাণ', 'ঐতিহাসিক ঘটনা'] }
+                ]
+            },
+            khasa: {
+                title: 'খাসাইসুন নবী সা.',
+                chapters: [
+                    { name: 'নবী হওয়ার বৈশিষ্ট্য', topics: ['সর্বশেষ নবী', 'সর্বজনীন রাসূল', 'আখলাকের শিক্ষক', 'আল-আমীন উপাধি'] },
+                    { name: 'বিশেষ সম্মাননা', topics: ['আল-মিরাজ', 'তারাবীহ নামাজ', 'জুমার নামাজ', 'ঈদের নামাজ'] },
+                    { name: 'অনন্য অধিকার', topics: ['সন্তানদের পরিচয়', 'স্ত্রীদের সংখ্যা', 'দ্রুত বিবাহের অনুমতি', 'যৌহর সম্পর্কে বিধান'] },
+                    { name: 'ইন্টারসেশন', topics: ['শেষ দিনে শাফাআত', 'জান্নাতের নেতৃত্ব', 'আল-কাওসার', 'সর্বোচ্চ আসন'] },
+                    { name: 'আধ্যাত্মিক বিশেষত্ব', topics: ['পাঁচটি জিনিস বিশেষ দেওয়া', 'কোরআনের মাধ্যমে আলোকিত', 'হৃদয়ের দৃষ্টি', 'অন্তর্দৃষ্টির জ্ঞান'] }
+                ]
+            },
+            books: {
+                title: 'নবী সম্পর্কিত বই',
+                chapters: [
+                    { name: 'সিরাত গ্রন্থ', topics: ['সীরাত ইবন হিশাম', 'মাগাজী আল-ওয়াকিদী', 'সীরাত ইবন সা\'দ', 'তারিখ আল-ত্বাবারী'] },
+                    { name: 'শামায়েল গ্রন্থ', topics: ['শামায়েল আল-ত্বিরমিজী', 'আল-খাসায়েস', 'কিতাব আল-মান্যাকিব', 'সুবুল আল-হুদা'] },
+                    { name: 'হাদিস সংগ্রহ', topics: ['সহিহ আল-বুখারী', 'সহিহ মুসলিম', 'সুনান আত-তিরমিজী', 'সুনান ইবন মাজাহ'] },
+                    { name: 'আধুনিক গবেষণা গ্রন্থ', topics: ['মুহাম্মাদের জীবন - মাহমুদ আবু রায়াহ', 'নবী জীবন - ইউসুফ আল-কারাদাবী', 'রাহিক আল-মাখতুম - সফিউর রহমান', 'মুহাম্মাদ ও তার সময় - মুহাম্মাদ ইসমাইল'] },
+                    { name: 'বিশেষায়িত গবেষণা', topics: ['পরিবার পরিকল্পনা', 'আর্থনীতিক নীতি', 'রাজনৈতিক ব্যবস্থা', 'আন্তর্জাতিক সম্পর্ক'] }
+                ]
+            }
+        };
+
+        // কন্টেন্ট মিনি ডেটা
+        const miniContent = {
+            sirat: {
+                '১': 'মদিনা মুনাওয়ারা ছিল নবীজি সাল্লাল্লাহু আলাইহি ওয়াসাল্লামের জন্মস্থান। তবে তিনি মক্কা শরীফে বেড়ে উঠেছিলেন। তার পবিত্র জন্ম হিজরীকাল অনুযায়ী হয়েছিল।',
+                '২': 'শৈশবে নবীজি সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম হালিমা আস-সাদিয়ার কাছে লালিত-পালিত হন। তিনি দেশব্যাপী পরিচিত ছিলেন একজন সৎ ব্যবসায়ী হিসেবে।',
+                '৩': 'নবুওয়তের আগমন ছিল সবচেয়ে গুরুত্বপূর্ণ মুহূর্ত। এই সময় আল্লাহ তাকে নির্বাচন করেন সমগ্র মানবতার জন্য বার্তা নিয়ে আসতে।',
+                '৪': 'হিজরত ছিল ইসলামের ইতিহাসে একটি যুগান্তকারী ঘটনা। এর মাধ্যমে মদিনায় গড়ে উঠে প্রথম ইসলামী রাষ্ট্র।',
+                '৫': 'বিভিন্ন যুদ্ধ ও অভিযান নবীজির নেতৃত্বে পরিচালিত হয় ইসলাম প্রতিষ্ঠার জন্য এবং মানুষের স্বাধীনতা নিশ্চিত করতে।'
+            },
+            shamail: {
+                '১': 'নবীজি সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম ছিলেন সততা ও সত্যবাদিতার প্রতীক। তাকে আরব সমাজ আল-আমীন বলে আখ্যায়িত করতো।',
+                '২': 'তার সামাজিক আচরণ ছিল অত্যন্ত মার্জিত ও শিষ্টাচারপূর্ণ। পরিবারের সদস্য থেকে শুরু করে সকলের সাথে তার সম্পর্ক ছিল হৃদয়স্পর্শী।',
+                '৩': 'তার শারীরিক বৈশিষ্ট্য ছিল মনোমুগ্ধকর। তিনি ছিলেন মাঝারি উচ্চতার, পবিত্র মুখমণ্ডল ছিল উজ্জ্বল ও দীপ্তিমান।',
+                '৪': 'দৈনন্দিন জীবনে তিনি ছিলেন অত্যন্ত সাধারণ। কখনো তিনি বিলাসবহুল জীবনযাপন পছন্দ করেননি।',
+                '৫': 'তার শিক্ষণ পদ্ধতি ছিল অত্যন্ত কার্যকর ও হৃদয়গ্রাহী। তিনি প্রতিটি শিক্ষার্থীর মন ও মানসিকতা বুঝে শিক্ষা প্রদান করতেন।'
+            },
+            dalaail: {
+                '১': 'তাওরাত ও ইনজিলে নবীজি সাল্লাল্লাহু আলাইহি ওয়াসাল্লামের আগমনের সুসংবাদ দেওয়া হয়েছে। পূর্ববর্তী নবীরা তার আসার কথা বলেছিলেন।',
+                '২': 'চাঁদ দ্বিখণ্ডিত হওয়া ছিল একটি প্রকাশ্য নিদর্শন। হাজার হাজার মানুষ এই অলৌকিক ঘটনা প্রত্যক্ষ করেছিল।',
+                '৩': 'কোরআন মজিদ নিজেই সর্ববৃহৎ মুজিযা। এর ভাষাগত সৌন্দর্য ও বৈজ্ঞানিক তথ্য অতুলনীয়।',
+                '৪': 'সাহাবীরা ছিলেন সেরা সাক্ষী। তারা তাদের জীবন ও সম্পদ নবীজির জন্য কুরবান করেছেন।',
+                '৫': 'ঐতিহাসিক প্রমাণ থেকে স্পষ্ট যে নবীজি সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম ছিলেন সত্যিকারের নবী ও রাসূল।'
+            },
+            khasa: {
+                '১': 'নবীজি সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম ছিলেন সর্বশেষ নবী এবং সর্বজনীন রাসূল। তার পরে আর কোনো নবী আসবেন না।',
+                '२': 'আল-মিরাজ ছিল একটি অসাধারণ অভিজ্ঞতা যেখানে তিনি আল্লাহর সাথে সরাসরি কথা বলেছেন।',
+                '३': 'তাকে বিশেষ অধিকার দেওয়া হয়েছে যা অন্য কোনো নবীকে দেওয়া হয়নি।',
+                '४': 'কিয়ামতের দিন তিনি সমস্ত মানুষের জন্য শাফাআত করবেন এবং জান্নাতে তার বিশেষ অবস্থান থাকবে।',
+                '५': 'তার আধ্যাত্মিক শক্তি ছিল অসীম এবং তার প্রভাব ছিল সর্বজনীন।'
+            },
+            books: {
+                '१': 'সিরাত ইবন হিশাম হলো নবীজির জীবনী সম্পর্কে সবচেয়ে সম্মানিত গ্রন্থ। এটি সংগৃহীত হয়েছে ইবন হিশাম দ্বারা।',
+                '२': 'শামায়েল আল-ত্বিরমিজী হলো নবীজির চারিত্রিক গুণাবলীর বিশদ বর্ণনা।',
+                '३': 'সহিহ আল-বুখারী ও সহিহ মুসলিম হলো সবচেয়ে বিশ্বস্ত হাদিস সংগ্রহ।',
+                '४': 'আধুনিক লেখকরা নবীজির জীবনী সম্পর্কে অনেক গবেষণামূলক গ্রন্থ রচনা করেছেন।',
+                '५': 'বিশেষায়িত গবেষণায় নবীজির বিভিন্ন দিক নিয়ে আলোচনা করা হয়েছে বিস্তারিতভাবে।'
+            }
+        };
+
+        let currentPage = 'main';
+        let navigationStack = ['main'];
+
+        // পেজ নেভিগেশন ফাংশন
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            const pageMap = {
+                'main': 'mainPage',
+                'sirat': 'siratPage',
+                'shamail': 'shamailPage',
+                'dalaail': 'dalaailPage',
+                'khasa': 'khasaPage',
+                'books': 'booksPage',
+                'content': 'contentPage'
+            };
+            document.getElementById(pageMap[pageName]).classList.add('active');
+            currentPage = pageName;
+            
+            const backBtn = document.getElementById('backBtn');
+            if (pageName === 'main') {
+                backBtn.classList.remove('show');
+            } else {
+                backBtn.classList.add('show');
+            }
+        }
+
+        // চ্যাপ্টার লিস্ট তৈরি করা
+        function createChaptersList(pageKey) {
+            const data = contentData[pageKey];
+            let html = '';
+            
+            data.chapters.forEach((chapter, index) => {
+                const chapterId = `${pageKey}-chapter-${index}`;
+                html += `
+                    <div class="chapter-item">
+                        <div class="chapter-header" onclick="toggleDropdown('${chapterId}')">
+                            <span class="chapter-title">${chapter.name}</span>
+                            <span class="toggle-icon" id="${chapterId}-icon">
+                                <i class="fas fa-chevron-down"></i>
+                            </span>
+                        </div>
+                        <div class="dropdown-menu" id="${chapterId}">
+                            ${chapter.topics.map((topic, topicIndex) => `
+                                <div class="dropdown-item" onclick="showContent('${pageKey}', '${index}', '${topicIndex}', '${topic}')">
+                                    ${topic}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+
+        // ড্রপডাউন টগল করা
+        function toggleDropdown(elementId) {
+            const dropdown = document.getElementById(elementId);
+            const icon = document.getElementById(elementId + '-icon');
+            
+            dropdown.classList.toggle('show');
+            icon.classList.toggle('open');
+        }
+
+        // কন্টেন্ট দেখানো
+        function showContent(pageKey, chapterIndex, topicIndex, topicName) {
+            const title = `${contentData[pageKey].chapters[chapterIndex].name} - ${topicName}`;
+            const topicNumber = String(topicIndex + 1);
+            const content = miniContent[pageKey][topicNumber] || 'বিষয়বস্তু খুব শীঘ্রই আপডেট করা হবে।';
+            
+            document.getElementById('contentTitle').textContent = title;
+            document.getElementById('contentText').textContent = content;
+            
+            showPage('content');
+        }
+
+        // মেইন পেজ অপশন ক্লিক ইভেন্ট
+        document.querySelectorAll('.option-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const pageKey = this.getAttribute('data-page');
+                const pageMap = {
+                    'sirat': 'sirat',
+                    'shamail': 'shamail',
+                    'dalaail': 'dalaail',
+                    'khasa': 'khasa',
+                    'books': 'books'
+                };
+                
+                const page = pageMap[pageKey];
+                
+                // চ্যাপ্টার লিস্ট তৈরি করা
+                const containerMap = {
+                    'sirat': 'siratChapters',
+                    'shamail': 'shamailChapters',
+                    'dalaail': 'dalaailChapters',
+                    'khasa': 'khasaChapters',
+                    'books': 'booksChapters'
+                };
+                
+                document.getElementById(containerMap[page]).innerHTML = createChaptersList(page);
+                
+                navigationStack.push(page);
+                showPage(page);
+            });
+        });
+
+        // ব্যাক বাটন
+        document.getElementById('backBtn').addEventListener('click', function() {
+            navigationStack.pop();
+            const previousPage = navigationStack[navigationStack.length - 1];
+            showPage(previousPage);
+        });
+
+        // প্রাথমিক অবস্থা
+        showPage('main');
+    </script>
+
+
+  <!-- Navbar Loader -->
+<script src="navbar/navbar-loader.js"></script>
+</body>
+</html>

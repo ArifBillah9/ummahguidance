@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ইসলামী খিলাফাত ও সাম্রাজ্যের ইতিহাস</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+                @font-face{
+    font-family:'Kalpurush';
+    src:url('history/fonts/Kalpurush.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            background: white;
+            color: #333;
+            height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .app-wrapper {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url('https://cdn.pixabay.com/photo/2025/05/29/15/28/education-9629691_640.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            color: white;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            min-height: 220px;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 1;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.85);
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-bottom: 10px;
+            align-self: center;
+            font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+            transition: background 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .content {
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .item {
+            background: #f5f5f5;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .item:hover {
+            background: #efefef;
+            transform: translateX(5px);
+        }
+
+        .item-icon {
+            width: 40px;
+            height: 40px;
+            background: #667eea;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .item-description {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .chapter-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .chapter-item:hover {
+            background: #f9f9f9;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .chapter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .chapter-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+        }
+
+        .dropdown-arrow {
+            color: #667eea;
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .chapter-item.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-content {
+            display: none;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+        }
+
+        .chapter-item.active .dropdown-content {
+            display: block;
+        }
+
+        .dropdown-item {
+            background: #f9f9f9;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .dropdown-item:hover {
+            background: #f0f0f0;
+            transform: translateX(5px);
+        }
+
+        .detail-page {
+            background: white;
+        }
+
+        .detail-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .detail-subtitle {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .detail-text {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                min-height: 180px;
+            }
+
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .content {
+                padding: 12px;
+            }
+
+            .item {
+                padding: 12px;
+                gap: 10px;
+            }
+
+            .item-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+
+            .item-title {
+                font-size: 14px;
+            }
+
+            .item-description {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <div class="header">
+            <button class="back-button" id="backBtn" onclick="goBack()" style="display: none;">
+                <i class="fas fa-arrow-left"></i> ফিরে যান
+            </button>
+            <h1 id="headerTitle">ইসলামী খিলাফাত ও সাম্রাজ্যের ইতিহাস</h1>
+            <p id="headerSubtitle">বিশ্ব ইতিহাসের গুরুত্বপূর্ণ সাম্রাজ্যসমূহ</p>
+        </div>
+
+        <div class="content">
+            <!-- মূল পৃষ্ঠা -->
+            <div id="mainPage" class="page active">
+                <div class="items-grid" id="mainItemsGrid"></div>
+            </div>
+
+            <!-- খিলাফাত বিস্তারিত পৃষ্ঠা -->
+            <div id="khaLifaPage" class="page">
+                <div id="chapterContainer"></div>
+            </div>
+
+            <!-- বিস্তারিত বিষয় পৃষ্ঠা -->
+            <div id="detailPage" class="page detail-page">
+                <div id="detailContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // সম্পূর্ণ ডেটা স্ট্রাকচার
+        const khalifatData = {
+            khulafa: {
+                name: 'খুলাফায়ে রাশেদীন',
+                icon: 'fa-crown',
+                desc: '৬৩২-৬৬১ খ্রিস্টাব্দ',
+                chapters: {
+                    chapter1: {
+                        title: 'পরিচয় ও প্রেক্ষাপট',
+                        items: {
+                            item1: {
+                                name: 'খুলাফায়ে রাশেদীনের সংজ্ঞা',
+                                detail: 'খুলাফায়ে রাশেদীন শব্দটি আরবি যা "সঠিক পথের অনুসরণকারী খলিফা" অর্থ বহন করে। এটি ইসলামের প্রথম চার খলিফার যুগকে নির্দেশ করে। এই সময়কাল ইসলামী শাসনের সবচেয়ে বিশুদ্ধ ও ন্যায়ভিত্তিক যুগ হিসেবে বিবেচিত হয়।'
+                            },
+                            item2: {
+                                name: 'প্রতিষ্ঠার কারণ',
+                                detail: 'নবী মুহাম্মাদ (স.) এর মৃত্যুর পর ইসলামী সম্প্রদায়ের একটি নেতার প্রয়োজন দেখা দেয়। মুসলিম উম্মাহ শূরা (পরামর্শ) নীতির মাধ্যমে চার জন মহান ব্যক্তিত্বকে খলিফা নির্বাচন করে। এই চার খলিফা ইসলামী শিক্ষা ও নীতিমালা অনুসরণ করে শাসন করেন।'
+                            },
+                            item3: {
+                                name: 'সময়কাল ও সীমানা',
+                                detail: 'খুলাফায়ে রাশেদীনের সময়কাল ছিল ৬৩২ থেকে ৬৬১ খ্রিস্টাব্দ পর্যন্ত, যা প্রায় ৩০ বছর স্থায়ী ছিল। এই সময়ে ইসলামী সাম্রাজ্য আরব উপদ্বীপ থেকে শুরু করে মধ্যপ্রাচ্য, উত্তর আফ্রিকা ও পারস্যের বিস্তৃত অঞ্চল জয় করে।'
+                            }
+                        }
+                    },
+                    chapter2: {
+                        title: 'চারজন খলিফার জীবনী',
+                        items: {
+                            item1: {
+                                name: 'আবু বকর (৬৩২-৬৩৪)',
+                                detail: 'আবু বকর আব্দুল্লাহ ইবন আবি কুহাফা ছিলেন নবীর ঘনিষ্ঠ সঙ্গী এবং প্রথম খলিফা। তিনি মাত্র দুই বছর খলিফা ছিলেন কিন্তু এই সময়ে অনেক গুরুত্বপূর্ণ কাজ সম্পন্ন করেন। তিনি কুরআন সংগ্রহ করার নির্দেশ দেন এবং অনেক মুরতাদকে দমন করেন।'
+                            },
+                            item2: {
+                                name: 'উমর ইবন খাত্তাব (৬৩৪-৬৪৪)',
+                                detail: 'উমর ছিলেন দ্বিতীয় খলিফা এবং ইসলামী ইতিহাসের সবচেয়ে প্রভাবশালী ব্যক্তিদের একজন। তার শাসনকালে সাম্রাজ্যের সীমানা উল্লেখযোগ্যভাবে বৃদ্ধি পায়। তিনি দিওয়ান ব্যবস্থা প্রবর্তন করেন এবং ন্যায়বিচারের জন্য বিখ্যাত।'
+                            },
+                            item3: {
+                                name: 'উসমান ইবন আফফান (৬৪৪-৬৫৬)',
+                                detail: 'উসমান তৃতীয় খলিফা ছিলেন এবং কুরআনের একটি সুসংগত কপি তৈরির জন্য পরিচিত। তার শাসনকাল প্রথম দিকে সফল ছিল কিন্তু পরবর্তীতে অভ্যন্তরীণ বিদ্রোহের সম্মুখীন হন। তিনি বিদ্রোহীদের হাতে নিহত হন।'
+                            },
+                            item4: {
+                                name: 'আলী ইবন আবি তালিব (৬৫৬-৬৬১)',
+                                detail: 'আলী চতুর্থ খলিফা এবং নবীর চাচাত ভাই ছিলেন। তার খিলাফতকাল অত্যন্ত সংকটময় ছিল কারণ অনেক গোষ্ঠী তার বিরুদ্ধে বিদ্রোহ করে। তিনি ন্যায় ও সততার জন্য প্রসিদ্ধ ছিলেন এবং অবশেষে একজন খারিজি দ্বারা নিহত হন।'
+                            }
+                        }
+                    },
+                    chapter3: {
+                        title: 'রাজনৈতিক ও সামরিক অর্জন',
+                        items: {
+                            item1: {
+                                name: 'সাম্রাজ্যের সম্প্রসারণ',
+                                detail: 'খুলাফায়ে রাশেদীনের সময়ে ইসলামী সাম্রাজ্য দ্রুত সম্প্রসারিত হয়। প্রথমে আরব পেনিনসুলার বিভিন্ন অংশ জয় করা হয় এবং তারপর বাইজান্টাইন ও পারসিয়ান সাম্রাজ্যের বিরুদ্ধে অভিযান পরিচালিত হয়। এই সময়ের মধ্যে সিরিয়া, মিশর, ইরাক ও পারস্য বিজয় করা হয়।'
+                            },
+                            item2: {
+                                name: 'গুরুত্বপূর্ণ যুদ্ধ',
+                                detail: 'এই যুগে অনেক গুরুত্বপূর্ণ যুদ্ধ সংঘটিত হয় যার মধ্যে ইয়ারমুক, কাদিসিয়া, নিহাওয়ান্দ ও হারা প্রধান। এই যুদ্ধগুলি ইসলামী ইতিহাসের মোড় পরিবর্তন করে এবং বাইজান্টাইন ও পারসিয়ান শক্তি দুর্বল করে।'
+                            },
+                            item3: {
+                                name: 'শাসন ব্যবস্থা',
+                                detail: 'খলিফারা একটি কেন্দ্রীভূত কিন্তু ন্যায়ভিত্তিক শাসন ব্যবস্থা স্থাপন করেন। তারা সূরা শূরা মেনে চলে শূরা পদ্ধতিতে সিদ্ধান্ত গ্রহণ করেন। বিভিন্ন প্রদেশে গভর্নর নিয়োগ করা হয় এবং কেন্দ্র থেকে তাদের নিয়ন্ত্রণ করা হয়।'
+                            }
+                        }
+                    },
+                    chapter4: {
+                        title: 'সাংস্কৃতিক ও সামাজিক অবদান',
+                        items: {
+                            item1: {
+                                name: 'ধর্মীয় শিক্ষা ও প্রশিক্ষণ',
+                                detail: 'এই যুগে ইসলামী জ্ঞান ও শিক্ষার ভিত্তি স্থাপিত হয়। হাদিস সংগ্রহ ও সংরক্ষণ শুরু হয়। কুরআন শিক্ষার জন্য বিশেষ গুরুত্ব দেওয়া হয়। অনেক সাহাবী মদিনায় শিক্ষা কেন্দ্র স্থাপন করেন।'
+                            },
+                            item2: {
+                                name: 'সামাজিক সেবা',
+                                detail: 'খলিফারা দরিদ্রদের জন্য বিশেষ যত্ন নেন। জাকাত ও সাদাকার ব্যবস্থা সুবিন্যস্ত করা হয়। রোগী সেবা ও অনাথদের লালন-পালনের ব্যবস্থা করা হয়। সমাজে সাম্যতা নিশ্চিত করার জন্য বিভিন্ন ব্যবস্থা গ্রহণ করা হয়।'
+                            },
+                            item3: {
+                                name: 'আইনি উন্নয়ন',
+                                detail: 'এই সময়ে ইসলামী আইনের ভিত্তি মজবুত হয়। কুরআন ও সুন্নাহ অনুযায়ী আইন প্রণয়ন করা হয়। কিয়াস (সামঞ্জস্য) ও ইজমা (সর্বসম্মতি) নীতির প্রয়োগ শুরু হয়। আইনের সামনে সবাই সমান এই নীতি প্রতিষ্ঠিত হয়।'
+                            }
+                        }
+                    }
+                }
+            },
+
+            umayyah: {
+                name: 'উমাইয়্যা খিলাফাত',
+                icon: 'fa-flag',
+                desc: '৬৬১-৭৫০ খ্রিস্টাব্দ',
+                chapters: {
+                    chapter1: {
+                        title: 'উমাইয়্যা খিলাফাতের ইতিহাস',
+                        items: {
+                            item1: {
+                                name: 'উৎপত্তি ও প্রতিষ্ঠা',
+                                detail: 'উমাইয়্যা খিলাফাত প্রতিষ্ঠিত হয়েছিল মুআবিয়া ইবন আবি সুফিয়ানের দ্বারা ৬৬১ খ্রিস্টাব্দে। তিনি ছিলেন আলী ইবন আবি তালিবের সাথে দীর্ঘ সংগ্রামের পরবর্তী খলিফা। উমাইয়্যা পরিবার আগে থেকেই প্রভাবশালী ছিল এবং তারা একটি শক্তিশালী প্রশাসন ব্যবস্থা প্রতিষ্ঠা করে।'
+                            },
+                            item2: {
+                                name: 'সাম্রাজ্যের বিস্তৃতি',
+                                detail: 'উমাইয়্যা খিলাফাত তার সর্বোচ্চ সময়ে স্পেন থেকে ভারত পর্যন্ত বিস্তৃত ছিল। এটি তিনটি মহাদেশ (এশিয়া, আফ্রিকা ও ইউরোপ) জুড়ে বিস্তৃত ছিল। সাম্রাজ্যের রাজধানী ছিল দামেস্ক এবং এটি ছিল শিয়া ও খারিজিদের বিরুদ্ধে একটি শক্তিশালী সুন্নি রাষ্ট্র।'
+                            },
+                            item3: {
+                                name: 'মূল সম্প্রসারণ',
+                                detail: 'উমাইয়্যাদের অধীনে সাম্রাজ্য দক্ষিণে আফ্রিকা পর্যন্ত এবং উত্তরে ককেশাস পর্যন্ত বিস্তৃত হয়। পশ্চিমে তারা উত্তর আফ্রিকা জয় করে এবং স্পেনে প্রবেশ করে। পূর্বে তারা সিন্ধু নদ পর্যন্ত পৌঁছায় এবং মধ্য এশিয়া নিয়ন্ত্রণ করে।'
+                            }
+                        }
+                    },
+                    chapter2: {
+                        title: 'গুরুত্বপূর্ণ খলিফা',
+                        items: {
+                            item1: {
+                                name: 'মুআবিয়া ইবন আবি সুফিয়ান',
+                                detail: 'মুআবিয়া উমাইয়্যা খলিফাতের প্রতিষ্ঠাতা এবং প্রথম খলিফা। তিনি দক্ষ প্রশাসক এবং কূটনীতিজ্ঞ ছিলেন। তার সময়ে নৌ বাহিনী শক্তিশালী করা হয় এবং বিজান্টাইন সাম্রাজ্যের বিরুদ্ধে অভিযান পরিচালিত হয়।'
+                            },
+                            item2: {
+                                name: 'আব্দুল মালিক ইবন মারওয়ান',
+                                detail: 'আব্দুল মালিক ছিলেন এক অসাধারণ খলিফা যিনি প্রশাসনিক সংস্কার সাধন করেন। তিনি আরবি ভাষা ও মুদ্রা নীতি প্রবর্তন করেন। তার সময়ে সাম্রাজ্য স্থিতিশীলতা অর্জন করে এবং সাংস্কৃতিক উন্নতি হয়।'
+                            },
+                            item3: {
+                                name: 'আল-ওয়ালিদ ইবন আব্দুল মালিক',
+                                detail: 'আল-ওয়ালিদ উমাইয়্যা খিলাফাতের সবচেয়ে সফল খলিফাদের একজন। তার সময়ে সাম্রাজ্য সর্বোচ্চ সম্প্রসারণ অর্জন করে। তিনি স্থাপত্য ও সংস্কৃতিতে উল্লেখযোগ্য অবদান রাখেন এবং আল-আকসা মসজিদ নির্মাণ করেন।'
+                            }
+                        }
+                    },
+                    chapter3: {
+                        title: 'সাংস্কৃতিক অবদান',
+                        items: {
+                            item1: {
+                                name: 'স্থাপত্য ও নির্মাণ',
+                                detail: 'উমাইয়্যা যুগে ইসলামী স্থাপত্যের একটি বিশেষ ধরন বিকশিত হয়। কুবা্ত আল-রক (ডোম অফ দ্য রক) এবং আল-আকসা মসজিদ এই যুগের বিখ্যাত নির্মাণ। উমাইয়্যা প্রাসাদ ও মসজিদের স্থাপত্য বিশ্বখ্যাত হয়ে ওঠে।'
+                            },
+                            item2: {
+                                name: 'আরবি ভাষা ও সাহিত্য',
+                                detail: 'এই যুগে আরবি ভাষা সাম্রাজ্যের সরকারি ভাষা হয়ে ওঠে। আরবি পেয়োটেট্রি ও সাহিত্য এই সময়ে উন্নতি করে। ইবন আব্বাস ও অন্যান্য পণ্ডিত হাদিস ও তাফসির রচনা করেন।'
+                            },
+                            item3: {
+                                name: 'বৈজ্ঞানিক উন্নয়ন',
+                                detail: 'উমাইয়্যা যুগে গ্রীক বিজ্ঞান ও দর্শনের সাথে ইসলামী জ্ঞানের সংমিশ্রণ শুরু হয়। আল-হাজ্জাজ ইবন মাতার ও অন্যরা গ্রীক গ্রন্থ অনুবাদ করেন। জ্যোতির্বিদ্যা ও গণিতে উল্লেখযোগ্য অগ্রগতি হয়।'
+                            }
+                        }
+                    }
+                }
+            },
+
+            abbasid: {
+                name: 'আব্বাসী খিলাফাত',
+                icon: 'fa-book',
+                desc: '৭৫০-১২৫৮ খ্রিস্টাব্দ',
+                chapters: {
+                    chapter1: {
+                        title: 'আব্বাসী খিলাফাতের প্রতিষ্ঠা',
+                        items: {
+                            item1: {
+                                name: 'বিপ্লব ও উত্থান',
+                                detail: 'আব্বাসী বিপ্লব ছিল একটি বড় রাজনৈতিক পরিবর্তন যা উমাইয়্যা খিলাফাতকে উৎখাত করেছিল। এই বিপ্লবের নেতৃত্ব দিয়েছিলেন নবীর চাচা আব্বাসের বংশধররা। বাগদাদ যুদ্ধে উমাইয়্যা শক্তি পরাজিত হয় এবং আব্বাসী শাসন প্রতিষ্ঠিত হয়।'
+                            },
+                            item2: {
+                                name: 'নতুন রাজধানী - বাগদাদ',
+                                detail: 'দ্বিতীয় খলিফা আল-মনসুর বাগদাদ শহর প্রতিষ্ঠা করেন। এটি হয়ে ওঠে বিশ্বের সবচেয়ে বড় শহর এবং জ্ঞান-বিজ্ঞানের কেন্দ্র। বাগদাদের অবস্থান টাইগ্রিস নদীর ধারে ব্যবসা-বাণিজ্যের জন্য আদর্শ ছিল।'
+                            },
+                            item3: {
+                                name: 'প্রথম দিকের সম্প্রসারণ',
+                                detail: 'আব্বাসীরা দ্রুত তাদের সাম্রাজ্য সম্প্রসারণ করে। তারা পূর্বে তালাসের যুদ্ধে চীনা শক্তিকে পরাজিত করে। উত্তরে ককেশাস এবং দক্ষিণে আরব উপদ্বীপ নিয়ন্ত্রণ করে।'
+                            }
+                        }
+                    },
+                    chapter2: {
+                        title: 'স্বর্ণযুগ ও বৈজ্ঞানিক বিপ্লব',
+                        items: {
+                            item1: {
+                                name: 'জ্ঞানের বাড়ি - বাইত আল-হিকমাহ',
+                                detail: 'খলিফা আল-মামুন একটি বিশাল লাইব্রেরি ও গবেষণা কেন্দ্র প্রতিষ্ঠা করেন। এখানে গ্রীক, পারসিয়ান, ভারতীয় ও আরবি বিজ্ঞানের গ্রন্থাদি সংগৃহীত ও অনুবাদ করা হয়। এটি হয়ে ওঠে মধ্যযুগীয় বিশ্বের সবচেয়ে গুরুত্বপূর্ণ বৌদ্ধিক প্রতিষ্ঠান।'
+                            },
+                            item2: {
+                                name: 'গণিত ও জ্যোতির্বিদ্যা',
+                                detail: 'আল-খোয়ারিজমি বীজগণিত ও অ্যালগরিদম আবিষ্কার করেন। আল-ফারাবি ও ইবন সিনা দর্শন ও বিজ্ঞানে বৈপ্লবিক অবদান রাখেন। জ্যোতির্বিদ্যায় আরবি বিজ্ঞানীরা নক্ষত্র তালিকা প্রণয়ন করেন।'
+                            },
+                            item3: {
+                                name: 'চিকিৎসা ও প্রযুক্তি',
+                                detail: 'আল-রাজি একজন বিখ্যাত চিকিৎসক যিনি অসংখ্য চিকিৎসা গ্রন্থ রচনা করেন। ইসলামী যুগে হাসপাতাল ও চিকিৎসা বিদ্যালয় প্রতিষ্ঠিত হয়। প্রযুক্তিতে কাগজ শিল্প, ছাপাখানা ও যন্ত্রপাতিতে উন্নতি হয়।'
+                            }
+                        }
+                    }
+                }
+            },
+
+            mughal: {
+                name: 'মুঘল সাম্রাজ্য',
+                icon: 'fa-gopuram',
+                desc: '১৫২৬-১৮৫৭ খ্রিস্টাব্দ',
+                chapters: {
+                    chapter1: {
+                        title: 'মুঘল সাম্রাজ্যের প্রতিষ্ঠা',
+                        items: {
+                            item1: {
+                                name: 'বাবর ও প্রতিষ্ঠা',
+                                detail: 'বাবর (জহির আল-দিন মুহাম্মাদ) ১৫২৬ সালে প্যানিপতের যুদ্ধে দিল্লির সুলতান ইব্রাহিম লোদিকে পরাজিত করে মুঘল সাম্রাজ্য প্রতিষ্ঠা করেন। তিনি ছিলেন তৈমুর লঙ্গের বংশধর এবং একজন অভিজ্ঞ সামরিক নেতা।'
+                            },
+                            item2: {
+                                name: 'সাম্রাজ্যের বিস্তার',
+                                detail: 'মুঘল সাম্রাজ্য ভারতীয় উপমহাদেশের বৃহত্তম অংশ জুড়ে বিস্তৃত ছিল। এটি আধুনিক ভারত, পাকিস্তান, বাংলাদেশ, আফগানিস্তান ও নেপালের অংশ অন্তর্ভুক্ত করেছিল। সাম্রাজ্যের রাজধানী ছিল দিল্লি এবং পরবর্তীতে আগ্রা।'
+                            },
+                            item3: {
+                                name: 'প্রাথমিক সমস্যা',
+                                detail: 'বাবর ও তার পুত্র হুমায়ুনকে অনেক সমস্যার সম্মুখীন হতে হয়। দেশীয় রাজপুত শাসক ও সুর সাম্রাজ্য তাদের বিরোধিতা করে। কিন্তু আকবরের আগমনে এই সমস্যা সমাধান হয় এবং সাম্রাজ্য শক্তিশালী হয়।'
+                            }
+                        }
+                    },
+                    chapter2: {
+                        title: 'আকবরের যুগ - সাম্রাজ্যের শিখর',
+                        items: {
+                            item1: {
+                                name: 'আকবর - মহান খলিফা',
+                                detail: 'আকবর ছিলেন মুঘল সাম্রাজ্যের সবচেয়ে মহান সম্রাট। তিনি রাজপুত নীতি গ্রহণ করে তাদের সাথে সম্পর্ক উন্নত করেন এবং বিবাহের মাধ্যমে জোট গড়েন। তার শাসনকালে সাম্রাজ্য সর্বোচ্চ সমৃদ্ধি অর্জন করে।'
+                            },
+                            item2: {
+                                name: 'প্রশাসনিক সংস্কার',
+                                detail: 'আকবর একটি কেন্দ্রীভূত প্রশাসন ব্যবস্থা প্রতিষ্ঠা করেন। তিনি "মানসাবদারি" ব্যবস্থা প্রবর্তন করেন যা সামরিক বাহিনী ও প্রশাসনে বিপ্লব ঘটায়। ভূমি রাজস্ব ব্যবস্থাতে আকবর উল্লেখযোগ্য সংস্কার করেন।'
+                            },
+                            item3: {
+                                name: 'ধর্মীয় নীতি ও সহিষ্ণুতা',
+                                detail: 'আকবর ধর্মীয় সহিষ্ণুতার নীতি অনুসরণ করেন এবং হিন্দু প্রজাদের সাথে সমান আচরণ নিশ্চিত করেন। তিনি জিজিয়া কর রহিত করেন এবং একটি অন্তর্ভুক্তিমূলক সমাজ গড়ার চেষ্টা করেন। বিভিন্ন ধর্মের পণ্ডিতদের আমন্ত্রণ জানিয়ে ধর্মীয় আলোচনা অনুষ্ঠান করেন।'
+                            }
+                        }
+                    },
+                    chapter3: {
+                        title: 'সংস্কৃতি ও স্থাপত্য',
+                        items: {
+                            item1: {
+                                name: 'স্থাপত্য - তাজমহল',
+                                detail: 'মুঘল স্থাপত্য বিশ্বখ্যাত এবং তাজমহল এর শিখর। শাহজাহান তার প্রিয় স্ত্রী মুমতাজ মহলের জন্য এই মারমারে তৈরি সমাধি নির্মাণ করান। এটি ইসলামী স্থাপত্যের একটি অনন্য উদাহরণ এবং বিশ্ব ঐতিহ্যের অংশ।'
+                            },
+                            item2: {
+                                name: 'চিত্রকলা ও শিল্পকলা',
+                                detail: 'মুঘল যুগে পারসিয়ান শৈলীর সাথে ভারতীয় শৈলীর সমন্বয়ে একটি অনন্য চিত্রকলা ধরন বিকাশ হয়। মুঘল চিত্রশিল্পীরা প্রাণী, উদ্যান, দরবার ও ঐতিহাসিক দৃশ্য তুলে ধরেন। ক্যালিগ্রাফি ও পরিশোধিত কাজে বিশেষ দক্ষতা লাভ করেন।'
+                            },
+                            item3: {
+                                name: 'সাহিত্য ও সংস্কৃতি',
+                                detail: 'মুঘল দরবার সাহিত্যের পৃষ্ঠপোষক ছিল। পারসিয়ান ও আরবি ভাষায় অনেক গ্রন্থ রচিত হয়। আবুল ফজল "আইন-ই-আকবরি" রচনা করেন যা মুঘল প্রশাসন ও সংস্কৃতির বিস্তারিত বর্ণনা দেয়। সংগীত ও নৃত্যও মুঘল দরবারে বিকাশ লাভ করে।'
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        // পৃষ্ঠা পরিচালনা
+        let currentState = {
+            page: 'main',
+            selectedKhalifa: null,
+            selectedChapter: null,
+            selectedItem: null
+        };
+
+        // মূল পৃষ্ঠা লোড করা
+        function loadMainPage() {
+            const grid = document.getElementById('mainItemsGrid');
+            grid.innerHTML = '';
+            
+            Object.keys(khalifatData).forEach(key => {
+                const khalifa = khalifatData[key];
+                const item = document.createElement('div');
+                item.className = 'item';
+                item.onclick = () => showKhalifaPage(key);
+                
+                item.innerHTML = `
+                    <div class="item-icon"><i class="fas ${khalifa.icon}"></i></div>
+                    <div class="item-info">
+                        <div class="item-title">${khalifa.name}</div>
+                        <div class="item-description">${khalifa.desc}</div>
+                    </div>
+                `;
+                
+                grid.appendChild(item);
+            });
+        }
+
+        // খিলাফাত পৃষ্ঠা দেখানো
+        function showKhalifaPage(khalifaKey) {
+            currentState.page = 'khalifa';
+            currentState.selectedKhalifa = khalifaKey;
+            
+            const khalifa = khalifatData[khalifaKey];
+            document.getElementById('headerTitle').textContent = khalifa.name;
+            document.getElementById('headerSubtitle').textContent = khalifa.desc;
+            document.getElementById('backBtn').style.display = 'flex';
+            
+            // মূল পৃষ্ঠা লুকাও
+            document.getElementById('mainPage').classList.remove('active');
+            document.getElementById('detailPage').classList.remove('active');
+            
+            // অধ্যায় পৃষ্ঠা দেখাও
+            const chapterContainer = document.getElementById('chapterContainer');
+            chapterContainer.innerHTML = '';
+            
+            Object.keys(khalifa.chapters).forEach(chapterKey => {
+                const chapter = khalifa.chapters[chapterKey];
+                const chapterDiv = document.createElement('div');
+                chapterDiv.className = 'chapter-item';
+                
+                const itemsHTML = Object.keys(chapter.items).map(itemKey => {
+                    const item = chapter.items[itemKey];
+                    return `
+                        <div class="dropdown-item" onclick="showDetail('${khalifaKey}', '${chapterKey}', '${itemKey}')">
+                            ${item.name}
+                        </div>
+                    `;
+                }).join('');
+                
+                chapterDiv.innerHTML = `
+                    <div class="chapter-header" onclick="toggleChapter(event)">
+                        <div class="chapter-title">${chapter.title}</div>
+                        <div class="dropdown-arrow"><i class="fas fa-chevron-down"></i></div>
+                    </div>
+                    <div class="dropdown-content">
+                        ${itemsHTML}
+                    </div>
+                `;
+                
+                chapterContainer.appendChild(chapterDiv);
+            });
+            
+            document.getElementById('khaLifaPage').classList.add('active');
+        }
+
+        // বিস্তারিত পৃষ্ঠা দেখানো
+        function showDetail(khalifaKey, chapterKey, itemKey) {
+            currentState.page = 'detail';
+            currentState.selectedKhalifa = khalifaKey;
+            currentState.selectedChapter = chapterKey;
+            currentState.selectedItem = itemKey;
+            
+            const khalifa = khalifatData[khalifaKey];
+            const chapter = khalifa.chapters[chapterKey];
+            const item = chapter.items[itemKey];
+            
+            const detailContent = document.getElementById('detailContent');
+            detailContent.innerHTML = `
+                <div class="detail-title">${item.name}</div>
+                <div class="detail-text">${item.detail}</div>
+            `;
+            
+            document.getElementById('khaLifaPage').classList.remove('active');
+            document.getElementById('detailPage').classList.add('active');
+        }
+
+        // ড্রপডাউন টগল
+        function toggleChapter(event) {
+            event.preventDefault();
+            const header = event.target.closest('.chapter-header');
+            const chapter = header.closest('.chapter-item');
+            chapter.classList.toggle('active');
+        }
+
+        // ফিরে যাওয়া
+        function goBack() {
+            if (currentState.page === 'detail') {
+                showKhalifaPage(currentState.selectedKhalifa);
+            } else if (currentState.page === 'khalifa') {
+                document.getElementById('backBtn').style.display = 'none';
+                document.getElementById('headerTitle').textContent = 'ইসলামী খিলাফাত ও সাম্রাজ্যের ইতিহাস';
+                document.getElementById('headerSubtitle').textContent = 'বিশ্ব ইতিহাসের গুরুত্বপূর্ণ সাম্রাজ্যসমূহ';
+                
+                document.getElementById('khaLifaPage').classList.remove('active');
+                document.getElementById('detailPage').classList.remove('active');
+                document.getElementById('mainPage').classList.add('active');
+                
+                currentState.page = 'main';
+                currentState.selectedKhalifa = null;
+            }
+        }
+
+        // প্রাথমিক লোডিং
+        loadMainPage();
+    </script>
+
+
+
+  <!-- Navbar Loader -->
+<script src="navbar/navbar-loader.js"></script>
+</body>
+</html>
