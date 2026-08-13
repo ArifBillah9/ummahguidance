@@ -366,7 +366,7 @@ const pageIndicator = document.getElementById('pageIndicator');
 async function loadQuranPdf() {
   try {
     /* PDF URL — স্থানীয় বা রিমোট উভয়ই হতে পারে */
-    const pdfUrl = 'quran.pdf'; /* একই ফোল্ডারে থাকতে হবে */
+    const pdfUrl = 'Emdadia-Hafezi-Quran.pdf'; /* একই ফোল্ডারে থাকতে হবে */
     
     pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
     totalPages = pdfDoc.numPages;
