@@ -1403,6 +1403,9 @@
   </button>
   <h1 class="m-title" id="mTitle">কুরআন</h1>
   <div class="m-appbar-actions">
+    <button class="m-icon-btn" id="mTilawatBtn" aria-label="তিলাওয়াত">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>
+    </button>
     <button class="m-icon-btn" id="mBookmarkBtn" aria-label="বুকমার্ক">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
     </button>
@@ -1446,6 +1449,7 @@
   </a>
   <div class="nav-links">
     <a class="current" id="navQuranLink">কুরআন</a>
+    <a id="navTilawatLink">তিলাওয়াত</a>
     <a id="navHadithLink">হাদীস</a>
     <a>নামাজের সময়</a>
     <a>মাসায়েল</a>
@@ -1457,6 +1461,9 @@
   <div class="nav-actions">
     <button class="nav-btn donate">🎁 ডোনেশন</button>
     <button class="nav-btn download">ডাউনলোড ↗</button>
+    <button class="nav-icon-btn" id="navTilawatBtn" title="তিলাওয়াত">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 8l6 4-6 4V8z" fill="currentColor" stroke="none"/></svg>
+    </button>
     <button class="nav-icon-btn">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       <span class="nav-dot"></span>
@@ -1808,6 +1815,21 @@
     <span style="width:32px;"></span>
   </div>
   <div class="bm-body" id="bmBody"></div>
+</div>
+
+<!-- ============ তিলাওয়াত (TILAWAT) PAGE ============
+     Loaded in an isolated iframe so its own full-page CSS/JS never collides
+     with the কুরআন page's styles/scripts. This lets a single page (this file)
+     serve as the entry point for both কুরআন এবং তিলাওয়াত. -->
+<div id="tilawatPageView" style="display:none; position:fixed; inset:0; z-index:200; background:#fdfaf3; flex-direction:column;">
+  <div class="tp-appbar">
+    <button class="m-back" id="tilawatBackBtn" title="ফিরে যান">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <h1 class="m-title">তিলাওয়াত</h1>
+    <span style="width:32px;"></span>
+  </div>
+  <iframe id="tilawatFrame" title="তিলাওয়াত" style="flex:1; width:100%; border:none; display:block;"></iframe>
 </div>
 
 <!-- ============ 'MORE' BOTTOM SHEET (mimics native app screenshot) ============ -->
@@ -2634,6 +2656,7 @@ function showListing(){
   if(typeof stopAyahAudioPlayback === 'function') stopAyahAudioPlayback();
   readerView.style.display = 'none';
   hideHadithViews();
+  closeTilawatView();
   heroSection.style.display = '';
   viewTabsEl.style.display = '';
   listingMain.style.display = '';
@@ -2642,6 +2665,41 @@ function showListing(){
   mPanel.style.display = '';
   window.scrollTo(0,0);
 }
+
+/* ---------- তিলাওয়াত (TILAWAT) overlay ---------- */
+const tilawatPageView = document.getElementById('tilawatPageView');
+const tilawatFrame = document.getElementById('tilawatFrame');
+let tilawatFrameLoaded = false;
+
+function openTilawatView(){
+  if(typeof stopAyahAudioPlayback === 'function') stopAyahAudioPlayback();
+  if(!tilawatFrameLoaded){
+    tilawatFrame.src = 'tilawat.html';
+    tilawatFrameLoaded = true;
+  }
+  readerView.style.display = 'none';
+  hideHadithViews();
+  heroSection.style.display = 'none';
+  viewTabsEl.style.display = 'none';
+  listingMain.style.display = 'none';
+  siteFooter.style.display = 'none';
+  mAppbar.style.display = 'none';
+  mPanel.style.display = 'none';
+  bookmarksPageView.style.display = 'none';
+  tafsirPageView.style.display = 'none';
+  tafsirSelectPageView.style.display = 'none';
+  tilawatPageView.style.display = 'flex';
+  window.scrollTo(0,0);
+}
+
+function closeTilawatView(){
+  tilawatPageView.style.display = 'none';
+}
+
+document.getElementById('navTilawatBtn').addEventListener('click', openTilawatView);
+document.getElementById('mTilawatBtn').addEventListener('click', openTilawatView);
+document.getElementById('navTilawatLink').addEventListener('click', openTilawatView);
+document.getElementById('tilawatBackBtn').addEventListener('click', showListing);
 
 function openReader(mode, num){
   heroSection.style.display = 'none';
