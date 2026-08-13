@@ -1412,9 +1412,9 @@
   </button>
   <h1 class="m-title" id="mTitle">কুরআন</h1>
   <div class="m-appbar-actions">
-    <button class="m-icon-btn" id="mTilawatBtn" aria-label="তিলাওয়াত">
+    <a href="/tilawat" class="m-icon-btn" aria-label="তিলাওয়াত">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v6m0 6v4m5.09-8.56L17.6 7.4M7.91 16.64l1.41-1.41M18.34 12c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6 6 2.69 6 6z"/></svg>
-    </button>
+    </a>
     <button class="m-icon-btn" id="mBookmarkBtn" aria-label="বুকমার্ক">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
     </button>
@@ -1458,7 +1458,7 @@
   </a>
   <div class="nav-links">
     <a class="current" id="navQuranLink">কুরআন</a>
-    <a id="navTilawatLink" href="/tilawat">🎙️ তিলাওয়াত</a>
+    <a href="/tilawat">🎙️ তিলাওয়াত</a>
     <a id="navHadithLink">হাদীস</a>
     <a>নামাজের সময়</a>
     <a>মাসায়েল</a>
@@ -1490,7 +1490,7 @@
       <input id="searchInput" type="text" placeholder="সূরার নাম লিখে খুঁজুন... (বাংলা বা আরবি)">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
     </div>
-    <a href="tilawat.html" class="tilawat-link">🎙️ তিলাওয়াত শুনুন</a>
+    <a href="/tilawat" class="tilawat-link">🎙️ তিলাওয়াত শুনুন</a>
   </div>
 </header>
 
@@ -4761,11 +4761,6 @@ function closeBookmarksPage(){
 
 mBookmarkBtn.addEventListener('click', openBookmarksPage);
 bmBackBtn.addEventListener('click', closeBookmarksPage);
-
-// তিলাওয়াত বাটন ক্লিক করলে tilawat.html এ নেভিগেট করে
-document.getElementById('mTilawatBtn').addEventListener('click', function(){
-  window.location.href = 'tilawat.html';
-});
 
 // Wire the real "বুকমার্ক" toggle in both the per-ayah action row and the ayah tap sheet
 // to persistent storage (they previously only flipped a CSS class).
