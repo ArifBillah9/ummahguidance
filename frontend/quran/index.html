@@ -37,28 +37,347 @@
     min-height:100vh;
   }
   
-  /* Smart Header - Hide on scroll down, show on scroll up */
-  .r-appbar {
+  /* Smart Header - Hide on scroll down, show on scroll up (বটম নেভবার ছাড়া) */
+  .r-appbar,
+  nav:not(.r-bottomnav),
+  [role="navigation"],
+  [class*="navbar"]:not(.r-bottomnav),
+  [class*="header"]:not(.r-bottomnav) {
+    transition: transform 0.3s ease-in-out !important;
+    transform: translateY(0) !important;
+  }
+  
+  .r-appbar,
+  [role="navigation"][class*="fixed"],
+  nav[class*="fixed"]:not(.r-bottomnav) {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     right: 0 !important;
     width: 100% !important;
     z-index: 1000;
-    transition: transform 0.3s ease-in-out;
-    transform: translateY(0);
+  }
+
+  .r-appbar.hidden,
+  nav.hidden:not(.r-bottomnav),
+  [role="navigation"].hidden,
+  [class*="navbar"].hidden:not(.r-bottomnav),
+  [class*="header"].hidden:not(.r-bottomnav) {
+    transform: translateY(-100%) !important;
   }
   
-  .r-appbar.hidden {
-    transform: translateY(-100%);
+  /* বটম নেভবার সবসময় দৃশ্যমান এবং স্থির থাকবে */
+  .r-bottomnav,
+  #rBottomNav {
+    transform: none !important;
+    transition: none !important;
+  }
+  
+  .r-bottomnav.hidden,
+  #rBottomNav.hidden {
+    transform: none !important;
   }
   
   /* Scrollable content area adjustment */
   .reader-content {
-    padding-top: 70px; /* Header height + buffer */
+    padding-top: 60px; /* Header height + buffer */
   }
   .bn-serif{font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;}
   .ar{font-family:'Amiri Quran','Amiri',serif;}
+
+  /* ============ Hamburger Menu & Sidebar Drawer ============ */
+  .hamburger-btn {
+    position: absolute;
+    left: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: none;
+    color: #2d5f4f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    font-size: 24px;
+  }
+
+  .hamburger-btn:hover {
+    background: #f0f0f0;
+  }
+
+  /* Side Drawer Overlay */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    z-index: 999;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .sidebar-overlay.active {
+    display: block;
+  }
+
+  /* Side Drawer Panel */
+  .sidebar-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    max-width: 320px;
+    height: 100vh;
+    background: white;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar-panel.active {
+    transform: translateX(0);
+  }
+
+  .sidebar-header {
+    background: linear-gradient(135deg, var(--leaf-green), var(--mid-green));
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .sidebar-title {
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+  }
+
+  .sidebar-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+
+  .sidebar-content {
+    flex: 1;
+    overflow: hidden;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+  }
+
+  /* সার্চ বক্স কন্টেইনার */
+  .sidebar-search-wrapper {
+    padding: 14px 16px;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    flex-shrink: 0;
+  }
+
+  .sidebar-search-box {
+    position: relative;
+    margin: 0;
+  }
+
+  .sidebar-search-box input {
+    width: 100%;
+    padding: 11px 14px 11px 40px;
+    border: 1.5px solid var(--line);
+    border-radius: 0;
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background: #fff;
+    color: var(--ink);
+  }
+
+  .sidebar-search-box input:focus {
+    border-color: var(--leaf-green);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(47, 158, 111, 0.12);
+  }
+
+  .sidebar-search-box input::placeholder {
+    color: var(--muted);
+  }
+
+  .sidebar-search-box::before {
+    content: '\f002';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    pointer-events: none;
+    color: var(--muted);
+  }
+
+  /* সূরা লিস্ট কন্টেইনার */
+  .surah-list-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0;
+  }
+
+  .surah-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .surah-item {
+    padding: 13px 16px;
+    margin: 0;
+    border-radius: 0;
+    border-bottom: 1px solid var(--line);
+    border-left: 3px solid transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    transition: background 0.2s ease, border-left-color 0.2s ease, color 0.2s ease;
+    position: relative;
+  }
+
+  .surah-item:last-child {
+    border-bottom: none;
+  }
+
+  .surah-item:active {
+    background: #eef4ee;
+  }
+
+  .surah-item:hover {
+    background: #f4f9f6;
+    color: var(--mid-green);
+    border-left-color: var(--leaf-green);
+  }
+
+  .surah-item.active {
+    background: #e7f3ec;
+    color: var(--mid-green);
+    border-left-color: var(--leaf-green);
+    font-weight: 600;
+  }
+
+  .surah-item-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    background: var(--cream);
+    color: var(--mid-green);
+    border-radius: 0;
+    border: 1px solid var(--line);
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+  }
+
+  .surah-item.active .surah-item-num {
+    background: var(--leaf-green);
+    border-color: var(--leaf-green);
+    color: #fff;
+  }
+
+  .surah-item-name {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .surah-item-name-main {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.3;
+  }
+
+  .surah-item.active .surah-item-name-main {
+    font-weight: 700;
+  }
+
+  .surah-item-name-arabic {
+    font-family: 'Amiri Quran', 'Amiri', serif;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  /* খালি অবস্থা */
+  .surah-list-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--muted);
+    min-height: 200px;
+  }
+
+  .surah-list-empty-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+    opacity: 0.5;
+  }
+
+  .surah-list-empty-text {
+    font-size: 14px;
+    font-family: 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    color: var(--muted);
+  }
+
+  /* স্ক্রল স্টাইলিং */
+  .surah-list-wrapper::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  .surah-list-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .surah-list-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(47, 158, 111, 0.35);
+    border-radius: 0;
+  }
+
+  .surah-list-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(47, 158, 111, 0.6);
+  }
 
   /* Settings Icon Animation */
   .settings-icon:hover {
@@ -1486,7 +1805,7 @@
          header, which is not mobile friendly. This offset (matching
          .reader-content's 70px) pushes the in-flow content (nav-section,
          quick-links, etc.) down to clear the fixed header's height. */
-      padding-top:70px;
+      padding-top:60px;
     }
 
     .m-appbar{
@@ -1608,6 +1927,70 @@
   .audio-player-bar{ display:none; }
   .r-mode-pills{ display:none !important; } /* not part of the target design */
 
+  /* Translation and Recitation Buttons Container */
+  .r-content-mode-buttons {
+    display: flex;
+    gap: 0;
+    padding: 0;
+    background-color: #f0f4f8;
+    justify-content: center;
+    border-bottom: 1px solid #e2ddc9;
+    position: relative;
+  }
+
+  .r-content-mode-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    background-color: transparent;
+    color: #2d5f4f;
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+    text-align: center;
+  }
+
+  .r-content-mode-btn:hover {
+    background-color: #e8f0eb;
+  }
+
+  .r-content-mode-btn.active {
+    color: #166a4f;
+    border-bottom-color: #2f9e6f;
+    background-color: #f7f3e8;
+  }
+
+  /* Back Button Styling */
+  .reader-back-btn {
+    position: absolute;
+    left: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: none;
+    color: #2d5f4f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    font-size: 20px;
+  }
+
+  .reader-back-btn:hover {
+    background: #f0f0f0;
+  }
+
+  .reader-back-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+  }
+
   /* Ornate ayah-number badge, reuses the same scalloped gold ring artwork as
      the surah-list medallions but recoloured per-ayah via CSS mask */
   .ayah-num-orn{
@@ -1658,7 +2041,7 @@
     .r-appbar{
       display:flex; align-items:center; gap:6px; position:sticky; top:0; z-index:60;
       background:var(--deep-teal);
-      color:#fff; padding:12px 14px; box-shadow:0 4px 10px -6px rgba(0,0,0,.35);
+      color:#fff; padding:12px 14px; 
     }
     .r-appbar .m-title{ margin:0; font-size:19px; font-weight:700; }
     .r-appbar .m-back{
@@ -2236,12 +2619,32 @@
 </head>
 <body>
   
+<!-- ============ SIDEBAR DRAWER ============ -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="sidebar-panel" id="sidebarPanel">
+  <div class="sidebar-header">
+    <span class="sidebar-title">সূরাহ তালিকা</span>
+    <button class="sidebar-close" id="sidebarCloseBtn">✕</button>
+  </div>
+  <div class="sidebar-content">
+    <div class="sidebar-search-wrapper">
+      <div class="sidebar-search-box">
+        <input type="text" id="sidebarSearch" placeholder="সূরা খুঁজুন..." />
+      </div>
+    </div>
+    <div class="surah-list-wrapper">
+      <ul class="surah-list" id="surahListSidebar">
+        <!-- সূরা লিস্ট এখানে পপুলেট করা হবে -->
+      </ul>
+    </div>
+  </div>
+</div>
 
 <!-- ============ MOBILE APP HEADER (matches native app screenshot) ============ -->
 <!-- m-fixed-top keeps the appbar + tabs/search/quicklinks stuck to the top together while the সূরা list scrolls underneath -->
 <div class="m-fixed-top" id="mFixedTop">
 <!-- Custom Header -->
-<div class="header r-appbar" id="mAppbar" style="background-color: #fff; padding: 12px 16px; display: flex; justify-content: center; align-items: center; position: relative; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+<div class="header r-appbar" id="mAppbar" style="background-color: #fff; padding: 12px 16px; display: flex; justify-content: center; align-items: center; position: relative;">
   <button class="m-back" id="mBackBtn" style="position: absolute; left: 12px; width: 36px; height: 36px; border-radius: 50%; border: none; background: none; color: #2d5f4f; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0;">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;"><polyline points="15 18 9 12 15 6"></polyline></svg>
   </button>
@@ -2489,11 +2892,11 @@
 <div id="readerView">
 
   <!-- Mobile app-style reader header (matches native app screenshot): back arrow, surah title, search -->
-  <div class="r-appbar header" id="rAppbar" style="background-color: #fff; padding: 12px 16px; display: flex; justify-content: center; align-items: center; position: relative; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
-    <button class="m-back" id="rBackBtn" title="ফিরে যান" style="position: absolute; left: 12px; width: 36px; height: 36px; border-radius: 50%; border: none; background: none; color: #2d5f4f; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;"><polyline points="15 18 9 12 15 6"></polyline></svg>
+  <div class="r-appbar header" id="rAppbar" style="background-color: #fff; padding: 12px 16px; display: flex; justify-content: center; align-items: center; position: relative;">
+    <button class="reader-back-btn" id="readerBackBtn" title="ফিরে যান" style="z-index: 10;">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
     </button>
-    <h1 class="m-title" id="rMobileTitle" style="font-size: 24px; font-weight: 600; color: #2d5f4f; margin: 0;">সূরা</h1>
+    <h1 class="m-title" id="rMobileTitle" style="font-size: 24px; font-weight: 600; color: #2d5f4f; margin: 0;">অনুবাদ</h1>
     <button class="m-icon-btn plain" id="rSearchToggleBtn" title="অনুসন্ধান" style="position: absolute; right: 12px; width: 36px; height: 36px; cursor: pointer; color: #2d5f4f; background: none; border: none; display: flex; align-items: center; justify-content: center; padding: 0;">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width: 19px; height: 19px;"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
     </button>
@@ -2503,6 +2906,15 @@
   <div class="r-mode-pills" id="rModePills">
     <button class="r-mode-pill active" id="rModePillSurah" data-mode="surah">সূরা</button>
     <button class="r-mode-pill" id="rModePillTafsir" data-mode="tafsir">তাফসীর</button>
+  </div>
+
+  <!-- Translation and Recitation Buttons -->
+  <div class="r-content-mode-buttons" id="rContentModeButtons">
+    <button class="hamburger-btn" id="hamburgerBtn" title="মেনু খুলুন" style="z-index: 10; position: absolute; left: 12px;">
+      ☰
+    </button>
+    <button class="r-content-mode-btn active" id="rContentModeBtnTranslation" data-mode="translation">অনুবাদ</button>
+    <button class="r-content-mode-btn" id="rContentModeBtnRecitation" data-mode="recitation">তেলাওয়াত</button>
   </div>
 
   <div class="reader-shell">
@@ -3938,6 +4350,21 @@ document.querySelectorAll('.content-tab').forEach(t=>{
   t.addEventListener('click', ()=>{
     document.querySelectorAll('.content-tab').forEach(b=>b.classList.remove('active'));
     t.classList.add('active');
+    contentMode = t.dataset.mode;
+    if(currentBodyView === 'para') renderJuzBody(currentJuzNum);
+    else renderSurahBody(currentSurahNum);
+  });
+});
+
+// Event listeners for the new translation and recitation buttons
+document.querySelectorAll('.r-content-mode-btn').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.r-content-mode-btn').forEach(b=>b.classList.remove('active'));
+    t.classList.add('active');
+    // Also update the content-tab buttons to sync
+    document.querySelectorAll('.content-tab').forEach(b=>b.classList.remove('active'));
+    const correspondingTab = document.querySelector(`.content-tab[data-mode="${t.dataset.mode}"]`);
+    if(correspondingTab) correspondingTab.classList.add('active');
     contentMode = t.dataset.mode;
     if(currentBodyView === 'para') renderJuzBody(currentJuzNum);
     else renderSurahBody(currentSurahNum);
@@ -6787,15 +7214,257 @@ document.addEventListener('click', (e)=>{
       }
     })();
 
-    // ===================== Smart Header - Hide on Scroll Down, Show on Scroll Up =====================
+    // ===================== Sidebar Drawer with Surah List =====================
     (function(){
-      const header = document.querySelector('.r-appbar');
-      if(!header) return;
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      const sidebarPanel = document.getElementById('sidebarPanel');
+      const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+      const surahListContainer = document.getElementById('surahListSidebar');
+      const sidebarSearch = document.getElementById('sidebarSearch');
+
+      // সূরা তথ্য (Surah Names in Bengali and Arabic)
+      const surahs = [
+        { num: 1, bn: 'আল-ফাতিহা', ar: 'الفاتحة' },
+        { num: 2, bn: 'আল-বাকারা', ar: 'البقرة' },
+        { num: 3, bn: 'আল-ইমরান', ar: 'آل عمران' },
+        { num: 4, bn: 'আন-নিসা', ar: 'النساء' },
+        { num: 5, bn: 'আল-মায়িদা', ar: 'المائدة' },
+        { num: 6, bn: 'আল-আনআম', ar: 'الأنعام' },
+        { num: 7, bn: 'আল-আরাফ', ar: 'الأعراف' },
+        { num: 8, bn: 'আল-আনফাল', ar: 'الأنفال' },
+        { num: 9, bn: 'আত-তাওবা', ar: 'التوبة' },
+        { num: 10, bn: 'ইউনুস', ar: 'يونس' },
+        { num: 11, bn: 'হুদ', ar: 'هود' },
+        { num: 12, bn: 'ইউসুফ', ar: 'يوسف' },
+        { num: 13, bn: 'আর-রাদ', ar: 'الرعد' },
+        { num: 14, bn: 'ইবরাহিম', ar: 'إبراهيم' },
+        { num: 15, bn: 'আল-হিজর', ar: 'الحجر' },
+        { num: 16, bn: 'আন-নাহল', ar: 'النحل' },
+        { num: 17, bn: 'আল-ইসরা', ar: 'الإسراء' },
+        { num: 18, bn: 'আল-কাহফ', ar: 'الكهف' },
+        { num: 19, bn: 'মারিয়াম', ar: 'مريم' },
+        { num: 20, bn: 'তাহা', ar: 'طه' },
+        { num: 21, bn: 'আল-আম্বিয়া', ar: 'الأنبياء' },
+        { num: 22, bn: 'আল-হাজ', ar: 'الحج' },
+        { num: 23, bn: 'আল-মুমিনুন', ar: 'المؤمنون' },
+        { num: 24, bn: 'আন-নুর', ar: 'النور' },
+        { num: 25, bn: 'আল-ফুরকান', ar: 'الفرقان' },
+        { num: 26, bn: 'আশ-শুআরা', ar: 'الشعراء' },
+        { num: 27, bn: 'আন-নামল', ar: 'النمل' },
+        { num: 28, bn: 'আল-কাসাস', ar: 'القصص' },
+        { num: 29, bn: 'আল-আনকাবুত', ar: 'العنكبوت' },
+        { num: 30, bn: 'আর-রুম', ar: 'الروم' },
+        { num: 31, bn: 'লুকমান', ar: 'لقمان' },
+        { num: 32, bn: 'আস-সাজদা', ar: 'السجدة' },
+        { num: 33, bn: 'আল-আহজাব', ar: 'الأحزاب' },
+        { num: 34, bn: 'সাবা', ar: 'سبأ' },
+        { num: 35, bn: 'ফাতির', ar: 'فاطر' },
+        { num: 36, bn: 'ইয়াসিন', ar: 'يس' },
+        { num: 37, bn: 'আস-সাফফাত', ar: 'الصافات' },
+        { num: 38, bn: 'সাদ', ar: 'ص' },
+        { num: 39, bn: 'আজ-জুমার', ar: 'الزمر' },
+        { num: 40, bn: 'গাফির', ar: 'غافر' },
+        { num: 41, bn: 'ফুস্সিলাত', ar: 'فصلت' },
+        { num: 42, bn: 'আশ-শুরা', ar: 'الشورى' },
+        { num: 43, bn: 'আজ-যুখরুফ', ar: 'الزخرف' },
+        { num: 44, bn: 'আদ-দুখান', ar: 'الدخان' },
+        { num: 45, bn: 'আল-জাসিয়া', ar: 'الجاثية' },
+        { num: 46, bn: 'আল-আহকাফ', ar: 'الأحقاف' },
+        { num: 47, bn: 'মুহাম্মাদ', ar: 'محمد' },
+        { num: 48, bn: 'আল-ফাতহ', ar: 'الفتح' },
+        { num: 49, bn: 'আল-হুজুরাত', ar: 'الحجرات' },
+        { num: 50, bn: 'কাফ', ar: 'ق' },
+        { num: 51, bn: 'আজ-জারিয়াত', ar: 'الذاريات' },
+        { num: 52, bn: 'আত-তুর', ar: 'الطور' },
+        { num: 53, bn: 'আন-নাজম', ar: 'النجم' },
+        { num: 54, bn: 'আল-কামার', ar: 'القمر' },
+        { num: 55, bn: 'আর-রাহমান', ar: 'الرحمن' },
+        { num: 56, bn: 'আল-ওয়াকিয়া', ar: 'الواقعة' },
+        { num: 57, bn: 'আল-হাদিদ', ar: 'الحديد' },
+        { num: 58, bn: 'আল-মুজাদিলা', ar: 'المجادلة' },
+        { num: 59, bn: 'আল-হাশর', ar: 'الحشر' },
+        { num: 60, bn: 'আল-মুমতাহিনা', ar: 'الممتحنة' },
+        { num: 61, bn: 'আস-সাফ', ar: 'الصف' },
+        { num: 62, bn: 'আল-জুমা', ar: 'الجمعة' },
+        { num: 63, bn: 'আল-মুনাফিকুন', ar: 'المنافقون' },
+        { num: 64, bn: 'আত-তাগাবুন', ar: 'التغابن' },
+        { num: 65, bn: 'আত-তালাক', ar: 'الطلاق' },
+        { num: 66, bn: 'আত-তাহরিম', ar: 'التحريم' },
+        { num: 67, bn: 'আল-মুলক', ar: 'الملك' },
+        { num: 68, bn: 'আল-কলম', ar: 'القلم' },
+        { num: 69, bn: 'আল-হাক্কা', ar: 'الحاقة' },
+        { num: 70, bn: 'আল-মাআরিজ', ar: 'المعارج' },
+        { num: 71, bn: 'নুহ', ar: 'نوح' },
+        { num: 72, bn: 'আল-জিন', ar: 'الجن' },
+        { num: 73, bn: 'আল-মুজাম্মিল', ar: 'المزمل' },
+        { num: 74, bn: 'আল-মুদ্দাস্সির', ar: 'المدثر' },
+        { num: 75, bn: 'আল-কিয়ামা', ar: 'القيامة' },
+        { num: 76, bn: 'আল-ইনসান', ar: 'الإنسان' },
+        { num: 77, bn: 'আল-মুরসালাত', ar: 'المرسلات' },
+        { num: 78, bn: 'আন-নাবা', ar: 'النبأ' },
+        { num: 79, bn: 'আন-নাজিয়াত', ar: 'النازعات' },
+        { num: 80, bn: 'আবাসা', ar: 'عبس' },
+        { num: 81, bn: 'আত-তাকভির', ar: 'التكوير' },
+        { num: 82, bn: 'আল-ইনফিতার', ar: 'الإنفطار' },
+        { num: 83, bn: 'আল-মুতাফ্ফিফিন', ar: 'المطففين' },
+        { num: 84, bn: 'আল-ইনশিকাক', ar: 'الإنشقاق' },
+        { num: 85, bn: 'আল-বুরুজ', ar: 'البروج' },
+        { num: 86, bn: 'আত-তারিক', ar: 'الطارق' },
+        { num: 87, bn: 'আল-আলা', ar: 'الأعلى' },
+        { num: 88, bn: 'আল-গাশিয়া', ar: 'الغاشية' },
+        { num: 89, bn: 'আল-ফাজর', ar: 'الفجر' },
+        { num: 90, bn: 'আল-বালাদ', ar: 'البلد' },
+        { num: 91, bn: 'আশ-শামস', ar: 'الشمس' },
+        { num: 92, bn: 'আল-লাইল', ar: 'الليل' },
+        { num: 93, bn: 'আদ-দুহা', ar: 'الضحى' },
+        { num: 94, bn: 'আল-ইনশিরাহ', ar: 'الإنشراح' },
+        { num: 95, bn: 'আত-তিন', ar: 'التين' },
+        { num: 96, bn: 'আল-আলাক', ar: 'العلق' },
+        { num: 97, bn: 'আল-কদর', ar: 'القدر' },
+        { num: 98, bn: 'আল-বায়্যিনা', ar: 'البينة' },
+        { num: 99, bn: 'আজ-জিলজাল', ar: 'الزلزلة' },
+        { num: 100, bn: 'আল-আদিয়াত', ar: 'العاديات' },
+        { num: 101, bn: 'আল-কারিয়া', ar: 'القارعة' },
+        { num: 102, bn: 'আত-তাকাসুর', ar: 'التكاثر' },
+        { num: 103, bn: 'আল-আসর', ar: 'العصر' },
+        { num: 104, bn: 'আল-হুমাজা', ar: 'الهمزة' },
+        { num: 105, bn: 'আল-ফিল', ar: 'الفيل' },
+        { num: 106, bn: 'কুরাইশ', ar: 'قريش' },
+        { num: 107, bn: 'আল-মাউন', ar: 'الماعون' },
+        { num: 108, bn: 'আল-কাউসার', ar: 'الكوثر' },
+        { num: 109, bn: 'আল-কাফিরুন', ar: 'الكافرون' },
+        { num: 110, bn: 'আন-নাসর', ar: 'النصر' },
+        { num: 111, bn: 'আল-মাসাদ', ar: 'المسد' },
+        { num: 112, bn: 'আল-ইখলাস', ar: 'الإخلاص' },
+        { num: 113, bn: 'আল-ফালাক', ar: 'الفلق' },
+        { num: 114, bn: 'আন-নাস', ar: 'الناس' }
+      ];
+
+      // সূরা লিস্ট রেন্ডার করুন
+      function renderSurahList(filteredSurahs = surahs) {
+        surahListContainer.innerHTML = '';
+        
+        if (filteredSurahs.length === 0) {
+          surahListContainer.innerHTML = `
+            <div class="surah-list-empty">
+              <div class="surah-list-empty-icon">📖</div>
+              <div class="surah-list-empty-text">কোন সূরা পাওয়া যায়নি</div>
+            </div>
+          `;
+          return;
+        }
+        
+        const fragment = document.createDocumentFragment();
+        filteredSurahs.forEach(surah => {
+          const li = document.createElement('li');
+          li.className = 'surah-item';
+          li.dataset.surahNum = surah.num;
+          li.innerHTML = `
+            <div class="surah-item-num">${surah.num}</div>
+            <div class="surah-item-name">
+              <div class="surah-item-name-main">সূরা ${surah.bn}</div>
+              <div class="surah-item-name-arabic">${surah.ar}</div>
+            </div>
+          `;
+          li.addEventListener('click', function(e) {
+            // পূর্ববর্তী active আইটেম থেকে active ক্লাস সরান
+            const prevActive = surahListContainer.querySelector('.surah-item.active');
+            if (prevActive) {
+              prevActive.classList.remove('active');
+            }
+            // নতুন আইটেমে active ক্লাস যোগ করুন
+            li.classList.add('active');
+            console.log(`সূরা ${surah.num} - ${surah.bn} নির্বাচিত`);
+            // এখানে অন্য অ্যাকশন যোগ করা যেতে পারে
+            setTimeout(() => {
+              closeSidebar();
+            }, 200);
+          });
+          fragment.appendChild(li);
+        });
+        surahListContainer.appendChild(fragment);
+      }
+
+      // সার্চ ফিল্টার - debounce সহ
+      let searchTimeout;
+      sidebarSearch.addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        const searchTerm = e.target.value.toLowerCase();
+        
+        searchTimeout = setTimeout(() => {
+          const filtered = surahs.filter(surah =>
+            surah.bn.toLowerCase().includes(searchTerm) ||
+            surah.ar.includes(searchTerm) ||
+            surah.num.toString().includes(searchTerm)
+          );
+          renderSurahList(filtered);
+        }, 100);
+      });
+
+      // সাইডবার খোলা এবং বন্ধ করার ফাংশন
+      function openSidebar() {
+        sidebarPanel.classList.add('active');
+        sidebarOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeSidebar() {
+        sidebarPanel.classList.remove('active');
+        sidebarOverlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      // ইভেন্ট লিসেনার
+      if(hamburgerBtn) {
+        hamburgerBtn.addEventListener('click', openSidebar);
+      }
+
+      if(sidebarCloseBtn) {
+        sidebarCloseBtn.addEventListener('click', closeSidebar);
+      }
+
+      if(sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+      }
+
+      // Back Button Event Listener
+      const readerBackBtn = document.getElementById('readerBackBtn');
+      if(readerBackBtn) {
+        readerBackBtn.addEventListener('click', () => {
+          window.history.back();
+        });
+      }
+
+      // প্রাথমিক রেন্ডার
+      renderSurahList();
+    })();
+
+    // ===================== Smart Header - Hide on Scroll Down, Show on Scroll Up (সকল নেভবারের জন্য) =====================
+    (function(){
+      // সকল নেভবার এলিমেন্ট খুঁজে বের করুন (বটম নেভবার ছাড়া)
+      const allNavbars = document.querySelectorAll('.r-appbar, [role="navigation"], nav, [class*="navbar"], [class*="header"]');
+      
+      // বটম নেভবার বাদ দিন
+      const navbars = Array.from(allNavbars).filter(navbar => {
+        return !navbar.classList.contains('r-bottomnav') && 
+               navbar.id !== 'rBottomNav' &&
+               !navbar.classList.contains('bottom');
+      });
+      
+      if(navbars.length === 0) return;
       
       let lastScrollTop = 0;
-      let isHidden = false;
-      let scrollTimeout;
       const scrollThreshold = 5; // ন্যূনতম scroll দূরত্ব যা পরিবর্তন ট্রিগার করে
+      const navbarStates = new Map(); // প্রতিটি navbar এর জন্য আলাদা state
+      
+      // প্রতিটি navbar এর জন্য স্টেট ইনিশিয়ালাইজ করুন
+      navbars.forEach((navbar, index) => {
+        navbarStates.set(navbar, { 
+          isHidden: false,
+          index: index 
+        });
+      });
       
       window.addEventListener('scroll', function(){
         const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
@@ -6803,22 +7472,35 @@ document.addEventListener('click', (e)=>{
         // ছোট scroll পরিবর্তন ignore করুন
         if(Math.abs(currentScroll - lastScrollTop) < scrollThreshold) return;
         
-        // যদি উপরে scroll করছেন
-        if(currentScroll < lastScrollTop) {
-          // Header দেখান
-          if(isHidden) {
-            header.classList.remove('hidden');
-            isHidden = false;
+        // প্রতিটি navbar এর স্থিতি আপডেট করুন
+        navbars.forEach(navbar => {
+          const state = navbarStates.get(navbar);
+          
+          // নিশ্চিত করুন navbar fixed/absolute position এ আছে
+          const style = window.getComputedStyle(navbar);
+          if(style.position !== 'fixed' && style.position !== 'absolute') {
+            navbar.style.position = 'fixed';
           }
-        } 
-        // যদি নিচে scroll করছেন
-        else if(currentScroll > 60) { // Header উচ্চতার চেয়ে বেশি scroll
-          // Header লুকান
-          if(!isHidden) {
-            header.classList.add('hidden');
-            isHidden = true;
+          
+          // যদি উপরে scroll করছেন
+          if(currentScroll < lastScrollTop) {
+            // Header দেখান
+            if(state.isHidden) {
+              navbar.classList.remove('hidden');
+              navbar.style.transform = 'translateY(0)';
+              state.isHidden = false;
+            }
+          } 
+          // যদি নিচে scroll করছেন
+          else if(currentScroll > 60) { // Header উচ্চতার চেয়ে বেশি scroll
+            // Header লুকান
+            if(!state.isHidden) {
+              navbar.classList.add('hidden');
+              navbar.style.transform = 'translateY(-100%)';
+              state.isHidden = true;
+            }
           }
-        }
+        });
         
         lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // শীর্ষে negative scroll হতে দিবেন না
       }, false);
