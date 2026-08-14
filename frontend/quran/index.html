@@ -39,6 +39,14 @@
   .bn-serif{font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;}
   .ar{font-family:'Amiri Quran','Amiri',serif;}
 
+  /* Header Hide/Show on Scroll */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    transform-origin: top center;
+  }
+
   /* Settings Icon Animation */
   .settings-icon:hover {
     transform: rotate(90deg);
@@ -3974,8 +3982,7 @@ readerSearch.addEventListener('input', buildReaderList);
 if(rBackBtn) rBackBtn.addEventListener('click', showListing);
 if(rSearchToggleBtn){
   rSearchToggleBtn.addEventListener('click', ()=>{
-    readerSidebar.classList.toggle('mobile-open');
-    if(readerSidebar.classList.contains('mobile-open')) readerSearch.focus();
+    openGlobalSearch();
   });
 }
 if(rBottomNav){
@@ -5910,7 +5917,7 @@ document.addEventListener('click', (e)=>{
             <div class="settings-item-label">কারী / অডিও ম্যানেজার</div>
             <div class="settings-item-desc">কারীদের প্রিভিউ ও সূরা ডাউনলোড পরিচালনা করুন</div>
           </div>
-          <i class="fa-solid fa-chevron-right" style="color:#aaa; font-size:14px;"></i>
+          <i class="#" style="color:#aaa; font-size:14px;"></i>
         </div>
 
         <div class="settings-item">
@@ -6758,6 +6765,106 @@ document.addEventListener('click', (e)=>{
           closeOtherFontDialog();
         });
       }
+    })();
+
+    // ===================== Header Hide/Show on Scroll =====================
+    (function(){
+      const header = document.querySelector('header');
+      let lastScrollTop = 0;
+      let headerHidden = false;
+
+      if(!header) return;
+
+      // Add CSS for smooth transition
+      header.style.transition = 'transform 0.3s ease-in-out';
+
+      window.addEventListener('scroll', function(){
+        const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        
+        // যদি নিচের দিকে স্ক্রল করে তাহলে হেডার লুকাও
+        if(currentScroll > lastScrollTop && currentScroll > 50){
+          if(!headerHidden){
+            header.style.transform = 'translateY(-100%)';
+            headerHidden = true;
+          }
+        } else {
+          // উপরের দিকে স্ক্রল করলে হেডার দেখাও
+          if(headerHidden){
+            header.style.transform = 'translateY(0)';
+            headerHidden = false;
+          }
+        }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+      }, false);
+    })();
+
+    // ===================== URL Routing for Surahs =====================
+    (function(){
+      const surahListEl = document.getElementById('surahList');
+      const contentEl = document.getElementById('content');
+      
+      // Surah data (assuming surahs array is already defined in the page)
+      const surahNames = ['ফাতিহা', 'আল-বাকারা', 'আল-ইমরান', 'আন-নিসা', 'আল-মাইদা'];
+
+      // URL থেকে সূরা নম্বর পান
+      function getCurrentSurahFromUrl(){
+        const match = window.location.pathname.match(/\/quran\/sura\/(\d+)/);
+        return match ? parseInt(match[1]) : null;
+      }
+
+      // সূরা খোলার সময় URL আপডেট করুন
+      function updateUrl(surahNum){
+        const surahName = surahs[surahNum - 1]?.[1] || 'Sura';
+        window.history.pushState(
+          { surah: surahNum }, 
+          `সূরা ${surahName}`,
+          `/quran/sura/${surahNum}`
+        );
+        // localStorage এ সংরক্ষণ করুন
+        localStorage.setItem('lastViewedSurah', surahNum);
+      }
+
+      // সূরা লোড করুন (বিদ্যমান loadSurah ফাংশন ব্যবহার করুন)
+      function loadSurahByNumber(surahNum){
+        if(surahNum >= 1 && surahNum <= surahs.length){
+          if(typeof loadSurah === 'function'){
+            loadSurah(surahNum - 1);
+          }
+          updateUrl(surahNum);
+        }
+      }
+
+      // পৃষ্ঠা লোড হওয়ার সময়
+      window.addEventListener('load', function(){
+        const urlSurah = getCurrentSurahFromUrl();
+        const savedSurah = localStorage.getItem('lastViewedSurah');
+        const surahToLoad = urlSurah || (savedSurah ? parseInt(savedSurah) : 1);
+        
+        loadSurahByNumber(surahToLoad);
+      });
+
+      // ব্রাউজার ব্যাক/ফরোয়ার্ড বাটনের জন্য
+      window.addEventListener('popstate', function(e){
+        if(e.state && e.state.surah){
+          loadSurahByNumber(e.state.surah);
+        }
+      });
+
+      // সূরা লিস্ট আইটেম ক্লিক করার সময়
+      if(surahListEl){
+        surahListEl.addEventListener('click', function(e){
+          const item = e.target.closest('.surah-item, [data-surah-num]');
+          if(item){
+            const surahNum = item.dataset.surahNum || item.getAttribute('data-index');
+            if(surahNum){
+              loadSurahByNumber(parseInt(surahNum) + 1);
+            }
+          }
+        });
+      }
+
+      // Window অবজেক্টে বৈশিষ্ট্য exposed করুন (কনসোল থেকে অ্যাক্সেসের জন্য)
+      window.navigateToSurah = loadSurahByNumber;
     })();
   </script>
 
