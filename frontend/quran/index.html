@@ -7375,8 +7375,10 @@ document.addEventListener('click', (e)=>{
             }
             // নতুন আইটেমে active ক্লাস যোগ করুন
             li.classList.add('active');
-            console.log(`সূরা ${surah.num} - ${surah.bn} নির্বাচিত`);
-            // এখানে অন্য অ্যাকশন যোগ করা যেতে পারে
+            // নির্বাচিত সূরাটি রিডারে লোড করুন এবং r-appbar হেডারে নাম আপডেট করুন
+            if (typeof selectSurah === 'function') {
+              selectSurah(surah.num);
+            }
             setTimeout(() => {
               closeSidebar();
             }, 200);
@@ -7407,6 +7409,18 @@ document.addEventListener('click', (e)=>{
         sidebarPanel.classList.add('active');
         sidebarOverlay.classList.add('active');
         document.body.style.overflow = 'hidden';
+
+        // বর্তমানে পঠিত সূরাটি লিস্টে হাইলাইট ও স্ক্রল করে দেখানো
+        const activeNum = typeof currentSurahNum !== 'undefined' ? currentSurahNum : null;
+        if (activeNum) {
+          const prevActive = surahListContainer.querySelector('.surah-item.active');
+          if (prevActive) prevActive.classList.remove('active');
+          const targetItem = surahListContainer.querySelector(`.surah-item[data-surah-num="${activeNum}"]`);
+          if (targetItem) {
+            targetItem.classList.add('active');
+            targetItem.scrollIntoView({ block: 'center' });
+          }
+        }
       }
 
       function closeSidebar() {
