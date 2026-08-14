@@ -6,6 +6,7 @@
 <title>কুরআনের সূরাসমূহ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&family=Noto+Serif+Bengali:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
 
   @font-face{
@@ -37,6 +38,733 @@
   }
   .bn-serif{font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;}
   .ar{font-family:'Amiri Quran','Amiri',serif;}
+
+  /* Settings Icon Animation */
+  .settings-icon:hover {
+    transform: rotate(90deg);
+    cursor: pointer;
+  }
+
+  /* Settings Modal Overlay */
+  .settings-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .settings-modal-overlay.active {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .settings-modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    max-width: 500px;
+    height: 100vh;
+    background: #f5f5f5;
+    z-index: 9999;
+    overflow-y: auto;
+    display: none;
+    flex-direction: column;
+    animation: slideIn 0.3s ease;
+  }
+
+  .settings-modal.active {
+    display: flex;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  .settings-modal-header {
+    background: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-bottom: 1px solid #e0e0e0;
+    flex-shrink: 0;
+  }
+
+  .settings-modal-back-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    font-size: 20px;
+  }
+
+  .settings-modal-title {
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .settings-modal-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+  }
+
+  .settings-section {
+    margin-bottom: 24px;
+  }
+
+  .settings-section-title {
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--leaf-green);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+  }
+
+  .settings-item {
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #e0e0e0;
+  }
+
+  .settings-item-left {
+    flex: 1;
+  }
+
+  .settings-item-label {
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .settings-item-desc {
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    font-size: 13px;
+    color: #666;
+    margin-top: 4px;
+  }
+
+  .toggle-switch {
+    position: relative;
+    width: 48px;
+    height: 28px;
+    background: #ccc;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.3s;
+    border: none;
+    outline: none;
+    flex-shrink: 0;
+  }
+
+  .toggle-switch.active {
+    background: var(--leaf-green);
+  }
+
+  .toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    transition: left 0.3s;
+  }
+
+  .toggle-switch.active::after {
+    left: 23px;
+  }
+
+  .font-size-selector {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .font-size-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--leaf-green);
+    min-width: 35px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .font-size-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: linear-gradient(to right, #ddd 0%, var(--leaf-green) 50%, #ddd 50%, #ddd 100%);
+    outline: none;
+    -webkit-slider-thumb-appearance: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .font-size-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--leaf-green);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: box-shadow 0.2s;
+  }
+
+  .font-size-slider::-webkit-slider-thumb:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+
+  .font-size-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--leaf-green);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: box-shadow 0.2s;
+  }
+
+  .font-size-slider::-moz-range-thumb:hover {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  }
+
+  .font-size-slider::-moz-range-track {
+    background: transparent;
+    border: none;
+  }
+
+  .font-size-slider::-moz-range-progress {
+    background-color: var(--leaf-green);
+  }
+
+  /* Quick Links Section */
+  .quick-links-container::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .quick-links-container::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+  }
+
+  .quick-links-container::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 10px;
+  }
+
+  .quick-links-container::-webkit-scrollbar-thumb:hover {
+    background: #888;
+  }
+
+  .quick-link-item:hover {
+    background-color: #0e3b31 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(26, 77, 58, 0.25);
+  }
+
+  .quick-link-item:active {
+    transform: translateY(0);
+  }
+
+  .settings-item-clickable {
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .settings-item-clickable:hover {
+    background: #f9f9f9;
+  }
+
+  .settings-item-clickable::after {
+    content: '›';
+    color: #666;
+    font-size: 24px;
+    font-weight: 300;
+    margin-left: auto;
+  }
+
+  /* ---------- Translation Modal ---------- */
+  .translation-modal{
+    z-index:10001;
+  }
+  .translation-overlay{
+    z-index:10000;
+  }
+
+  .translation-section{
+    margin-bottom:32px;
+  }
+
+  .translation-section-title{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:22px;
+    font-weight:700;
+    color:var(--leaf-green);
+    margin-bottom:8px;
+    border-bottom:none;
+    padding-bottom:0;
+  }
+
+  .translation-section-desc{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:14px;
+    color:#666;
+    line-height:1.5;
+    margin-bottom:20px;
+  }
+
+  .translation-lang-label{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:18px;
+    font-weight:700;
+    color:var(--leaf-green);
+    margin-bottom:12px;
+    margin-top:20px;
+    border-bottom:none;
+  }
+
+  .translation-lang-label:first-of-type{
+    margin-top:0;
+  }
+
+  .translation-card{
+    background:white;
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    border:1px solid #e0e0e0;
+  }
+
+  .translation-card-left{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex:1;
+    min-width:0;
+  }
+
+  .translation-checkbox{
+    width:26px;
+    height:26px;
+    border-radius:7px;
+    border:2px solid #ccc;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    background:white;
+    transition:all 0.2s;
+  }
+
+  .translation-checkbox.checked{
+    background:var(--leaf-green);
+    border-color:var(--leaf-green);
+    color:white;
+    font-size:14px;
+  }
+
+  .translation-name-block{
+    min-width:0;
+  }
+
+  .translation-name{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:17px;
+    font-weight:600;
+    color:#333;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .translation-sub{
+    font-family:'Hind Siliguri', sans-serif;
+    font-size:14px;
+    color:#888;
+    margin-top:2px;
+  }
+
+  .translation-card-right{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    flex-shrink:0;
+  }
+
+  .translation-selected-check{
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    background:var(--leaf-green);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    flex-shrink:0;
+  }
+
+  /* ---------- Reciter / Audio Manager Modal ---------- */
+  .reciter-modal{
+    z-index:10001;
+    background:#eef3f1;
+  }
+  .reciter-overlay{
+    z-index:10000;
+  }
+  .reciter-modal .settings-modal-content{
+    padding:0;
+  }
+  .reciter-list{
+    display:flex;
+    flex-direction:column;
+  }
+  .reciter-item{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:16px 18px;
+    background:#eef3f1;
+    border-bottom:1px solid #dfe6e2;
+    cursor:pointer;
+  }
+  .reciter-radio{
+    width:22px;
+    height:22px;
+    border-radius:50%;
+    border:2px solid #9aa8a1;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all 0.2s;
+    background:transparent;
+  }
+  .reciter-radio.selected{
+    border-color:var(--leaf-green);
+  }
+  .reciter-radio.selected::after{
+    content:'';
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:var(--leaf-green);
+  }
+  .reciter-name{
+    flex:1;
+    min-width:0;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:16px;
+    color:#233;
+    line-height:1.4;
+  }
+  .reciter-name.selected{
+    font-weight:700;
+  }
+  .reciter-actions{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    flex-shrink:0;
+  }
+  .reciter-play-btn{
+    width:28px;
+    height:28px;
+    border:none;
+    background:none;
+    color:var(--leaf-green);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    padding:0;
+  }
+  .reciter-play-btn svg{ width:20px; height:20px; }
+  .reciter-chevron{
+    color:var(--leaf-green);
+    font-size:16px;
+    width:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .reciter-loading{
+    text-align:center;
+    padding:18px;
+    color:#888;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:14px;
+  }
+
+  /* ---------- Reciter Detail (Surah Download) Modal ---------- */
+  .reciter-detail-modal{
+    z-index:10002;
+    background:#eef3f1;
+  }
+  .reciter-detail-overlay{
+    z-index:10002;
+  }
+  .reciter-detail-modal .settings-modal-header{
+    justify-content:center;
+    position:relative;
+  }
+  .reciter-detail-modal .settings-modal-back-btn{
+    position:absolute;
+    left:20px;
+  }
+  .reciter-detail-modal .settings-modal-title{
+    font-size:20px;
+    text-align:center;
+    width:100%;
+  }
+  .reciter-detail-modal .settings-modal-content{
+    padding:0;
+  }
+  .reciter-detail-actions{
+    display:flex;
+    gap:12px;
+    padding:16px 18px;
+    background:#eef3f1;
+  }
+  .reciter-detail-btn{
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    padding:13px 10px;
+    border-radius:24px;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    border:none;
+  }
+  .reciter-detail-btn-download{
+    background:var(--leaf-green);
+    color:#fff;
+  }
+  .reciter-detail-btn-delete{
+    background:#fff;
+    color:#c0392b;
+    border:1px solid #ddd;
+  }
+  .reciter-surah-list{
+    display:flex;
+    flex-direction:column;
+  }
+  .reciter-surah-item{
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:16px 18px;
+    background:#eef3f1;
+    border-bottom:1px solid #dfe6e2;
+  }
+  .reciter-surah-num{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:20px;
+    font-weight:700;
+    color:var(--leaf-green);
+    width:26px;
+    flex-shrink:0;
+    text-align:center;
+  }
+  .reciter-surah-name{
+    flex:1;
+    min-width:0;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:17px;
+    color:#233;
+  }
+  .reciter-surah-dl{
+    width:26px;
+    height:26px;
+    border:none;
+    background:none;
+    color:var(--leaf-green);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    padding:0;
+    flex-shrink:0;
+  }
+  .reciter-surah-dl svg{ width:20px; height:20px; }
+  .reciter-surah-dl.downloaded{ color:var(--leaf-green); }
+
+  /* ---------- Arabic Font Style Dialog ---------- */
+  .dialog-overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(20,25,22,0.6);
+    z-index:10003;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .dialog-overlay.active{
+    display:flex;
+  }
+  .dialog-card{
+    background:#eef3f1;
+    border-radius:26px;
+    width:100%;
+    max-width:420px;
+    max-height:85vh;
+    overflow-y:auto;
+    padding:28px 26px 22px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.35);
+    animation:fadeIn 0.2s ease;
+  }
+  .dialog-title{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:26px;
+    font-weight:700;
+    color:var(--leaf-green);
+    margin-bottom:22px;
+  }
+  .dialog-group{
+    margin-bottom:8px;
+  }
+  .dialog-group-title{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:16px;
+    font-weight:700;
+    color:var(--leaf-green);
+    margin-bottom:14px;
+  }
+  .dialog-option{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:12px 0 12px 30px;
+    cursor:pointer;
+  }
+  .dialog-check{
+    width:24px;
+    height:24px;
+    border-radius:50%;
+    flex-shrink:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:var(--leaf-green);
+    color:#fff;
+    font-size:13px;
+  }
+  .dialog-option.selected .dialog-check{
+    display:flex;
+  }
+  .dialog-option-label{
+    font-family:'Amiri','Kalpurush','Hind Siliguri',sans-serif;
+    font-size:18px;
+    color:#333;
+  }
+  .dialog-divider{
+    height:1px;
+    background:#d7ddd6;
+    margin:14px 0 18px;
+  }
+  .dialog-footer{
+    display:flex;
+    gap:12px;
+    margin-top:24px;
+  }
+  .dialog-btn{
+    flex:1;
+    padding:13px 10px;
+    border-radius:24px;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    text-align:center;
+  }
+  .dialog-btn-cancel{
+    background:#eef3f1;
+    color:var(--leaf-green);
+    border:1.5px solid #bcd0c6;
+  }
+  .dialog-btn-save{
+    background:var(--deep-teal);
+    color:#fff;
+    border:none;
+  }
+  .dialog-footer.dialog-footer-end{
+    justify-content:flex-end;
+  }
+  .dialog-footer.dialog-footer-end .dialog-btn{
+    flex:none;
+    padding:13px 28px;
+  }
+
+  .translation-delete-btn{
+    color:#8a1f11;
+    font-size:19px;
+    cursor:pointer;
+    background:none;
+    border:none;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .translation-download-btn{
+    color:var(--leaf-green);
+    font-size:19px;
+    cursor:pointer;
+    background:none;
+    border:none;
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
 
   /* ---------- Header ---------- */
   header.top{
@@ -119,6 +847,39 @@
   }
   .view-tab.active{color:var(--deep-teal);}
   .view-tab.active::after{background:var(--gold);}
+
+  /* ---------- Mobile pill-style view tabs (সূরা / পারা / বিষয় অনুযায়ী) ---------- */
+  .mobile-view-tabs{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    background:var(--mid-green);
+    border-radius:30px;
+    margin:14px 12px 16px;
+    padding:6px;
+  }
+  .mobile-view-tabs .view-tab{
+    flex:1;
+    text-align:center;
+    padding:12px 8px;
+    border-radius:24px;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:15px;
+    font-weight:600;
+    color:rgba(255,255,255,0.8);
+    background:transparent;
+    border:none;
+    cursor:pointer;
+    transition:background .18s, color .18s, box-shadow .18s;
+  }
+  .mobile-view-tabs .view-tab::after{
+    content:none;
+  }
+  .mobile-view-tabs .view-tab.active{
+    background:var(--deep-teal);
+    color:#fff;
+    box-shadow:0 3px 10px -2px rgba(0,0,0,0.35);
+  }
 
   /* ---------- Filter bar ---------- */
   .filter-bar{
@@ -1142,6 +1903,54 @@
   .tp-content .tafsir-footnote{ margin-top:18px; padding-top:14px; border-top:1px dashed var(--line); font-size:13.5px; color:var(--muted); }
   .tp-source{ font-size:12px; color:var(--muted); margin-bottom:18px; }
 
+  /* ---- সূচীপত্র (surah + ayah table-of-contents) modal, opened from the tp-select-btn ---- */
+  .tp-toc-overlay{
+    display:none; flex-direction:column; position:fixed; inset:0; z-index:9990; background:var(--paper);
+  }
+  .tp-toc-overlay.active{ display:flex; }
+  .tp-toc-header{
+    display:flex; align-items:center; justify-content:center; position:relative; flex-shrink:0;
+    padding:16px 16px; border-bottom:1px solid var(--line); background:var(--paper);
+  }
+  .tp-toc-title{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:19px;
+    color:var(--deep-teal);
+  }
+  .tp-toc-close{
+    position:absolute; right:14px; top:50%; transform:translateY(-50%);
+    width:30px; height:30px; border:none; background:none; color:var(--deep-teal);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+  }
+  .tp-toc-close svg{ width:22px; height:22px; }
+  .tp-toc-body{ flex:1; display:flex; overflow:hidden; }
+  .tp-toc-surah-list{ width:46%; overflow-y:auto; background:var(--cream); border-right:1px solid var(--line); }
+  .tp-toc-surah-item{
+    padding:14px 12px; cursor:pointer; border-bottom:1px solid var(--line); transition:background .15s;
+  }
+  .tp-toc-surah-item.active{ background:#d9ece3; }
+  .tp-toc-surah-item:active{ background:#cfe6da; }
+  .tp-toc-surah-name{
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:14.5px;
+    color:var(--deep-teal); line-height:1.4;
+  }
+  .tp-toc-surah-sub{ font-size:12px; color:var(--muted); margin-top:3px; }
+  .tp-toc-ayah-panel{ flex:1; overflow-y:auto; padding:14px; }
+  .tp-toc-ayah-heading{
+    background:#d9ece3; border-radius:10px; padding:11px 10px; text-align:center; margin-bottom:14px;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:14.5px;
+    color:var(--deep-teal);
+  }
+  .tp-toc-ayah-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .tp-toc-ayah-btn{
+    aspect-ratio:1; border-radius:10px; border:1px solid var(--line); background:var(--paper);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:15px;
+    color:var(--deep-teal); transition:background .15s, color .15s;
+  }
+  .tp-toc-ayah-btn.active{ background:var(--mid-green); color:#fff; border-color:transparent; }
+  .tp-toc-ayah-btn:active{ background:var(--cream); }
+  .tp-toc-ayah-btn.active:active{ background:var(--deep-teal); }
+
   /* =======================================================================
      TAFSIR SELECTION PAGE ("তাফসীর নির্বাচন")
      ======================================================================= */
@@ -1406,50 +2215,154 @@
 <!-- ============ MOBILE APP HEADER (matches native app screenshot) ============ -->
 <!-- m-fixed-top keeps the appbar + tabs/search/quicklinks stuck to the top together while the সূরা list scrolls underneath -->
 <div class="m-fixed-top" id="mFixedTop">
-<div class="m-appbar" id="mAppbar">
-  <button class="m-back" id="mBackBtn" aria-label="ফিরুন">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+<!-- Custom Header -->
+<div class="header r-appbar" id="mAppbar" style="background-color: #fff; padding: 12px 16px; display: flex; justify-content: center; align-items: center; position: relative; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+  <button class="m-back" id="mBackBtn" style="position: absolute; left: 12px; width: 36px; height: 36px; border-radius: 50%; border: none; background: none; color: #2d5f4f; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0;">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;"><polyline points="15 18 9 12 15 6"></polyline></svg>
   </button>
-  <h1 class="m-title" id="mTitle">কুরআন</h1>
-  <div class="m-appbar-actions">
-    <a href="/tilawat" class="m-icon-btn" aria-label="তিলাওয়াত">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v6m0 6v4m5.09-8.56L17.6 7.4M7.91 16.64l1.41-1.41M18.34 12c0 3.31-2.69 6-6 6s-6-2.69-6-6 2.69-6 6-6 6 2.69 6 6z"/></svg>
+  <h1 class="m-title" id="mTitle" style="font-size: 24px; font-weight: 600; color: #2d5f4f; margin: 0;">কুরআন</h1>
+  <div class="m-appbar-actions" style="position: absolute; right: 12px; display: flex; align-items: center; gap: 6px;">
+    <button class="settings-icon" style="width: 36px; height: 36px; cursor: pointer; transition: transform 0.3s ease; color: #2d5f4f; background: none; border: none; display: flex; align-items: center; justify-content: center; padding: 0;">
+      <i class="fas fa-cog" style="font-size: 20px; color: #2d5f4f;"></i>
+    </button>
+  </div>
+</div>
+
+<!-- Navigation Section -->
+<style>
+  .nav-section{ padding:18px 12px 14px; background:var(--paper); border-bottom:1px solid var(--line); }
+  .nav-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; max-width:100%; margin:0 auto; border:1px solid var(--line); border-radius:0; }
+  .nav-item{
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:7px;
+    padding:16px 6px; background:var(--paper); border-radius:0; cursor:pointer; text-decoration:none;
+    color:var(--deep-teal); border-right:1px solid var(--line); position:relative; overflow:hidden;
+    transition:background .2s ease, color .2s ease;
+  }
+  .nav-item:last-child{ border-right:none; }
+  .nav-item::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:2px; background:var(--gold);
+    transform:scaleX(0); transform-origin:center; transition:transform .2s ease;
+  }
+  .nav-item:hover{ background:var(--cream); }
+  .nav-item:hover::before{ transform:scaleX(1); }
+  .nav-item .nav-icon{ width:26px; height:26px; color:var(--mid-green); }
+  .nav-item .nav-label{
+    font-size:11.5px; font-weight:600; text-align:center; color:var(--deep-teal); line-height:1.2;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+  }
+</style>
+<div class="nav-section">
+  <div class="nav-grid">
+    <!-- তেলাওয়াত -->
+    <a href="/tilawat" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+      </svg>
+      <span class="nav-label">তেলাওয়াত</span>
     </a>
-    <button class="m-icon-btn" id="mBookmarkBtn" aria-label="বুকমার্ক">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-    </button>
-    <button class="m-icon-btn" id="mSearchIconBtn" aria-label="অনুসন্ধান">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    </button>
+
+    <!-- সর্বশেষ (Last Read) -->
+    <a href="#" id="mLastReadBtn" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="12" cy="12" r="9"></circle>
+        <polyline points="12 7 12 12 15.5 14"></polyline>
+      </svg>
+      <span class="nav-label">সর্বশেষ</span>
+    </a>
+
+    <!-- অনুসন্ধান (Search) -->
+    <a href="#" id="mNavSearchBtn" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <circle cx="11" cy="11" r="8"></circle>
+        <path d="m21 21-4.35-4.35"></path>
+      </svg>
+      <span class="nav-label">অনুসন্ধান</span>
+    </a>
+
+    <!-- বুকমার্ক (Bookmarks) -->
+    <a href="#" id="mBookmarkBtn" class="nav-item">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8">
+        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+      </svg>
+      <span class="nav-label">বুকমার্ক</span>
+    </a>
   </div>
 </div>
 
-<div class="m-panel" id="mPanel">
-  <div class="m-tabs" id="mTabs">
-    <button class="m-tab active" data-view="surah">সূরা</button>
-    <button class="m-tab" data-view="para">পারা</button>
-    <button class="m-tab" data-view="topic">বিষয় অনুযায়ী</button>
-  </div>
-
-  <div class="m-search-wrap">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-    <input id="mSearchInput" type="text" placeholder="সূরার নাম/অর্থ/নম্বর দিয়ে অনুসন্ধান">
-  </div>
-
-  <div class="m-quicklinks" id="mQuickLinksWrap">
-    <div class="m-quicklinks-label">কুইক লিংক</div>
-    <div class="m-quicklinks-row" id="mQuickLinks">
-      <button class="m-quick-pill" data-quick-surah="2">আয়াতুল কুরসী</button>
-      <button class="m-quick-pill" data-quick-surah="18">আল কাহ্‌ফ</button>
-      <button class="m-quick-pill" data-quick-surah="32">আস সেজদাহ</button>
-      <button class="m-quick-pill" data-quick-surah="36">ইয়াসীন</button>
-      <button class="m-quick-pill" data-quick-surah="55">আর-রাহমান</button>
-      <button class="m-quick-pill" data-quick-surah="67">আল-মুলক</button>
-    </div>
+<!-- ফজিলতের সুরা (Virtues of Surahs) Section -->
+<style>
+  .quick-links-section{ padding:18px 12px; background:var(--paper); border-bottom:1px solid var(--line); }
+  .quick-links-title{
+    font-size:13px; font-weight:700; color:var(--deep-teal); margin-bottom:12px; padding:0 4px;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    display:flex; align-items:center; gap:8px;
+  }
+  .quick-links-title::before{ content:""; width:4px; height:14px; background:var(--gold); display:inline-block; }
+  .quick-links-container{
+    display:flex; gap:0; overflow-x:auto; padding:0; -webkit-overflow-scrolling:touch; scroll-behavior:smooth;
+  }
+  .quick-link-item{
+    display:inline-flex; align-items:center; justify-content:center; padding:10px 18px;
+    background:var(--paper); color:var(--deep-teal); border:1px solid var(--line); border-left:none;
+    border-radius:0; text-decoration:none; white-space:nowrap;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:13px; font-weight:600;
+    flex-shrink:0; transition:background .2s ease, color .2s ease;
+  }
+  .quick-link-item:first-child{ border-left:1px solid var(--line); }
+  .quick-link-item:hover{ background:var(--mid-green); color:#fff; }
+</style>
+<div class="quick-links-section" id="quickLinksSection">
+  <div class="quick-links-title">ফজিলতের সুরা</div>
+  <div class="quick-links-container">
+    <a href="#" class="quick-link-item" data-quick-surah="1">আল-ফাতিহা</a>
+    <a href="#" class="quick-link-item" data-quick-surah="2">আলিফ লাম মিম</a>
+    <a href="#" class="quick-link-item" data-quick-surah="2" data-quick-ayah="255">আয়াতুল কুরসি</a>
+    <a href="#" class="quick-link-item" data-quick-surah="20">ত-হা</a>
+    <a href="#" class="quick-link-item" data-quick-surah="37">সাফফাত</a>
+    <a href="#" class="quick-link-item" data-quick-surah="50">কাফ</a>
+    <a href="#" class="quick-link-item" data-quick-surah="21">আয়ুব</a>
+    <a href="#" class="quick-link-item" data-quick-surah="56">আল-ওয়াকিয়া</a>
+    <a href="#" class="quick-link-item" data-quick-surah="67">আল-মুলক</a>
+    <a href="#" class="quick-link-item" data-quick-surah="18">আল-কাহাফ</a>
+    <a href="#" class="quick-link-item" data-quick-surah="32">আস-সেজদাহ</a>
+    <a href="#" class="quick-link-item" data-quick-surah="36">ইয়াসিন</a>
+    <a href="#" class="quick-link-item" data-quick-surah="55">আর-রহমান</a>
+    <a href="#" class="quick-link-item" data-quick-surah="76">আল-ইনসান</a>
+    <a href="#" class="quick-link-item" data-quick-surah="86">আত-তারিক</a>
+    <a href="#" class="quick-link-item" data-quick-surah="105">আল-ফিল</a>
+    <a href="#" class="quick-link-item" data-quick-surah="101">আল-কারীয়া</a>
+    <a href="#" class="quick-link-item" data-quick-surah="97">আল-কাদর</a>
   </div>
 </div>
+
+<!-- Mobile View Tabs (সূরা / পারা / বিষয় অনুযায়ী) -->
+<style>
+  .mobile-view-tabs{
+    display:flex; align-items:stretch; gap:0; background:var(--paper);
+    border:1px solid var(--line); border-radius:0; margin:0 12px 16px; padding:0; overflow:hidden;
+  }
+  .mobile-view-tabs .view-tab{
+    flex:1; text-align:center; padding:13px 8px; border-radius:0;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:14.5px; font-weight:700; color:var(--muted);
+    background:transparent; border:none; border-right:1px solid var(--line);
+    cursor:pointer; position:relative; transition:background .18s ease, color .18s ease;
+  }
+  .mobile-view-tabs .view-tab:last-child{ border-right:none; }
+  .mobile-view-tabs .view-tab::after{
+    content:""; position:absolute; left:0; right:0; bottom:0; height:3px; background:transparent;
+  }
+  .mobile-view-tabs .view-tab.active{
+    background:var(--deep-teal); color:#fff;
+  }
+  .mobile-view-tabs .view-tab.active::after{ background:var(--gold); }
+</style>
+<div class="mobile-view-tabs">
+  <button class="view-tab active" data-view="surah">সূরা</button>
+  <button class="view-tab" data-view="para">পারা</button>
+  <button class="view-tab" data-view="topic">বিষয় ভিত্তিক</button>
 </div>
-<!-- /m-fixed-top -->
 
 <nav class="site-nav">
   <a class="nav-logo" id="navLogo">
@@ -1551,13 +2464,13 @@
 <div id="readerView">
 
   <!-- Mobile app-style reader header (matches native app screenshot): back arrow, surah title, search -->
-  <div class="r-appbar" id="rAppbar">
-    <button class="m-back" id="rBackBtn" title="ফিরে যান">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  <div class="r-appbar header" id="rAppbar" style="background-color: #fff; padding: 12px 16px; display: flex; justify-content: center; align-items: center; position: relative; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+    <button class="m-back" id="rBackBtn" title="ফিরে যান" style="position: absolute; left: 12px; width: 36px; height: 36px; border-radius: 50%; border: none; background: none; color: #2d5f4f; display: flex; align-items: center; justify-content: center; cursor: pointer; padding: 0;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 20px; height: 20px;"><polyline points="15 18 9 12 15 6"></polyline></svg>
     </button>
-    <h1 class="m-title" id="rMobileTitle">সূরা</h1>
-    <button class="m-icon-btn plain" id="rSearchToggleBtn" title="অনুসন্ধান">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <h1 class="m-title" id="rMobileTitle" style="font-size: 24px; font-weight: 600; color: #2d5f4f; margin: 0;">সূরা</h1>
+    <button class="m-icon-btn plain" id="rSearchToggleBtn" title="অনুসন্ধান" style="position: absolute; right: 12px; width: 36px; height: 36px; cursor: pointer; color: #2d5f4f; background: none; border: none; display: flex; align-items: center; justify-content: center; padding: 0;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width: 19px; height: 19px;"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
     </button>
   </div>
 
@@ -1775,6 +2688,23 @@
   </div>
   <div class="tp-ayah-dropdown" id="tpAyahDropdown"></div>
   <div class="tp-body" id="tpBody"></div>
+</div>
+
+<!-- ============ TAFSIR PAGE "সূচীপত্র" (SURAH + AYAH TABLE OF CONTENTS) MODAL ============ -->
+<div class="tp-toc-overlay" id="tpTocOverlay">
+  <div class="tp-toc-header">
+    <div class="tp-toc-title">সূচীপত্র</div>
+    <button class="tp-toc-close" id="tpTocCloseBtn" title="বন্ধ করুন">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <div class="tp-toc-body">
+    <div class="tp-toc-surah-list" id="tpTocSurahList"></div>
+    <div class="tp-toc-ayah-panel">
+      <div class="tp-toc-ayah-heading" id="tpTocAyahHeading"></div>
+      <div class="tp-toc-ayah-grid" id="tpTocAyahGrid"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ============ GLOBAL AYAH SEARCH PAGE (opened from the header search icon) ============ -->
@@ -2619,6 +3549,16 @@ async function ensureSelectedTranslationsLoaded(){
 }
 
 const heroSection = document.querySelector('header.top');
+const quickLinksSection = document.getElementById('quickLinksSection');
+if(quickLinksSection && heroSection){
+  // "ফজিলতের সুরা" সেকশনটি শুধু হোমপেজে (সূরা তালিকার পেজে) দেখানোর জন্য
+  // heroSection (header.top) যখনই দেখানো/লুকানো হয়, এই সেকশনও একই সাথে দেখানো/লুকানো হবে
+  const syncQuickLinks = () => {
+    quickLinksSection.style.display = heroSection.style.display === 'none' ? 'none' : '';
+  };
+  new MutationObserver(syncQuickLinks).observe(heroSection, { attributes:true, attributeFilter:['style'] });
+  syncQuickLinks();
+}
 const viewTabsEl = document.querySelector('.view-tabs');
 const listingMain = document.querySelector('main');
 const siteFooter = document.querySelector('footer.site');
@@ -2637,6 +3577,23 @@ let contentMode = 'translation'; // 'translation' | 'recitation'
 let currentSurahNum = 1;
 let currentJuzNum = 1;
 let currentBodyView = 'surah'; // 'surah' | 'para' — tracks what's actually rendered in readerBody
+
+/* ---------- সর্বশেষ পঠিত আয়াত (Last Read Ayah) ---------- */
+function saveLastRead(surahNum, ayahNum){
+  try{
+    localStorage.setItem('lastReadAyah', JSON.stringify({ surah: surahNum, ayah: ayahNum, ts: Date.now() }));
+  } catch(e){ /* ignore storage errors */ }
+}
+function getLastRead(){
+  try{
+    const raw = localStorage.getItem('lastReadAyah');
+    if(!raw) return null;
+    const parsed = JSON.parse(raw);
+    if(parsed && parsed.surah && parsed.ayah) return parsed;
+  } catch(e){ /* ignore parse errors */ }
+  return null;
+}
+
 const surahCache = {};   // num -> {arabic, bengali}
 const juzCache = {};     // num -> data
 const transliterationCache = {}; // num -> Map(numberInSurah -> latin transliteration text) | null
@@ -2653,7 +3610,8 @@ function showListing(){
   listingMain.style.display = '';
   siteFooter.style.display = '';
   mAppbar.style.display = '';
-  mPanel.style.display = '';
+  navSection.style.display = '';
+  if(mobileViewTabsEl) mobileViewTabsEl.style.display = '';
   window.scrollTo(0,0);
 }
 
@@ -2663,7 +3621,8 @@ function openReader(mode, num){
   listingMain.style.display = 'none';
   siteFooter.style.display = 'none';
   mAppbar.style.display = 'none';
-  mPanel.style.display = 'none';
+  navSection.style.display = 'none';
+  if(mobileViewTabsEl) mobileViewTabsEl.style.display = 'none';
   hideHadithViews();
   readerView.style.display = 'block';
   window.scrollTo(0,0);
@@ -2681,34 +3640,32 @@ function openReader(mode, num){
 document.getElementById('navLogo').addEventListener('click', showListing);
 document.getElementById('navQuranLink').addEventListener('click', showListing);
 
-/* ---------- Mobile app-bar / panel wiring ---------- */
+/* ---------- Mobile app-bar wiring ---------- */
 const mAppbar = document.getElementById('mAppbar');
-const mPanel = document.getElementById('mPanel');
-const mTabs = document.querySelectorAll('#mTabs .m-tab');
-const mSearchInput = document.getElementById('mSearchInput');
-const mQuickLinksWrap = document.getElementById('mQuickLinksWrap');
-
-mTabs.forEach(mtab=>{
-  mtab.addEventListener('click', ()=>{
-    mTabs.forEach(b=>b.classList.remove('active'));
-    mtab.classList.add('active');
-    const view = mtab.dataset.view;
-    const desktopTab = document.querySelector(`.view-tab[data-view="${view}"]`);
-    if(desktopTab) desktopTab.click();
-    mQuickLinksWrap.style.display = view === 'surah' ? '' : 'none';
-  });
-});
-
-mSearchInput.addEventListener('input', ()=>{
-  searchInput.value = mSearchInput.value;
-  if(currentView === 'para') renderPara(); else render();
-});
+const navSection = document.querySelector('.nav-section');
+const mobileViewTabsEl = document.querySelector('.mobile-view-tabs');
 
 document.querySelectorAll('.m-quick-pill').forEach(pill=>{
   pill.addEventListener('click', ()=> openReader('surah', Number(pill.dataset.quickSurah)));
 });
 
-document.getElementById('mSearchIconBtn').addEventListener('click', openGlobalSearch);
+document.querySelectorAll('.quick-link-item[data-quick-surah]').forEach(item=>{
+  item.addEventListener('click', function(e){
+    e.preventDefault();
+    const surahNum = Number(this.dataset.quickSurah);
+    const ayahNum = this.dataset.quickAyah ? Number(this.dataset.quickAyah) : null;
+    if(ayahNum){
+      openReaderAtAyah(surahNum, ayahNum);
+    } else {
+      openReader('surah', surahNum);
+    }
+  });
+});
+
+document.getElementById('mNavSearchBtn').addEventListener('click', function(e){
+  e.preventDefault();
+  openGlobalSearch();
+});
 document.getElementById('mBackBtn').addEventListener('click', function(){
   window.location.href = 'https://ummahguidance.vercel.app/';
 });
@@ -2896,6 +3853,7 @@ function openReaderAtAyah(surahNum, ayahNum){
     const block = readerBody.querySelector(`.ayah-block[data-surah="${surahNum}"][data-ayah-index="${ayahNum}"]`);
     if(block){
       currentAyahIndex = ayahNum;
+      saveLastRead(surahNum, ayahNum);
       document.querySelectorAll('.ayah-block.highlighted').forEach(b=>b.classList.remove('highlighted'));
       block.classList.add('highlighted');
       block.scrollIntoView({ behavior:'smooth', block:'center' });
@@ -2912,7 +3870,8 @@ function openGlobalSearch(){
   listingMain.style.display = 'none';
   siteFooter.style.display = 'none';
   mAppbar.style.display = 'none';
-  mPanel.style.display = 'none';
+  navSection.style.display = 'none';
+  if(mobileViewTabsEl) mobileViewTabsEl.style.display = 'none';
   readerView.style.display = 'none';
   if(typeof hideHadithViews === 'function') hideHadithViews();
   globalSearchView.style.display = 'block';
@@ -3041,6 +4000,7 @@ if(rBottomNav){
 
 function jumpToAyah(i){
   currentAyahIndex = i;
+  saveLastRead(currentSurahNum, i);
   buildReaderList();
   const block = readerBody.querySelector(`[data-ayah-index="${i}"]`);
   if(block){
@@ -3290,6 +4250,7 @@ function selectSurah(num){
   currentSurahNum = num;
   currentAyahIndex = 1;
   currentBodyView = 'surah';
+  saveLastRead(num, 1);
   buildReaderList();
   renderSurahBody(num);
   const entry = surahs.find(s=>s[0]===num);
@@ -3470,7 +4431,8 @@ function showHadithListing(){
   listingMain.style.display = 'none';
   siteFooter.style.display = 'none';
   mAppbar.style.display = 'none';
-  mPanel.style.display = 'none';
+  navSection.style.display = 'none';
+  if(mobileViewTabsEl) mobileViewTabsEl.style.display = 'none';
   readerView.style.display = 'none';
   hadithReaderView.style.display = 'none';
   hadithView.style.display = 'block';
@@ -3542,7 +4504,8 @@ function openHadithReader(entry){
   listingMain.style.display = 'none';
   siteFooter.style.display = 'none';
   mAppbar.style.display = 'none';
-  mPanel.style.display = 'none';
+  navSection.style.display = 'none';
+  if(mobileViewTabsEl) mobileViewTabsEl.style.display = 'none';
   readerView.style.display = 'none';
   hadithView.style.display = 'none';
   hadithReaderView.style.display = 'block';
@@ -4281,7 +5244,7 @@ function tpEmptyStateHTML(){
 function tpUpdateHeader(){
   const entry = surahs.find(s=>s[0]===currentSurahNum);
   const surahName = entry ? entry[1] : 'সূরা';
-  tpSelectLabel.textContent = `${surahName} - আয়াত ${toBnDigits(tpAyahNum)}`;
+  tpSelectLabel.textContent = `সূরা ${surahName} - আয়াত ${toBnDigits(tpAyahNum)}`;
   const total = currentSurahAyahCount();
   if(tpAyahNum < total){
     tpNextBtn.style.visibility = 'visible';
@@ -4353,7 +5316,8 @@ function openTafsirPage(){
   listingMain.style.display = 'none';
   siteFooter.style.display = 'none';
   mAppbar.style.display = 'none';
-  mPanel.style.display = 'none';
+  navSection.style.display = 'none';
+  if(mobileViewTabsEl) mobileViewTabsEl.style.display = 'none';
   readerView.style.display = 'none';
   if(typeof hideHadithViews === 'function') hideHadithViews();
   tpAyahNum = currentAyahIndex || 1;
@@ -4367,8 +5331,72 @@ function closeTafsirPage(){
   readerView.style.display = 'block';
 }
 
+/* ---- সূচীপত্র (surah + ayah picker) modal, opened by tapping the tp-select-btn ---- */
+const tpTocOverlay = document.getElementById('tpTocOverlay');
+const tpTocSurahList = document.getElementById('tpTocSurahList');
+const tpTocAyahHeading = document.getElementById('tpTocAyahHeading');
+const tpTocAyahGrid = document.getElementById('tpTocAyahGrid');
+const tpTocCloseBtn = document.getElementById('tpTocCloseBtn');
+let tpTocSelectedSurah = 1;
+
+function tpTocRenderSurahList(){
+  let html = '';
+  surahs.forEach(s=>{
+    const [num, bn, , ayahCount] = s;
+    html += `<div class="tp-toc-surah-item ${num===tpTocSelectedSurah?'active':''}" data-surah="${num}">
+      <div class="tp-toc-surah-name">${toBnDigits(num)}. সূরা ${bn}</div>
+      <div class="tp-toc-surah-sub">${toBnDigits(ayahCount)} টি আয়াত</div>
+    </div>`;
+  });
+  tpTocSurahList.innerHTML = html;
+  tpTocSurahList.querySelectorAll('.tp-toc-surah-item').forEach(item=>{
+    item.addEventListener('click', ()=>{
+      tpTocSelectedSurah = Number(item.dataset.surah);
+      tpTocRenderSurahList();
+      tpTocRenderAyahGrid();
+    });
+  });
+  const activeEl = tpTocSurahList.querySelector('.tp-toc-surah-item.active');
+  if(activeEl) activeEl.scrollIntoView({block:'nearest'});
+}
+
+function tpTocRenderAyahGrid(){
+  const entry = surahs.find(s=>s[0]===tpTocSelectedSurah);
+  const bnName = entry ? entry[1] : '';
+  const total = entry ? entry[3] : 0;
+  tpTocAyahHeading.textContent = `সূরা ${bnName}`;
+  let html = '';
+  for(let i=1;i<=total;i++){
+    const isActive = (tpTocSelectedSurah === currentSurahNum && i === tpAyahNum);
+    html += `<button class="tp-toc-ayah-btn ${isActive?'active':''}" data-ayah="${i}">${toBnDigits(i)}</button>`;
+  }
+  tpTocAyahGrid.innerHTML = html;
+  tpTocAyahGrid.querySelectorAll('.tp-toc-ayah-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const chosenAyah = Number(btn.dataset.ayah);
+      if(tpTocSelectedSurah !== currentSurahNum) selectSurah(tpTocSelectedSurah);
+      tpAyahNum = chosenAyah;
+      currentAyahIndex = chosenAyah;
+      closeTpTocModal();
+      tpUpdateHeader();
+      tpRenderCurrent();
+    });
+  });
+}
+
+function openTpTocModal(){
+  tpTocSelectedSurah = currentSurahNum;
+  tpTocRenderSurahList();
+  tpTocRenderAyahGrid();
+  tpTocOverlay.classList.add('active');
+}
+function closeTpTocModal(){
+  tpTocOverlay.classList.remove('active');
+}
+tpTocCloseBtn.addEventListener('click', closeTpTocModal);
+
 tpBackBtn.addEventListener('click', closeTafsirPage);
-tpSelectBtn.addEventListener('click', ()=> tpAyahDropdown.classList.toggle('open'));
+tpSelectBtn.addEventListener('click', openTpTocModal);
 tpNextBtn.addEventListener('click', ()=>{
   const total = currentSurahAyahCount();
   if(tpAyahNum < total){
@@ -4377,6 +5405,19 @@ tpNextBtn.addEventListener('click', ()=>{
     tpRenderCurrent();
   }
 });
+
+const mLastReadBtn = document.getElementById('mLastReadBtn');
+if(mLastReadBtn){
+  mLastReadBtn.addEventListener('click', function(e){
+    e.preventDefault();
+    const last = getLastRead();
+    if(last){
+      openReaderAtAyah(last.surah, last.ayah);
+    } else {
+      openReaderAtAyah(1, 1); // কোনো আয়াত এখনো পড়া হয়নি — সূরা আল-ফাতিহা থেকে শুরু
+    }
+  });
+}
 
 /* ================= "অন্যান্য" (MORE) BOTTOM SHEET ================= */
 const moreSheetOverlay = document.getElementById('moreSheetOverlay');
@@ -4562,7 +5603,8 @@ function openTafsirSelectPage(onSelect, onCancel){
   listingMain.style.display = 'none';
   siteFooter.style.display = 'none';
   mAppbar.style.display = 'none';
-  mPanel.style.display = 'none';
+  navSection.style.display = 'none';
+  if(mobileViewTabsEl) mobileViewTabsEl.style.display = 'none';
   readerView.style.display = 'none';
   tafsirPageView.style.display = 'none';
   bookmarksPageView.style.display = 'none';
@@ -4745,7 +5787,8 @@ function openBookmarksPage(){
   listingMain.style.display = 'none';
   siteFooter.style.display = 'none';
   mAppbar.style.display = 'none';
-  mPanel.style.display = 'none';
+  navSection.style.display = 'none';
+  if(mobileViewTabsEl) mobileViewTabsEl.style.display = 'none';
   readerView.style.display = 'none';
   tafsirPageView.style.display = 'none';
   tafsirSelectPageView.style.display = 'none';
@@ -4785,6 +5828,945 @@ document.addEventListener('click', (e)=>{
   <!-- Navbar Loader -->
 <script src="navbar/navbar-loader.js"></script>
 
+  <!-- Settings Modal -->
+  <div class="settings-modal-overlay" id="settingsOverlay"></div>
+  <div class="settings-modal" id="settingsModal">
+    <div class="settings-modal-header">
+      <button class="settings-modal-back-btn" id="settingsBackBtn">‹</button>
+      <div class="settings-modal-title">সেটিংস</div>
+    </div>
+    <div class="settings-modal-content">
+      <!-- অনুবাদ ও তাফসীর Section -->
+      <div class="settings-section">
+        <div class="settings-section-title">অনুবাদ ও তাফসীর</div>
+        
+        <div class="settings-item settings-item-clickable" id="translationTrigger">
+          <div class="settings-item-left">
+            <div class="settings-item-label">কুরআনের সরল অনুবাদ</div>
+            <div class="settings-item-desc" id="translationSelectedCount">২ অনুবাদ নির্বাচিত</div>
+          </div>
+        </div>
+
+        <div class="settings-item">
+          <div class="settings-item-left">
+            <div class="settings-item-label">শব্দে শব্দে অনুবাদ দেখান</div>
+            <div class="settings-item-desc">প্রতিটি আরবি শব্দের নিচে সংক্ষিপ্ত দেখাবে</div>
+          </div>
+          <button class="toggle-switch active"></button>
+        </div>
+
+        <div class="settings-item">
+          <div class="settings-item-left">
+            <div class="settings-item-label">কালার কোডিং তাজভীদ</div>
+            <div class="settings-item-desc">তাজভীদ কালার কোডিং অন বা অফ করুন</div>
+          </div>
+          <button class="toggle-switch active"></button>
+        </div>
+
+        <div class="settings-item settings-item-clickable" id="tafsirSettingsTrigger">
+          <div class="settings-item-left">
+            <div class="settings-item-label">তাফসীর</div>
+            <div class="settings-item-desc">কোনো তাফসীর সিলেক্ট করা হয়নি</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- পড়ার সেটিংস Section -->
+      <div class="settings-section">
+        <div class="settings-section-title">পড়ার সেটিংস</div>
+
+        <div class="settings-item">
+          <div class="settings-item-left">
+            <div class="settings-item-label">আরবি ফন্ট সাইজ</div>
+            <div class="font-size-selector">
+              <div class="font-size-value" id="arabicFontSizeValue">20</div>
+              <input type="range" id="arabicFontSizeSlider" class="font-size-slider" min="10" max="40" value="20">
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-item">
+          <div class="settings-item-left">
+            <div class="settings-item-label">অনুবাদ ফন্ট সাইজ</div>
+            <div class="font-size-selector">
+              <div class="font-size-value" id="translationFontSizeValue">16</div>
+              <input type="range" id="translationFontSizeSlider" class="font-size-slider" min="10" max="30" value="16">
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-item settings-item-clickable" id="arFontTrigger" style="cursor:pointer;">
+          <div class="settings-item-left">
+            <div class="settings-item-label">আরবি ফন্ট স্টাইল</div>
+          </div>
+        </div>
+
+        <div class="settings-item settings-item-clickable" id="otherFontTrigger" style="cursor:pointer;">
+          <div class="settings-item-left">
+            <div class="settings-item-label">অন্যান্য ফন্ট</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- অডিও সেটিংস Section -->
+      <div class="settings-section">
+        <div class="settings-section-title">অডিও সেটিংস</div>
+
+        <div class="settings-item settings-item-clickable" id="reciterManagerTrigger" style="cursor:pointer;">
+          <div class="settings-item-left">
+            <div class="settings-item-label">কারী / অডিও ম্যানেজার</div>
+            <div class="settings-item-desc">কারীদের প্রিভিউ ও সূরা ডাউনলোড পরিচালনা করুন</div>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="color:#aaa; font-size:14px;"></i>
+        </div>
+
+        <div class="settings-item">
+          <div class="settings-item-left">
+            <div class="settings-item-label">পরবর্তী আয়াত অটো প্লে</div>
+            <div class="settings-item-desc">একটির পর একটি আয়াত অটো প্লে হবে</div>
+          </div>
+          <button class="toggle-switch active"></button>
+        </div>
+      </div>
+
+      <div style="height: 40px;"></div>
+    </div>
+  </div>
+
+  <!-- Reciter / Audio Manager Modal -->
+  <div class="settings-modal-overlay reciter-overlay" id="reciterOverlay"></div>
+  <div class="settings-modal reciter-modal" id="reciterModal">
+    <div class="settings-modal-header">
+      <button class="settings-modal-back-btn" id="reciterBackBtn"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="settings-modal-title">কারী / অডিও ম্যানেজার</div>
+    </div>
+    <div class="settings-modal-content" id="reciterModalContent">
+      <div class="reciter-list" id="reciterList"></div>
+      <div class="reciter-loading" id="reciterLoading" style="display:none;">লোড হচ্ছে...</div>
+    </div>
+  </div>
+
+  <!-- Reciter Detail / Surah Download Modal -->
+  <div class="settings-modal-overlay reciter-detail-overlay" id="reciterDetailOverlay"></div>
+  <div class="settings-modal reciter-detail-modal" id="reciterDetailModal">
+    <div class="settings-modal-header">
+      <button class="settings-modal-back-btn" id="reciterDetailBackBtn"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="settings-modal-title" id="reciterDetailTitle">কারী</div>
+    </div>
+    <div class="settings-modal-content" id="reciterDetailContent">
+      <div class="reciter-detail-actions">
+        <button class="reciter-detail-btn reciter-detail-btn-download" id="reciterDownloadAllBtn">
+          <i class="fa-solid fa-download"></i> সব ডাউনলোড
+        </button>
+        <button class="reciter-detail-btn reciter-detail-btn-delete" id="reciterDeleteAllBtn">
+          <i class="fa-solid fa-trash"></i> সব মুছুন
+        </button>
+      </div>
+      <div class="reciter-surah-list" id="reciterSurahList"></div>
+    </div>
+  </div>
+
+  <!-- Arabic Font Style Dialog -->
+  <div class="dialog-overlay" id="arFontOverlay">
+    <div class="dialog-card" id="arFontDialog">
+      <div class="dialog-title">আরবি ফন্ট স্টাইল</div>
+
+      <div class="dialog-group">
+        <div class="dialog-group-title">উসমানি/মদিনি</div>
+        <div class="dialog-option" data-id="qcf-uthmanic">
+          <span class="dialog-check"><i class="fa-solid fa-check"></i></span>
+          <span class="dialog-option-label">QCF Uthmanic</span>
+        </div>
+        <div class="dialog-option" data-id="uthmani-hafs">
+          <span class="dialog-check"><i class="fa-solid fa-check"></i></span>
+          <span class="dialog-option-label">Uthmani Hafs</span>
+        </div>
+      </div>
+
+      <div class="dialog-divider"></div>
+
+      <div class="dialog-group">
+        <div class="dialog-group-title">ইন্দোপাক</div>
+        <div class="dialog-option selected" data-id="alquran-neo-indopak">
+          <span class="dialog-check"><i class="fa-solid fa-check"></i></span>
+          <span class="dialog-option-label">Al-Quran Neo IndoPak</span>
+        </div>
+        <div class="dialog-option" data-id="indopak-nastaliq">
+          <span class="dialog-check"><i class="fa-solid fa-check"></i></span>
+          <span class="dialog-option-label">IndoPak Nastaliq</span>
+        </div>
+      </div>
+
+      <div class="dialog-footer">
+        <button class="dialog-btn dialog-btn-cancel" id="arFontCancelBtn">বাতিল</button>
+        <button class="dialog-btn dialog-btn-save" id="arFontSaveBtn">সেভ করুন</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Other (General) Font Selection Dialog -->
+  <div class="dialog-overlay" id="otherFontOverlay">
+    <div class="dialog-card" id="otherFontDialog">
+      <div class="dialog-title">সাধারণ ফন্ট নির্বাচন</div>
+
+      <div class="dialog-group">
+        <div class="dialog-group-title">ইংরেজি</div>
+        <div class="dialog-option selected" data-group="en" data-id="poppins">
+          <span class="dialog-check"><i class="fa-solid fa-check"></i></span>
+          <span class="dialog-option-label">Poppins</span>
+        </div>
+        <div class="dialog-option" data-group="en" data-id="nunito">
+          <span class="dialog-check"><i class="fa-solid fa-check"></i></span>
+          <span class="dialog-option-label">Nunito</span>
+        </div>
+      </div>
+
+      <div class="dialog-divider"></div>
+
+      <div class="dialog-group">
+        <div class="dialog-group-title">বাংলা</div>
+        <div class="dialog-option" data-group="bn" data-id="kalpurush">
+          <span class="dialog-check"><i class="fa-solid fa-check"></i></span>
+          <span class="dialog-option-label">Kalpurush</span>
+        </div>
+        <div class="dialog-option selected" data-group="bn" data-id="potro-sans">
+          <span class="dialog-check"><i class="fa-solid fa-check"></i></span>
+          <span class="dialog-option-label">Potro Sans</span>
+        </div>
+      </div>
+
+      <div class="dialog-footer dialog-footer-end">
+        <button class="dialog-btn dialog-btn-save" id="otherFontSaveBtn">সেভ করুন</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Translation Selection Modal -->
+  <div class="settings-modal-overlay translation-overlay" id="translationOverlay"></div>
+  <div class="settings-modal translation-modal" id="translationModal">
+    <div class="settings-modal-header">
+      <button class="settings-modal-back-btn" id="translationBackBtn"><i class="fa-solid fa-chevron-left"></i></button>
+      <div class="settings-modal-title">অনুবাদ</div>
+    </div>
+    <div class="settings-modal-content" id="translationModalContent">
+
+      <div class="translation-section">
+        <div class="translation-section-title">ডাউনলোডকৃত অনুবাদ</div>
+        <div class="translation-section-desc">কুরআনের অনুবাদ পড়ার জন্য নিচের লিস্ট থেকে এক বা একাধিক অনুবাদ সিলেক্ট করুন</div>
+        <div id="downloadedTranslationList"></div>
+      </div>
+
+      <div class="translation-section">
+        <div class="translation-section-title">কুরআনের অনুবাদসমূহ</div>
+        <div class="translation-section-desc">অনুবাদ পড়তে ডাউনলোড করুন</div>
+        <div id="availableTranslationList"></div>
+      </div>
+
+      <div style="height: 40px;"></div>
+    </div>
+  </div>
+
+  <script>
+    // Settings Modal Controller
+    const settingsIcon = document.querySelector('.settings-icon');
+    const settingsModal = document.getElementById('settingsModal');
+    const settingsOverlay = document.getElementById('settingsOverlay');
+    const settingsBackBtn = document.getElementById('settingsBackBtn');
+
+    // Open Settings Modal
+    function openSettingsModal() {
+      settingsModal.classList.add('active');
+      settingsOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Close Settings Modal
+    function closeSettingsModal() {
+      settingsModal.classList.remove('active');
+      settingsOverlay.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Event Listeners
+    if (settingsIcon) {
+      settingsIcon.addEventListener('click', openSettingsModal);
+    }
+
+    if (settingsBackBtn) {
+      settingsBackBtn.addEventListener('click', closeSettingsModal);
+    }
+
+    if (settingsOverlay) {
+      settingsOverlay.addEventListener('click', closeSettingsModal);
+    }
+
+    // Toggle Switches
+    const toggleSwitches = document.querySelectorAll('.toggle-switch');
+    toggleSwitches.forEach(toggle => {
+      toggle.addEventListener('click', function(e) {
+        e.stopPropagation();
+        this.classList.toggle('active');
+      });
+    });
+
+    // Font Size Sliders - Make them functional
+    const arabicFontSizeSlider = document.getElementById('arabicFontSizeSlider');
+    const arabicFontSizeValue = document.getElementById('arabicFontSizeValue');
+    const translationFontSizeSlider = document.getElementById('translationFontSizeSlider');
+    const translationFontSizeValue = document.getElementById('translationFontSizeValue');
+
+    // Create a style element for dynamic CSS
+    let dynamicStyle = document.getElementById('fontSizeDynamicStyle');
+    if (!dynamicStyle) {
+      dynamicStyle = document.createElement('style');
+      dynamicStyle.id = 'fontSizeDynamicStyle';
+      document.head.appendChild(dynamicStyle);
+    }
+
+    // Load saved font sizes from localStorage
+    function loadFontSizes() {
+      const savedArabicSize = localStorage.getItem('arabicFontSize') || '20';
+      const savedTranslationSize = localStorage.getItem('translationFontSize') || '16';
+      
+      if (arabicFontSizeSlider) {
+        arabicFontSizeSlider.value = savedArabicSize;
+      }
+      if (arabicFontSizeValue) {
+        arabicFontSizeValue.textContent = savedArabicSize;
+      }
+      applyArabicFontSize(savedArabicSize);
+      
+      if (translationFontSizeSlider) {
+        translationFontSizeSlider.value = savedTranslationSize;
+      }
+      if (translationFontSizeValue) {
+        translationFontSizeValue.textContent = savedTranslationSize;
+      }
+      applyTranslationFontSize(savedTranslationSize);
+    }
+
+    // Apply Arabic font size using CSS rules
+    function applyArabicFontSize(size) {
+      const css = `
+        .ayah-text, 
+        .ar,
+        [class*="ayah"] .ar,
+        .reader-ayah,
+        .quran-text,
+        [dir="rtl"],
+        .arabic-text {
+          font-size: ${size}px !important;
+        }
+      `;
+      dynamicStyle.textContent = dynamicStyle.textContent.split('/* ARABIC_SIZE_END */')[0] + css + '/* ARABIC_SIZE_END */';
+    }
+
+    // Apply Translation font size using CSS rules
+    function applyTranslationFontSize(size) {
+      const css = `
+        .trans-text, 
+        .trans-row,
+        .translation-text,
+        .bn-serif,
+        .bangla-text,
+        [lang="bn"],
+        [class*="translation"] {
+          font-size: ${size}px !important;
+        }
+      `;
+      dynamicStyle.textContent = dynamicStyle.textContent.split('/* TRANSLATION_SIZE_END */')[0] + css + '/* TRANSLATION_SIZE_END */';
+    }
+
+    // Handle Arabic font size slider change
+    if (arabicFontSizeSlider) {
+      arabicFontSizeSlider.addEventListener('input', function(e) {
+        e.stopPropagation();
+        if (arabicFontSizeValue) {
+          arabicFontSizeValue.textContent = this.value;
+        }
+        applyArabicFontSize(this.value);
+        localStorage.setItem('arabicFontSize', this.value);
+      });
+    }
+
+    // Handle Translation font size slider change
+    if (translationFontSizeSlider) {
+      translationFontSizeSlider.addEventListener('input', function(e) {
+        e.stopPropagation();
+        if (translationFontSizeValue) {
+          translationFontSizeValue.textContent = this.value;
+        }
+        applyTranslationFontSize(this.value);
+        localStorage.setItem('translationFontSize', this.value);
+      });
+    }
+
+    // Load font sizes when page loads
+    setTimeout(loadFontSizes, 100);
+
+    // Font Size Sliders - Layout adjustment
+    const fontSizeItems = document.querySelectorAll('.settings-item');
+    fontSizeItems.forEach(item => {
+      const label = item.querySelector('.settings-item-label');
+      if (label && (label.textContent.includes('ফন্ট সাইজ'))) {
+        item.style.flexDirection = 'column';
+        item.style.alignItems = 'flex-start';
+        item.style.gap = '12px';
+      }
+    });
+
+    // ===================== Translation Modal =====================
+    (function(){
+      const translationTrigger = document.getElementById('translationTrigger');
+      const translationModal = document.getElementById('translationModal');
+      const translationOverlay = document.getElementById('translationOverlay');
+      const translationBackBtn = document.getElementById('translationBackBtn');
+      const downloadedListEl = document.getElementById('downloadedTranslationList');
+      const availableListEl = document.getElementById('availableTranslationList');
+      const translationSelectedCount = document.getElementById('translationSelectedCount');
+
+      // Already downloaded translations
+      let downloaded = [
+        { id: 'islamic-foundation', name: 'ইসলামিক ফাউন্ডেশন', lang: 'Bangla', selected: true, deletable: false },
+        { id: 'fazlur-rahman', name: 'ড. মুহাম্মদ ফজলুর রহমান', lang: 'Bangla', selected: true, deletable: true }
+      ];
+
+      // Translations available to download, grouped by language
+      let available = {
+        'Bangla': [
+          { id: 'mujibur-rahman', name: 'ড. মুহাম্মদ মুজীবুর রহমান' },
+          { id: 'taisirul-quran', name: 'তাইসীরুল কোরআন' },
+          { id: 'bayan-foundation', name: 'বায়ান ফাউন্ডেশন' },
+          { id: 'muhiuddin-khan', name: 'মাওলানা মুহিউদ্দিন খান' },
+          { id: 'taqi-usmani-bn', name: 'মুফতী মুহাম্মাদ তাকী উসমানী' }
+        ],
+        'English': [
+          { id: 'abdel-haleem', name: 'Abdel Haleem' },
+          { id: 'hilali-khan', name: 'Hilali & Khan' },
+          { id: 'taqi-usmani-en', name: 'Mufti Taqi Usmani' },
+          { id: 'pickthall', name: 'Pickthall' },
+          { id: 'saheeh-international', name: 'Saheeh International' },
+          { id: 'clear-quran', name: 'The Clear Quran (Mustafa Khattab)' },
+          { id: 'yusuf-ali', name: 'Yusuf Ali' }
+        ],
+        'Indonesian': [
+          { id: 'indonesian-sabiq', name: 'Indonesian Sabiq Company' }
+        ]
+      };
+
+      function updateSelectedCount() {
+        const count = downloaded.filter(t => t.selected).length;
+        if (translationSelectedCount) {
+          translationSelectedCount.textContent = `${count} অনুবাদ নির্বাচিত`;
+        }
+      }
+
+      function renderDownloaded() {
+        if (!downloadedListEl) return;
+        downloadedListEl.innerHTML = '';
+
+        const byLang = {};
+        downloaded.forEach(t => {
+          if (!byLang[t.lang]) byLang[t.lang] = [];
+          byLang[t.lang].push(t);
+        });
+
+        Object.keys(byLang).forEach(lang => {
+          const langLabel = document.createElement('div');
+          langLabel.className = 'translation-lang-label';
+          langLabel.textContent = lang;
+          downloadedListEl.appendChild(langLabel);
+
+          byLang[lang].forEach(t => {
+            const card = document.createElement('div');
+            card.className = 'translation-card';
+            card.innerHTML = `
+              <div class="translation-card-left">
+                <div class="translation-checkbox ${t.selected ? 'checked' : ''}" data-id="${t.id}">
+                  ${t.selected ? '<i class="fa-solid fa-check"></i>' : ''}
+                </div>
+                <div class="translation-name-block">
+                  <div class="translation-name">${t.name}</div>
+                  <div class="translation-sub">${t.lang}</div>
+                </div>
+              </div>
+              <div class="translation-card-right">
+                ${t.selected ? '<div class="translation-selected-check"><i class="fa-solid fa-check"></i></div>' : ''}
+                ${t.deletable ? `<button class="translation-delete-btn" data-id="${t.id}"><i class="fa-solid fa-trash"></i></button>` : ''}
+              </div>
+            `;
+            downloadedListEl.appendChild(card);
+          });
+        });
+
+        // Checkbox toggle
+        downloadedListEl.querySelectorAll('.translation-checkbox').forEach(cb => {
+          cb.addEventListener('click', function(e){
+            e.stopPropagation();
+            const id = this.getAttribute('data-id');
+            const item = downloaded.find(t => t.id === id);
+            if (item) {
+              item.selected = !item.selected;
+              renderDownloaded();
+              updateSelectedCount();
+            }
+          });
+        });
+
+        // Delete (remove from downloaded, put back into available list)
+        downloadedListEl.querySelectorAll('.translation-delete-btn').forEach(btn => {
+          btn.addEventListener('click', function(e){
+            e.stopPropagation();
+            const id = this.getAttribute('data-id');
+            const idx = downloaded.findIndex(t => t.id === id);
+            if (idx > -1) {
+              const [removed] = downloaded.splice(idx, 1);
+              if (!available[removed.lang]) available[removed.lang] = [];
+              available[removed.lang].unshift({ id: removed.id, name: removed.name });
+              renderDownloaded();
+              renderAvailable();
+              updateSelectedCount();
+            }
+          });
+        });
+      }
+
+      function renderAvailable() {
+        if (!availableListEl) return;
+        availableListEl.innerHTML = '';
+
+        Object.keys(available).forEach(lang => {
+          if (!available[lang].length) return;
+          const langLabel = document.createElement('div');
+          langLabel.className = 'translation-lang-label';
+          langLabel.textContent = lang;
+          availableListEl.appendChild(langLabel);
+
+          available[lang].forEach(t => {
+            const card = document.createElement('div');
+            card.className = 'translation-card';
+            const subLine = lang === 'Bangla' ? '' : `<div class="translation-sub">${t.name}</div>`;
+            card.innerHTML = `
+              <div class="translation-card-left">
+                <div class="translation-name-block">
+                  <div class="translation-name">${t.name}</div>
+                  <div class="translation-sub">${lang}</div>
+                  ${subLine}
+                </div>
+              </div>
+              <div class="translation-card-right">
+                <button class="translation-download-btn" data-id="${t.id}" data-lang="${lang}"><i class="fa-solid fa-arrow-down"></i></button>
+              </div>
+            `;
+            availableListEl.appendChild(card);
+          });
+        });
+
+        // Download click -> move to downloaded list
+        availableListEl.querySelectorAll('.translation-download-btn').forEach(btn => {
+          btn.addEventListener('click', function(e){
+            e.stopPropagation();
+            const id = this.getAttribute('data-id');
+            const lang = this.getAttribute('data-lang');
+            const idx = available[lang].findIndex(t => t.id === id);
+            if (idx > -1) {
+              const [moved] = available[lang].splice(idx, 1);
+              downloaded.push({ id: moved.id, name: moved.name, lang: lang, selected: true, deletable: true });
+              renderDownloaded();
+              renderAvailable();
+              updateSelectedCount();
+            }
+          });
+        });
+      }
+
+      function openTranslationModal() {
+        renderDownloaded();
+        renderAvailable();
+        updateSelectedCount();
+        translationModal.classList.add('active');
+        translationOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeTranslationModal() {
+        translationModal.classList.remove('active');
+        translationOverlay.classList.remove('active');
+        document.body.style.overflow = 'hidden'; // settings modal is still open underneath
+      }
+
+      if (translationTrigger) {
+        translationTrigger.addEventListener('click', openTranslationModal);
+      }
+      const tafsirSettingsTrigger = document.getElementById('tafsirSettingsTrigger');
+      if (tafsirSettingsTrigger) {
+        tafsirSettingsTrigger.addEventListener('click', openTranslationModal);
+      }
+      if (translationBackBtn) {
+        translationBackBtn.addEventListener('click', closeTranslationModal);
+      }
+      if (translationOverlay) {
+        translationOverlay.addEventListener('click', closeTranslationModal);
+      }
+    })();
+
+    // ===================== Reciter / Audio Manager Modal =====================
+    (function(){
+      const reciterTrigger = document.getElementById('reciterManagerTrigger');
+      const reciterModal = document.getElementById('reciterModal');
+      const reciterOverlay = document.getElementById('reciterOverlay');
+      const reciterBackBtn = document.getElementById('reciterBackBtn');
+      const reciterContent = document.getElementById('reciterModalContent');
+      const reciterListEl = document.getElementById('reciterList');
+      const reciterLoadingEl = document.getElementById('reciterLoading');
+
+      // Full list of reciters (Bangla). One is selected by default.
+      const RECITERS = [
+        { id:'akram-alakimi', name:'আকরাম আল-আলাকিমি' },
+        { id:'aziz-alili', name:'আজিজ আলিলি' },
+        { id:'abdurrahman-sudais', name:'আবদুর রহমান আস-সুদাইস' },
+        { id:'abdulbasit-abdulsamad', name:'আবদুল বাসিত আবদুল সামাদ' },
+        { id:'abdulbasit-mujawwad', name:'আবদুল বাসিত মুজাওয়াদ' },
+        { id:'abdulbasit-murattal', name:'আবদুল বাসিত মুরাত্তাল' },
+        { id:'abdullah-awad-juhani', name:'আবদুল্লাহ আবাদ আল-জুহাইনি' },
+        { id:'abdullah-basfar', name:'আবদুল্লাহ বাসফার' },
+        { id:'abdullah-matrood', name:'আবদুল্লাহ মাতরূদ' },
+        { id:'abubakr-shatri', name:'আবু বকর আশ-শাতরি' },
+        { id:'ahmed-ibn-ali-ajamy', name:'আহমেদ ইবন আলী আল-আজামী' },
+        { id:'ahmed-neana', name:'আহমেদ নেয়ানা' },
+        { id:'ibrahim-akhdar', name:'ইব্রাহিম আখদার' },
+        { id:'ibrahim-dosari-warsh', name:'ইব্রাহিম আল দোসারি - ওয়ারশ' },
+        { id:'yassin-jazairi-warsh', name:'ইয়াসিন আল জাজাইরি - ওয়ারশ' },
+        { id:'yasser-dussary', name:'ইয়াসির আদ-দুসসারি' },
+        { id:'yasser-salamah', name:'ইয়াসের সালামাহ' },
+        { id:'karim-mansoori', name:'কারিম মানসুরি' },
+        { id:'khalid-abdullah-qahtani', name:'খালিদ আবদুল্লাহ আল-কাহতানি' },
+        { id:'khalifah-tunaiji', name:'খালিফা আল তুনাইজি' },
+        { id:'fares-abbad', name:'ফারেস আব্বাদ' },
+        { id:'mahmoud-ali-banna', name:'মাহমুদ আলী আল বান্না' },
+        { id:'maher-muaiqly', name:'মাহের আল-মুয়াইকলি' },
+        { id:'mishari-alafasy', name:'মিশারি রশীদ আলাফাসি' },
+        { id:'mishari-alafasy-bn', name:'মিশারি রশীদ আলাফাসি (বাংলা অনুবাদসহ)' },
+        { id:'mustafa-ismail', name:'মুস্তাফা ইসমাইল' },
+        { id:'muhsin-qasim', name:'মুহসিন আল কাসিম' },
+        { id:'muhammad-abdulkarim', name:'মুহাম্মদ আবদুল করিম' },
+        { id:'muhammad-ayyub', name:'মুহাম্মদ আয়্যুব' },
+        { id:'muhammad-jibreel', name:'মুহাম্মদ জিবরিল' },
+        { id:'nasser-qatami', name:'নাসের আল কাতামি' },
+        { id:'saad-ghamdi', name:'সাদ আল-গামিদি' },
+        { id:'salah-bukhatir', name:'সালাহ বুখাতির' },
+        { id:'salah-hudhaify', name:'সালাহ আল-হুদাইফি' },
+        { id:'saud-shuraim', name:'সৌদ আশ-শুরাইম' },
+        { id:'wadee-yamani', name:'ওয়াদি আল-ইয়ামানি' }
+      ];
+
+      let selectedReciterId = 'abdulbasit-abdulsamad';
+      let playingReciterId = null;
+      let renderedCount = 0;
+      const BATCH = 10;
+
+      const playIcon = '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>';
+      const pauseIcon = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>';
+
+      function buildItem(r){
+        const isSelected = r.id === selectedReciterId;
+        const isPlaying = r.id === playingReciterId;
+        const item = document.createElement('div');
+        item.className = 'reciter-item';
+        item.dataset.id = r.id;
+        item.innerHTML = `
+          <div class="reciter-radio ${isSelected ? 'selected' : ''}" data-role="radio"></div>
+          <div class="reciter-name ${isSelected ? 'selected' : ''}" data-role="name">${r.name}</div>
+          <div class="reciter-actions">
+            <button class="reciter-play-btn" data-role="play" title="প্রিভিউ">${isPlaying ? pauseIcon : playIcon}</button>
+            <span class="reciter-chevron" data-role="chevron"><i class="fa-solid fa-chevron-right"></i></span>
+          </div>
+        `;
+        return item;
+      }
+
+      function renderNextBatch(){
+        if(renderedCount >= RECITERS.length) return;
+        const slice = RECITERS.slice(renderedCount, renderedCount + BATCH);
+        const frag = document.createDocumentFragment();
+        slice.forEach(r => frag.appendChild(buildItem(r)));
+        reciterListEl.appendChild(frag);
+        renderedCount += slice.length;
+        reciterLoadingEl.style.display = renderedCount < RECITERS.length ? 'block' : 'none';
+      }
+
+      function resetAndRenderFirstBatch(){
+        reciterListEl.innerHTML = '';
+        renderedCount = 0;
+        renderNextBatch();
+      }
+
+      function selectReciter(id){
+        selectedReciterId = id;
+        reciterListEl.querySelectorAll('.reciter-item').forEach(el => {
+          const isSel = el.dataset.id === id;
+          const radio = el.querySelector('[data-role="radio"]');
+          const nameEl = el.querySelector('[data-role="name"]');
+          radio.classList.toggle('selected', isSel);
+          nameEl.classList.toggle('selected', isSel);
+        });
+      }
+
+      function togglePlay(id, btnEl){
+        if(playingReciterId === id){
+          playingReciterId = null;
+          btnEl.innerHTML = playIcon;
+        } else {
+          if(playingReciterId){
+            const prevBtn = reciterListEl.querySelector(`.reciter-item[data-id="${playingReciterId}"] [data-role="play"]`);
+            if(prevBtn) prevBtn.innerHTML = playIcon;
+          }
+          playingReciterId = id;
+          btnEl.innerHTML = pauseIcon;
+        }
+      }
+
+      reciterListEl.addEventListener('click', function(e){
+        const item = e.target.closest('.reciter-item');
+        if(!item) return;
+        const id = item.dataset.id;
+        const playBtn = e.target.closest('[data-role="play"]');
+        if(playBtn){
+          e.stopPropagation();
+          togglePlay(id, playBtn);
+          return;
+        }
+        const chevronBtn = e.target.closest('[data-role="chevron"]');
+        if(chevronBtn){
+          e.stopPropagation();
+          const r = RECITERS.find(x => x.id === id);
+          if(r) openReciterDetailModal(r);
+          return;
+        }
+        selectReciter(id);
+      });
+
+      // Infinite scroll: load more reciters as the user scrolls down the modal
+      reciterContent.addEventListener('scroll', function(){
+        const nearBottom = (reciterContent.scrollTop + reciterContent.clientHeight) >= (reciterContent.scrollHeight - 300);
+        if(nearBottom) renderNextBatch();
+      });
+
+      function openReciterModal(){
+        resetAndRenderFirstBatch();
+        reciterModal.classList.add('active');
+        reciterOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeReciterModal(){
+        reciterModal.classList.remove('active');
+        reciterOverlay.classList.remove('active');
+        document.body.style.overflow = 'hidden'; // settings modal is still open underneath
+      }
+
+      if(reciterTrigger) reciterTrigger.addEventListener('click', openReciterModal);
+      if(reciterBackBtn) reciterBackBtn.addEventListener('click', closeReciterModal);
+      if(reciterOverlay) reciterOverlay.addEventListener('click', closeReciterModal);
+
+      // ===================== Reciter Detail (Surah Download) Modal =====================
+      const reciterDetailModal = document.getElementById('reciterDetailModal');
+      const reciterDetailOverlay = document.getElementById('reciterDetailOverlay');
+      const reciterDetailBackBtn = document.getElementById('reciterDetailBackBtn');
+      const reciterDetailTitle = document.getElementById('reciterDetailTitle');
+      const reciterSurahListEl = document.getElementById('reciterSurahList');
+      const reciterDownloadAllBtn = document.getElementById('reciterDownloadAllBtn');
+      const reciterDeleteAllBtn = document.getElementById('reciterDeleteAllBtn');
+
+      const downloadIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="5" y1="21" x2="19" y2="21"></line></svg>';
+      const downloadedIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>';
+
+      let currentDetailReciterId = null;
+      const downloadedSurahsByReciter = {}; // { reciterId: Set(surahNum) }
+
+      function getDownloadedSet(reciterId){
+        if(!downloadedSurahsByReciter[reciterId]) downloadedSurahsByReciter[reciterId] = new Set();
+        return downloadedSurahsByReciter[reciterId];
+      }
+
+      function buildSurahRow(surahEntry){
+        const num = surahEntry[0];
+        const name = surahEntry[1];
+        const set = getDownloadedSet(currentDetailReciterId);
+        const isDownloaded = set.has(num);
+        const row = document.createElement('div');
+        row.className = 'reciter-surah-item';
+        row.dataset.num = num;
+        row.innerHTML = `
+          <div class="reciter-surah-num">${toBnDigits(num)}</div>
+          <div class="reciter-surah-name">সূরা ${name}</div>
+          <button class="reciter-surah-dl ${isDownloaded ? 'downloaded' : ''}" data-role="dl" title="${isDownloaded ? 'ডাউনলোড হয়েছে' : 'ডাউনলোড করুন'}">${isDownloaded ? downloadedIcon : downloadIcon}</button>
+        `;
+        return row;
+      }
+
+      function renderSurahList(){
+        reciterSurahListEl.innerHTML = '';
+        const frag = document.createDocumentFragment();
+        surahs.forEach(s => frag.appendChild(buildSurahRow(s)));
+        reciterSurahListEl.appendChild(frag);
+      }
+
+      reciterSurahListEl.addEventListener('click', function(e){
+        const dlBtn = e.target.closest('[data-role="dl"]');
+        if(!dlBtn) return;
+        const row = e.target.closest('.reciter-surah-item');
+        const num = Number(row.dataset.num);
+        const set = getDownloadedSet(currentDetailReciterId);
+        if(set.has(num)){
+          set.delete(num);
+          dlBtn.classList.remove('downloaded');
+          dlBtn.innerHTML = downloadIcon;
+          dlBtn.title = 'ডাউনলোড করুন';
+        } else {
+          set.add(num);
+          dlBtn.classList.add('downloaded');
+          dlBtn.innerHTML = downloadedIcon;
+          dlBtn.title = 'ডাউনলোড হয়েছে';
+        }
+      });
+
+      if(reciterDownloadAllBtn){
+        reciterDownloadAllBtn.addEventListener('click', function(){
+          const set = getDownloadedSet(currentDetailReciterId);
+          surahs.forEach(s => set.add(s[0]));
+          renderSurahList();
+        });
+      }
+
+      if(reciterDeleteAllBtn){
+        reciterDeleteAllBtn.addEventListener('click', function(){
+          const set = getDownloadedSet(currentDetailReciterId);
+          set.clear();
+          renderSurahList();
+        });
+      }
+
+      function openReciterDetailModal(reciter){
+        currentDetailReciterId = reciter.id;
+        reciterDetailTitle.textContent = reciter.name;
+        renderSurahList();
+        reciterDetailModal.classList.add('active');
+        reciterDetailOverlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeReciterDetailModal(){
+        reciterDetailModal.classList.remove('active');
+        reciterDetailOverlay.classList.remove('active');
+        document.body.style.overflow = 'hidden';
+      }
+
+      if(reciterDetailBackBtn) reciterDetailBackBtn.addEventListener('click', closeReciterDetailModal);
+      if(reciterDetailOverlay) reciterDetailOverlay.addEventListener('click', closeReciterDetailModal);
+    })();
+
+    // ===================== Arabic Font Style Dialog =====================
+    (function(){
+      const arFontTrigger = document.getElementById('arFontTrigger');
+      const arFontOverlay = document.getElementById('arFontOverlay');
+      const arFontDialog = document.getElementById('arFontDialog');
+      const arFontCancelBtn = document.getElementById('arFontCancelBtn');
+      const arFontSaveBtn = document.getElementById('arFontSaveBtn');
+
+      let savedArabicFont = 'alquran-neo-indopak';
+      let tempArabicFont = savedArabicFont;
+
+      function renderSelection(id){
+        arFontDialog.querySelectorAll('.dialog-option').forEach(opt => {
+          opt.classList.toggle('selected', opt.dataset.id === id);
+        });
+      }
+
+      function openArFontDialog(){
+        tempArabicFont = savedArabicFont;
+        renderSelection(tempArabicFont);
+        arFontOverlay.classList.add('active');
+      }
+
+      function closeArFontDialog(){
+        arFontOverlay.classList.remove('active');
+      }
+
+      arFontDialog.querySelectorAll('.dialog-option').forEach(opt => {
+        opt.addEventListener('click', function(){
+          tempArabicFont = this.dataset.id;
+          renderSelection(tempArabicFont);
+        });
+      });
+
+      if(arFontTrigger) arFontTrigger.addEventListener('click', openArFontDialog);
+      if(arFontCancelBtn) arFontCancelBtn.addEventListener('click', closeArFontDialog);
+      if(arFontOverlay){
+        arFontOverlay.addEventListener('click', function(e){
+          if(e.target === arFontOverlay) closeArFontDialog();
+        });
+      }
+      if(arFontSaveBtn){
+        arFontSaveBtn.addEventListener('click', function(){
+          savedArabicFont = tempArabicFont;
+          localStorage.setItem('arabicFontStyle', savedArabicFont);
+          closeArFontDialog();
+        });
+      }
+    })();
+
+    // ===================== Other (General) Font Selection Dialog =====================
+    (function(){
+      const otherFontTrigger = document.getElementById('otherFontTrigger');
+      const otherFontOverlay = document.getElementById('otherFontOverlay');
+      const otherFontDialog = document.getElementById('otherFontDialog');
+      const otherFontSaveBtn = document.getElementById('otherFontSaveBtn');
+
+      let savedFonts = { en: 'poppins', bn: 'potro-sans' };
+      let tempFonts = Object.assign({}, savedFonts);
+
+      function renderSelection(){
+        otherFontDialog.querySelectorAll('.dialog-option').forEach(opt => {
+          const group = opt.dataset.group;
+          opt.classList.toggle('selected', opt.dataset.id === tempFonts[group]);
+        });
+      }
+
+      function openOtherFontDialog(){
+        tempFonts = Object.assign({}, savedFonts);
+        renderSelection();
+        otherFontOverlay.classList.add('active');
+      }
+
+      function closeOtherFontDialog(){
+        otherFontOverlay.classList.remove('active');
+      }
+
+      otherFontDialog.querySelectorAll('.dialog-option').forEach(opt => {
+        opt.addEventListener('click', function(){
+          const group = this.dataset.group;
+          tempFonts[group] = this.dataset.id;
+          renderSelection();
+        });
+      });
+
+      if(otherFontTrigger) otherFontTrigger.addEventListener('click', openOtherFontDialog);
+      if(otherFontOverlay){
+        otherFontOverlay.addEventListener('click', function(e){
+          if(e.target === otherFontOverlay) closeOtherFontDialog();
+        });
+      }
+      if(otherFontSaveBtn){
+        otherFontSaveBtn.addEventListener('click', function(){
+          savedFonts = Object.assign({}, tempFonts);
+          localStorage.setItem('generalFontEn', savedFonts.en);
+          localStorage.setItem('generalFontBn', savedFonts.bn);
+          closeOtherFontDialog();
+        });
+      }
+    })();
+  </script>
 
 </body>
 </html>
