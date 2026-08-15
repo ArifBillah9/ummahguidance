@@ -3640,9 +3640,14 @@ function toArDigits(n){
   return String(n).split('').map(d=>map[d]!==undefined?map[d]:d).join('');
 }
 
-// আলিফের উপর থাকা ওয়াসলা/পেশ চিহ্ন (ٱ, U+0671) সরিয়ে সাধারণ আলিফ (ا, U+0627) বসানো হয়
+// আলিফের উপর থাকা ওয়াসলা/পেশ চিহ্ন (ٱ, U+0671) সরিয়ে সাধারণ আলিফ (ا, U+0627) বসানো হয়,
+// আর বাঁকা জবর (উপরে ছোট ঝুলন্ত আলিফ / dagger alif, U+0670 — সাথে থাকা তাতবিল U+0640 সহ) সরিয়ে দেওয়া হয়,
+// শুধু সাধারণ খাড়া জবর (ফাতহা, U+064E) থাকবে
 function cleanArabicText(text){
-  return typeof text === 'string' ? text.replace(/\u0671/g, '\u0627') : text;
+  if(typeof text !== 'string') return text;
+  return text
+    .replace(/\u0671/g, '\u0627')      // ٱ (আলিফ ওয়াসলা) -> ا (সাধারণ আলিফ)
+    .replace(/\u0640?\u0670/g, '');    // ـٰ / ٰ (বাঁকা জবর/ড্যাগার আলিফ) সরানো
 }
 
 function render(){
@@ -4679,13 +4684,6 @@ async function renderSurahBody(num){
   try{
     const [{ arabic }] = await Promise.all([ fetchSurah(num), ensureSelectedTranslationsLoaded(), fetchTransliteration(num) ]);
     let html = surahHeadHTML(arabic);
-    if(num !== 9){ // Surah At-Tawbah traditionally has no Bismillah heading
-      html += `
-        <div class="bismillah-box">
-          <span class="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
-          <span class="translit">পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে</span>
-        </div>`;
-    }
     if(contentMode === 'recitation'){
       const flow = arabic.ayahs.map(a =>
         `${a.text}<span class="ayah-end">${toArDigits(a.numberInSurah)}</span>`
@@ -4728,9 +4726,6 @@ async function renderJuzBody(num){
         const bnName = bnEntry ? bnEntry[1] : (surahMeta.englishName || '');
         const arName = surahMeta.name || '';
         html += `<p class="juz-surah-tag">সূরা ${bnName} <span class="ar" style="color:var(--gold);font-size:.8em;">(${arName})</span></p>`;
-        if(a.numberInSurah === 1 && surahNum !== 9){
-          html += `<div class="bismillah-box"><span class="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span><span class="translit">পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে</span></div>`;
-        }
       }
       if(contentMode === 'recitation'){
         recitationBuffer += `${a.text}<span class="ayah-end">${toArDigits(a.numberInSurah)}</span> `;
