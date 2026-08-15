@@ -16,6 +16,38 @@
     font-style:normal;
     font-display:swap;
   }
+  @font-face{
+    font-family:'noorehuda';
+    src:local('noorehuda'),
+        url('quran/icons/fonts/noorehuda.woff2') format('woff2'),
+        url('https://raw.githubusercontent.com/GlobalQuran/mushaf/master/noorehuda.ttf') format('truetype');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:'noorehuda Fallback';
+    src:local('Arial');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:'uthmanic';
+    src:local('KFGQPC Uthmanic Script HAFS'),
+        url('quran/icons/fonts/uthmanic.woff2') format('woff2'),
+        url('https://raw.githubusercontent.com/mustafa0x/qpc-fonts/f93bf5f3/various-woff2/UthmanicHafs1%20Ver09.woff2') format('woff2');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
+  @font-face{
+    font-family:'uthmanic Fallback';
+    src:local('Arial');
+    font-weight:normal;
+    font-style:normal;
+    font-display:swap;
+  }
   :root{
     --deep-teal:#0e3b31;
     --mid-green:#166a4f;
@@ -83,7 +115,7 @@
     padding-top: 60px; /* Header height + buffer */
   }
   .bn-serif{font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;}
-  .ar{font-family:'Amiri Quran','Amiri',serif;}
+  .ar{font-family:'uthmanic','uthmanic Fallback','Amiri Quran','Amiri',serif;}
 
   /* ============ Hamburger Menu & Sidebar Drawer ============ */
   .hamburger-btn {
@@ -331,7 +363,7 @@
   }
 
   .surah-item-name-arabic {
-    font-family: 'Amiri Quran', 'Amiri', serif;
+    font-family: 'uthmanic','uthmanic Fallback', 'Amiri Quran', 'Amiri', serif;
     font-size: 13px;
     color: var(--muted);
     font-weight: 400;
@@ -1332,7 +1364,7 @@
     border-radius:999px; padding:2px 10px; margin-bottom:10px;
   }
   .tv-ayah-arabic{
-    font-family:'Amiri Quran','Amiri',serif; direction:rtl; text-align:right;
+    font-family:'noorehuda','noorehuda Fallback','Amiri Quran','Amiri',serif; direction:rtl; text-align:right;
     font-size:25px; line-height:2.05; color:var(--deep-teal); margin-bottom:12px;
   }
   .tv-ayah-source{
@@ -1373,7 +1405,7 @@
     color:var(--deep-teal); margin:0 0 2px; line-height:1.3;
   }
   .card-ar{
-    font-family:'Amiri',serif; font-size:20px; color:var(--gold);
+    font-family:'uthmanic','uthmanic Fallback','Amiri',serif; font-size:20px; color:var(--gold);
     text-align:right; margin:2px 0 8px; line-height:1;
   }
   .surah-calligraphy{
@@ -1412,7 +1444,7 @@
     font-size:18px; color:var(--deep-teal); white-space:nowrap;
   }
   .para-ar{
-    font-family:'Amiri Quran','Amiri',serif; font-size:26px; color:var(--mid-green);
+    font-family:'noorehuda','noorehuda Fallback','Amiri Quran','Amiri',serif; font-size:26px; color:var(--mid-green);
     text-align:right; direction:rtl; line-height:1.5;
   }
 
@@ -1540,7 +1572,7 @@
   }
   .reader-list-item:hover{background:var(--cream);}
   .reader-list-item.active{background:#eef6f1; color:var(--deep-teal); font-weight:700; box-shadow:inset -3px 0 0 var(--mid-green);}
-  .reader-list-item .ar-small{font-family:'Amiri',serif; color:var(--gold); font-size:16px;}
+  .reader-list-item .ar-small{font-family:'uthmanic','uthmanic Fallback','Amiri',serif; color:var(--gold); font-size:16px;}
 
   .reader-content{flex:1; min-width:0; padding:24px 40px 60px;}
   .content-tabs{
@@ -1574,11 +1606,11 @@
   .bismillah-box{
     background:#eef4ee; border-radius:14px; padding:26px; text-align:center; margin-bottom:22px;
   }
-  .bismillah-box .ar{font-size:30px; color:var(--deep-teal); display:block; margin-bottom:8px;}
+  .bismillah-box .ar{font-family:'noorehuda','noorehuda Fallback','Amiri Quran','Amiri',serif; font-size:30px; color:var(--deep-teal); display:block; margin-bottom:8px;}
   .bismillah-box .translit{font-size:13.5px; color:var(--muted);}
   .ayah-block{padding:22px 0; border-bottom:1px solid var(--line);}
   .ayah-arabic{
-    font-family:'Amiri',serif; font-size:28px; line-height:2.2; color:var(--ink);
+    font-family:'noorehuda','noorehuda Fallback','Amiri',serif; font-size:28px; line-height:2.2; color:var(--ink);
     text-align:right; direction:rtl;
   }
   .ayah-num-circle{
@@ -1594,7 +1626,7 @@
     background:none; border:none; cursor:pointer; display:flex; flex-direction:column;
     align-items:center; gap:6px; padding:4px 2px;
   }
-  .wbw-item .wbw-ar{ font-family:'Amiri Quran','Amiri',serif; font-size:26px; color:var(--deep-teal); line-height:1.6; }
+  .wbw-item .wbw-ar{ font-family:'noorehuda','noorehuda Fallback','Amiri Quran','Amiri',serif; font-size:26px; color:var(--deep-teal); line-height:1.6; }
   .wbw-item .wbw-meaning{
     font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:13px; color:var(--muted);
     white-space:nowrap;
@@ -1662,7 +1694,7 @@
     padding:22px 24px 26px; overflow-y:auto; font-size:15.5px; line-height:1.9; color:var(--ink);
   }
   .tafsir-modal-body .tafsir-ayah-ar{
-    font-family:'Amiri',serif; font-size:22px; color:var(--deep-teal); text-align:right; direction:rtl;
+    font-family:'noorehuda','noorehuda Fallback','Amiri',serif; font-size:22px; color:var(--deep-teal); text-align:right; direction:rtl;
     margin-bottom:16px; line-height:1.9;
   }
   .tafsir-footnote{
@@ -1760,7 +1792,7 @@
   .recitation-flow{
     background:var(--paper); border:1px solid var(--line); border-radius:18px;
     padding:38px 34px; margin-bottom:22px;
-    font-family:'Amiri',serif; font-size:29px; line-height:2.7;
+    font-family:'noorehuda','noorehuda Fallback','Amiri',serif; font-size:29px; line-height:2.7;
     text-align:justify; direction:rtl; color:var(--ink);
     box-shadow:0 10px 26px -18px rgba(14,59,49,.3);
   }
@@ -1916,7 +1948,7 @@
     .s-right{ flex:0 0 auto; display:flex; align-items:center; gap:6px; max-width:44%; }
     .s-mosque{ width:22px; height:22px; object-fit:contain; flex:0 0 auto; }
     .s-ar-mobile{
-      font-family:'Amiri',serif; font-size:21px; color:var(--deep-teal); direction:rtl;
+      font-family:'uthmanic','uthmanic Fallback','Amiri',serif; font-size:21px; color:var(--deep-teal); direction:rtl;
       white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     }
   /* ---- end mobile app UI block ---- */
@@ -2103,7 +2135,7 @@
 
     .bismillah-box{ background:none; padding:22px 10px 26px; text-align:center; }
     .bismillah-box .ar{
-      font-family:'Amiri Quran','Amiri',serif; font-size:38px; color:var(--deep-teal);
+      font-family:'noorehuda','noorehuda Fallback','Amiri Quran','Amiri',serif; font-size:38px; color:var(--deep-teal);
       display:block; line-height:1.4;
     }
     .bismillah-box .translit{ display:block; margin-top:6px; font-style:italic; color:var(--muted); }
@@ -2305,7 +2337,7 @@
   }
   .tp-loading, .tp-error{ text-align:center; padding-top:40px; color:var(--muted); font-size:14.5px; }
   .tp-content .tafsir-ayah-ar{
-    font-family:'Amiri',serif; font-size:24px; color:var(--deep-teal); text-align:right; direction:rtl; margin-bottom:20px; line-height:1.9;
+    font-family:'noorehuda','noorehuda Fallback','Amiri',serif; font-size:24px; color:var(--deep-teal); text-align:right; direction:rtl; margin-bottom:20px; line-height:1.9;
   }
   .tp-content p{ font-size:15.5px; color:var(--ink); line-height:1.9; }
   .tp-content .tafsir-footnote{ margin-top:18px; padding-top:14px; border-top:1px dashed var(--line); font-size:13.5px; color:var(--muted); }
@@ -2423,7 +2455,7 @@
   }
   .bm-tag-btn:hover{ background:var(--cream); }
   .bm-arabic{
-    font-family:'Amiri Quran','Amiri',serif; font-size:23px; color:var(--deep-teal); text-align:right;
+    font-family:'noorehuda','noorehuda Fallback','Amiri Quran','Amiri',serif; font-size:23px; color:var(--deep-teal); text-align:right;
     direction:rtl; line-height:2; margin-bottom:14px;
   }
   .bm-icon-row{ display:flex; align-items:center; justify-content:center; gap:22px; margin-bottom:16px; }
@@ -2520,7 +2552,7 @@
     font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-weight:700; font-size:15px;
     color:var(--ink); margin-bottom:26px;
   }
-  .word-sheet-ar{ font-family:'Amiri Quran','Amiri',serif; font-size:36px; color:var(--deep-teal); margin-bottom:26px; }
+  .word-sheet-ar{ font-family:'noorehuda','noorehuda Fallback','Amiri Quran','Amiri',serif; font-size:36px; color:var(--deep-teal); margin-bottom:26px; }
   .word-sheet-line{
     font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:15px; color:var(--ink);
     margin-bottom:10px;
