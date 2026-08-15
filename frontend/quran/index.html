@@ -4504,7 +4504,25 @@ if(rBottomNav){
   });
 }
 
-function jumpToAyah(i){
+// সূরা ফাতিহার আয়াতগুলোর জন্য নির্দিষ্ট (ইন্দো-পাক স্টাইল হরকতসহ) হুবহু টেক্সট —
+// কী হলো আসল API নম্বর (বিসমিল্লাহ সহ, তাই ২ থেকে ৮), যেহেতু বিসমিল্লাহকে এখানে আলাদা আয়াত হিসেবে গণনা করা হয় না,
+// তাই দেখানোর সময় নম্বর ১ কমিয়ে ১-৭ দেখানো হয় (দেখুন displayAyahNumber)
+const FATIHA_AYAH_TEXT_OVERRIDE = {
+  2: 'اَلۡحَمۡدُ لِلّٰہِ رَبِّ الۡعٰلَمِیۡنَ ۙ',
+  3: 'الرَّحۡمٰنِ الرَّحِیۡمِ ۙ',
+  4: 'مٰلِکِ یَوۡمِ الدِّیۡنِ ؕ',
+  5: 'اِیَّاکَ نَعۡبُدُ وَاِیَّاکَ نَسۡتَعِیۡنُ ؕ',
+  6: 'اِہۡدِنَا الصِّرَاطَ الۡمُسۡتَقِیۡمَ ۙ',
+  7: 'صِرَاطَ الَّذِیۡنَ اَنۡعَمۡتَ عَلَیۡہِمۡ ۙ۬',
+  8: 'غَیۡرِ الۡمَغۡضُوۡبِ عَلَیۡہِمۡ وَلَا الضَّآلِّیۡنَ'
+};
+
+// সূরা ফাতিহায় বিসমিল্লাহকে আয়াত হিসেবে গণনা না করায়, প্রদর্শিত আয়াত-নম্বর আসল API নম্বরের চেয়ে ১ কম হবে
+function displayAyahNumber(surahNum, numberInSurah){
+  return (surahNum === 1) ? (numberInSurah - 1) : numberInSurah;
+}
+
+
   currentAyahIndex = i;
   saveLastRead(currentSurahNum, i);
   buildReaderList();
@@ -4514,7 +4532,7 @@ function jumpToAyah(i){
     block.classList.add('highlighted');
     block.scrollIntoView({ behavior:'smooth', block:'center' });
   }
-}
+
 
 async function fetchSurah(num){
   if(surahCache[num]) return surahCache[num];
@@ -4525,6 +4543,9 @@ async function fetchSurah(num){
     json.data.ayahs.forEach(a=>{
       a.text = stripEmbeddedBismillah(a.text, a.numberInSurah, num);
       a.text = cleanArabicText(a.text);
+      if(num === 1 && FATIHA_AYAH_TEXT_OVERRIDE[a.numberInSurah]){
+        a.text = FATIHA_AYAH_TEXT_OVERRIDE[a.numberInSurah];
+      }
     });
   }
   const data = { arabic: json.data };
