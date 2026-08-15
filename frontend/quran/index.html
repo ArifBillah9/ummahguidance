@@ -3640,14 +3640,13 @@ function toArDigits(n){
   return String(n).split('').map(d=>map[d]!==undefined?map[d]:d).join('');
 }
 
-// আলিফের উপর থাকা ওয়াসলা/পেশ চিহ্ন (ٱ, U+0671) সরিয়ে সাধারণ আলিফ (ا, U+0627) বসানো হয়,
-// আর বাঁকা জবর (উপরে ছোট ঝুলন্ত আলিফ / dagger alif, U+0670 — সাথে থাকা তাতবিল U+0640 সহ) সরিয়ে দেওয়া হয়,
-// শুধু সাধারণ খাড়া জবর (ফাতহা, U+064E) থাকবে
+// আলিফের উপর থাকা ওয়াসলা/পেশ চিহ্ন (ٱ, U+0671) সরিয়ে সাধারণ আলিফ (ا, U+0627) বসানো হয়।
+// বাঁকা জবর/ড্যাগার আলিফ (আলিফ টান চিহ্ন, U+0670) স্পর্শ করা হয় না — যেখানে যেমন আছে তেমনই থাকে।
 function cleanArabicText(text){
   if(typeof text !== 'string') return text;
   return text
-    .replace(/\u0671/g, '\u0627')      // ٱ (আলিফ ওয়াসলা) -> ا (সাধারণ আলিফ)
-    .replace(/\u0640?\u0670/g, '');    // ـٰ / ٰ (বাঁকা জবর/ড্যাগার আলিফ) সরানো
+    .replace(/\u0671/g, '\u0627');     // ٱ (আলিফ ওয়াসলা) -> ا (সাধারণ আলিফ)
+    // ـٰ / ٰ (বাঁকা জবর/ড্যাগার আলিফ, অর্থাৎ "আলিফ টান" চিহ্ন) আর সরানো হয় না — যেখানে থাকে সেখানে তার চিহ্ন থেকে যাবে
 }
 
 // quran-uthmani এডিশনে প্রতিটা সূরার প্রথম আয়াতের টেক্সটের শুরুতে বিসমিল্লাহ জুড়ে দেওয়া থাকে —
@@ -4709,13 +4708,14 @@ async function renderSurahBody(num){
           <span class="translit">পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে</span>
         </div>`;
     }
+    const bodyAyahs = arabic.ayahs.filter(a => !(num === 1 && a.numberInSurah === 1));
     if(contentMode === 'recitation'){
-      const flow = arabic.ayahs.map(a =>
+      const flow = bodyAyahs.map(a =>
         `${a.text}<span class="ayah-end">${toArDigits(a.numberInSurah)}</span>`
       ).join(' ');
       html += `<div class="recitation-flow">${flow}</div>`;
     } else {
-      arabic.ayahs.forEach((a)=>{
+      bodyAyahs.forEach((a)=>{
         html += renderAyahBlock(a, num);
       });
     }
@@ -4755,10 +4755,13 @@ async function renderJuzBody(num){
           html += `<div class="bismillah-box"><span class="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span><span class="translit">পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে</span></div>`;
         }
       }
-      if(contentMode === 'recitation'){
-        recitationBuffer += `${a.text}<span class="ayah-end">${toArDigits(a.numberInSurah)}</span> `;
-      } else {
-        html += renderAyahBlock(a, surahNum);
+      const isDuplicateFatihaBismillah = (surahNum === 1 && a.numberInSurah === 1);
+      if(!isDuplicateFatihaBismillah){
+        if(contentMode === 'recitation'){
+          recitationBuffer += `${a.text}<span class="ayah-end">${toArDigits(a.numberInSurah)}</span> `;
+        } else {
+          html += renderAyahBlock(a, surahNum);
+        }
       }
     });
     if(contentMode === 'recitation') flushRecitation();
