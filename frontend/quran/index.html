@@ -3635,6 +3635,16 @@ function toBnDigits(n){
   return String(n).split('').map(d=>map[d]!==undefined?map[d]:d).join('');
 }
 
+function toArDigits(n){
+  const map = {'0':'٠','1':'١','2':'٢','3':'٣','4':'٤','5':'٥','6':'٦','7':'٧','8':'٨','9':'٩'};
+  return String(n).split('').map(d=>map[d]!==undefined?map[d]:d).join('');
+}
+
+// আলিফের উপর থাকা ওয়াসলা/পেশ চিহ্ন (ٱ, U+0671) সরিয়ে সাধারণ আলিফ (ا, U+0627) বসানো হয়
+function cleanArabicText(text){
+  return typeof text === 'string' ? text.replace(/\u0671/g, '\u0627') : text;
+}
+
 function render(){
   const q = searchInput.value.trim().toLowerCase();
   grid.innerHTML = '';
@@ -3840,7 +3850,7 @@ async function fetchTopicAyah(surah, ayah){
     fetchTafsir(surah, ayah).catch(()=>null)
   ]);
   const data = {
-    arabic: arRes && arRes.data ? arRes.data.text : '',
+    arabic: arRes && arRes.data ? cleanArabicText(arRes.data.text) : '',
     translation: tafsirData ? tafsirData.translation : null
   };
   topicVerseAyahCache[key] = data;
@@ -4498,6 +4508,9 @@ async function fetchSurah(num){
   const res = await fetch(`${API_BASE}/surah/${num}/${ARABIC_EDITION}`);
   if(!res.ok) throw new Error('network');
   const json = await res.json();
+  if(json.data && Array.isArray(json.data.ayahs)){
+    json.data.ayahs.forEach(a=>{ a.text = cleanArabicText(a.text); });
+  }
   const data = { arabic: json.data };
   surahCache[num] = data;
   return data;
@@ -4527,6 +4540,10 @@ async function fetchWordByWord(surahNum){
   (json.verses || []).forEach(v=>{
     const ayahNum = Number(String(v.verse_key).split(':')[1]);
     const words = (v.words || []).filter(w=> w.char_type_name === 'word');
+    words.forEach(w=>{
+      if(w.text_uthmani) w.text_uthmani = cleanArabicText(w.text_uthmani);
+      if(w.text_indopak) w.text_indopak = cleanArabicText(w.text_indopak);
+    });
     map.set(ayahNum, words);
   });
   wordByWordCache[surahNum] = map;
@@ -4539,6 +4556,9 @@ async function fetchJuz(num){
   if(!res.ok) throw new Error('network');
   const json = await res.json();
   if(!json.data) throw new Error('bad-shape');
+  if(Array.isArray(json.data.ayahs)){
+    json.data.ayahs.forEach(a=>{ a.text = cleanArabicText(a.text); });
+  }
   const data = { arabic: json.data };
   juzCache[num] = data;
   return data;
@@ -4591,7 +4611,7 @@ function wordByWordHTMLFor(surahNum, n, fallbackArabic){
   const words = map ? map.get(n) : null;
   const hasArabic = words && words.some(w=> w.text_uthmani || w.text_indopak);
   if(!words || !words.length || !hasArabic){
-    return `<p class="ayah-arabic">${fallbackArabic}<span class="ayah-num-circle">${toBnDigits(n)}</span></p>`;
+    return `<p class="ayah-arabic">${fallbackArabic}<span class="ayah-num-circle">${toArDigits(n)}</span></p>`;
   }
   const items = words.map(w=>{
     const ar = w.text_uthmani || w.text_indopak || '';
@@ -4605,7 +4625,7 @@ function wordByWordHTMLFor(surahNum, n, fallbackArabic){
         <span class="wbw-meaning">${meaning}</span>
       </button>`;
   }).join('');
-  return `<div class="wbw-grid" dir="rtl">${items}<span class="ayah-num-circle wbw-num-circle">${toBnDigits(n)}</span></div>`;
+  return `<div class="wbw-grid" dir="rtl">${items}<span class="ayah-num-circle wbw-num-circle">${toArDigits(n)}</span></div>`;
 }
 
 function renderAyahBlock(arabicAyah, surahNum){
@@ -4616,11 +4636,11 @@ function renderAyahBlock(arabicAyah, surahNum){
   const translit = translitMap ? translitMap.get(n) : null;
   const arabicHTML = wordByWordSurahs.has(resolvedSurahNum)
     ? wordByWordHTMLFor(resolvedSurahNum, n, arabicAyah.text)
-    : `<p class="ayah-arabic">${arabicAyah.text}<span class="ayah-num-circle">${toBnDigits(n)}</span></p>`;
+    : `<p class="ayah-arabic">${arabicAyah.text}<span class="ayah-num-circle">${toArDigits(n)}</span></p>`;
   return `
     <div class="ayah-block" data-ayah-index="${n}" data-surah="${resolvedSurahNum}" data-g="${g}">
       <div class="ayah-top-row">
-        <span class="ayah-num-orn"><span>${toBnDigits(n)}</span></span>
+        <span class="ayah-num-orn"><span>${toArDigits(n)}</span></span>
         <span class="ayah-dots">
           <button class="dot dot-audio" data-action="audio" data-g="${g}" title="অডিও"></button>
           <button class="dot dot-bookmark" data-action="bookmark" data-g="${g}" title="বুকমার্ক"></button>
@@ -4668,7 +4688,7 @@ async function renderSurahBody(num){
     }
     if(contentMode === 'recitation'){
       const flow = arabic.ayahs.map(a =>
-        `${a.text}<span class="ayah-end">${toBnDigits(a.numberInSurah)}</span>`
+        `${a.text}<span class="ayah-end">${toArDigits(a.numberInSurah)}</span>`
       ).join(' ');
       html += `<div class="recitation-flow">${flow}</div>`;
     } else {
@@ -4713,7 +4733,7 @@ async function renderJuzBody(num){
         }
       }
       if(contentMode === 'recitation'){
-        recitationBuffer += `${a.text}<span class="ayah-end">${toBnDigits(a.numberInSurah)}</span> `;
+        recitationBuffer += `${a.text}<span class="ayah-end">${toArDigits(a.numberInSurah)}</span> `;
       } else {
         html += renderAyahBlock(a, surahNum);
       }
