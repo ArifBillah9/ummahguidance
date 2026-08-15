@@ -4093,6 +4093,21 @@ const wordByWordCache = {}; // num -> Map(numberInSurah -> words[])
 const wordByWordSurahs = new Set(); // surah numbers that have "downloaded" word-by-word data
 const WORD_API_BASE = 'https://api.quran.com/api/v4';
 
+// সূরা আল-ফাতিহার আয়াতসমূহ — নির্দিষ্টভাবে দেওয়া হুবহু টেক্সট অনুযায়ী।
+// এখানে বিসমিল্লাহ্‌কে আলাদা আয়াত হিসেবে গণনা করা হয়নি (সেটি উপরে bismillah-box এ আলাদাভাবে দেখানো হয়),
+// এবং সপ্তম (সংযুক্ত) আয়াতটিকে দুই ভাগে ভাগ করে ৬ ও ৭ নম্বর হিসেবে দেখানো হয়েছে — মোট ৭টি আয়াত (১–৭)।
+// display = পাঠকের কাছে দেখানো আয়াত নম্বর, apiNum = alquran.cloud এর numberInSurah
+// (অনুবাদ/তাফসীর/অডিওর জন্য ব্যবহৃত হয়, যেখানে বিসমিল্লাহ ১ নং আয়াত হিসেবে গণনা করা আছে)
+const FATIHA_CUSTOM_AYAHS = [
+  { display: 1, apiNum: 2, text: 'اَلۡحَمۡدُ لِلّٰہِ رَبِّ الۡعٰلَمِیۡنَ ۙ' },
+  { display: 2, apiNum: 3, text: 'الرَّحۡمٰنِ الرَّحِیۡمِ ۙ' },
+  { display: 3, apiNum: 4, text: 'مٰلِکِ یَوۡمِ الدِّیۡنِ ؕ' },
+  { display: 4, apiNum: 5, text: 'اِیَّاکَ نَعۡبُدُ وَاِیَّاکَ نَسۡتَعِیۡنُ ؕ' },
+  { display: 5, apiNum: 6, text: 'اِہۡدِنَا الصِّرَاطَ الۡمُسۡتَقِیۡمَ ۙ' },
+  { display: 6, apiNum: 7, text: 'صِرَاطَ الَّذِیۡنَ اَنۡعَمۡتَ عَلَیۡہِمۡ ۙ۬' },
+  { display: 7, apiNum: 7, text: 'غَیۡرِ الۡمَغۡضُوۡبِ عَلَیۡہِمۡ وَلَا الضَّآلِّیۡنَ' }
+];
+
 function showListing(){
   if(typeof stopAyahAudioPlayback === 'function') stopAyahAudioPlayback();
   readerView.style.display = 'none';
@@ -4504,25 +4519,7 @@ if(rBottomNav){
   });
 }
 
-// সূরা ফাতিহার আয়াতগুলোর জন্য নির্দিষ্ট (ইন্দো-পাক স্টাইল হরকতসহ) হুবহু টেক্সট —
-// কী হলো আসল API নম্বর (বিসমিল্লাহ সহ, তাই ২ থেকে ৮), যেহেতু বিসমিল্লাহকে এখানে আলাদা আয়াত হিসেবে গণনা করা হয় না,
-// তাই দেখানোর সময় নম্বর ১ কমিয়ে ১-৭ দেখানো হয় (দেখুন displayAyahNumber)
-const FATIHA_AYAH_TEXT_OVERRIDE = {
-  2: 'اَلۡحَمۡدُ لِلّٰہِ رَبِّ الۡعٰلَمِیۡنَ ۙ',
-  3: 'الرَّحۡمٰنِ الرَّحِیۡمِ ۙ',
-  4: 'مٰلِکِ یَوۡمِ الدِّیۡنِ ؕ',
-  5: 'اِیَّاکَ نَعۡبُدُ وَاِیَّاکَ نَسۡتَعِیۡنُ ؕ',
-  6: 'اِہۡدِنَا الصِّرَاطَ الۡمُسۡتَقِیۡمَ ۙ',
-  7: 'صِرَاطَ الَّذِیۡنَ اَنۡعَمۡتَ عَلَیۡہِمۡ ۙ۬',
-  8: 'غَیۡرِ الۡمَغۡضُوۡبِ عَلَیۡہِمۡ وَلَا الضَّآلِّیۡنَ'
-};
-
-// সূরা ফাতিহায় বিসমিল্লাহকে আয়াত হিসেবে গণনা না করায়, প্রদর্শিত আয়াত-নম্বর আসল API নম্বরের চেয়ে ১ কম হবে
-function displayAyahNumber(surahNum, numberInSurah){
-  return (surahNum === 1) ? (numberInSurah - 1) : numberInSurah;
-}
-
-
+function jumpToAyah(i){
   currentAyahIndex = i;
   saveLastRead(currentSurahNum, i);
   buildReaderList();
@@ -4532,7 +4529,7 @@ function displayAyahNumber(surahNum, numberInSurah){
     block.classList.add('highlighted');
     block.scrollIntoView({ behavior:'smooth', block:'center' });
   }
-
+}
 
 async function fetchSurah(num){
   if(surahCache[num]) return surahCache[num];
@@ -4543,9 +4540,6 @@ async function fetchSurah(num){
     json.data.ayahs.forEach(a=>{
       a.text = stripEmbeddedBismillah(a.text, a.numberInSurah, num);
       a.text = cleanArabicText(a.text);
-      if(num === 1 && FATIHA_AYAH_TEXT_OVERRIDE[a.numberInSurah]){
-        a.text = FATIHA_AYAH_TEXT_OVERRIDE[a.numberInSurah];
-      }
     });
   }
   const data = { arabic: json.data };
@@ -4605,7 +4599,8 @@ async function fetchJuz(num){
   return data;
 }
 
-function ayahActionsHTML(globalAyahNumber, numberInSurah, surahNum){
+function ayahActionsHTML(globalAyahNumber, numberInSurah, surahNum, displayNum){
+  const shownNum = displayNum !== undefined && displayNum !== null ? displayNum : numberInSurah;
   return `
     <div class="ayah-actions">
       <button class="ayah-action" data-action="tafsir" data-g="${globalAyahNumber}" data-surah="${surahNum}" data-ayah="${numberInSurah}">
@@ -4615,7 +4610,7 @@ function ayahActionsHTML(globalAyahNumber, numberInSurah, surahNum){
       <button class="ayah-action icon-only" data-action="share" data-g="${globalAyahNumber}" title="শেয়ার">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
       </button>
-      <span class="ayah-num-pill">${toBnDigits(numberInSurah)}</span>
+      <span class="ayah-num-pill">${toBnDigits(shownNum)}</span>
       <button class="ayah-action icon-only" data-action="bookmark" data-g="${globalAyahNumber}" title="বুকমার্ক">
         <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
       </button>
@@ -4626,7 +4621,7 @@ function ayahActionsHTML(globalAyahNumber, numberInSurah, surahNum){
     </div>`;
 }
 
-function translationsHTMLFor(surahNum, ayahNumInSurah){
+function translationsHTMLFor(surahNum, ayahNumInSurah, displayNum){
   if(selectedTranslations.length === 0){
     return `<p class="ayah-translation" style="color:var(--muted);font-size:13.5px;">কোনো অনুবাদ নির্বাচিত নেই — উপরে ⚙ আইকনে ক্লিক করে অনুবাদ বেছে নিন।</p>`;
   }
@@ -4641,18 +4636,20 @@ function translationsHTMLFor(surahNum, ayahNumInSurah){
   }).filter(Boolean);
   if(parts.length === 0) return '';
   // append the ayah-number "link" (mirrors the native app's blue verse-number link) onto the last translation paragraph
-  const numLink = ` <a class="ayah-num-link" data-action="tafsir" data-surah="${surahNum}" data-ayah="${ayahNumInSurah}">${toBnDigits(ayahNumInSurah)}</a>`;
+  const shownNum = displayNum !== undefined && displayNum !== null ? displayNum : ayahNumInSurah;
+  const numLink = ` <a class="ayah-num-link" data-action="tafsir" data-surah="${surahNum}" data-ayah="${ayahNumInSurah}">${toBnDigits(shownNum)}</a>`;
   const lastIdx = parts.length - 1;
   parts[lastIdx] = parts[lastIdx].replace(/<\/p>$/, `${numLink}</p>`);
   return parts.join('');
 }
 
-function wordByWordHTMLFor(surahNum, n, fallbackArabic){
+function wordByWordHTMLFor(surahNum, n, fallbackArabic, displayNum){
+  const shownNum = displayNum !== undefined && displayNum !== null ? displayNum : n;
   const map = wordByWordCache[surahNum];
   const words = map ? map.get(n) : null;
   const hasArabic = words && words.some(w=> w.text_uthmani || w.text_indopak);
   if(!words || !words.length || !hasArabic){
-    return `<p class="ayah-arabic">${fallbackArabic}<span class="ayah-num-circle">${toArDigits(n)}</span></p>`;
+    return `<p class="ayah-arabic">${fallbackArabic}<span class="ayah-num-circle">${toArDigits(shownNum)}</span></p>`;
   }
   const items = words.map(w=>{
     const ar = w.text_uthmani || w.text_indopak || '';
@@ -4666,22 +4663,25 @@ function wordByWordHTMLFor(surahNum, n, fallbackArabic){
         <span class="wbw-meaning">${meaning}</span>
       </button>`;
   }).join('');
-  return `<div class="wbw-grid" dir="rtl">${items}<span class="ayah-num-circle wbw-num-circle">${toArDigits(n)}</span></div>`;
+  return `<div class="wbw-grid" dir="rtl">${items}<span class="ayah-num-circle wbw-num-circle">${toArDigits(shownNum)}</span></div>`;
 }
 
 function renderAyahBlock(arabicAyah, surahNum){
   const resolvedSurahNum = surahNum || (arabicAyah.surah && arabicAyah.surah.number) || currentSurahNum;
   const g = arabicAyah.number;
   const n = arabicAyah.numberInSurah;
+  // displayNum থাকলে (যেমন সূরা আল-ফাতিহার কাস্টম আয়াত বিভাজনে) সেটাই দেখানো হবে,
+  // কিন্তু অনুবাদ/তাফসীর/অডিও লুকআপের জন্য প্রকৃত API numberInSurah (n) ব্যবহার হয়
+  const displayN = (arabicAyah.displayNum !== undefined && arabicAyah.displayNum !== null) ? arabicAyah.displayNum : n;
   const translitMap = transliterationCache[resolvedSurahNum];
   const translit = translitMap ? translitMap.get(n) : null;
   const arabicHTML = wordByWordSurahs.has(resolvedSurahNum)
-    ? wordByWordHTMLFor(resolvedSurahNum, n, arabicAyah.text)
-    : `<p class="ayah-arabic">${arabicAyah.text}<span class="ayah-num-circle">${toArDigits(n)}</span></p>`;
+    ? wordByWordHTMLFor(resolvedSurahNum, n, arabicAyah.text, displayN)
+    : `<p class="ayah-arabic">${arabicAyah.text}<span class="ayah-num-circle">${toArDigits(displayN)}</span></p>`;
   return `
     <div class="ayah-block" data-ayah-index="${n}" data-surah="${resolvedSurahNum}" data-g="${g}">
       <div class="ayah-top-row">
-        <span class="ayah-num-orn"><span>${toArDigits(n)}</span></span>
+        <span class="ayah-num-orn"><span>${toArDigits(displayN)}</span></span>
         <span class="ayah-dots">
           <button class="dot dot-audio" data-action="audio" data-g="${g}" title="অডিও"></button>
           <button class="dot dot-bookmark" data-action="bookmark" data-g="${g}" title="বুকমার্ক"></button>
@@ -4690,8 +4690,8 @@ function renderAyahBlock(arabicAyah, surahNum){
       </div>
       ${arabicHTML}
       ${translit ? `<p class="ayah-translit">${translit}।</p>` : ``}
-      ${ayahActionsHTML(g, n, resolvedSurahNum)}
-      ${contentMode==='translation' ? translationsHTMLFor(resolvedSurahNum, n) : ``}
+      ${ayahActionsHTML(g, n, resolvedSurahNum, displayN)}
+      ${contentMode==='translation' ? translationsHTMLFor(resolvedSurahNum, n, displayN) : ``}
     </div>`;
 }
 
@@ -4727,10 +4727,25 @@ async function renderSurahBody(num){
           <span class="translit">পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে</span>
         </div>`;
     }
-    const bodyAyahs = arabic.ayahs.filter(a => !(num === 1 && a.numberInSurah === 1));
+    let bodyAyahs;
+    if(num === 1){
+      // সূরা আল-ফাতিহা: বিসমিল্লাহ্‌কে আয়াত হিসেবে গণনা না করে, নির্দিষ্ট হুবহু টেক্সট ও ১-৭ নম্বর অনুযায়ী দেখানো হচ্ছে।
+      const apiAyahsByNum = new Map(arabic.ayahs.map(a => [a.numberInSurah, a]));
+      bodyAyahs = FATIHA_CUSTOM_AYAHS.map(fc => {
+        const apiAyah = apiAyahsByNum.get(fc.apiNum);
+        return {
+          number: apiAyah ? apiAyah.number : null,   // global ayah number (audio/share/bookmark এর জন্য)
+          numberInSurah: fc.apiNum,                    // অনুবাদ/তাফসীর লুকআপের জন্য প্রকৃত API নম্বর
+          displayNum: fc.display,                       // পাঠকের কাছে দেখানো নম্বর (১-৭, বিসমিল্লাহ বাদে)
+          text: fc.text
+        };
+      });
+    } else {
+      bodyAyahs = arabic.ayahs;
+    }
     if(contentMode === 'recitation'){
       const flow = bodyAyahs.map(a =>
-        `${a.text}<span class="ayah-end">${toArDigits(a.numberInSurah)}</span>`
+        `${a.text}<span class="ayah-end">${toArDigits(a.displayNum !== undefined && a.displayNum !== null ? a.displayNum : a.numberInSurah)}</span>`
       ).join(' ');
       html += `<div class="recitation-flow">${flow}</div>`;
     } else {
@@ -4776,10 +4791,12 @@ async function renderJuzBody(num){
       }
       const isDuplicateFatihaBismillah = (surahNum === 1 && a.numberInSurah === 1);
       if(!isDuplicateFatihaBismillah){
+        // সূরা আল-ফাতিহায় বিসমিল্লাহ্‌কে আয়াত হিসেবে গণনা করা হয় না, তাই বাকি আয়াতগুলোর নম্বর ১ কমিয়ে (২→১, ৩→২ ...) দেখানো হচ্ছে
+        const displayNum = (surahNum === 1) ? (a.numberInSurah - 1) : a.numberInSurah;
         if(contentMode === 'recitation'){
-          recitationBuffer += `${a.text}<span class="ayah-end">${toArDigits(a.numberInSurah)}</span> `;
+          recitationBuffer += `${a.text}<span class="ayah-end">${toArDigits(displayNum)}</span> `;
         } else {
-          html += renderAyahBlock(a, surahNum);
+          html += renderAyahBlock(Object.assign({}, a, { displayNum }), surahNum);
         }
       }
     });
