@@ -4092,6 +4092,28 @@ const transliterationCache = {}; // num -> Map(numberInSurah -> latin transliter
 const wordByWordCache = {}; // num -> Map(numberInSurah -> words[])
 const wordByWordSurahs = new Set(); // surah numbers that have "downloaded" word-by-word data
 const WORD_API_BASE = 'https://api.quran.com/api/v4';
+const indoPakCache = {}; // num -> Map(numberInSurah -> ইন্দো-পাক স্ক্রিপ্ট টেক্সট, হরকত/ওয়াকফ চিহ্নসহ) | null
+
+// প্রতিটি সূরার আরবি টেক্সট এখন ইন্দো-পাক স্ক্রিপ্টে (হরকত, ওয়াকফ চিহ্ন ۙ ؕ ۬ ইত্যাদিসহ) দেখানো হয় —
+// অর্থাৎ সূরা আল-ফাতিহায় যে স্টাইলে আয়াতগুলো লেখা আছে, ঠিক একই স্টাইল বাকি সব সূরাতেও প্রযোজ্য হবে।
+// এই টেক্সট api.quran.com এর ভেরিফায়েড text_indopak ফিল্ড থেকে আনা হয়, যাতে পুরো কুরআনের প্রতিটি হরফ/হরকত নির্ভুল থাকে।
+async function fetchIndoPakText(num){
+  if(indoPakCache[num] !== undefined) return indoPakCache[num];
+  try{
+    const res = await fetch(`${WORD_API_BASE}/verses/by_chapter/${num}?fields=text_indopak&per_page=300`);
+    if(!res.ok) throw new Error('network');
+    const json = await res.json();
+    const map = new Map();
+    (json.verses || []).forEach(v=>{
+      const ayahNum = Number(String(v.verse_key).split(':')[1]);
+      if(v.text_indopak) map.set(ayahNum, v.text_indopak);
+    });
+    indoPakCache[num] = map;
+  } catch(e){
+    indoPakCache[num] = null; // ব্যর্থ হলে alquran.cloud এর মূল উসমানি টেক্সট fallback হিসেবে দেখানো হবে
+  }
+  return indoPakCache[num];
+}
 
 // সূরা আল-ফাতিহার আয়াতসমূহ — নির্দিষ্টভাবে দেওয়া হুবহু টেক্সট অনুযায়ী।
 // এখানে বিসমিল্লাহ্‌কে আলাদা আয়াত হিসেবে গণনা করা হয়নি (সেটি উপরে bismillah-box এ আলাদাভাবে দেখানো হয়),
@@ -4537,9 +4559,17 @@ async function fetchSurah(num){
   if(!res.ok) throw new Error('network');
   const json = await res.json();
   if(json.data && Array.isArray(json.data.ayahs)){
+    // সূরা আল-ফাতিহার (num===1) জন্য নির্দিষ্ট হার্ডকোডেড টেক্সট আলাদাভাবে ব্যবহৃত হয় (renderSurahBody দ্রষ্টব্য),
+    // তাই বাকি সব সূরার জন্য এখানে ইন্দো-পাক স্ক্রিপ্ট টেক্সট আনা হচ্ছে ও বসানো হচ্ছে
+    const indoPakMap = (num !== 1) ? await fetchIndoPakText(num) : null;
     json.data.ayahs.forEach(a=>{
-      a.text = stripEmbeddedBismillah(a.text, a.numberInSurah, num);
-      a.text = cleanArabicText(a.text);
+      const indoPakText = indoPakMap ? indoPakMap.get(a.numberInSurah) : null;
+      if(indoPakText){
+        a.text = indoPakText;
+      } else {
+        a.text = stripEmbeddedBismillah(a.text, a.numberInSurah, num);
+        a.text = cleanArabicText(a.text);
+      }
     });
   }
   const data = { arabic: json.data };
@@ -4588,10 +4618,22 @@ async function fetchJuz(num){
   const json = await res.json();
   if(!json.data) throw new Error('bad-shape');
   if(Array.isArray(json.data.ayahs)){
+    // এই পারায় যতগুলো ভিন্ন সূরা আছে, সবগুলোর ইন্দো-পাক স্ক্রিপ্ট টেক্সট আগেভাগে নিয়ে আসা হচ্ছে
+    const surahNumsInJuz = Array.from(new Set(json.data.ayahs.map(a => a.surah ? a.surah.number : null).filter(Boolean)));
+    const indoPakMaps = {};
+    await Promise.all(surahNumsInJuz.map(async sn=>{
+      indoPakMaps[sn] = (sn !== 1) ? await fetchIndoPakText(sn) : null; // সূরা আল-ফাতিহার জন্য হার্ডকোডেড টেক্সট আলাদাভাবে ব্যবহৃত হয়
+    }));
     json.data.ayahs.forEach(a=>{
       const surahNum = a.surah ? a.surah.number : null;
-      a.text = stripEmbeddedBismillah(a.text, a.numberInSurah, surahNum);
-      a.text = cleanArabicText(a.text);
+      const indoPakMap = indoPakMaps[surahNum];
+      const indoPakText = indoPakMap ? indoPakMap.get(a.numberInSurah) : null;
+      if(indoPakText){
+        a.text = indoPakText;
+      } else {
+        a.text = stripEmbeddedBismillah(a.text, a.numberInSurah, surahNum);
+        a.text = cleanArabicText(a.text);
+      }
     });
   }
   const data = { arabic: json.data };
@@ -4723,7 +4765,7 @@ async function renderSurahBody(num){
     if(num !== 9){ // Surah At-Tawbah traditionally has no Bismillah heading
       html += `
         <div class="bismillah-box">
-          <span class="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
+          <span class="ar">بِسۡمِ اللهِ الرَّحۡمٰنِ الرَّحِيۡمِ</span>
           <span class="translit">পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে</span>
         </div>`;
     }
@@ -4786,7 +4828,7 @@ async function renderJuzBody(num){
         const arName = surahMeta.name || '';
         html += `<p class="juz-surah-tag">সূরা ${bnName} <span class="ar" style="color:var(--gold);font-size:.8em;">(${arName})</span></p>`;
         if(a.numberInSurah === 1 && surahNum !== 9){
-          html += `<div class="bismillah-box"><span class="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span><span class="translit">পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে</span></div>`;
+          html += `<div class="bismillah-box"><span class="ar">بِسۡمِ اللهِ الرَّحۡمٰنِ الرَّحِيۡمِ</span><span class="translit">পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে</span></div>`;
         }
       }
       const isDuplicateFatihaBismillah = (surahNum === 1 && a.numberInSurah === 1);
