@@ -3650,6 +3650,17 @@ function cleanArabicText(text){
     .replace(/\u0640?\u0670/g, '');    // ـٰ / ٰ (বাঁকা জবর/ড্যাগার আলিফ) সরানো
 }
 
+// quran-uthmani এডিশনে প্রতিটা সূরার প্রথম আয়াতের টেক্সটের শুরুতে বিসমিল্লাহ জুড়ে দেওয়া থাকে —
+// সূরা ফাতিহা ছাড়া (যেখানে বিসমিল্লাহ নিজেই ১ নং আয়াত) বাকি সব সূরায় সেই জোড়া-লাগা বিসমিল্লাহ সরিয়ে দেওয়া হয়
+const BISMILLAH_PREFIX_RE = /^بِسْمِ\s*اللَّهِ\s*الرَّحْمَـٰنِ\s*الرَّحِيمِ\s*/;
+function stripEmbeddedBismillah(text, numberInSurah, surahNum){
+  if(typeof text !== 'string') return text;
+  if(numberInSurah === 1 && surahNum !== 1 && surahNum !== 9){
+    return text.replace(BISMILLAH_PREFIX_RE, '');
+  }
+  return text;
+}
+
 function render(){
   const q = searchInput.value.trim().toLowerCase();
   grid.innerHTML = '';
@@ -3855,7 +3866,7 @@ async function fetchTopicAyah(surah, ayah){
     fetchTafsir(surah, ayah).catch(()=>null)
   ]);
   const data = {
-    arabic: arRes && arRes.data ? cleanArabicText(arRes.data.text) : '',
+    arabic: arRes && arRes.data ? cleanArabicText(stripEmbeddedBismillah(arRes.data.text, Number(ayah), Number(surah))) : '',
     translation: tafsirData ? tafsirData.translation : null
   };
   topicVerseAyahCache[key] = data;
@@ -4514,7 +4525,10 @@ async function fetchSurah(num){
   if(!res.ok) throw new Error('network');
   const json = await res.json();
   if(json.data && Array.isArray(json.data.ayahs)){
-    json.data.ayahs.forEach(a=>{ a.text = cleanArabicText(a.text); });
+    json.data.ayahs.forEach(a=>{
+      a.text = stripEmbeddedBismillah(a.text, a.numberInSurah, num);
+      a.text = cleanArabicText(a.text);
+    });
   }
   const data = { arabic: json.data };
   surahCache[num] = data;
@@ -4562,7 +4576,11 @@ async function fetchJuz(num){
   const json = await res.json();
   if(!json.data) throw new Error('bad-shape');
   if(Array.isArray(json.data.ayahs)){
-    json.data.ayahs.forEach(a=>{ a.text = cleanArabicText(a.text); });
+    json.data.ayahs.forEach(a=>{
+      const surahNum = a.surah ? a.surah.number : null;
+      a.text = stripEmbeddedBismillah(a.text, a.numberInSurah, surahNum);
+      a.text = cleanArabicText(a.text);
+    });
   }
   const data = { arabic: json.data };
   juzCache[num] = data;
@@ -4684,6 +4702,13 @@ async function renderSurahBody(num){
   try{
     const [{ arabic }] = await Promise.all([ fetchSurah(num), ensureSelectedTranslationsLoaded(), fetchTransliteration(num) ]);
     let html = surahHeadHTML(arabic);
+    if(num !== 9){ // Surah At-Tawbah traditionally has no Bismillah heading
+      html += `
+        <div class="bismillah-box">
+          <span class="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
+          <span class="translit">পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে</span>
+        </div>`;
+    }
     if(contentMode === 'recitation'){
       const flow = arabic.ayahs.map(a =>
         `${a.text}<span class="ayah-end">${toArDigits(a.numberInSurah)}</span>`
@@ -4726,6 +4751,9 @@ async function renderJuzBody(num){
         const bnName = bnEntry ? bnEntry[1] : (surahMeta.englishName || '');
         const arName = surahMeta.name || '';
         html += `<p class="juz-surah-tag">সূরা ${bnName} <span class="ar" style="color:var(--gold);font-size:.8em;">(${arName})</span></p>`;
+        if(a.numberInSurah === 1 && surahNum !== 9){
+          html += `<div class="bismillah-box"><span class="ar">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span><span class="translit">পরম করুণাময় ও অসীম দয়ালু আল্লাহর নামে</span></div>`;
+        }
       }
       if(contentMode === 'recitation'){
         recitationBuffer += `${a.text}<span class="ayah-end">${toArDigits(a.numberInSurah)}</span> `;
