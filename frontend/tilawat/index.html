@@ -475,7 +475,17 @@
             setupPageClickHandlers(canvas, viewport);
 
             // এই পৃষ্ঠার আয়াত-অঞ্চল তৈরি/লোড করুন (সব পৃষ্ঠার জন্য স্বয়ংক্রিয়)
-            ensureRegionsForPage(pageNumber, canvas);
+            currentRegions = null;
+            currentAyahList = [];
+            selectedAyahId = null;
+            lastHit = null;
+            setAyahBarMessage('আয়াত প্রস্তুত হচ্ছে...');
+            ensureRegionsForPage(pageNumber, canvas).then(regions => {
+                if (currentPage !== pageNumber) return;
+                currentRegions = regions;
+                currentAyahList = buildAyahList(regions);
+                renderAyahBar();
+            });
             
             // পৃষ্ঠা নম্বর আপডেট করুন
             currentPage = pageNumber;
@@ -486,9 +496,8 @@
             prevBtn.disabled = pageNumber === 1;
             nextBtn.disabled = pageNumber === totalPages;
             
-            // ডিফল্টে কোনো আয়াত দেখানো হবে না — ক্লিক করলে তবেই আয়াত-বার এ দেখাবে
+            // নতুন পৃষ্ঠায় হাইলাইট মুছে দিন; আয়াত তালিকা উপরে অ্যাসিঙ্কে পূরণ হচ্ছে
             if (currentHighlight) currentHighlight.style.display = 'none';
-            updateAyahBar([]);
         } catch (error) {
             console.error('পৃষ্ঠা রেন্ডার করা যায়নি:', error);
         }
@@ -528,29 +537,32 @@
     };
 
     // ==========================================================
-    //  স্বয়ংক্রিয় আয়াত-অঞ্চল ইঞ্জিন (সব পৃষ্ঠার জন্য)
-    //  ১. রেন্ডার করা পৃষ্ঠার পিক্সেল স্ক্যান করে প্রতিটি লাইনের অবস্থান বের করা হয়
-    //  ২. quran.com API থেকে ঐ মুসহাফ পৃষ্ঠার আয়াতগুলো (শব্দ + লাইন নম্বর সহ) আনা হয়
-    //  ৩. আয়াতগুলো লাইনে লাইনে (ডান থেকে বাম) ভাগ করে ক্লিকযোগ্য অঞ্চল তৈরি হয়
-    //  ফলাফল localStorage-এ ক্যাশ হয়, তাই পরে অফলাইনেও কাজ করে।
+    //  স্বয়ংক্রিয় আয়াত-অঞ্চল ইঞ্জিন — এখন কুরআনের সব পৃষ্ঠায়
+    //  সূরা ফাতিহার মতোই আয়াত আলাদাভাবে নির্বাচন করা যায়।
+    //  ১. রেন্ডার করা পৃষ্ঠার পিক্সেল স্ক্যান করে প্রতিটি লাইনের অবস্থান বের হয়
+    //  ২. quran.com API থেকে ঐ মুসহাফ পৃষ্ঠার আয়াত (শব্দ + লাইন নম্বর) আনা হয়
+    //  ৩. আয়াতগুলো লাইনে লাইনে (ডান → বাম) ভাগ করে ক্লিকযোগ্য অঞ্চল তৈরি হয়
+    //  ৪. ফলাফল localStorage-এ ক্যাশ হয়, তাই পরে অফলাইনেও কাজ করে
     // ==========================================================
 
     const MUSHAF_PAGE_OFFSET = 1;      // পিডিএফ পৃষ্ঠা − ১ = মুসহাফ পৃষ্ঠা
     const autoRegions = {};            // pdfPage -> regions[]
-    const regionBuildState = {};       // pdfPage -> 'loading' | 'done' | 'failed'
+    const regionPromises = {};         // pdfPage -> Promise<regions[]>
     let currentHighlight = null;
+    let currentRegions = null;
+    let currentAyahList = [];
+    let selectedAyahId = null;
+    let lastHit = null;
 
-    function cacheKey(mushafPage) { return 'ayahRegions_v1_' + selectedMushaf + '_' + mushafPage; }
+    function versesKey(mushafPage) { return 'q_verses_v2_' + mushafPage; }
+    function regionsKey(mushafPage) { return 'q_regions_v2_' + selectedMushaf + '_' + mushafPage; }
 
-    function readCache(mushafPage) {
-        try {
-            const raw = localStorage.getItem(cacheKey(mushafPage));
-            return raw ? JSON.parse(raw) : null;
-        } catch (e) { return null; }
+    function readJSON(key) {
+        try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : null; }
+        catch (e) { return null; }
     }
-
-    function writeCache(mushafPage, regions) {
-        try { localStorage.setItem(cacheKey(mushafPage), JSON.stringify(regions)); } catch (e) {}
+    function writeJSON(key, value) {
+        try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
     }
 
     // ---------- ১) পিক্সেল স্ক্যান করে লেখার লাইন সনাক্ত ----------
@@ -623,7 +635,7 @@
             });
         }
 
-        // পাশাপাশি থাকা লাইনগুলোর মাঝের ফাঁক সমানভাবে ভাগ করে দিন (ট্যাপ সহজ হয়)
+        // পাশাপাশি লাইনগুলোর মাঝের ফাঁক সমানভাবে ভাগ করে দিন (ট্যাপ সহজ হয়)
         for (let i = 0; i < lines.length - 1; i++) {
             const mid = (lines[i].y1 + lines[i + 1].y0) / 2;
             lines[i].y1 = mid;
@@ -653,19 +665,28 @@
     }
 
     // ---------- ৩) আয়াত + লাইন মিলিয়ে অঞ্চল বানান ----------
-    function buildRegions(verses, lines) {
-        if (!verses.length || !lines.length) return [];
+    function buildRegions(verses, detected) {
+        if (!verses.length || !detected.length) return [];
 
-        // API-র লাইন নম্বর ব্যবহার করা যাবে কি না দেখুন
         const apiLines = [...new Set(verses.flatMap(v => v.lineNumbers))].sort((a, b) => a - b);
-        const useApiLines = apiLines.length === lines.length;
+
+        // সনাক্ত হওয়া ব্যান্ড বেশি হলে (সূরা-শিরোনাম/নকশা) সবচেয়ে চওড়াগুলো রাখুন
+        let lines = detected;
+        if (apiLines.length && detected.length > apiLines.length) {
+            lines = [...detected]
+                .sort((a, b) => (b.x1 - b.x0) - (a.x1 - a.x0))
+                .slice(0, apiLines.length)
+                .sort((a, b) => a.y0 - b.y0);
+        }
 
         const regions = [];
+        const useApiLines = apiLines.length === lines.length;
 
         if (useApiLines) {
             apiLines.forEach((ln, idx) => {
                 const line = lines[idx];
                 const onLine = verses.filter(v => v.lineNumbers.includes(ln));
+                if (!onLine.length) return;
                 const total = onLine.reduce((s, v) => s + v.wordCount / v.lineNumbers.length, 0) || 1;
                 let acc = 0;
                 const lw = line.x1 - line.x0;
@@ -682,7 +703,7 @@
                     });
                 });
             });
-            return regions;
+            if (regions.length) return regions;
         }
 
         // ফলব্যাক: মোট শব্দ সংখ্যা অনুপাতে লাইনে লাইনে ভাগ করুন
@@ -715,50 +736,94 @@
         return regions;
     }
 
-    async function ensureRegionsForPage(pdfPage, canvas) {
-        if (pageAyahRegions[pdfPage] || autoRegions[pdfPage]) return;
-        if (regionBuildState[pdfPage] === 'loading') return;
-        regionBuildState[pdfPage] = 'loading';
+    // ---------- ৪) যেকোনো পৃষ্ঠার জন্য অঞ্চল নিশ্চিত করুন (Promise) ----------
+    function ensureRegionsForPage(pdfPage, canvas) {
+        if (pageAyahRegions[pdfPage]) return Promise.resolve(pageAyahRegions[pdfPage]);
+        if (autoRegions[pdfPage]) return Promise.resolve(autoRegions[pdfPage]);
+        if (regionPromises[pdfPage]) return regionPromises[pdfPage];
 
         const mushafPage = pdfPage - MUSHAF_PAGE_OFFSET;
-        if (mushafPage < 1 || mushafPage > 604) { regionBuildState[pdfPage] = 'failed'; return; }
 
-        const lines = detectTextLines(canvas);
-
-        try {
-            let verses = readCache(mushafPage);
-            if (!verses) {
-                verses = await fetchPageVerses(mushafPage);
-                if (verses.length) writeCache(mushafPage, verses);
+        regionPromises[pdfPage] = (async () => {
+            const cachedRegions = readJSON(regionsKey(mushafPage));
+            if (cachedRegions && cachedRegions.length) {
+                autoRegions[pdfPage] = cachedRegions;
+                return cachedRegions;
             }
-            const regions = buildRegions(verses, lines);
+
+            const lines = detectTextLines(canvas);
+            let regions = [];
+
+            try {
+                let verses = readJSON(versesKey(mushafPage));
+                if ((!verses || !verses.length) && mushafPage >= 1 && mushafPage <= 604) {
+                    verses = await fetchPageVerses(mushafPage);
+                    if (verses.length) writeJSON(versesKey(mushafPage), verses);
+                }
+                if (verses && verses.length) regions = buildRegions(verses, lines);
+            } catch (e) {
+                console.warn('আয়াত ডেটা আনা যায়নি:', e);
+            }
+
             if (regions.length) {
-                autoRegions[pdfPage] = regions;
-                regionBuildState[pdfPage] = 'done';
-                return;
+                writeJSON(regionsKey(mushafPage), regions);
+            } else {
+                // অফলাইন ফলব্যাক: অন্তত লাইন-ভিত্তিক নির্বাচন কাজ করবে
+                regions = lines.map((l, i) => ({
+                    surahNum: 0, ayahNum: i + 1, text: 'লাইন ' + toBengaliNumeral(i + 1),
+                    x0: l.x0, x1: l.x1, y0: l.y0, y1: l.y1, isLine: true
+                }));
             }
-        } catch (e) {
-            console.warn('আয়াত ডেটা আনা যায়নি:', e);
-        }
 
-        // অফলাইন ফলব্যাক: অন্তত লাইন-ভিত্তিক নির্বাচন কাজ করবে
-        autoRegions[pdfPage] = lines.map((l, i) => ({
-            surahNum: 0, ayahNum: i + 1, text: 'লাইন ' + toBengaliNumeral(i + 1),
-            x0: l.x0, x1: l.x1, y0: l.y0, y1: l.y1, isLine: true
-        }));
-        regionBuildState[pdfPage] = 'fallback';
+            autoRegions[pdfPage] = regions;
+            return regions;
+        })().catch(err => {
+            console.warn('অঞ্চল তৈরি ব্যর্থ:', err);
+            delete regionPromises[pdfPage];
+            return [];
+        });
+
+        return regionPromises[pdfPage];
     }
 
     function getRegions(pdfPage) {
         return pageAyahRegions[pdfPage] || autoRegions[pdfPage] || null;
     }
 
+    function regionId(r) {
+        return r.isLine ? ('page_' + currentPage + '_line_' + r.ayahNum)
+                        : ('surah_' + r.surahNum + '_ayah_' + r.ayahNum);
+    }
+
+    // পৃষ্ঠার সব আয়াতের তালিকা (ডান→বাম, উপর→নিচ ক্রমে)
+    function buildAyahList(regions) {
+        const map = new Map();
+        (regions || []).forEach(r => {
+            const id = regionId(r);
+            if (!map.has(id)) {
+                map.set(id, {
+                    id,
+                    text: r.text,
+                    page: currentPage,
+                    surahNum: r.surahNum,
+                    surahName: (typeof surahNames !== 'undefined' && surahNames[r.surahNum]) || '',
+                    ayahNum: r.ayahNum,
+                    isLine: !!r.isLine,
+                    y0: r.y0, x1: r.x1
+                });
+            }
+        });
+        return [...map.values()].sort((a, b) => (a.y0 - b.y0) || (b.x1 - a.x1));
+    }
+
     function showHighlight(regions, hit) {
         if (!currentHighlight) return;
         const canvas = document.getElementById('pdfCanvas');
         if (!canvas) return;
-        const parts = hit.isLine ? [hit] :
-            regions.filter(r => r.surahNum === hit.surahNum && r.ayahNum === hit.ayahNum);
+        const parts = hit.isLine
+            ? (regions || []).filter(r => r.isLine && r.ayahNum === hit.ayahNum)
+            : (regions || []).filter(r => r.surahNum === hit.surahNum && r.ayahNum === hit.ayahNum);
+        if (!parts.length) return;
         const x0 = Math.min(...parts.map(r => r.x0));
         const x1 = Math.max(...parts.map(r => r.x1));
         const y0 = Math.min(...parts.map(r => r.y0));
@@ -770,18 +835,32 @@
         currentHighlight.style.height = ((y1 - y0) * canvas.clientHeight) + 'px';
     }
 
-    // পৃষ্ঠায় ক্লিক হ্যান্ডলার — এখন প্রতিটি পৃষ্ঠাতেই আয়াত আলাদাভাবে নির্বাচন করা যায়
+    // স্ক্রিন সাইজ বদলালে হাইলাইট আবার ঠিক জায়গায় বসান
+    window.addEventListener('resize', () => {
+        if (lastHit && currentRegions) showHighlight(currentRegions, lastHit);
+    });
+
+    // পৃষ্ঠায় ট্যাপ — প্রতিটি পৃষ্ঠাতেই আয়াত আলাদাভাবে নির্বাচন করা যায়
     function setupPageClickHandlers(canvas, viewport) {
         canvas.addEventListener('click', async (e) => {
+            const pageAtClick = currentPage;
             const rect = canvas.getBoundingClientRect();
             const xFrac = (e.clientX - rect.left) / rect.width;
             const yFrac = (e.clientY - rect.top) / rect.height;
 
-            if (!getRegions(currentPage)) {
-                await ensureRegionsForPage(currentPage, canvas);
+            let regions = getRegions(pageAtClick);
+            if (!regions) {
+                setAyahBarMessage('আয়াত প্রস্তুত হচ্ছে...');
+                regions = await ensureRegionsForPage(pageAtClick, canvas);
+                if (pageAtClick !== currentPage) return;
+                currentRegions = regions;
+                currentAyahList = buildAyahList(regions);
+                renderAyahBar();
             }
-            const regions = getRegions(currentPage);
-            if (!regions) return;
+            if (!regions || !regions.length) {
+                setAyahBarMessage('এই পৃষ্ঠার আয়াত শনাক্ত করা যায়নি');
+                return;
+            }
 
             let hit = regions.find(r => xFrac >= r.x0 && xFrac < r.x1 && yFrac >= r.y0 && yFrac < r.y1);
             if (!hit) {
@@ -792,19 +871,17 @@
                         const d = Math.min(Math.abs(xFrac - r.x0), Math.abs(xFrac - r.x1));
                         return (!best || d < best.d) ? { ...r, d } : best;
                     }, null);
+                } else {
+                    // সবচেয়ে কাছের লাইন খুঁজুন (উপরে/নিচে ট্যাপ করলেও কাজ করবে)
+                    hit = regions.reduce((best, r) => {
+                        const dy = Math.min(Math.abs(yFrac - r.y0), Math.abs(yFrac - r.y1));
+                        return (!best || dy < best.dy) ? { ...r, dy } : best;
+                    }, null);
                 }
             }
             if (!hit) return;
 
-            showHighlight(regions, hit);
-            selectAyah({
-                id: hit.isLine ? `page_${currentPage}_line_${hit.ayahNum}` : `surah_${hit.surahNum}_ayah_${hit.ayahNum}`,
-                text: hit.text,
-                page: currentPage,
-                surahNum: hit.surahNum,
-                surahName: surahNames[hit.surahNum] || '',
-                ayahNum: hit.ayahNum
-            });
+            selectAyah(regionId(hit));
         });
     }
 
@@ -856,34 +933,52 @@
     // তার বদলে উপরের pageAyahRegions ব্যবহার করা হয়, যা প্রকৃত পৃষ্ঠা পরিমাপ করে তৈরি।
     // এটি রাখা হয়েছে সম্ভাব্য ভবিষ্যৎ ব্যবহারের জন্য, যেমন অনুসন্ধান বা তালিকা view)
 
-    // আয়াত নির্বাচন করুন
-    function selectAyah(ayah) {
-        // ক্লিক করা আয়াতটিই শুধু আয়াত-বার এ দেখান (ডিফল্টে বার খালি থাকে)
-        updateAyahBar([ayah]);
-
-        // নির্বাচিত আয়াত হাইলাইট করুন
-        const selectedItem = ayahBar.querySelector(`[data-id="${CSS.escape(ayah.id)}"]`);
-        if (selectedItem) {
-            selectedItem.classList.add('selected');
-            selectedItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
+    // নির্বাচিত আয়াত (আইডি দিয়ে) — পৃষ্ঠায় হাইলাইট + তালিকায় চিহ্নিত
+    function selectAyah(id) {
+        const ayah = currentAyahList.find(a => a.id === id);
+        if (!ayah) return;
+        selectedAyahId = id;
+        lastHit = { surahNum: ayah.surahNum, ayahNum: ayah.ayahNum, isLine: ayah.isLine };
+        showHighlight(currentRegions, lastHit);
+        renderAyahBar();
+        const selectedItem = ayahBar.querySelector('[data-id="' + CSS.escape(id) + '"]');
+        if (selectedItem) selectedItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    // আয়াত বার আপডেট করুন
-    function updateAyahBar(ayahs) {
-        if (ayahs.length === 0) {
-            ayahBar.innerHTML = '<div class="ayah-item" style="text-align:center; color:#999;">আয়াত নির্বাচন করতে পড়ুন</div>';
+    function setAyahBarMessage(msg) {
+        ayahBar.innerHTML = '<div class="ayah-item" style="text-align:center; color:#999;">' + msg + '</div>';
+    }
+
+    function escapeHtml(str) {
+        return String(str == null ? '' : str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    // চলতি পৃষ্ঠার সব আয়াত তালিকায় দেখান (ফাতিহার মতো — সব পৃষ্ঠায়)
+    function renderAyahBar() {
+        if (!currentAyahList.length) {
+            setAyahBarMessage('আয়াত নির্বাচন করতে পড়ুন');
             return;
         }
-        
-        ayahBar.innerHTML = ayahs.map(ayah => {
-            const surahNameAr = quranData[ayah.surahNum] ? quranData[ayah.surahNum].name : 'سورة غير معروفة';
-            return `<div class="ayah-item" data-id="${ayah.id}" onclick="selectAyah({id: '${ayah.id}', text: '${ayah.text.replace(/'/g, "\\'")}', page: ${ayah.page}, surahNum: ${ayah.surahNum}, surahName: '${ayah.surahName}', ayahNum: ${ayah.ayahNum}})">
-                <div>${ayah.text}</div>
-                <div style="font-size:11px; color:#999; margin-top:4px; direction:rtl; font-family:serif;">سورة ${surahNameAr} • آية ${ayah.ayahNum}</div>
-            </div>`;
+        ayahBar.innerHTML = currentAyahList.map(ayah => {
+            const surahNameAr = ayah.surahName ||
+                ((typeof quranData !== 'undefined' && quranData[ayah.surahNum]) ? quranData[ayah.surahNum].name : '');
+            const meta = ayah.isLine
+                ? 'লাইন ' + toBengaliNumeral(ayah.ayahNum)
+                : 'سورة ' + escapeHtml(surahNameAr) + ' • آية ' + ayah.ayahNum;
+            const cls = 'ayah-item' + (ayah.id === selectedAyahId ? ' selected' : '');
+            return '<div class="' + cls + '" data-id="' + escapeHtml(ayah.id) + '">' +
+                '<div>' + escapeHtml(ayah.text) + '</div>' +
+                '<div style="font-size:11px; color:#999; margin-top:4px; direction:rtl; font-family:serif;">' + meta + '</div>' +
+            '</div>';
         }).join('');
     }
+
+    // তালিকা থেকে ট্যাপ করলেও পৃষ্ঠায় হাইলাইট হবে
+    ayahBar.addEventListener('click', (e) => {
+        const item = e.target.closest('.ayah-item[data-id]');
+        if (item) selectAyah(item.getAttribute('data-id'));
+    });
 
     // বাংলা সংখ্যা রূপান্তর
     function toBengaliNumeral(num) {
