@@ -449,9 +449,8 @@
             prevBtn.disabled = pageNumber === 1;
             nextBtn.disabled = pageNumber === totalPages;
             
-            // এই পৃষ্ঠার আয়াত লোড করুন
-            const pageAyahs = generateSampleAyahs(pageNumber);
-            updateAyahBar(pageAyahs);
+            // ডিফল্টে কোনো আয়াত দেখানো হবে না — ক্লিক করলে তবেই আয়াত-বার এ দেখাবে
+            updateAyahBar([]);
         } catch (error) {
             console.error('পৃষ্ঠা রেন্ডার করা যায়নি:', error);
         }
@@ -584,12 +583,10 @@
 
     // আয়াত নির্বাচন করুন
     function selectAyah(ayah) {
-        // পূর্ববর্তী নির্বাচন সরান
-        document.querySelectorAll('.ayah-item').forEach(item => {
-            item.classList.remove('selected');
-        });
+        // ক্লিক করা আয়াতটিই শুধু আয়াত-বার এ দেখান (ডিফল্টে বার খালি থাকে)
+        updateAyahBar([ayah]);
 
-        // নির্বাচিত আয়াত হাইলাইট করুন (তালিকা পুনরায় তৈরি না করে, যাতে বাকি আয়াতগুলো দেখা যায়)
+        // নির্বাচিত আয়াত হাইলাইট করুন
         const selectedItem = ayahBar.querySelector(`[data-id="${CSS.escape(ayah.id)}"]`);
         if (selectedItem) {
             selectedItem.classList.add('selected');
@@ -687,5 +684,5 @@
 
 </script>
 
-</body>     
+</body>
 </html>
