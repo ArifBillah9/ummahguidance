@@ -346,7 +346,7 @@
 
     <!-- AYAH SELECTION BAR -->
     <div class="ayah-selection-bar" id="ayahBar">
-        <div class="ayah-item" style="text-align:center; color:#999;">আয়াত নির্বাচন করতে পড়ুন</div>
+        <div class="ayah-item" style="text-align:center; color:#999;">আয়াতের উপর ট্যাপ করুন</div>
     </div>
 
     <!-- PAGE CONTROLS -->
@@ -954,24 +954,26 @@
             .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
-    // চলতি পৃষ্ঠার সব আয়াত তালিকায় দেখান (ফাতিহার মতো — সব পৃষ্ঠায়)
+    // ডিফল্টভাবে কোনো আয়াত দেখানো হবে না — পৃষ্ঠায় ট্যাপ করলে শুধু সেই আয়াতটি দেখাবে
     function renderAyahBar() {
-        if (!currentAyahList.length) {
-            setAyahBarMessage('আয়াত নির্বাচন করতে পড়ুন');
+        if (!selectedAyahId) {
+            setAyahBarMessage('আয়াতের উপর ট্যাপ করুন');
             return;
         }
-        ayahBar.innerHTML = currentAyahList.map(ayah => {
-            const surahNameAr = ayah.surahName ||
-                ((typeof quranData !== 'undefined' && quranData[ayah.surahNum]) ? quranData[ayah.surahNum].name : '');
-            const meta = ayah.isLine
-                ? 'লাইন ' + toBengaliNumeral(ayah.ayahNum)
-                : 'سورة ' + escapeHtml(surahNameAr) + ' • آية ' + ayah.ayahNum;
-            const cls = 'ayah-item' + (ayah.id === selectedAyahId ? ' selected' : '');
-            return '<div class="' + cls + '" data-id="' + escapeHtml(ayah.id) + '">' +
-                '<div>' + escapeHtml(ayah.text) + '</div>' +
-                '<div style="font-size:11px; color:#999; margin-top:4px; direction:rtl; font-family:serif;">' + meta + '</div>' +
-            '</div>';
-        }).join('');
+        const ayah = currentAyahList.find(a => a.id === selectedAyahId);
+        if (!ayah) {
+            setAyahBarMessage('আয়াতের উপর ট্যাপ করুন');
+            return;
+        }
+        const surahNameAr = ayah.surahName ||
+            ((typeof quranData !== 'undefined' && quranData[ayah.surahNum]) ? quranData[ayah.surahNum].name : '');
+        const meta = ayah.isLine
+            ? 'লাইন ' + toBengaliNumeral(ayah.ayahNum)
+            : 'سورة ' + escapeHtml(surahNameAr) + ' • آية ' + ayah.ayahNum;
+        ayahBar.innerHTML = '<div class="ayah-item selected" data-id="' + escapeHtml(ayah.id) + '">' +
+            '<div>' + escapeHtml(ayah.text) + '</div>' +
+            '<div style="font-size:11px; color:#999; margin-top:4px; direction:rtl; font-family:serif;">' + meta + '</div>' +
+        '</div>';
     }
 
     // তালিকা থেকে ট্যাপ করলেও পৃষ্ঠায় হাইলাইট হবে
