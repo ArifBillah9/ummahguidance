@@ -2063,32 +2063,6 @@
     font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
   }
 
-  /* "অন্যান্য" প্যানেলের "উচ্চারণ" টগল বন্ধ থাকলে প্রতিটি আয়াতের নিচের উচ্চারণ লাইন লুকানো থাকে */
-  body.pronun-hidden .ayah-translit{ display:none !important; }
-
-  /* সেটিংসের "কালার কোডিং তাজভীদ" টগল চালু থাকলে quran.com API থেকে আসা প্রকৃত তাজভীদ
-     নিয়মমাফিক রঙ (King Fahd Complex/KFGQPC মানদণ্ড অনুসারে) প্রয়োগ হয়। */
-  .tajweed-ar tajweed.ham_wasl,
-  .tajweed-ar tajweed.laam_shamsiyah,
-  .tajweed-ar tajweed.slnt,
-  .tajweed-ar tajweed.silent{ color:#AAAAAA; }
-  .tajweed-ar tajweed.madda_normal{ color:#537FFF; }
-  .tajweed-ar tajweed.madda_permissible{ color:#4050FF; }
-  .tajweed-ar tajweed.madda_necessary{ color:#000EBC; }
-  .tajweed-ar tajweed.madda_obligatory,
-  .tajweed-ar tajweed.madda_obligatory_mottasel,
-  .tajweed-ar tajweed.madda_obligatory_monfasel{ color:#2144C1; }
-  .tajweed-ar tajweed.qalaqah{ color:#DD0008; }
-  .tajweed-ar tajweed.ikhafa_shafawi{ color:#D500B7; }
-  .tajweed-ar tajweed.ikhafa{ color:#9400A8; }
-  .tajweed-ar tajweed.idgham_shafawi{ color:#58B800; }
-  .tajweed-ar tajweed.iqlab{ color:#26BFFD; }
-  .tajweed-ar tajweed.idgham_ghunnah{ color:#169777; }
-  .tajweed-ar tajweed.idgham_wo_ghunnah,
-  .tajweed-ar tajweed.idgham_mutajanisayn,
-  .tajweed-ar tajweed.idgham_mutaqaribayn{ color:#169200; }
-  .tajweed-ar tajweed.ghunnah{ color:#FF7E1E; }
-
   /* ---- The block below used to be gated behind @media (max-width:680px).
      It is now applied unconditionally so the app-style design from the
      reference screenshot is used for the reader at every screen size,
@@ -4120,72 +4094,6 @@ const wordByWordSurahs = new Set(); // surah numbers that have "downloaded" word
 const WORD_API_BASE = 'https://api.quran.com/api/v4';
 const indoPakCache = {}; // num -> Map(numberInSurah -> ইন্দো-পাক স্ক্রিপ্ট টেক্সট, হরকত/ওয়াকফ চিহ্নসহ) | null
 
-/* ================= সেটিংস মোডালের টগলগুলো — প্রকৃত ফাংশনালিটি ================= */
-// এই তিনটি ভ্যালু localStorage-এ সংরক্ষিত থাকে, তাই অ্যাপ পুনরায় খুললেও পছন্দ মনে রাখে।
-let wbwAutoEnabled = localStorage.getItem('bn_quran_wbw_auto') === '1';
-let tajweedModeEnabled = localStorage.getItem('bn_quran_tajweed_on') === '1';
-let autoPlayNextAyahEnabled = localStorage.getItem('bn_quran_autoplay_next') === '1';
-let pronunciationVisible = localStorage.getItem('bn_quran_pronun_visible') !== '0';
-
-// "অন্যান্য" প্যানেলের "উচ্চারণ" বাটন — উচ্চারণ (translit) লাইন দেখানো/লুকানো টগল করে
-function applyPronunciationVisibility(){
-  document.body.classList.toggle('pronun-hidden', !pronunciationVisible);
-  const labelEl = document.querySelector('.ms-item[data-ms="pronun"] span:last-child');
-  const iconEl = document.querySelector('.ms-item[data-ms="pronun"] img');
-  const text = pronunciationVisible ? 'উচ্চারণ: বাংলা' : 'উচ্চারণ: বন্ধ';
-  if(labelEl) labelEl.textContent = text;
-  if(iconEl) iconEl.alt = text;
-}
-function togglePronunciationDisplay(){
-  pronunciationVisible = !pronunciationVisible;
-  localStorage.setItem('bn_quran_pronun_visible', pronunciationVisible ? '1' : '0');
-  applyPronunciationVisibility();
-}
-
-// api.quran.com-এর প্রকৃত (আনুষ্ঠানিক) তাজভীদ-মার্কআপকৃত টেক্সট — <tajweed class="..."> ট্যাগসহ,
-// যা KFGQPC মানদণ্ড অনুযায়ী রঙ-কোডিং করার জন্য ব্যবহৃত হয় (উপরের CSS দ্রষ্টব্য)।
-const tajweedCache = {}; // surahNum -> Map(numberInSurah -> tajweed HTML)
-async function fetchTajweedText(surahNum){
-  if(tajweedCache[surahNum]) return tajweedCache[surahNum];
-  const res = await fetch(`${WORD_API_BASE}/verses/by_chapter/${surahNum}?fields=text_uthmani_tajweed&per_page=300`);
-  if(!res.ok) throw new Error('network');
-  const json = await res.json();
-  const map = new Map();
-  (json.verses || []).forEach(v=>{
-    const ayahNum = Number(String(v.verse_key).split(':')[1]);
-    if(v.text_uthmani_tajweed) map.set(ayahNum, v.text_uthmani_tajweed);
-  });
-  tajweedCache[surahNum] = map;
-  return map;
-}
-
-// সেটিংস মোডালের "কালার কোডিং তাজভীদ" টগল — চালু করলে বর্তমানে খোলা সূরাটির জন্য তাজভীদ টেক্সট
-// ডাউনলোড করে সাথে সাথে রঙ-কোডেড দেখায়; বন্ধ করলে সাধারণ (প্লেইন) আরবি টেক্সটে ফিরে যায়।
-function setTajweedModeEnabled(on){
-  tajweedModeEnabled = !!on;
-  localStorage.setItem('bn_quran_tajweed_on', tajweedModeEnabled ? '1' : '0');
-  if(currentBodyView === 'surah' && currentSurahNum){
-    if(tajweedModeEnabled){
-      fetchTajweedText(currentSurahNum).catch(()=>{}).then(()=> renderSurahBody(currentSurahNum));
-    } else {
-      renderSurahBody(currentSurahNum);
-    }
-  }
-}
-
-// সেটিংস মোডালের "শব্দে শব্দে অনুবাদ দেখান" টগল — চালু করলে প্রতিটি সূরা খোলার সাথে সাথেই
-// (আলাদাভাবে "ডাউনলোড করুন" জিজ্ঞাসা না করেই) শব্দে-শব্দে ভিউ স্বয়ংক্রিয়ভাবে লোড হয়ে যায়।
-function setWbwAutoEnabled(on){
-  wbwAutoEnabled = !!on;
-  localStorage.setItem('bn_quran_wbw_auto', wbwAutoEnabled ? '1' : '0');
-  if(wbwAutoEnabled && currentBodyView === 'surah' && currentSurahNum && !wordByWordSurahs.has(currentSurahNum)){
-    fetchWordByWord(currentSurahNum).then(()=>{
-      wordByWordSurahs.add(currentSurahNum);
-      renderSurahBody(currentSurahNum);
-    }).catch(()=>{});
-  }
-}
-
 // প্রতিটি সূরার আরবি টেক্সট এখন ইন্দো-পাক স্ক্রিপ্টে (হরকত, ওয়াকফ চিহ্ন ۙ ؕ ۬ ইত্যাদিসহ) দেখানো হয় —
 // অর্থাৎ সূরা আল-ফাতিহায় যে স্টাইলে আয়াতগুলো লেখা আছে, ঠিক একই স্টাইল বাকি সব সূরাতেও প্রযোজ্য হবে।
 // এই টেক্সট api.quran.com এর ভেরিফায়েড text_indopak ফিল্ড থেকে আনা হয়, যাতে পুরো কুরআনের প্রতিটি হরফ/হরকত নির্ভুল থাকে।
@@ -4809,11 +4717,9 @@ function renderAyahBlock(arabicAyah, surahNum){
   const displayN = (arabicAyah.displayNum !== undefined && arabicAyah.displayNum !== null) ? arabicAyah.displayNum : n;
   const translitMap = transliterationCache[resolvedSurahNum];
   const translit = translitMap ? translitMap.get(n) : null;
-  const tajweedMap = tajweedCache[resolvedSurahNum];
-  const tajweedHTML = (tajweedModeEnabled && tajweedMap) ? tajweedMap.get(n) : null;
   const arabicHTML = wordByWordSurahs.has(resolvedSurahNum)
     ? wordByWordHTMLFor(resolvedSurahNum, n, arabicAyah.text, displayN)
-    : `<p class="ayah-arabic${tajweedHTML ? ' tajweed-ar' : ''}">${tajweedHTML || arabicAyah.text}<span class="ayah-num-circle">${toArDigits(displayN)}</span></p>`;
+    : `<p class="ayah-arabic">${arabicAyah.text}<span class="ayah-num-circle">${toArDigits(displayN)}</span></p>`;
   return `
     <div class="ayah-block" data-ayah-index="${n}" data-surah="${resolvedSurahNum}" data-g="${g}">
       <div class="ayah-top-row">
@@ -4854,15 +4760,7 @@ function surahHeadHTML(arabicMeta){
 async function renderSurahBody(num){
   readerBody.innerHTML = '<div class="reader-loading">লোড হচ্ছে...</div>';
   try{
-    const loaders = [ fetchSurah(num), ensureSelectedTranslationsLoaded(), fetchTransliteration(num) ];
-    // সেটিংসের টগল অনুযায়ী শব্দে-শব্দে ও তাজভীদ ডেটা স্বয়ংক্রিয়ভাবে লোড হবে (এখনও লোড না থাকলে)
-    if(wbwAutoEnabled && !wordByWordSurahs.has(num)){
-      loaders.push(fetchWordByWord(num).then(()=>{ wordByWordSurahs.add(num); }).catch(()=>{}));
-    }
-    if(tajweedModeEnabled){
-      loaders.push(fetchTajweedText(num).catch(()=>{}));
-    }
-    const [{ arabic }] = await Promise.all(loaders);
+    const [{ arabic }] = await Promise.all([ fetchSurah(num), ensureSelectedTranslationsLoaded(), fetchTransliteration(num) ]);
     let html = surahHeadHTML(arabic);
     if(num !== 9){ // Surah At-Tawbah traditionally has no Bismillah heading
       html += `
@@ -5838,22 +5736,6 @@ ayahAudio.addEventListener('ended', ()=>{
       return;
     }
   }
-  // সেটিংসের "পরবর্তী আয়াত অটো প্লে" টগল চালু থাকলে, সারিতে আর কোনো আয়াত না থাকলেও
-  // পাঠক-দেহে বর্তমান আয়াতের ঠিক পরের আয়াতটি খুঁজে নিয়ে সয়ংক্রিয়ভাবে চালানো হয়।
-  if(barPlaybackIndex + 1 >= barPlaybackQueue.length && autoPlayNextAyahEnabled && barMode !== 'surah'){
-    const cur = barPlaybackQueue[barPlaybackIndex];
-    const curBlock = (cur && cur.numberInSurah)
-      ? readerBody.querySelector(`.ayah-block[data-surah="${cur.surahNum}"][data-ayah-index="${cur.numberInSurah}"]`)
-      : null;
-    const nextBlock = curBlock ? curBlock.nextElementSibling : null;
-    if(nextBlock && nextBlock.classList && nextBlock.classList.contains('ayah-block')){
-      barPlaybackQueue.push({
-        g: Number(nextBlock.dataset.g),
-        numberInSurah: Number(nextBlock.dataset.ayahIndex),
-        surahNum: Number(nextBlock.dataset.surah)
-      });
-    }
-  }
   barPlaybackIndex += 1;
   playBarCurrent();
 });
@@ -6173,27 +6055,11 @@ moreSheetOverlay.querySelectorAll('.ms-item').forEach(item=>{
       openTransPanel();
     } else if(action === 'explain'){
       openTafsirModal(currentSurahNum, currentAyahIndex || 1);
-    } else if(action === 'reciter'){
-      // পূর্ণাঙ্গ সেটিংস মোডাল খুলে সরাসরি "কারী / অডিও ম্যানেজার" অংশে নিয়ে যাওয়া হচ্ছে
-      const gearBtn = document.querySelector('.settings-icon');
-      if(gearBtn) gearBtn.click();
-      setTimeout(()=>{ document.getElementById('reciterManagerTrigger')?.click(); }, 260);
-    } else if(action === 'arfont'){
-      const gearBtn = document.querySelector('.settings-icon');
-      if(gearBtn) gearBtn.click();
-      setTimeout(()=>{ document.getElementById('arFontTrigger')?.click(); }, 260);
-    } else if(action === 'fontsize'){
-      // ফন্ট সাইজের স্লাইডারদুটি সরাসরি পূর্ণাঙ্গ সেটিংস মোডালে আছে
-      const gearBtn = document.querySelector('.settings-icon');
-      if(gearBtn) gearBtn.click();
-    } else if(action === 'pronun'){
-      togglePronunciationDisplay();
     } else {
       alert('এই ফিচারটি শীঘ্রই যুক্ত করা হবে।');
     }
   });
 });
-applyPronunciationVisibility();
 
 /* ================= PER-AYAH TAP ACTION SHEET ================= */
 const ayahSheetOverlay = document.getElementById('ayahSheetOverlay');
@@ -6589,7 +6455,7 @@ document.addEventListener('click', (e)=>{
             <div class="settings-item-label">শব্দে শব্দে অনুবাদ দেখান</div>
             <div class="settings-item-desc">প্রতিটি আরবি শব্দের নিচে সংক্ষিপ্ত দেখাবে</div>
           </div>
-          <button class="toggle-switch active" id="wbwToggleBtn"></button>
+          <button class="toggle-switch active"></button>
         </div>
 
         <div class="settings-item">
