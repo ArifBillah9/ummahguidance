@@ -554,8 +554,8 @@
     let selectedAyahId = null;
     let lastHit = null;
 
-    function versesKey(mushafPage) { return 'q_verses_v2_' + mushafPage; }
-    function regionsKey(mushafPage) { return 'q_regions_v2_' + selectedMushaf + '_' + mushafPage; }
+    function versesKey(mushafPage) { return 'q_verses_v3_' + mushafPage; }
+    function regionsKey(mushafPage) { return 'q_regions_v3_' + selectedMushaf + '_' + mushafPage; }
 
     function readJSON(key) {
         try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : null; }
@@ -566,13 +566,19 @@
     }
 
     // ---------- ১) পিক্সেল স্ক্যান করে লেখার লাইন সনাক্ত ----------
-    function detectTextLines(canvas) {
+    // মাদানি মুসহাফের প্রতি পৃষ্ঠায় ১৫টি লাইন থাকে। তাই লেখার এলাকা (উপর→নিচ)
+    // বের করে সেটিকে লাইন সংখ্যা অনুযায়ী ভাগ করা হয় — এতে সব পৃষ্ঠাতেই
+    // সূরা ফাতিহার মতো নির্ভুল আয়াত-অঞ্চল পাওয়া যায়।
+    const MUSHAF_LINES = 15;
+
+    function scanCanvas(canvas) {
         const w = canvas.width, h = canvas.height;
         let data;
-        try {
-            data = canvas.getContext('2d').getImageData(0, 0, w, h).data;
-        } catch (e) { return []; }
+        try { data = canvas.getContext('2d').getImageData(0, 0, w, h).data; }
+        catch (e) { return null; }
 
+        // পাশের নকশাদার বর্ডার বাদ দিন
+        const xFrom = Math.round(w * 0.12), xTo = Math.round(w * 0.88);
         const rowInk = new Int32Array(h);
         const rowMin = new Int32Array(h).fill(w);
         const rowMax = new Int32Array(h).fill(-1);
@@ -580,9 +586,9 @@
         for (let y = 0; y < h; y++) {
             let count = 0, min = w, max = -1;
             const base = y * w * 4;
-            for (let x = 0; x < w; x++) {
+            for (let x = xFrom; x < xTo; x++) {
                 const i = base + x * 4;
-                const lum = (data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114);
+                const lum = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
                 if (lum < 150 && data[i + 3] > 40) {
                     count++;
                     if (x < min) min = x;
@@ -591,55 +597,89 @@
             }
             rowInk[y] = count; rowMin[y] = min; rowMax[y] = max;
         }
+        return { w, h, xFrom, xTo, rowInk, rowMin, rowMax };
+    }
 
-        const minInk = Math.max(3, w * 0.012);
-        const bands = [];
-        let startY = -1;
+    // লেখার ব্যান্ডগুলো (একটানা কালি) বের করুন
+    function inkBands(scan) {
+        const { h, xFrom, xTo, rowInk } = scan;
+        const minInk = Math.max(3, (xTo - xFrom) * 0.03);
         const gapAllowed = Math.max(2, Math.round(h * 0.004));
-        let gap = 0;
-
+        const bands = [];
+        let startY = -1, gap = 0;
         for (let y = 0; y < h; y++) {
-            const isInk = rowInk[y] >= minInk;
-            if (isInk) {
+            if (rowInk[y] >= minInk) {
                 if (startY < 0) startY = y;
                 gap = 0;
             } else if (startY >= 0) {
                 gap++;
-                if (gap > gapAllowed) {
-                    bands.push([startY, y - gap]);
-                    startY = -1; gap = 0;
-                }
+                if (gap > gapAllowed) { bands.push([startY, y - gap]); startY = -1; gap = 0; }
             }
         }
         if (startY >= 0) bands.push([startY, h - 1]);
+        // খুব পাতলা দাগ/বর্ডার বাদ
+        return bands.filter(([a, b]) => (b - a + 1) >= h * 0.012);
+    }
 
-        const lines = [];
-        for (const [a, b] of bands) {
-            const height = b - a + 1;
-            if (height < h * 0.012) continue;          // খুব পাতলা — বর্ডার/দাগ
-            let left = w, right = 0, ink = 0;
-            for (let y = a; y <= b; y++) {
-                if (rowMax[y] < 0) continue;
-                ink += rowInk[y];
-                if (rowMin[y] < left) left = rowMin[y];
-                if (rowMax[y] > right) right = rowMax[y];
+    // একটি y-ব্যান্ডের ভেতরে লেখার বাম/ডান সীমা
+    function bandExtent(scan, yTop, yBottom) {
+        let left = scan.w, right = 0, ink = 0;
+        for (let y = Math.max(0, yTop); y <= Math.min(scan.h - 1, yBottom); y++) {
+            if (scan.rowMax[y] < 0) continue;
+            ink += scan.rowInk[y];
+            if (scan.rowMin[y] < left) left = scan.rowMin[y];
+            if (scan.rowMax[y] > right) right = scan.rowMax[y];
+        }
+        if (right <= left) return null;
+        return { left, right, ink };
+    }
+
+    // লাইন সংখ্যা অনুযায়ী গ্রিড বানান (ফাতিহার মতো লাইনভিত্তিক অঞ্চল)
+    function buildLineGrid(canvas, lineCount) {
+        const scan = scanCanvas(canvas);
+        if (!scan) return [];
+        const bands = inkBands(scan);
+        if (!bands.length) return [];
+
+        const top = bands[0][0];
+        const bottom = bands[bands.length - 1][1];
+        const h = scan.h, w = scan.w;
+
+        // ব্যান্ড সংখ্যা লাইন সংখ্যার সমান হলে সরাসরি ব্যান্ডই ব্যবহার করুন
+        let slots;
+        if (bands.length === lineCount) {
+            slots = bands.map(([a, b]) => [a, b]);
+        } else {
+            const step = (bottom - top + 1) / lineCount;
+            slots = [];
+            for (let i = 0; i < lineCount; i++) {
+                slots.push([Math.round(top + i * step), Math.round(top + (i + 1) * step) - 1]);
             }
-            const width = right - left;
-            if (width < w * 0.15) continue;             // খুব ছোট — পৃষ্ঠা নম্বর ইত্যাদি
-            const density = ink / (height * Math.max(width, 1));
-            if (density < 0.02) continue;               // ফাঁকা ফ্রেম লাইন
-            lines.push({
-                y0: a / h, y1: (b + 1) / h,
-                x0: Math.max(0, (left - w * 0.01) / w),
-                x1: Math.min(1, (right + w * 0.01) / w)
-            });
         }
 
-        // পাশাপাশি লাইনগুলোর মাঝের ফাঁক সমানভাবে ভাগ করে দিন (ট্যাপ সহজ হয়)
+        const lines = slots.map(([a, b]) => {
+            const inner = bandExtent(scan, a + Math.round((b - a) * 0.15), b - Math.round((b - a) * 0.15));
+            const ext = inner || bandExtent(scan, a, b);
+            const left = ext ? ext.left : scan.xFrom;
+            const right = ext ? ext.right : scan.xTo;
+            return {
+                y0: a / h,
+                y1: (b + 1) / h,
+                x0: Math.max(0, (left - w * 0.008) / w),
+                x1: Math.min(1, (right + w * 0.008) / w),
+                hasInk: !!ext
+            };
+        });
+
+        // লাইনের মাঝের ফাঁক সমানভাগে ভাগ করে দিন (ট্যাপ সহজ হয়)
         for (let i = 0; i < lines.length - 1; i++) {
             const mid = (lines[i].y1 + lines[i + 1].y0) / 2;
             lines[i].y1 = mid;
             lines[i + 1].y0 = mid;
+        }
+        if (lines.length) {
+            lines[0].y0 = Math.max(0, lines[0].y0 - 0.006);
+            lines[lines.length - 1].y1 = Math.min(1, lines[lines.length - 1].y1 + 0.006);
         }
         return lines;
     }
@@ -654,85 +694,73 @@
         return (json.verses || []).map(v => {
             const key = String(v.verse_key || '').split(':');
             const words = (v.words || []).filter(wd => wd.char_type_name !== 'end');
+            // প্রতি লাইনে এই আয়াতের কত শব্দ আছে
+            const perLine = {};
+            (v.words || []).forEach(wd => {
+                if (!wd.line_number) return;
+                perLine[wd.line_number] = (perLine[wd.line_number] || 0) + 1;
+            });
             return {
                 surahNum: parseInt(key[0], 10),
                 ayahNum: parseInt(key[1], 10),
                 text: v.text_uthmani || (v.words || []).map(wd => wd.text_uthmani || '').join(' '),
                 wordCount: Math.max(1, words.length),
-                lineNumbers: [...new Set((v.words || []).map(wd => wd.line_number).filter(Boolean))]
+                perLine,
+                lineNumbers: Object.keys(perLine).map(Number).sort((a, b) => a - b)
             };
         });
     }
 
     // ---------- ৩) আয়াত + লাইন মিলিয়ে অঞ্চল বানান ----------
-    function buildRegions(verses, detected) {
-        if (!verses.length || !detected.length) return [];
-
-        const apiLines = [...new Set(verses.flatMap(v => v.lineNumbers))].sort((a, b) => a - b);
-
-        // সনাক্ত হওয়া ব্যান্ড বেশি হলে (সূরা-শিরোনাম/নকশা) সবচেয়ে চওড়াগুলো রাখুন
-        let lines = detected;
-        if (apiLines.length && detected.length > apiLines.length) {
-            lines = [...detected]
-                .sort((a, b) => (b.x1 - b.x0) - (a.x1 - a.x0))
-                .slice(0, apiLines.length)
-                .sort((a, b) => a.y0 - b.y0);
-        }
-
+    // প্রতিটি লাইনে (ডান → বাম) আয়াতগুলোকে শব্দ-অনুপাতে ভাগ করা হয়,
+    // ঠিক যেমন সূরা ফাতিহার হাতে-করা অঞ্চলগুলোতে করা হয়েছে।
+    function buildRegions(verses, lines) {
+        if (!verses.length || !lines.length) return [];
         const regions = [];
-        const useApiLines = apiLines.length === lines.length;
 
-        if (useApiLines) {
-            apiLines.forEach((ln, idx) => {
-                const line = lines[idx];
-                const onLine = verses.filter(v => v.lineNumbers.includes(ln));
-                if (!onLine.length) return;
-                const total = onLine.reduce((s, v) => s + v.wordCount / v.lineNumbers.length, 0) || 1;
-                let acc = 0;
-                const lw = line.x1 - line.x0;
-                onLine.forEach(v => {
-                    const share = (v.wordCount / v.lineNumbers.length) / total;
-                    // RTL: প্রথম আয়াত ডান দিক থেকে শুরু
-                    const xEnd = line.x1 - acc * lw;
-                    const xStart = xEnd - share * lw;
-                    acc += share;
-                    regions.push({
-                        surahNum: v.surahNum, ayahNum: v.ayahNum, text: v.text,
-                        x0: Math.min(xStart, xEnd), x1: Math.max(xStart, xEnd),
-                        y0: line.y0, y1: line.y1
-                    });
-                });
-            });
-            if (regions.length) return regions;
-        }
+        const maxLine = Math.max(...verses.flatMap(v => v.lineNumbers), 0);
+        if (!maxLine) return [];
 
-        // ফলব্যাক: মোট শব্দ সংখ্যা অনুপাতে লাইনে লাইনে ভাগ করুন
-        const lineWidths = lines.map(l => l.x1 - l.x0);
-        const totalWidth = lineWidths.reduce((a, b) => a + b, 0) || 1;
-        const totalWords = verses.reduce((s, v) => s + v.wordCount, 0) || 1;
-        const capacity = lineWidths.map(w => (w / totalWidth) * totalWords);
+        for (let ln = 1; ln <= Math.min(maxLine, lines.length); ln++) {
+            const line = lines[ln - 1];
+            if (!line) continue;
+            const onLine = verses.filter(v => v.perLine[ln]);
+            if (!onLine.length) continue;
 
-        let li = 0, used = 0;
-        verses.forEach(v => {
-            let remaining = v.wordCount;
-            while (remaining > 0 && li < lines.length) {
-                const free = Math.max(capacity[li] - used, 0);
-                const take = Math.min(remaining, free > 0 ? free : remaining);
-                const line = lines[li];
-                const lw = line.x1 - line.x0;
-                const startFrac = used / (capacity[li] || 1);
-                const endFrac = Math.min((used + take) / (capacity[li] || 1), 1);
+            const total = onLine.reduce((s, v) => s + v.perLine[ln], 0) || 1;
+            const lw = line.x1 - line.x0;
+            let acc = 0;
+            onLine.forEach(v => {
+                const share = v.perLine[ln] / total;
+                // RTL: লাইনের ডান দিক থেকে শুরু
+                const xEnd = line.x1 - acc * lw;
+                const xStart = xEnd - share * lw;
+                acc += share;
                 regions.push({
                     surahNum: v.surahNum, ayahNum: v.ayahNum, text: v.text,
-                    x0: line.x1 - endFrac * lw,
-                    x1: line.x1 - startFrac * lw,
+                    x0: Math.max(0, Math.min(xStart, xEnd)),
+                    x1: Math.min(1, Math.max(xStart, xEnd)),
                     y0: line.y0, y1: line.y1
                 });
-                used += take;
-                remaining -= take;
-                if (used >= capacity[li] - 0.001) { li++; used = 0; }
+            });
+        }
+
+        // একটি লাইনে একটিমাত্র আয়াত থাকলে পুরো লাইনের প্রস্থ দিন (ফাতিহার মতো)
+        const byLine = {};
+        regions.forEach(r => {
+            const k = r.y0.toFixed(4);
+            (byLine[k] = byLine[k] || []).push(r);
+        });
+        Object.keys(byLine).forEach(k => {
+            const arr = byLine[k];
+            if (arr.length === 1) { arr[0].x0 = 0; arr[0].x1 = 1; }
+            else {
+                const sorted = [...arr].sort((a, b) => b.x1 - a.x1);
+                sorted[0].x1 = 1;                            // ডানের প্রথমটি প্রান্ত পর্যন্ত
+                sorted[sorted.length - 1].x0 = 0;            // বামের শেষটি প্রান্ত পর্যন্ত
             }
         });
+
         return regions;
     }
 
@@ -751,27 +779,34 @@
                 return cachedRegions;
             }
 
-            const lines = detectTextLines(canvas);
             let regions = [];
+            let verses = null;
 
             try {
-                let verses = readJSON(versesKey(mushafPage));
+                verses = readJSON(versesKey(mushafPage));
                 if ((!verses || !verses.length) && mushafPage >= 1 && mushafPage <= 604) {
                     verses = await fetchPageVerses(mushafPage);
                     if (verses.length) writeJSON(versesKey(mushafPage), verses);
                 }
-                if (verses && verses.length) regions = buildRegions(verses, lines);
             } catch (e) {
                 console.warn('আয়াত ডেটা আনা যায়নি:', e);
+            }
+
+            if (verses && verses.length) {
+                const apiMaxLine = Math.max(...verses.flatMap(v => v.lineNumbers), 0);
+                const lineCount = Math.max(apiMaxLine, MUSHAF_LINES);
+                const lines = buildLineGrid(canvas, lineCount);
+                regions = buildRegions(verses, lines);
             }
 
             if (regions.length) {
                 writeJSON(regionsKey(mushafPage), regions);
             } else {
                 // অফলাইন ফলব্যাক: অন্তত লাইন-ভিত্তিক নির্বাচন কাজ করবে
+                const lines = buildLineGrid(canvas, MUSHAF_LINES).filter(l => l.hasInk);
                 regions = lines.map((l, i) => ({
                     surahNum: 0, ayahNum: i + 1, text: 'লাইন ' + toBengaliNumeral(i + 1),
-                    x0: l.x0, x1: l.x1, y0: l.y0, y1: l.y1, isLine: true
+                    x0: 0, x1: 1, y0: l.y0, y1: l.y1, isLine: true
                 }));
             }
 
