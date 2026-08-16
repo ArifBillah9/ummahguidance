@@ -234,13 +234,13 @@
   .ayah-toolbar button:active{background:rgba(255,255,255,.35); transform:scale(0.95);}
 
   .ayah-highlight{
-    position:absolute; left:3%; right:3%; width:auto;
-    background:rgba(31, 111, 85, .18); 
+    position:absolute; left:4%; right:4%; width:auto;
+    background:rgba(46, 168, 94, .30); 
     border:none;
-    border-radius:0px;
+    border-radius:7px;
     display:none; z-index:25;
-    box-shadow:inset 0 0 0 1px rgba(23, 90, 69, .5);
-    transition:opacity .2s ease;
+    box-shadow:inset 0 0 0 1px rgba(23, 90, 69, .35);
+    transition:opacity .2s ease, top .15s ease, height .15s ease;
   }
   .ayah-highlight.show{display:block; opacity:1;}
 
@@ -455,6 +455,7 @@ function renderPage(pageNum){
       prevPageBtn.disabled = pageNum <= 1;
       nextPageBtn.disabled = pageNum >= totalPages;
       hideAyahToolbar();
+      detectTextLines(); // পাতার প্রকৃত লাইনগুলো চিহ্নিত করুন (আয়াত সিলেকশনের জন্য)
     });
   });
 }
@@ -492,7 +493,125 @@ function setImmersive(on){
 /* ===== আয়াত সিলেক্ট করার ফিচার ===== */
 const ayahToolbar = document.getElementById('ayahToolbar');
 const ayahHighlight = document.getElementById('ayahHighlight');
-const ESTIMATED_LINES = 17; // প্রতি পাতায় গড়ে ১৭ লাইন
+const ESTIMATED_LINES = 17; // ফলব্যাক: লাইন শনাক্তকরণ ব্যর্থ হলে ব্যবহৃত হবে
+
+/* পাতার ছবি বিশ্লেষণ করে আসল লাইনগুলোর (ইঙ্ক থাকা অংশ) উপরে-নিচের সীমানা বের করুন,
+   যাতে হাইলাইট ঠিক আসল লাইনের উপর বসে এবং টুলবার কখনও লেখার উপর না বসে যায় */
+let detectedLines = [];
+
+/* পাতার সাজসজ্জার বর্ডার (নকশা করা ফ্রেম) বাদ দিয়ে আসল লেখার এলাকা (content box)
+   কোথায় শুরু-শেষ হচ্ছে তা স্বয়ংক্রিয়ভাবে বের করুন — কারণ প্রতিটি মুসহাফে বর্ডারের
+   প্রস্থ ভিন্ন হতে পারে, নির্দিষ্ট % মার্জিন দিয়ে কাজ হয় না */
+function detectContentXRange(imgData, w, h){
+  const colFrac = new Float32Array(w);
+  const yStep = Math.max(1, Math.floor(h / 600));
+  let samples = 0;
+  for(let y = 0; y < h; y += yStep) samples++;
+
+  for(let x = 0; x < w; x++){
+    let cnt = 0;
+    for(let y = 0; y < h; y += yStep){
+      const idx = (y * w + x) * 4;
+      const lum = (imgData[idx] + imgData[idx+1] + imgData[idx+2]) / 3;
+      if((255 - lum) > 80) cnt++;
+    }
+    colFrac[x] = samples ? cnt / samples : 0;
+  }
+
+  // বর্ডারের এলাকায় (ঘন নকশা) কভারেজ বেশি থাকে; মাঝের লেখার এলাকায় কম
+  const thr = 0.35;
+  const runs = [];
+  let inRun = false, start = 0;
+  for(let x = 0; x < w; x++){
+    const low = colFrac[x] < thr;
+    if(low && !inRun){ inRun = true; start = x; }
+    else if(!low && inRun){ inRun = false; runs.push([start, x]); }
+  }
+  if(inRun) runs.push([start, w]);
+
+  // পাতার কেন্দ্র ধারণ করে এমন সবচেয়ে চওড়া "কম কভারেজ" অংশটিই আসল লেখার এলাকা
+  const center = w / 2;
+  let best = null;
+  runs.forEach(r => {
+    if(r[0] <= center && center <= r[1]){
+      if(!best || (r[1]-r[0]) > (best[1]-best[0])) best = r;
+    }
+  });
+
+  if(!best) return [Math.floor(w*0.13), Math.ceil(w*0.87)]; // ফলব্যাক
+  // এখানে বাইরের দিকে প্যাডিং যোগ করা হচ্ছে না — সামান্য পাডিংও বর্ডারের নকশার
+  // কিছু অংশ ঢুকিয়ে দিতে পারে, যা লাইন শনাক্তকরণে গোলমাল করে
+  return [Math.floor(best[0]), Math.ceil(best[1])];
+}
+
+function detectTextLines(){
+  detectedLines = [];
+  try{
+    const w = pdfCanvas.width, h = pdfCanvas.height;
+    if(w === 0 || h === 0) return;
+
+    const ctx = pdfCanvas.getContext('2d');
+    const imgData = ctx.getImageData(0, 0, w, h).data;
+
+    // সাজসজ্জার বর্ডার বাদ দিয়ে শুধু লেখার এলাকা বিশ্লেষণ করুন
+    const [xStart, xEnd] = detectContentXRange(imgData, w, h);
+    const xStep = Math.max(1, Math.floor((xEnd - xStart) / 220));
+
+    const rowDarkness = new Float32Array(h);
+    let maxD = 0;
+    for(let y = 0; y < h; y++){
+      let sum = 0, cnt = 0;
+      for(let x = xStart; x < xEnd; x += xStep){
+        const idx = (y * w + x) * 4;
+        const lum = (imgData[idx] + imgData[idx+1] + imgData[idx+2]) / 3;
+        sum += (255 - lum);
+        cnt++;
+      }
+      const avg = cnt ? sum / cnt : 0;
+      rowDarkness[y] = avg;
+      if(avg > maxD) maxD = avg;
+    }
+    if(maxD < 5) return; // পাতা প্রায় ফাঁকা, শনাক্ত করার কিছু নেই
+
+    const threshold = maxD * 0.12;
+    const rawBands = [];
+    let inBand = false, bandStart = 0;
+    for(let y = 0; y < h; y++){
+      const isInk = rowDarkness[y] > threshold;
+      if(isInk && !inBand){ inBand = true; bandStart = y; }
+      else if(!isInk && inBand){ inBand = false; rawBands.push({top: bandStart, bottom: y}); }
+    }
+    if(inBand) rawBands.push({top: bandStart, bottom: h});
+
+    // একই লাইনের হরফ/হরকতের মাঝের ছোট ফাঁক জোড়া লাগান
+    // পাতাভেদে লাইন-ঘনত্ব খুব আলাদা হতে পারে (কোনো পাতায় ৭টি বড় লাইন, কোনোটায় ১৫টি
+    // ঘনসন্নিবিষ্ট লাইন) — তাই স্থির একটি সংখ্যার বদলে প্রতিটি পাতার জন্য নিজস্ব
+    // ফাঁকের হিসাব (Otsu থ্রেশহোল্ড) বের করা হয়
+    const gaps = [];
+    for(let i = 0; i < rawBands.length - 1; i++){
+      gaps.push(rawBands[i+1].top - rawBands[i].bottom);
+    }
+    const sectionGapCap = h * 0.05; // এর চেয়ে বড় ফাঁক নিশ্চিতভাবেই দুটি ভিন্ন অংশ/লাইনের মাঝের ফাঁক
+    const smallGaps = gaps.filter(g => g < sectionGapCap);
+    const mergeGap = smallGaps.length >= 6 ? otsuThreshold(smallGaps) : h * 0.011;
+
+    const merged = [];
+    rawBands.forEach(b => {
+      if(merged.length && (b.top - merged[merged.length - 1].bottom) <= mergeGap){
+        merged[merged.length - 1].bottom = b.bottom;
+      }else{
+        merged.push({top: b.top, bottom: b.bottom});
+      }
+    });
+
+    // নয়েজ (খুব ছোট ব্যান্ড) বাদ দিন
+    const minHeight = h * 0.012;
+    detectedLines = merged.filter(b => (b.bottom - b.top) >= minHeight);
+  }catch(err){
+    console.warn('লাইন শনাক্তকরণ ব্যর্থ হয়েছে, ফলব্যাক ব্যবহার হবে:', err);
+    detectedLines = [];
+  }
+}
 
 function showAyahToolbar(clientY){
   if(!pdfCanvas || !pdfCanvas.offsetParent) return; // ক্যানভাস visible না হলে exit করুন
@@ -504,49 +623,78 @@ function showAyahToolbar(clientY){
   if(clientY < frameRect.top || clientY > frameRect.bottom) return;
   if(clientY < canvasRect.top || clientY > canvasRect.bottom) return;
 
-  // ক্যানভাসের ভিতরে সম্পর্কিত Y পজিশন
+  // ক্যানভাসের ভিতরে সম্পর্কিত Y পজিশন (স্ক্রিন পিক্সেলে)
   const relY = clientY - canvasRect.top;
-  
-  // ক্যানভাসের উচ্চতা
   const canvasHeight = canvasRect.height;
-  
-  // যদি উচ্চতা 0 হয় তবে রিটার্ন করুন
   if(canvasHeight <= 0) return;
-  
-  // লাইনের উচ্চতা
-  const lineHeight = canvasHeight / ESTIMATED_LINES;
-  
-  // কোন লাইন ক্লিক করা হয়েছে
-  const lineIndex = Math.min(ESTIMATED_LINES - 1, Math.max(0, Math.floor(relY / lineHeight)));
-  
-  // ফ্রেমের ভিতরে হাইলাইটের টপ পজিশন
-  const topInFrame = (canvasRect.top - frameRect.top) + lineIndex * lineHeight;
-  
-  // হাইলাইট অবস্থান সেট করুন
+
+  // ক্যানভাস বিটম্যাপ পিক্সেল ও স্ক্রিন পিক্সেলের অনুপাত (detectTextLines বিটম্যাপ পিক্সেলে কাজ করে)
+  const scaleY = pdfCanvas.height / canvasHeight;
+  const relYCanvas = relY * scaleY;
+
+  let bandTopCanvas, bandBottomCanvas, lineIndex;
+
+  if(detectedLines.length){
+    // প্রকৃত লাইনের সীমানা দিয়ে সিলেক্ট করুন
+    let idx = detectedLines.findIndex(b => relYCanvas >= b.top && relYCanvas <= b.bottom);
+    if(idx === -1){
+      // ক্লিক দুই লাইনের মাঝের ফাঁকা জায়গায় হলে, সবচেয়ে কাছের লাইনটি বেছে নিন
+      let minDist = Infinity;
+      detectedLines.forEach((b, i) => {
+        const d = relYCanvas < b.top ? (b.top - relYCanvas) : (relYCanvas - b.bottom);
+        if(d < minDist){ minDist = d; idx = i; }
+      });
+    }
+    const band = detectedLines[idx];
+    const pad = Math.min((band.bottom - band.top) * 0.28, 10 * scaleY);
+    bandTopCanvas = Math.max(0, band.top - pad);
+    bandBottomCanvas = Math.min(pdfCanvas.height, band.bottom + pad);
+    lineIndex = idx;
+  }else{
+    // ফলব্যাক: সমান-উচ্চতার আনুমানিক লাইন হিসাব
+    const lineHeightCanvas = pdfCanvas.height / ESTIMATED_LINES;
+    lineIndex = Math.min(ESTIMATED_LINES - 1, Math.max(0, Math.floor(relYCanvas / lineHeightCanvas)));
+    bandTopCanvas = lineIndex * lineHeightCanvas;
+    bandBottomCanvas = bandTopCanvas + lineHeightCanvas;
+  }
+
+  // স্ক্রিন পিক্সেলে ফিরিয়ে আনুন
+  const topScreen = bandTopCanvas / scaleY;
+  const bottomScreen = bandBottomCanvas / scaleY;
+  const heightScreen = bottomScreen - topScreen;
+  const topInFrame = (canvasRect.top - frameRect.top) + topScreen;
+
+  // হাইলাইট অবস্থান সেট করুন — এটি এখন প্রকৃত লেখার উপরেই বসবে, পুরো লাইন জুড়ে নয়
   ayahHighlight.style.top = topInFrame + 'px';
-  ayahHighlight.style.height = lineHeight + 'px';
+  ayahHighlight.style.height = heightScreen + 'px';
   ayahHighlight.classList.add('show');
-  
+
   // লাইন নম্বর দেখান
   const lineNumDisplay = document.getElementById('ayahLineNum');
   lineNumDisplay.textContent = `${lineIndex + 1}`;
 
   // টুলবার শো করুন
   ayahToolbar.classList.add('show');
-  
-  // টুলবারের উচ্চতা পান
+
+  // টুলবারকে সবসময় হাইলাইট করা লেখার বাইরে (উপরে বা নিচে) রাখুন, যাতে লেখা কখনও ঢাকা না পড়ে
   setTimeout(() => {
     const toolbarH = ayahToolbar.offsetHeight || 50;
-    const gap = 12;
-    
+    const gap = 14;
+
     // প্রথমে উপরে রাখার চেষ্টা করুন
     let toolbarTop = topInFrame - toolbarH - gap;
-    
-    // যদি উপরে জায়গা না থাকে তবে নিচে রাখুন
-    if(toolbarTop < 0){
-      toolbarTop = topInFrame + lineHeight + gap;
+
+    // উপরে জায়গা না থাকলে নিচে রাখুন
+    if(toolbarTop < 4){
+      toolbarTop = topInFrame + heightScreen + gap;
+
+      // নিচেও পর্যাপ্ত জায়গা না থাকলে ফ্রেমের মধ্যেই সীমাবদ্ধ রাখুন (তবু লেখার উপর বসবে না)
+      const frameH = frameRect.height;
+      if(toolbarTop + toolbarH > frameH - 4){
+        toolbarTop = Math.max(4, frameH - toolbarH - 4);
+      }
     }
-    
+
     ayahToolbar.style.top = toolbarTop + 'px';
   }, 50);
 
