@@ -417,11 +417,11 @@
     }
 
     // পৃষ্ঠা রেন্ডার করুন
-    async function renderPage(pageNum) {
+    async function renderPage(pageNumber) {
         if (!pdfDoc) return;
         
         try {
-            const page = await pdfDoc.getPage(pageNum);
+            const page = await pdfDoc.getPage(pageNumber);
             const scale = 1.5;
             const viewport = page.getViewport({ scale });
             
@@ -441,16 +441,16 @@
             setupPageClickHandlers(canvas, viewport);
             
             // পৃষ্ঠা নম্বর আপডেট করুন
-            currentPage = pageNum;
-            pageNum.textContent = toBengaliNumeral(pageNum);
-            localStorage.setItem('currentPage_' + selectedMushaf, pageNum);
+            currentPage = pageNumber;
+            pageNum.textContent = toBengaliNumeral(pageNumber);
+            localStorage.setItem('currentPage_' + selectedMushaf, pageNumber);
             
             // নেভিগেশন বাটন অক্ষম/সক্ষম করুন
-            prevBtn.disabled = pageNum === 1;
-            nextBtn.disabled = pageNum === totalPages;
+            prevBtn.disabled = pageNumber === 1;
+            nextBtn.disabled = pageNumber === totalPages;
             
             // এই পৃষ্ঠার আয়াত লোড করুন
-            const pageAyahs = generateSampleAyahs(pageNum);
+            const pageAyahs = generateSampleAyahs(pageNumber);
             updateAyahBar(pageAyahs);
         } catch (error) {
             console.error('পৃষ্ঠা রেন্ডার করা যায়নি:', error);
@@ -588,12 +588,9 @@
         document.querySelectorAll('.ayah-item').forEach(item => {
             item.classList.remove('selected');
         });
-        
-        // নতুন আয়াত নির্বাচন করুন
-        updateAyahBar([ayah]);
-        
-        // নির্বাচিত আয়াত হাইলাইট করুন
-        const selectedItem = ayahBar.querySelector(`[data-id="${ayah.id}"]`);
+
+        // নির্বাচিত আয়াত হাইলাইট করুন (তালিকা পুনরায় তৈরি না করে, যাতে বাকি আয়াতগুলো দেখা যায়)
+        const selectedItem = ayahBar.querySelector(`[data-id="${CSS.escape(ayah.id)}"]`);
         if (selectedItem) {
             selectedItem.classList.add('selected');
             selectedItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
