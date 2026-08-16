@@ -8,868 +8,603 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
-
     @font-face{   
-    font-family:'Kalpurush';
-    src:url('tilawat/fonts/Kalpurush.woff2') format('woff2');
-    font-weight:normal;
-    font-style:normal;
-    font-display:swap;
-  }
-  
+        font-family:'Kalpurush';
+        src:url('tilawat/fonts/Kalpurush.woff2') format('woff2');
+        font-weight:normal;
+        font-style:normal;
+        font-display:swap;
+    }
 
-  :root{
-    --brand:#175a45;
-    --brand-dark:#0f4534;
-    --brand-light:#1f6f55;
-    --cream:#fdfaf3;
-    --ink:#1b1b1b;
-    --gold:#c9973f;
-    --line:#d8d2c2;
-    --radius:14px;
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html,body{height:100%;}
-  body{
-    font-family:'Noto Sans Bengali','Noto Naskh Arabic',sans-serif;
-    background:#e9e5da;
-    color:var(--ink);
-    display:flex;
-    justify-content:center;
-    -webkit-tap-highlight-color:transparent;
-  }
+    :root{
+        --brand:#175a45;
+        --brand-dark:#0f4534;
+        --brand-light:#1f6f55;
+        --cream:#fdfaf3;
+        --ink:#1b1b1b;
+        --gold:#c9973f;
+        --line:#d8d2c2;
+        --radius:14px;
+    }
 
-     html,body{
-    margin:0;padding:0;
-    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
-  }
-  #app{
-    width:100%;
-    max-width:480px;
-    min-height:100vh;
-    background:var(--cream);
-    display:flex;
-    flex-direction:column;
-    position:relative;
-    box-shadow:0 0 30px rgba(0,0,0,.15);
-    overflow:hidden;
-  }
+    *{box-sizing:border-box; margin:0; padding:0;}
+    html,body{height:100%;}
+    
+    body{
+        font-family:'Noto Sans Bengali','Noto Naskh Arabic',sans-serif;
+        background:#e9e5da;
+        color:var(--ink);
+        display:flex;
+        justify-content:center;
+        -webkit-tap-highlight-color:transparent;
+    }
 
-  /* ===== HEADER ===== */
-  header{
-    background:linear-gradient(180deg,var(--brand),var(--brand-dark));
-    color:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:10px 12px;
-    position:relative;
-    z-index:30;
-    flex-shrink:0;
-  }
-  header .left{display:flex; align-items:center; gap:10px;}
-  #mainHeader{
-    position:absolute; top:0; left:0; right:0;
-    transition:transform .28s ease, opacity .28s ease;
-  }
-  #mainHeader.hidden-bar{
-    transform:translateY(-100%); opacity:0; pointer-events:none;
-  }
-  .icon-btn{
-    width:36px; height:36px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    background:transparent; border:none; color:#fff; cursor:pointer;
-    flex-shrink:0;
-  }
-  .icon-btn svg{width:20px; height:20px;}
-  .icon-btn.filled{background:#fff; color:var(--brand);}
-  header h1{font-size:19px; font-weight:600;}
-  header .right{display:flex; align-items:center; gap:2px;}
+    #app{
+        width:100%;
+        max-width:480px;
+        min-height:100vh;
+        background:var(--cream);
+        display:flex;
+        flex-direction:column;
+        position:relative;
+        box-shadow:0 0 30px rgba(0,0,0,.15);
+        overflow:hidden;
+    }
 
-  /* ===== READER VIEW ===== */
-  #readerView{flex:1; display:flex; flex-direction:column; min-height:0;}
-  .status-bar{
-    display:flex; justify-content:space-between; align-items:center;
-    padding:6px 14px; font-size:12px; color:#8a8370;
-  }
-  #pdfViewer{
-    flex:1; display:flex; flex-direction:column; min-height:0; padding:0; width:100%;
-    position:relative;
-  }
-  .page-frame{
-    position:relative;
-    flex:1;
-    overflow:hidden;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:#fff;
-    width:100%;
-    height:100%;
-  }
-  #pdfCanvas{
-    display:block;
-  }
-  .page-nav{
-    display:flex; align-items:center; justify-content:center; gap:18px;
-    padding:8px 0 2px; flex-shrink:0;
-    max-height:60px; overflow:hidden;
-    transition:max-height .28s ease, opacity .28s ease, padding .28s ease;
-  }
-  .page-nav.hidden-bar{
-    max-height:0; opacity:0; padding-top:0; padding-bottom:0; pointer-events:none;
-  }
-  .nav-btn{
-    width:36px; height:36px; border-radius:50%; border:1px solid var(--gold);
-    background:#fff; color:var(--brand); display:flex; align-items:center;
-    justify-content:center; cursor:pointer;
-  }
-  .nav-btn svg{width:18px; height:18px;}
-  .nav-btn:disabled{opacity:.4; cursor:default;}
-  #pageIndicator{font-size:13px; color:var(--brand); min-width:70px; text-align:center;}
-  #loadingMsg{padding:40px 10px; text-align:center; color:#8a8370; font-size:14px;}
+    /* ===== HEADER ===== */
+    header{
+        background:linear-gradient(180deg,var(--brand),var(--brand-dark));
+        color:#fff;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding:10px 12px;
+        position:relative;
+        z-index:30;
+        flex-shrink:0;
+        height:56px;
+    }
 
-  /* ===== FOOTER PLAYER ===== */
-  footer{
-    background:linear-gradient(180deg,var(--brand),var(--brand-dark));
-    color:#fff; flex-shrink:0;
-    display:flex; align-items:center; gap:10px;
-    padding:10px 14px;
-    position:absolute; left:0; right:0; bottom:0;
-    z-index:20;
-    transition:transform .28s ease, opacity .28s ease;
-  }
-  footer.hidden-bar{
-    transform:translateY(100%); opacity:0; pointer-events:none;
-  }
-  #playBtn{
-    width:42px; height:42px; border-radius:50%; background:#fff;
-    color:var(--brand); border:none; display:flex; align-items:center;
-    justify-content:center; flex-shrink:0; cursor:pointer;
-  }
-  #playBtn svg{width:18px; height:18px;}
-  .reciter{flex:1; min-width:0;}
-  .reciter .name{font-size:14px; font-weight:600; line-height:1.3;}
-  .reciter .sub{font-size:11px; opacity:.75;}
-  footer .right-icons{display:flex; align-items:center; gap:12px;}
-  footer .right-icons svg{width:18px; height:18px; cursor:pointer;}
+    header .left{display:flex; align-items:center; gap:10px;}
+    header h1{font-size:18px; font-weight:600;}
+    header .right{display:flex; align-items:center; gap:2px;}
 
-  /* ===== DROPDOWN MENU ===== */
-  #menuOverlay{
-    position:absolute; inset:0; background:rgba(0,0,0,.25);
-    display:none; z-index:40;
-  }
-  #menuOverlay.show{display:block;}
-  #menuCard{
-    position:absolute; top:56px; right:10px; width:260px;
-    background:#fff; border-radius:10px; overflow:hidden;
-    box-shadow:0 10px 30px rgba(0,0,0,.25);
-  }
-  .menu-item{
-    display:flex; align-items:center; gap:14px;
-    padding:14px 16px; font-size:14.5px; color:#20402f;
-    cursor:pointer; border-bottom:1px solid #eee;
-  }
-  .menu-item:last-child{border-bottom:none;}
-  .menu-item:active{background:#f3f3f3;}
-  .menu-item svg{width:20px; height:20px; color:var(--brand); flex-shrink:0;}
+    .icon-btn{
+        width:36px; height:36px; border-radius:50%;
+        display:flex; align-items:center; justify-content:center;
+        background:transparent; border:none; color:#fff; cursor:pointer;
+        flex-shrink:0;
+    }
 
-  /* ===== MUSHAF SELECT VIEW ===== */
-  #selectView{
-    position:absolute; inset:0; background:var(--cream);
-    display:none; flex-direction:column; z-index:35;
-  }
-  #selectView.show{display:flex;}
-  .select-grid{
-    flex:1; overflow-y:auto; padding:16px 14px 30px;
-    display:grid; grid-template-columns:1fr 1fr; gap:16px;
-  }
-  .mushaf-card{cursor:pointer; text-align:center;}
-  .mushaf-thumb{
-    position:relative; aspect-ratio:3/4; border-radius:8px;
-    background:#fff; display:flex; flex-direction:column; justify-content:center;
-    align-items:center; gap:6px; padding:4px;
-    box-shadow:0 2px 8px rgba(0,0,0,.12);
-    overflow:hidden;
-  }
-  .mushaf-thumb img{
-    width:100%; height:100%; object-fit:cover; border-radius:5px; display:block;
-  }
-  .mushaf-thumb .mini-line{
-    width:78%; height:5px; border-radius:2px; background:#d8d2c2;
-  }
-  .mushaf-thumb .mini-line.short{width:55%;}
-  .mushaf-thumb .bismillah{
-    font-family:'Amiri',serif; font-size:13px; color:#333; direction:rtl;
-  }
-  .check-badge{
-    position:absolute; top:6px; left:6px; width:22px; height:22px;
-    background:var(--brand); border-radius:50%; display:none;
-    align-items:center; justify-content:center; color:#fff;
-  }
-  .check-badge svg{width:13px; height:13px;}
-  .mushaf-card.active .check-badge{display:flex;}
-  .mushaf-card.active .mushaf-thumb{outline:2.5px solid var(--brand); outline-offset:2px;}
-  .mushaf-card .label{margin-top:8px; font-size:13px; color:#20402f; font-weight:500; line-height:1.4;}
+    .icon-btn svg{width:20px; height:20px;}
+    .icon-btn.filled{background:#fff; color:var(--brand);}
 
-  /* ===== AYAH SELECT TOOLBAR ===== */
-  .ayah-toolbar{
-    position:absolute; left:2.5%; right:2.5%; width:auto;
-    background:var(--brand-dark); border-radius:8px;
-    display:none; align-items:center; gap:8px; padding:12px 14px;
-    z-index:50;
-    transform:translateY(-50%);
-    box-shadow:0 8px 20px rgba(0,0,0,.3);
-  }
-  .ayah-toolbar.show{display:flex; animation:slideIn .3s ease-out;}
-  .ayah-toolbar button{
-    width:38px; height:38px; border-radius:50%; border:none;
-    background:rgba(255,255,255,.18); color:#fff; cursor:pointer;
-    display:flex; align-items:center; justify-content:center;
-    flex-shrink:0;
-    transition:all .2s ease;
-  }
-  .ayah-toolbar button svg{width:19px; height:19px;}
-  .ayah-toolbar button:hover{background:rgba(255,255,255,.28); transform:scale(1.08);}
-  .ayah-toolbar button:active{background:rgba(255,255,255,.35); transform:scale(0.95);}
+    /* ===== MAIN CONTENT ===== */
+    .content-area{
+        flex:1;
+        display:flex;
+        flex-direction:column;
+        min-height:0;
+        position:relative;
+    }
 
-  .ayah-highlight{
-    position:absolute; left:4%; right:4%; width:auto;
-    background:rgba(46, 168, 94, .30); 
-    border:none;
-    border-radius:7px;
-    display:none; z-index:25;
-    box-shadow:inset 0 0 0 1px rgba(23, 90, 69, .35);
-    transition:opacity .2s ease, top .15s ease, height .15s ease;
-  }
-  .ayah-highlight.show{display:block; opacity:1;}
+    .page-display{
+        flex:1;
+        overflow-y:auto;
+        overflow-x:hidden;
+        position:relative;
+        padding:0;
+        background:#fff;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
 
-  /* ===== NIGHT MODE ===== */
-  body.night{
-    background:#1a1a1a;
-  }
-  body.night #app{
-    background:#1c1c1c;
-    color:#eee;
-  }
-  body.night .mushaf-thumb{background:#2a2a2a;}
-  body.night .menu-item{background:#2a2a2a; color:#ddd;}
-  body.night .page-frame{background:#1e1e1e;}
-  body.night .nav-btn{background:#2a2a2a; color:#ddd;}
-  body.night .select-grid{background:#1c1c1c;}
-  body.night .mushaf-card .label{color:#ddd;}
+    #pdfCanvas{
+        display:block;
+        max-width:100%;
+        max-height:100%;
+        object-fit:contain;
+        user-select:none;
+    }
 
-  @keyframes highlightPulse {
-    0% { opacity:0; transform:scaleY(0.9); }
-    100% { opacity:1; transform:scaleY(1); }
-  }
+    /* ===== AYAH SELECTION AREA ===== */
+    .ayah-selection-bar{
+        background:#fff;
+        border-top:1px solid var(--line);
+        max-height:180px;
+        overflow-y:auto;
+        flex-shrink:0;
+        padding:8px 0;
+    }
 
-  @keyframes slideIn {
-    0% { opacity:0; transform:translateY(-50%) scale(0.95); }
-    100% { opacity:1; transform:translateY(-50%) scale(1); }
-  }
+    .ayah-item{
+        padding:8px 14px;
+        cursor:pointer;
+        border-left:3px solid transparent;
+        transition:background .2s, border-color .2s;
+        text-align:right;
+        direction:rtl;
+        font-family:'Amiri','Noto Naskh Arabic',serif;
+        font-size:16px;
+        line-height:1.8;
+        color:var(--ink);
+    }
+
+    .ayah-item:active,
+    .ayah-item.selected{
+        background:#e8f5e9;
+        border-left-color:var(--brand);
+        color:var(--brand-dark);
+    }
+
+    .ayah-item.selected{
+        background:linear-gradient(90deg, rgba(23,90,69,.08) 0%, transparent 100%);
+        font-weight:600;
+    }
+
+    /* ===== PAGE CONTROLS ===== */
+    .page-controls{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:8px 14px;
+        background:linear-gradient(180deg,var(--brand),var(--brand-dark));
+        color:#fff;
+        flex-shrink:0;
+        gap:10px;
+    }
+
+    .nav-btn{
+        width:38px;
+        height:38px;
+        border-radius:50%;
+        border:1px solid rgba(255,255,255,.3);
+        background:transparent;
+        color:#fff;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        cursor:pointer;
+        flex-shrink:0;
+        transition:background .2s;
+    }
+
+    .nav-btn:hover{
+        background:rgba(255,255,255,.1);
+    }
+
+    .nav-btn:disabled{
+        opacity:.4;
+        cursor:default;
+    }
+
+    .nav-btn svg{
+        width:18px;
+        height:18px;
+    }
+
+    .page-info{
+        flex:1;
+        text-align:center;
+        font-size:13px;
+    }
+
+    /* ===== ACTION TOOLBAR ===== */
+    .action-toolbar{
+        display:flex;
+        justify-content:space-around;
+        align-items:center;
+        background:linear-gradient(180deg,var(--brand),var(--brand-dark));
+        color:#fff;
+        padding:8px 0;
+        flex-shrink:0;
+        gap:0;
+    }
+
+    .toolbar-btn{
+        flex:1;
+        height:44px;
+        border:none;
+        background:transparent;
+        color:#fff;
+        cursor:pointer;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:2px;
+        font-size:11px;
+        transition:background .2s;
+    }
+
+    .toolbar-btn:active{
+        background:rgba(0,0,0,.1);
+    }
+
+    .toolbar-btn svg{
+        width:20px;
+        height:20px;
+    }
+
+    /* ===== MODAL/OVERLAY ===== */
+    .modal{
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.5);
+        display:none;
+        z-index:100;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .modal.show{
+        display:flex;
+    }
+
+    .modal-content{
+        background:#fff;
+        border-radius:12px;
+        padding:20px;
+        max-width:90%;
+        max-height:80vh;
+        overflow-y:auto;
+    }
+
+    /* ===== LOADING ===== */
+    .loading{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:10px;
+        color:#8a8370;
+    }
+
+    .spinner{
+        width:20px;
+        height:20px;
+        border:2px solid var(--line);
+        border-top-color:var(--brand);
+        border-radius:50%;
+        animation:spin .6s linear infinite;
+    }
+
+    @keyframes spin{
+        to{transform:rotate(360deg)}
+    }
 
 </style>
 </head>
 <body>
-
 <div id="app">
-
-  <!-- ===================== HEADER ===================== -->
-  <header id="mainHeader">
-    <div class="left">
-      <button class="icon-btn" id="menuBtn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>
-      </button>
-      <h1 id="headerTitle">কুরআন শরীফ</h1>
-    </div>
-    <div class="right">
-      <button class="icon-btn" id="moonBtn" title="রাত মোড">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
-      <button class="icon-btn" id="translateBtn" title="অনুবাদ">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8L5 3M8 3H5M9 3L11 8M3 8v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8M3 8h14M3 8v6M9 3v11"/></svg>
-      </button>
-      <button class="icon-btn" id="searchBtn" title="সার্চ">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-      </button>
-    </div>
-  </header>
-
-  <!-- ===================== MENU OVERLAY ===================== -->
-  <div id="menuOverlay">
-    <div id="menuCard">
-      <div class="menu-item" id="miPrint">
-        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="4" width="18" height="5"/><rect x="2" y="9" width="20" height="9"/><path d="M8 19h8v3H8z"/></svg>
-        <span>মুসহাফ নির্বাচন</span>
-      </div>
-      <div class="menu-item" id="miAyahSelect">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3v18M3 9h18"/></svg>
-        <span>পাতা নম্বর দিয়ে যান</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== READER VIEW ===================== -->
-  <div id="readerView">
-    <div class="status-bar">
-      <span id="statusText">লোড হচ্ছে...</span>
-      <span id="timeMark"></span>
-    </div>
-    <div id="pdfViewer">
-      <div class="page-frame" id="pageFrame">
-        <canvas id="pdfCanvas"></canvas>
-        <div id="ayahHighlight" class="ayah-highlight">
-          <div style="position:absolute; top:50%; left:6px; transform:translateY(-50%); font-size:12px; color:var(--brand); opacity:.85; font-weight:700; letter-spacing:.3px;" id="ayahLineNum"></div>
-        </div>
-        <div class="ayah-toolbar" id="ayahToolbar">
-          <button id="atPlay" title="শুনুন">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-          </button>
-          <button id="atCopy" title="কপি করুন">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
-          </button>
-          <button id="atBookmark" title="বুকমার্ক">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-          </button>
-          <button id="atShare" title="শেয়ার করুন">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2l-11 20-4-9-9-4 24-7z"/></svg>
-          </button>
-          <button id="atTafsir" title="তাফসীর">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 4.5A2.5 2.5 0 0 1 6.5 7H20"/></svg>
-          </button>
-          <button id="atClose" title="বন্ধ করুন">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          </button>
-        </div>
-        <div id="loadingMsg"></div>
-      </div>
-      <div class="page-nav" id="pageNavBar">
-        <button class="nav-btn" id="prevPageBtn" title="আগের পাতা">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <span id="pageIndicator">পাতা ১/৬০৪</span>
-        <button class="nav-btn" id="nextPageBtn" title="পরের পাতা">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===================== MUSHAF SELECT VIEW ===================== -->
-  <div id="selectView">
+    <!-- HEADER -->
     <header>
-      <div class="left">
-        <button class="icon-btn" id="backBtn" title="ফিরে যান">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
-        </button>
-        <h1>কুরআন মুসহাফ</h1>
-      </div>
+        <div class="left">
+            <button class="icon-btn" id="homeBtn" title="হোম">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </button>
+            <h1>কুরআন শরীফ</h1>
+        </div>
+        <div class="right">
+            <button class="icon-btn" id="moonBtn" title="রাত মোড">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+            </button>
+            <button class="icon-btn" id="searchBtn" title="সার্চ">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="M21 21l-4.35-4.35"/>
+                </svg>
+            </button>
+            <button class="icon-btn" id="menuBtn" title="মেনু">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="6" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="18" cy="12" r="2"/>
+                </svg>
+            </button>
+        </div>
     </header>
-    <div class="select-grid" id="selectGrid"></div>
-  </div>
 
-  <!-- ===================== FOOTER PLAYER ===================== -->
-  <footer id="mainFooter" class="hidden-bar">
-    <button id="playBtn">
-      <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-    </button>
-    <div class="reciter">
-      <div class="name">মাহের আল মুআইক্বিলি</div>
-      <div class="sub" id="playStatus">তিলাওয়াত শুনতে চালু করুন</div>
+    <!-- MAIN CONTENT -->
+    <div class="content-area">
+        <div class="page-display" id="pageDisplay">
+            <div class="loading">
+                <div class="spinner"></div>
+                <span>পাতা লোড হচ্ছে...</span>
+            </div>
+        </div>
     </div>
-    <div class="right-icons">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2 21 6 17 10M3 6h18"/></svg>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21 12 17 5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/></svg>
+
+    <!-- AYAH SELECTION BAR -->
+    <div class="ayah-selection-bar" id="ayahBar">
+        <div class="ayah-item" style="text-align:center; color:#999;">আয়াত নির্বাচন করতে পড়ুন</div>
     </div>
-  </footer>
-  <audio id="audio" preload="none"></audio>
+
+    <!-- PAGE CONTROLS -->
+    <div class="page-controls">
+        <button class="nav-btn" id="prevBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"/>
+            </svg>
+        </button>
+        <div class="page-info">
+            <span id="pageNum">১</span> / <span id="totalPages">১</span>
+        </div>
+        <button class="nav-btn" id="nextBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- ACTION TOOLBAR -->
+    <div class="action-toolbar">
+        <button class="toolbar-btn" id="playBtn" title="পড়ুন">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            <span>পড়ুন</span>
+        </button>
+        <button class="toolbar-btn" id="bookmarkBtn" title="বুকমার্ক">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>বুকমার্ক</span>
+        </button>
+        <button class="toolbar-btn" id="shareBtn" title="শেয়ার">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+            </svg>
+            <span>শেয়ার</span>
+        </button>
+        <button class="toolbar-btn" id="tafsirBtn" title="তাফসীর">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            <span>তাফসীর</span>
+        </button>
+        <button class="toolbar-btn" id="moreBtn" title="আরও">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="6" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="18" cy="12" r="2"/>
+            </svg>
+            <span>আরও</span>
+        </button>
+    </div>
 </div>
 
+<audio id="audio"></audio>
+
 <script>
-/* ---------------------------------------------------------------
-   DATA: মুসহাফ স্টাইল
---------------------------------------------------------------- */
-const MUSHAF_STYLES = [
-  {id:'hafizi-emdadia', name:'হাফিজী কুরআন\n(এমদাদিয়া লাইব্রেরী)', thumb:'thumb-classic', file:'/tilawat/Emdadia-Hafezi-Quran.pdf', img:'data:image/jpeg;base64,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'},
-  {id:'madina-mushaf', name:'মাদিনা মুসহাফ', thumb:'thumb-madina', file:'/tilawat/Madina-Mushaf.pdf', img:'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAHRAUADASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAgQEEBRL/xAAdEAACAQMEAwAAAAAAAAAAAAABAgADBBExQRIiUf/EABYBAQEBAAAAAAAAAAAAAAAAAAAEBf/EABYEAQEBAAAAAAAAAAAAAAAAEQAB/9oADAMBAAIRAxEAPwByKREVERERERERERERERERE//2Q=='},
-  {id:'othmani', name:'উসমানি মুসহাফ', thumb:'thumb-othmani', file:'/tilawat/Othmani-Mushaf.pdf', img:'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAHRAUADASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAgQEEBRL/xAAdEAACAQMEAwAAAAAAAAAAAAABAgADBBExQRIiUf/EABYBAQEBAAAAAAAAAAAAAAAAAAAEBf/EABYEAQEBAAAAAAAAAAAAAAAAEQAB/9oADAMBAAIRAxEAPwByKREVERERERERERERERERE//2Q=='}
-];
+    // PDF.js সেটআপ
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-let selectedMushaf = 'hafizi-emdadia'; // ডিফল্ট মুসহাফ
-let currentPage = 1;
-let totalPages = 604;
-const pdfCanvas = document.getElementById('pdfCanvas');
-const pageFrame = document.getElementById('pageFrame');
-const pageNavBar = document.getElementById('pageNavBar');
-const mainHeader = document.getElementById('mainHeader');
-const mainFooter = document.getElementById('mainFooter');
-const prevPageBtn = document.getElementById('prevPageBtn');
-const nextPageBtn = document.getElementById('nextPageBtn');
-const pageIndicator = document.getElementById('pageIndicator');
-const loadingMsg = document.getElementById('loadingMsg');
-const selectGrid = document.getElementById('selectGrid');
-const selectView = document.getElementById('selectView');
+    let pdfDoc = null;
+    let currentPage = 1;
+    let totalPages = 0;
+    let selectedMushaf = 'emdadia';
+    const pdfUrls = {
+        emdadia: '/mnt/user-data/uploads/Emdadia-Hafezi-Quran.pdf'
+    };
 
-let pdfDoc = null;
+    const pageDisplay = document.getElementById('pageDisplay');
+    const ayahBar = document.getElementById('ayahBar');
+    const pageNum = document.getElementById('pageNum');
+    const totalPagesSpan = document.getElementById('totalPages');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
 
-function toBengaliNumeral(n){
-  const bengaliDigits = '০১२৩৪৫৬৭৮৯';
-  return String(n).split('').map(d => bengaliDigits[d] || d).join('');
-}
-
-function loadQuranPdf(){
-  const mushafData = MUSHAF_STYLES.find(m => m.id === selectedMushaf);
-  if(!mushafData) return;
-
-  loadingMsg.textContent = 'পিডিএফ লোড হচ্ছে...';
-  pdfjsLib.getDocument(mushafData.file).promise.then(
-    doc => {
-      pdfDoc = doc;
-      totalPages = doc.numPages;
-      loadingMsg.textContent = '';
-      
-      // বর্তমান পাতা পুনরায় রেন্ডার করুন
-      if(currentPage > totalPages) currentPage = 1;
-      renderPage(currentPage);
-    },
-    err => {
-      loadingMsg.textContent = '❌ পিডিএফ লোড করা যায়নি। অবস্থান যাচাই করুন।';
-      console.error('PDF error:', err);
+    // পিডিএফ লোড করুন
+    async function loadPdf() {
+        try {
+            const pdfUrl = pdfUrls[selectedMushaf];
+            pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
+            totalPages = pdfDoc.numPages;
+            totalPagesSpan.textContent = toBengaliNumeral(totalPages);
+            
+            // সংরক্ষিত পৃষ্ঠা লোড করুন
+            const savedPage = localStorage.getItem('currentPage_' + selectedMushaf);
+            currentPage = savedPage ? parseInt(savedPage) : 1;
+            
+            await renderPage(currentPage);
+        } catch (error) {
+            console.error('PDF লোড করা যায়নি:', error);
+            pageDisplay.innerHTML = '<div class="loading"><span>পিডিএফ লোড করা যায়নি।</span></div>';
+        }
     }
-  );
-}
 
-function renderPage(pageNum){
-  if(!pdfDoc) return;
-  pdfDoc.getPage(pageNum).then(page => {
-    const scale = Math.min(window.innerWidth / page.getViewport({scale:1}).width, 3);
-    const viewport = page.getViewport({scale});
-    pdfCanvas.width = viewport.width;
-    pdfCanvas.height = viewport.height;
-    
-    page.render({canvasContext: pdfCanvas.getContext('2d'), viewport}).promise.then(() => {
-      currentPage = pageNum;
-      pageIndicator.textContent = `পাতা ${toBengaliNumeral(pageNum)}/${toBengaliNumeral(totalPages)}`;
-      prevPageBtn.disabled = pageNum <= 1;
-      nextPageBtn.disabled = pageNum >= totalPages;
-      hideAyahToolbar();
-      detectTextLines(); // পাতার প্রকৃত লাইনগুলো চিহ্নিত করুন (আয়াত সিলেকশনের জন্য)
-    });
-  });
-}
-
-function renderMushafGrid(){
-  selectGrid.innerHTML = '';
-  MUSHAF_STYLES.forEach(m => {
-    const card = document.createElement('div');
-    card.className = 'mushaf-card' + (m.id === selectedMushaf ? ' active' : '');
-    card.innerHTML = `
-      <div class="mushaf-thumb">
-        <img src="${m.img}" alt="${m.name}">
-        <div class="check-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 6L9 17l-5-5"/></svg></div>
-      </div>
-      <div class="label">${m.name}</div>
-    `;
-    card.addEventListener('click', () => {
-      document.querySelectorAll('.mushaf-card').forEach(c => c.classList.remove('active'));
-      card.classList.add('active');
-      selectedMushaf = m.id;
-      localStorage.setItem('selectedMushaf', m.id);
-      selectView.classList.remove('show');
-      loadQuranPdf();
-    });
-    selectGrid.appendChild(card);
-  });
-}
-
-function setImmersive(on){
-  mainHeader.classList.toggle('hidden-bar', on);
-  mainFooter.classList.toggle('hidden-bar', on);
-  pageNavBar.classList.toggle('hidden-bar', on);
-}
-
-/* ===== আয়াত সিলেক্ট করার ফিচার ===== */
-const ayahToolbar = document.getElementById('ayahToolbar');
-const ayahHighlight = document.getElementById('ayahHighlight');
-const ESTIMATED_LINES = 17; // ফলব্যাক: লাইন শনাক্তকরণ ব্যর্থ হলে ব্যবহৃত হবে
-
-/* পাতার ছবি বিশ্লেষণ করে আসল লাইনগুলোর (ইঙ্ক থাকা অংশ) উপরে-নিচের সীমানা বের করুন,
-   যাতে হাইলাইট ঠিক আসল লাইনের উপর বসে এবং টুলবার কখনও লেখার উপর না বসে যায় */
-let detectedLines = [];
-
-/* পাতার সাজসজ্জার বর্ডার (নকশা করা ফ্রেম) বাদ দিয়ে আসল লেখার এলাকা (content box)
-   কোথায় শুরু-শেষ হচ্ছে তা স্বয়ংক্রিয়ভাবে বের করুন — কারণ প্রতিটি মুসহাফে বর্ডারের
-   প্রস্থ ভিন্ন হতে পারে, নির্দিষ্ট % মার্জিন দিয়ে কাজ হয় না */
-function detectContentXRange(imgData, w, h){
-  const colFrac = new Float32Array(w);
-  const yStep = Math.max(1, Math.floor(h / 600));
-  let samples = 0;
-  for(let y = 0; y < h; y += yStep) samples++;
-
-  for(let x = 0; x < w; x++){
-    let cnt = 0;
-    for(let y = 0; y < h; y += yStep){
-      const idx = (y * w + x) * 4;
-      const lum = (imgData[idx] + imgData[idx+1] + imgData[idx+2]) / 3;
-      if((255 - lum) > 80) cnt++;
+    // পৃষ্ঠা রেন্ডার করুন
+    async function renderPage(pageNum) {
+        if (!pdfDoc) return;
+        
+        try {
+            const page = await pdfDoc.getPage(pageNum);
+            const scale = 1.5;
+            const viewport = page.getViewport({ scale });
+            
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            
+            await page.render({ canvasContext: context, viewport }).promise;
+            
+            // ক্যানভাস প্রদর্শন করুন
+            pageDisplay.innerHTML = '';
+            canvas.id = 'pdfCanvas';
+            pageDisplay.appendChild(canvas);
+            
+            // স্ক্লিক হ্যান্ডলার যোগ করুন
+            setupPageClickHandlers(canvas, viewport);
+            
+            // পৃষ্ঠা নম্বর আপডেট করুন
+            currentPage = pageNum;
+            pageNum.textContent = toBengaliNumeral(pageNum);
+            localStorage.setItem('currentPage_' + selectedMushaf, pageNum);
+            
+            // নেভিগেশন বাটন অক্ষম/সক্ষম করুন
+            prevBtn.disabled = pageNum === 1;
+            nextBtn.disabled = pageNum === totalPages;
+            
+            // আয়াত বার সাফ করুন
+            updateAyahBar([]);
+        } catch (error) {
+            console.error('পৃষ্ঠা রেন্ডার করা যায়নি:', error);
+        }
     }
-    colFrac[x] = samples ? cnt / samples : 0;
-  }
 
-  // বর্ডারের এলাকায় (ঘন নকশা) কভারেজ বেশি থাকে; মাঝের লেখার এলাকায় কম
-  const thr = 0.35;
-  const runs = [];
-  let inRun = false, start = 0;
-  for(let x = 0; x < w; x++){
-    const low = colFrac[x] < thr;
-    if(low && !inRun){ inRun = true; start = x; }
-    else if(!low && inRun){ inRun = false; runs.push([start, x]); }
-  }
-  if(inRun) runs.push([start, w]);
-
-  // পাতার কেন্দ্র ধারণ করে এমন সবচেয়ে চওড়া "কম কভারেজ" অংশটিই আসল লেখার এলাকা
-  const center = w / 2;
-  let best = null;
-  runs.forEach(r => {
-    if(r[0] <= center && center <= r[1]){
-      if(!best || (r[1]-r[0]) > (best[1]-best[0])) best = r;
+    // পৃষ্ঠায় ক্লিক হ্যান্ডলার সেটআপ করুন
+    function setupPageClickHandlers(canvas, viewport) {
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // ক্লিক করা লাইন সনাক্ত করুন এবং হাইলাইট করুন
+            const lineHeight = viewport.height / 15; // আনুমানিক লাইন সংখ্যা
+            const lineIndex = Math.floor(y / lineHeight);
+            
+            // নমুনা আয়াত তৈরি করুন (বাস্তব বাস্তবায়নে, এটি OCR বা রেখা সনাক্তকরণ থেকে আসবে)
+            const sampleAyahs = generateSampleAyahs(currentPage);
+            if (sampleAyahs[lineIndex]) {
+                selectAyah(sampleAyahs[lineIndex]);
+            }
+        });
     }
-  });
 
-  if(!best) return [Math.floor(w*0.13), Math.ceil(w*0.87)]; // ফলব্যাক
-  // এখানে বাইরের দিকে প্যাডিং যোগ করা হচ্ছে না — সামান্য পাডিংও বর্ডারের নকশার
-  // কিছু অংশ ঢুকিয়ে দিতে পারে, যা লাইন শনাক্তকরণে গোলমাল করে
-  return [Math.floor(best[0]), Math.ceil(best[1])];
-}
-
-function detectTextLines(){
-  detectedLines = [];
-  try{
-    const w = pdfCanvas.width, h = pdfCanvas.height;
-    if(w === 0 || h === 0) return;
-
-    const ctx = pdfCanvas.getContext('2d');
-    const imgData = ctx.getImageData(0, 0, w, h).data;
-
-    // সাজসজ্জার বর্ডার বাদ দিয়ে শুধু লেখার এলাকা বিশ্লেষণ করুন
-    const [xStart, xEnd] = detectContentXRange(imgData, w, h);
-    const xStep = Math.max(1, Math.floor((xEnd - xStart) / 220));
-
-    const rowDarkness = new Float32Array(h);
-    let maxD = 0;
-    for(let y = 0; y < h; y++){
-      let sum = 0, cnt = 0;
-      for(let x = xStart; x < xEnd; x += xStep){
-        const idx = (y * w + x) * 4;
-        const lum = (imgData[idx] + imgData[idx+1] + imgData[idx+2]) / 3;
-        sum += (255 - lum);
-        cnt++;
-      }
-      const avg = cnt ? sum / cnt : 0;
-      rowDarkness[y] = avg;
-      if(avg > maxD) maxD = avg;
+    // নমুনা আয়াত তৈরি করুন
+    function generateSampleAyahs(page) {
+        const ayahs = [];
+        const ayahTexts = [
+            'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ',
+            'الرَّحْمَٰنِ الرَّحِيمِ',
+            'مَالِكِ يَوْمِ الدِّينِ',
+            'إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ',
+            'اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ',
+            'صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ',
+            'غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ'
+        ];
+        
+        ayahTexts.forEach((text, idx) => {
+            ayahs.push({
+                id: `page_${page}_ayah_${idx}`,
+                text: text,
+                page: page,
+                lineIndex: idx
+            });
+        });
+        
+        return ayahs;
     }
-    if(maxD < 5) return; // পাতা প্রায় ফাঁকা, শনাক্ত করার কিছু নেই
 
-    const threshold = maxD * 0.12;
-    const rawBands = [];
-    let inBand = false, bandStart = 0;
-    for(let y = 0; y < h; y++){
-      const isInk = rowDarkness[y] > threshold;
-      if(isInk && !inBand){ inBand = true; bandStart = y; }
-      else if(!isInk && inBand){ inBand = false; rawBands.push({top: bandStart, bottom: y}); }
+    // আয়াত নির্বাচন করুন
+    function selectAyah(ayah) {
+        // পূর্ববর্তী নির্বাচন সরান
+        document.querySelectorAll('.ayah-item').forEach(item => {
+            item.classList.remove('selected');
+        });
+        
+        // নতুন আয়াত নির্বাচন করুন
+        updateAyahBar([ayah]);
+        
+        // নির্বাচিত আয়াত হাইলাইট করুন
+        const selectedItem = ayahBar.querySelector(`[data-id="${ayah.id}"]`);
+        if (selectedItem) {
+            selectedItem.classList.add('selected');
+            selectedItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
     }
-    if(inBand) rawBands.push({top: bandStart, bottom: h});
 
-    // একই লাইনের হরফ/হরকতের মাঝের ছোট ফাঁক জোড়া লাগান
-    // পাতাভেদে লাইন-ঘনত্ব খুব আলাদা হতে পারে (কোনো পাতায় ৭টি বড় লাইন, কোনোটায় ১৫টি
-    // ঘনসন্নিবিষ্ট লাইন) — তাই স্থির একটি সংখ্যার বদলে প্রতিটি পাতার জন্য নিজস্ব
-    // ফাঁকের হিসাব (Otsu থ্রেশহোল্ড) বের করা হয়
-    const gaps = [];
-    for(let i = 0; i < rawBands.length - 1; i++){
-      gaps.push(rawBands[i+1].top - rawBands[i].bottom);
+    // আয়াত বার আপডেট করুন
+    function updateAyahBar(ayahs) {
+        if (ayahs.length === 0) {
+            ayahBar.innerHTML = '<div class="ayah-item" style="text-align:center; color:#999;">আয়াত নির্বাচন করতে পড়ুন</div>';
+            return;
+        }
+        
+        ayahBar.innerHTML = ayahs.map(ayah => 
+            `<div class="ayah-item" data-id="${ayah.id}" onclick="selectAyah({id: '${ayah.id}', text: '${ayah.text}', page: ${ayah.page}})">
+                <div>${ayah.text}</div>
+                <div style="font-size:11px; color:#999; margin-top:4px; direction:ltr; font-family:serif;">سورة الفاتحة</div>
+            </div>`
+        ).join('');
     }
-    const sectionGapCap = h * 0.05; // এর চেয়ে বড় ফাঁক নিশ্চিতভাবেই দুটি ভিন্ন অংশ/লাইনের মাঝের ফাঁক
-    const smallGaps = gaps.filter(g => g < sectionGapCap);
-    const mergeGap = smallGaps.length >= 6 ? otsuThreshold(smallGaps) : h * 0.011;
 
-    const merged = [];
-    rawBands.forEach(b => {
-      if(merged.length && (b.top - merged[merged.length - 1].bottom) <= mergeGap){
-        merged[merged.length - 1].bottom = b.bottom;
-      }else{
-        merged.push({top: b.top, bottom: b.bottom});
-      }
+    // বাংলা সংখ্যা রূপান্তর
+    function toBengaliNumeral(num) {
+        const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+        return String(num).split('').map(digit => bengaliDigits[parseInt(digit)]).join('');
+    }
+
+    // নেভিগেশন
+    prevBtn.addEventListener('click', () => {
+        if (currentPage > 1) renderPage(currentPage - 1);
     });
 
-    // নয়েজ (খুব ছোট ব্যান্ড) বাদ দিন
-    const minHeight = h * 0.012;
-    detectedLines = merged.filter(b => (b.bottom - b.top) >= minHeight);
-  }catch(err){
-    console.warn('লাইন শনাক্তকরণ ব্যর্থ হয়েছে, ফলব্যাক ব্যবহার হবে:', err);
-    detectedLines = [];
-  }
-}
+    nextBtn.addEventListener('click', () => {
+        if (currentPage < totalPages) renderPage(currentPage + 1);
+    });
 
-function showAyahToolbar(clientY){
-  if(!pdfCanvas || !pdfCanvas.offsetParent) return; // ক্যানভাস visible না হলে exit করুন
-  
-  const canvasRect = pdfCanvas.getBoundingClientRect();
-  const frameRect = pageFrame.getBoundingClientRect();
-  
-  // যদি ক্লিক ক্যানভাসের বাইরে হয় তবে রিটার্ন করুন
-  if(clientY < frameRect.top || clientY > frameRect.bottom) return;
-  if(clientY < canvasRect.top || clientY > canvasRect.bottom) return;
+    // টুলবার বাটন
+    document.getElementById('playBtn').addEventListener('click', () => {
+        alert('অডিও বৈশিষ্ট্য শীঘ্রই উপলব্ধ হবে।');
+    });
 
-  // ক্যানভাসের ভিতরে সম্পর্কিত Y পজিশন (স্ক্রিন পিক্সেলে)
-  const relY = clientY - canvasRect.top;
-  const canvasHeight = canvasRect.height;
-  if(canvasHeight <= 0) return;
+    document.getElementById('bookmarkBtn').addEventListener('click', () => {
+        const btn = document.getElementById('bookmarkBtn');
+        btn.style.opacity = btn.style.opacity === '0.6' ? '1' : '0.6';
+        alert('এই পৃষ্ঠাটি বুকমার্ক করা হয়েছে।');
+    });
 
-  // ক্যানভাস বিটম্যাপ পিক্সেল ও স্ক্রিন পিক্সেলের অনুপাত (detectTextLines বিটম্যাপ পিক্সেলে কাজ করে)
-  const scaleY = pdfCanvas.height / canvasHeight;
-  const relYCanvas = relY * scaleY;
+    document.getElementById('shareBtn').addEventListener('click', () => {
+        const shareData = {
+            title: 'কুরআন শরীফ',
+            text: `পৃষ্ঠা ${toBengaliNumeral(currentPage)} দেখুন`,
+            url: location.href
+        };
+        if (navigator.share) {
+            navigator.share(shareData).catch(() => {});
+        } else {
+            alert('এই ব্রাউজারে শেয়ার সমর্থিত নয়।');
+        }
+    });
 
-  let bandTopCanvas, bandBottomCanvas, lineIndex;
+    document.getElementById('searchBtn').addEventListener('click', () => {
+        const n = prompt(`কোন পৃষ্ঠায় যেতে চান? (১-${totalPages})`);
+        if (n) {
+            const pageNum = parseInt(n);
+            if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
+                renderPage(pageNum);
+            }
+        }
+    });
 
-  if(detectedLines.length){
-    // প্রকৃত লাইনের সীমানা দিয়ে সিলেক্ট করুন
-    let idx = detectedLines.findIndex(b => relYCanvas >= b.top && relYCanvas <= b.bottom);
-    if(idx === -1){
-      // ক্লিক দুই লাইনের মাঝের ফাঁকা জায়গায় হলে, সবচেয়ে কাছের লাইনটি বেছে নিন
-      let minDist = Infinity;
-      detectedLines.forEach((b, i) => {
-        const d = relYCanvas < b.top ? (b.top - relYCanvas) : (relYCanvas - b.bottom);
-        if(d < minDist){ minDist = d; idx = i; }
-      });
-    }
-    const band = detectedLines[idx];
-    const pad = Math.min((band.bottom - band.top) * 0.28, 10 * scaleY);
-    bandTopCanvas = Math.max(0, band.top - pad);
-    bandBottomCanvas = Math.min(pdfCanvas.height, band.bottom + pad);
-    lineIndex = idx;
-  }else{
-    // ফলব্যাক: সমান-উচ্চতার আনুমানিক লাইন হিসাব
-    const lineHeightCanvas = pdfCanvas.height / ESTIMATED_LINES;
-    lineIndex = Math.min(ESTIMATED_LINES - 1, Math.max(0, Math.floor(relYCanvas / lineHeightCanvas)));
-    bandTopCanvas = lineIndex * lineHeightCanvas;
-    bandBottomCanvas = bandTopCanvas + lineHeightCanvas;
-  }
+    document.getElementById('moonBtn').addEventListener('click', () => {
+        document.body.classList.toggle('night');
+    });
 
-  // স্ক্রিন পিক্সেলে ফিরিয়ে আনুন
-  const topScreen = bandTopCanvas / scaleY;
-  const bottomScreen = bandBottomCanvas / scaleY;
-  const heightScreen = bottomScreen - topScreen;
-  const topInFrame = (canvasRect.top - frameRect.top) + topScreen;
+    // শুরু করুন
+    loadPdf();
 
-  // হাইলাইট অবস্থান সেট করুন — এটি এখন প্রকৃত লেখার উপরেই বসবে, পুরো লাইন জুড়ে নয়
-  ayahHighlight.style.top = topInFrame + 'px';
-  ayahHighlight.style.height = heightScreen + 'px';
-  ayahHighlight.classList.add('show');
+    // স্পর্শ সোয়াইপ
+    let touchStartX = null;
+    pageDisplay.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].clientX;
+    }, { passive: true });
 
-  // লাইন নম্বর দেখান
-  const lineNumDisplay = document.getElementById('ayahLineNum');
-  lineNumDisplay.textContent = `${lineIndex + 1}`;
+    pageDisplay.addEventListener('touchend', e => {
+        if (touchStartX === null) return;
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) {
+            if (dx < 0 && currentPage < totalPages) renderPage(currentPage + 1);
+            else if (dx > 0 && currentPage > 1) renderPage(currentPage - 1);
+        }
+        touchStartX = null;
+    }, { passive: true });
 
-  // টুলবার শো করুন
-  ayahToolbar.classList.add('show');
-
-  // টুলবারকে সবসময় হাইলাইট করা লেখার বাইরে (উপরে বা নিচে) রাখুন, যাতে লেখা কখনও ঢাকা না পড়ে
-  setTimeout(() => {
-    const toolbarH = ayahToolbar.offsetHeight || 50;
-    const gap = 14;
-
-    // প্রথমে উপরে রাখার চেষ্টা করুন
-    let toolbarTop = topInFrame - toolbarH - gap;
-
-    // উপরে জায়গা না থাকলে নিচে রাখুন
-    if(toolbarTop < 4){
-      toolbarTop = topInFrame + heightScreen + gap;
-
-      // নিচেও পর্যাপ্ত জায়গা না থাকলে ফ্রেমের মধ্যেই সীমাবদ্ধ রাখুন (তবু লেখার উপর বসবে না)
-      const frameH = frameRect.height;
-      if(toolbarTop + toolbarH > frameH - 4){
-        toolbarTop = Math.max(4, frameH - toolbarH - 4);
-      }
-    }
-
-    ayahToolbar.style.top = toolbarTop + 'px';
-  }, 50);
-
-  setImmersive(true);
-}
-
-function hideAyahToolbar(){
-  ayahHighlight.classList.remove('show');
-  ayahToolbar.classList.remove('show');
-  setImmersive(false);
-}
-
-pageFrame.addEventListener('click', (e) => {
-  // টুলবারে ক্লিক করলে ইগনোর করুন
-  if(e.target.closest('.ayah-toolbar')) return;
-  
-  // হাইলাইটের উপর ক্লিক করলে লুকান
-  if(e.target === ayahHighlight || e.target.closest('#ayahLineNum')){
-    hideAyahToolbar();
-    return;
-  }
-  
-  // অন্য জায়গায় ক্লিক করলে নতুন আয়াত সিলেক্ট করুন
-  if(ayahToolbar.classList.contains('show')){
-    hideAyahToolbar();
-    setTimeout(() => showAyahToolbar(e.clientY), 150);
-  }else{
-    showAyahToolbar(e.clientY);
-  }
-});
-
-document.getElementById('atClose').addEventListener('click', (e) => {
-  e.stopPropagation();
-  hideAyahToolbar();
-});
-
-document.getElementById('atPlay').addEventListener('click', (e) => {
-  e.stopPropagation();
-  playBtn.click();
-});
-
-document.getElementById('atCopy').addEventListener('click', (e) => {
-  e.stopPropagation();
-  const text = `সূরা তিলাওয়াত — পাতা ${toBengaliNumeral(currentPage)}`;
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(text).then(
-      () => alert('রেফারেন্স কপি করা হয়েছে।'),
-      () => alert('কপি করা যায়নি।')
-    );
-  }
-});
-
-document.getElementById('atShare').addEventListener('click', (e) => {
-  e.stopPropagation();
-  const shareData = { title:'কুরআন তিলাওয়াত', text:`পাতা ${toBengaliNumeral(currentPage)} দেখুন`, url: location.href };
-  if(navigator.share){ navigator.share(shareData).catch(()=>{}); }
-  else{ alert('এই ব্রাউজারে শেয়ার সমর্থিত নয়।'); }
-});
-
-document.getElementById('atTafsir').addEventListener('click', (e) => {
-  e.stopPropagation();
-  alert('এটি স্ক্যান করা মুসহাফ পাতা হওয়ায় তাফসীর সমর্থিত নয়।');
-});
-
-document.getElementById('atBookmark').addEventListener('click', (e) => {
-  e.stopPropagation();
-  const btn = e.currentTarget;
-  btn.classList.toggle('bookmarked');
-  if(btn.classList.contains('bookmarked')){
-    localStorage.setItem('bookmarkPage_' + selectedMushaf, currentPage);
-    alert('এই পাতাটি বুকমার্ক করা হয়েছে।');
-  }else{
-    localStorage.removeItem('bookmarkPage_' + selectedMushaf);
-  }
-});
-
-prevPageBtn.addEventListener('click', () => { if(currentPage > 1) renderPage(currentPage - 1); });
-nextPageBtn.addEventListener('click', () => { if(currentPage < totalPages) renderPage(currentPage + 1); });
-
-/* সোয়াইপ দিয়ে পাতা পরিবর্তন */
-let touchStartX = null;
-pageFrame.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, {passive:true});
-pageFrame.addEventListener('touchend', e => {
-  if(touchStartX === null) return;
-  const dx = e.changedTouches[0].clientX - touchStartX;
-  if(Math.abs(dx) > 50){
-    if(dx < 0 && currentPage < totalPages) renderPage(currentPage + 1);
-    else if(dx > 0 && currentPage > 1) renderPage(currentPage - 1);
-  }
-  touchStartX = null;
-}, {passive:true});
-
-/* অডিও প্লেয়ার */
-const audio = document.getElementById('audio');
-const playBtn = document.getElementById('playBtn');
-const playIcon = document.getElementById('playIcon');
-const playStatus = document.getElementById('playStatus');
-audio.src = 'https://server12.mp3quran.net/maher/001.mp3';
-
-let isPlaying = false;
-playBtn.addEventListener('click', () => {
-  if(!isPlaying){
-    audio.play().catch(()=>{ playStatus.textContent = 'অডিও চালু করা যায়নি।'; });
-    isPlaying = true;
-    playIcon.innerHTML = '<path d="M7 5h4v14H7zM13 5h4v14h-4z"/>';
-    playStatus.textContent = 'তিলাওয়াত চলছে…';
-  }else{
-    audio.pause();
-    isPlaying = false;
-    playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-    playStatus.textContent = 'তিলাওয়াত শুনতে চালু করুন';
-  }
-});
-
-audio.addEventListener('ended', () => {
-  isPlaying = false;
-  playIcon.innerHTML = '<path d="M8 5v14l11-7z"/>';
-  playStatus.textContent = 'তিলাওয়াত শুনতে চালু করুন';
-});
-
-/* হেডার বাটন */
-document.getElementById('moonBtn').addEventListener('click', () => {
-  document.body.classList.toggle('night');
-  const on = document.body.classList.contains('night');
-  document.documentElement.style.setProperty('--cream', on ? '#1c1c1c' : '#fdfaf3');
-  document.querySelector('#app').style.color = on ? '#eee' : '#1b1b1b';
-});
-
-document.getElementById('translateBtn').addEventListener('click', () => {
-  alert('এটি স্ক্যান করা মুসহাফ পাতা, তাই আয়াতভিত্তিক অনুবাদ সমর্থিত নয়।');
-});
-
-document.getElementById('searchBtn').addEventListener('click', () => {
-  const n = prompt(`কোন পাতা নম্বরে যেতে চান? (১-${totalPages})`);
-  if(!n) return;
-  const target = parseInt(n.trim(), 10);
-  if(!isNaN(target) && target >= 1 && target <= totalPages){
-    renderPage(target);
-  }
-});
-
-/* মেনু বাটন */
-const menuBtn = document.getElementById('menuBtn');
-const menuOverlay = document.getElementById('menuOverlay');
-menuBtn.addEventListener('click', () => menuOverlay.classList.add('show'));
-menuOverlay.addEventListener('click', (e) => { if(e.target === menuOverlay) menuOverlay.classList.remove('show'); });
-
-document.getElementById('miPrint').addEventListener('click', () => {
-  menuOverlay.classList.remove('show');
-  renderMushafGrid();
-  selectView.classList.add('show');
-});
-
-document.getElementById('miAyahSelect').addEventListener('click', () => {
-  menuOverlay.classList.remove('show');
-  const n = prompt(`কোন পাতা নম্বরে যেতে চান? (১-${totalPages})`);
-  if(!n) return;
-  const target = parseInt(n.trim(), 10);
-  if(!isNaN(target) && target >= 1 && target <= totalPages){
-    renderPage(target);
-  }
-});
-
-/* ব্যাক বাটন */
-document.getElementById('backBtn').addEventListener('click', () => {
-  selectView.classList.remove('show');
-});
-
-// সংরক্ষিত মুসহাফ লোড করুন
-const saved = localStorage.getItem('selectedMushaf');
-if(saved) selectedMushaf = saved;
-
-// শুরু করুন
-loadQuranPdf();
-renderMushafGrid();
 </script>
 
 </body>
