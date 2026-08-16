@@ -93,7 +93,8 @@
     padding:6px 14px; font-size:12px; color:#8a8370;
   }
   #pdfViewer{
-    flex:1; display:flex; flex-direction:column; min-height:0; padding:0;
+    flex:1; display:flex; flex-direction:column; min-height:0; padding:0; width:100%;
+    position:relative;
   }
   .page-frame{
     position:relative;
@@ -103,6 +104,8 @@
     align-items:center;
     justify-content:center;
     background:#fff;
+    width:100%;
+    height:100%;
   }
   #pdfCanvas{
     display:block;
@@ -211,35 +214,35 @@
 
   /* ===== AYAH SELECT TOOLBAR ===== */
   .ayah-toolbar{
-    position:absolute; left:5%; right:5%;
-    background:var(--brand-dark); border-radius:6px;
-    display:none; align-items:center; gap:10px; padding:10px 14px;
+    position:absolute; left:2.5%; right:2.5%; width:auto;
+    background:var(--brand-dark); border-radius:8px;
+    display:none; align-items:center; gap:8px; padding:12px 14px;
     z-index:50;
     transform:translateY(-50%);
-    box-shadow:0 6px 16px rgba(0,0,0,.25);
+    box-shadow:0 8px 20px rgba(0,0,0,.3);
   }
-  .ayah-toolbar.show{display:flex;}
+  .ayah-toolbar.show{display:flex; animation:slideIn .3s ease-out;}
   .ayah-toolbar button{
-    width:36px; height:36px; border-radius:50%; border:none;
-    background:rgba(255,255,255,.15); color:#fff; cursor:pointer;
+    width:38px; height:38px; border-radius:50%; border:none;
+    background:rgba(255,255,255,.18); color:#fff; cursor:pointer;
     display:flex; align-items:center; justify-content:center;
     flex-shrink:0;
-    transition:background .2s ease;
-  }
-  .ayah-toolbar button svg{width:18px; height:18px;}
-  .ayah-toolbar button:hover{background:rgba(255,255,255,.25);}
-  .ayah-toolbar button:active{background:rgba(255,255,255,.35);}
-
-  .ayah-highlight{
-    position:absolute; left:5%; right:5%;
-    background:rgba(31, 111, 85, .22); 
-    border:none;
-    border-radius:2px;
-    display:none; z-index:25;
-    box-shadow:inset 0 0 0 1.5px rgba(23, 90, 69, .6);
     transition:all .2s ease;
   }
-  .ayah-highlight.show{display:block; animation:highlightPulse .3s ease-out;}
+  .ayah-toolbar button svg{width:19px; height:19px;}
+  .ayah-toolbar button:hover{background:rgba(255,255,255,.28); transform:scale(1.08);}
+  .ayah-toolbar button:active{background:rgba(255,255,255,.35); transform:scale(0.95);}
+
+  .ayah-highlight{
+    position:absolute; left:3%; right:3%; width:auto;
+    background:rgba(31, 111, 85, .18); 
+    border:none;
+    border-radius:0px;
+    display:none; z-index:25;
+    box-shadow:inset 0 0 0 1px rgba(23, 90, 69, .5);
+    transition:opacity .2s ease;
+  }
+  .ayah-highlight.show{display:block; opacity:1;}
 
   /* ===== NIGHT MODE ===== */
   body.night{
@@ -259,6 +262,11 @@
   @keyframes highlightPulse {
     0% { opacity:0; transform:scaleY(0.9); }
     100% { opacity:1; transform:scaleY(1); }
+  }
+
+  @keyframes slideIn {
+    0% { opacity:0; transform:translateY(-50%) scale(0.95); }
+    100% { opacity:1; transform:translateY(-50%) scale(1); }
   }
 
 </style>
@@ -312,7 +320,7 @@
       <div class="page-frame" id="pageFrame">
         <canvas id="pdfCanvas"></canvas>
         <div id="ayahHighlight" class="ayah-highlight">
-          <div style="position:absolute; top:50%; left:8px; transform:translateY(-50%); font-size:11px; color:var(--brand); opacity:.7; font-weight:600;" id="ayahLineNum"></div>
+          <div style="position:absolute; top:50%; left:6px; transform:translateY(-50%); font-size:12px; color:var(--brand); opacity:.85; font-weight:700; letter-spacing:.3px;" id="ayahLineNum"></div>
         </div>
         <div class="ayah-toolbar" id="ayahToolbar">
           <button id="atPlay" title="শুনুন">
@@ -487,38 +495,60 @@ const ayahHighlight = document.getElementById('ayahHighlight');
 const ESTIMATED_LINES = 17; // প্রতি পাতায় গড়ে ১৭ লাইন
 
 function showAyahToolbar(clientY){
+  if(!pdfCanvas || !pdfCanvas.offsetParent) return; // ক্যানভাস visible না হলে exit করুন
+  
   const canvasRect = pdfCanvas.getBoundingClientRect();
   const frameRect = pageFrame.getBoundingClientRect();
+  
+  // যদি ক্লিক ক্যানভাসের বাইরে হয় তবে রিটার্ন করুন
+  if(clientY < frameRect.top || clientY > frameRect.bottom) return;
   if(clientY < canvasRect.top || clientY > canvasRect.bottom) return;
 
-  // আরও সঠিক লাইন উচ্চতা গণনা করুন
-  const lineHeight = canvasRect.height / ESTIMATED_LINES;
+  // ক্যানভাসের ভিতরে সম্পর্কিত Y পজিশন
   const relY = clientY - canvasRect.top;
-  const lineIndex = Math.min(ESTIMATED_LINES - 1, Math.floor(relY / lineHeight));
   
-  // পাতার মধ্যে অবস্থান
+  // ক্যানভাসের উচ্চতা
+  const canvasHeight = canvasRect.height;
+  
+  // যদি উচ্চতা 0 হয় তবে রিটার্ন করুন
+  if(canvasHeight <= 0) return;
+  
+  // লাইনের উচ্চতা
+  const lineHeight = canvasHeight / ESTIMATED_LINES;
+  
+  // কোন লাইন ক্লিক করা হয়েছে
+  const lineIndex = Math.min(ESTIMATED_LINES - 1, Math.max(0, Math.floor(relY / lineHeight)));
+  
+  // ফ্রেমের ভিতরে হাইলাইটের টপ পজিশন
   const topInFrame = (canvasRect.top - frameRect.top) + lineIndex * lineHeight;
-
-  // হাইলাইট স্টাইল
+  
+  // হাইলাইট অবস্থান সেট করুন
   ayahHighlight.style.top = topInFrame + 'px';
   ayahHighlight.style.height = lineHeight + 'px';
   ayahHighlight.classList.add('show');
   
   // লাইন নম্বর দেখান
   const lineNumDisplay = document.getElementById('ayahLineNum');
-  lineNumDisplay.textContent = `আয়াত ${lineIndex + 1}`;
+  lineNumDisplay.textContent = `${lineIndex + 1}`;
 
-  // টুলবার অবস্থান
+  // টুলবার শো করুন
   ayahToolbar.classList.add('show');
-  const toolbarH = ayahToolbar.offsetHeight || 50;
-  const gap = 10;
-  let toolbarTop = topInFrame - toolbarH - gap;
   
-  // যদি উপরের জায়গা না থাকে তবে নিচে রাখুন
-  if(toolbarTop < 4){
-    toolbarTop = topInFrame + lineHeight + gap;
-  }
-  ayahToolbar.style.top = toolbarTop + 'px';
+  // টুলবারের উচ্চতা পান
+  setTimeout(() => {
+    const toolbarH = ayahToolbar.offsetHeight || 50;
+    const gap = 12;
+    
+    // প্রথমে উপরে রাখার চেষ্টা করুন
+    let toolbarTop = topInFrame - toolbarH - gap;
+    
+    // যদি উপরে জায়গা না থাকে তবে নিচে রাখুন
+    if(toolbarTop < 0){
+      toolbarTop = topInFrame + lineHeight + gap;
+    }
+    
+    ayahToolbar.style.top = toolbarTop + 'px';
+  }, 50);
 
   setImmersive(true);
 }
@@ -530,9 +560,19 @@ function hideAyahToolbar(){
 }
 
 pageFrame.addEventListener('click', (e) => {
+  // টুলবারে ক্লিক করলে ইগনোর করুন
   if(e.target.closest('.ayah-toolbar')) return;
+  
+  // হাইলাইটের উপর ক্লিক করলে লুকান
+  if(e.target === ayahHighlight || e.target.closest('#ayahLineNum')){
+    hideAyahToolbar();
+    return;
+  }
+  
+  // অন্য জায়গায় ক্লিক করলে নতুন আয়াত সিলেক্ট করুন
   if(ayahToolbar.classList.contains('show')){
     hideAyahToolbar();
+    setTimeout(() => showAyahToolbar(e.clientY), 150);
   }else{
     showAyahToolbar(e.clientY);
   }
