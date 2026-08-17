@@ -126,162 +126,6 @@
         padding:3px 6px;
     }
 
-    /* ===== আয়াত রিজিয়ন এডিটর (ক্যালিব্রেশন মোড) ===== */
-    .toolbar-icon-btn#editRegionBtn.active{
-        background:var(--gold);
-        color:#fff;
-        border-radius:6px;
-    }
-
-    .edit-mode-banner{
-        display:none;
-        background:var(--gold);
-        color:#3a2a06;
-        font-size:12px;
-        text-align:center;
-        padding:6px 10px;
-        line-height:1.5;
-        flex-shrink:0;
-    }
-    .edit-mode-banner.active{ display:block; }
-
-    .draw-rect{
-        position:absolute;
-        border:2px dashed #d43f3f;
-        background:rgba(212,63,63,.18);
-        pointer-events:none;
-        z-index:6;
-    }
-
-    .pending-rect{
-        position:absolute;
-        border:2px solid #1f6f55;
-        background:rgba(31,111,85,.22);
-        pointer-events:none;
-        z-index:6;
-    }
-
-    .saved-region-box{
-        position:absolute;
-        border:1.5px dashed rgba(23,90,69,.55);
-        background:rgba(139,195,74,.10);
-        pointer-events:none;
-        z-index:4;
-    }
-
-    .saved-region-box .rb-tag{
-        position:absolute;
-        top:-9px; right:-2px;
-        background:var(--brand);
-        color:#fff;
-        font-size:9px;
-        padding:1px 4px;
-        border-radius:3px;
-        direction:rtl;
-        white-space:nowrap;
-    }
-
-    /* ট্যাগিং পপআপ */
-    .tag-popup{
-        display:none;
-        position:absolute;
-        left:8px; right:8px;
-        bottom:8px;
-        background:#fff;
-        border:1px solid var(--line);
-        border-radius:12px;
-        box-shadow:0 6px 24px rgba(0,0,0,.3);
-        padding:12px;
-        z-index:50;
-        direction:rtl;
-    }
-    .tag-popup.active{ display:block; }
-    .tag-popup h4{
-        font-size:13px;
-        margin-bottom:8px;
-        color:var(--brand-dark);
-    }
-    .tag-popup .tag-row{
-        display:flex;
-        gap:6px;
-        margin-bottom:8px;
-    }
-    .tag-popup select,
-    .tag-popup input[type=number]{
-        flex:1;
-        padding:8px;
-        border:1px solid var(--line);
-        border-radius:8px;
-        font-size:13px;
-        font-family:inherit;
-        min-width:0;
-    }
-    .tag-popup .tag-actions{
-        display:flex;
-        gap:6px;
-    }
-    .tag-popup .tag-actions button{
-        flex:1;
-        padding:9px 6px;
-        border:none;
-        border-radius:8px;
-        font-size:12px;
-        font-weight:600;
-        cursor:pointer;
-        font-family:inherit;
-    }
-    .tag-btn-add{ background:#eef6ee; color:var(--brand-dark); }
-    .tag-btn-save{ background:var(--brand); color:#fff; }
-    .tag-btn-cancel{ background:#f3ecec; color:#a33; }
-
-    /* পৃষ্ঠার চিহ্নিত আয়াত তালিকা (এডিট মোডে) */
-    .region-list-panel{
-        display:none;
-        background:#fff;
-        border-top:1px solid var(--line);
-        max-height:150px;
-        overflow-y:auto;
-        flex-shrink:0;
-        padding:6px 10px;
-        direction:rtl;
-    }
-    .region-list-panel.active{ display:block; }
-    .region-list-panel .rl-head{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        font-size:12px;
-        color:#888;
-        margin-bottom:4px;
-    }
-    .region-list-panel .rl-head button{
-        border:none;
-        background:none;
-        color:var(--brand);
-        font-size:11px;
-        cursor:pointer;
-        text-decoration:underline;
-        padding:2px 4px;
-    }
-    .region-list-item{
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        padding:6px 4px;
-        border-bottom:1px dashed var(--line);
-        font-size:12.5px;
-    }
-    .region-list-item button{
-        border:none;
-        background:#fdeaea;
-        color:#c0392b;
-        border-radius:6px;
-        width:24px; height:24px;
-        cursor:pointer;
-        font-size:13px;
-        flex-shrink:0;
-    }
-
     #pdfCanvas{
         display:block;
         max-width:100%;
@@ -921,30 +765,11 @@
         </div>
     </header>
 
-    <!-- আয়াত চিহ্নিতকরণ মোড নির্দেশিকা -->
-    <div class="edit-mode-banner" id="editModeBanner">
-        ✏️ চিহ্নিতকরণ মোড চালু — আয়াতের উপর টেনে (drag) একটি বক্স আঁকুন, তারপর সূরা ও আয়াত নম্বর দিয়ে সংরক্ষণ করুন।
-    </div>
-
     <!-- MAIN CONTENT AREA -->
     <div class="content-area">
         <div class="page-display" id="pageDisplay">
             <div class="page-wrap" id="pageWrap">
                 <canvas id="pdfCanvas"></canvas>
-
-                <!-- আয়াত ট্যাগিং পপআপ (চিহ্নিতকরণ মোডে বক্স আঁকার পর দেখাবে) -->
-                <div class="tag-popup" id="tagPopup">
-                    <h4>এই অংশটি কোন আয়াত?</h4>
-                    <div class="tag-row">
-                        <select id="tagSurahSelect"></select>
-                        <input type="number" id="tagAyahInput" min="1" placeholder="আয়াত নং">
-                    </div>
-                    <div class="tag-actions">
-                        <button class="tag-btn-add" id="tagAddMoreBtn" title="একই আয়াতের জন্য আরেকটি লাইন/বক্স আঁকুন">+ আরেকটি অংশ</button>
-                        <button class="tag-btn-save" id="tagSaveBtn">সংরক্ষণ করুন</button>
-                        <button class="tag-btn-cancel" id="tagCancelBtn">বাতিল</button>
-                    </div>
-                </div>
 
                 <!-- ACTION BUTTONS BAR (আয়াত সিলেক্ট হলে হাইলাইটের ঠিক নিচে ওভারলে হয়ে দেখাবে) -->
                 <div class="action-buttons-bar" id="actionButtonsBar">
@@ -989,20 +814,6 @@
 
         <!-- AYAH SELECTION BAR (হিডেন থাকবে) -->
         <div class="ayah-selection-bar" id="ayahBar"></div>
-
-        <!-- এই পৃষ্ঠায় চিহ্নিত আয়াতের তালিকা (শুধু চিহ্নিতকরণ মোডে দেখাবে) -->
-        <div class="region-list-panel" id="regionListPanel">
-            <div class="rl-head">
-                <span>এই পৃষ্ঠায় চিহ্নিত আয়াতসমূহ</span>
-                <span>
-                    <button id="exportRegionsBtn">এক্সপোর্ট</button>
-                    <button id="importRegionsBtn">ইম্পোর্ট</button>
-                    <button id="clearPageRegionsBtn">সব মুছুন</button>
-                </span>
-            </div>
-            <div id="regionListBody"></div>
-            <input type="file" id="importRegionsFile" accept="application/json" style="display:none;">
-        </div>
     </div>
 
     <!-- Custom Toolbar -->
@@ -1028,12 +839,6 @@
             <button class="toolbar-icon-btn" id="selectionModeBtn" title="আয়াত নির্বাচন">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d="M3 3l7 7M3 3h6v6M21 3l-7 7M21 3h-6v6M3 21l7-7M3 21v-6h6M21 21l-7-7M21 21v-6h-6"/>
-                </svg>
-            </button>
-            <button class="toolbar-icon-btn" id="editRegionBtn" title="আয়াত চিহ্নিতকরণ মোড">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M12 20h9"/>
-                    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
                 </svg>
             </button>
             <button class="toolbar-icon-btn" title="সুরক্ষা">
@@ -1463,61 +1268,24 @@
     const ctx = canvas.getContext('2d');
     const ayahBar = document.getElementById('ayahBar');
     const actionButtonsBar = document.getElementById('actionButtonsBar');
-    const editModeBanner = document.getElementById('editModeBanner');
-    const regionListPanel = document.getElementById('regionListPanel');
-    const regionListBody = document.getElementById('regionListBody');
-    const tagPopup = document.getElementById('tagPopup');
-    const tagSurahSelect = document.getElementById('tagSurahSelect');
-    const tagAyahInput = document.getElementById('tagAyahInput');
 
     let pdfDoc = null;
     let currentPage = 1;
     let totalPages = 0;
-    let currentAyahList = [];   // বর্তমান পৃষ্ঠায় চিহ্নিত আয়াতসমূহ [{id, surahNum, ayahNum, surahName, text, rects:[...]}]
+    let currentAyahList = [];
+    let currentRegions = [];
     let selectedAyahId = null;
     let lastHit = null;
     let selectionModeEnabled = true;
 
-    // ===== আয়াত রিজিয়ন সংরক্ষণাগার (localStorage ভিত্তিক) =====
-    // গঠন: { "<pageNum>": [ { surah, ayah, rects:[{x0,y0,x1,y1}, ...] }, ... ] }
-    const REGIONS_STORAGE_KEY = 'quranAyahRegions_v1';
-    let regionsStore = loadRegionsFromStorage();
-    let regionEditMode = false;
-    let pendingRects = [];   // এই মুহূর্তে আঁকা কিন্তু এখনো ট্যাগ না করা বক্সসমূহ
-    let drawStart = null;
-    let tempRectEl = null;
-
-    function loadRegionsFromStorage() {
-        try {
-            const raw = localStorage.getItem(REGIONS_STORAGE_KEY);
-            return raw ? JSON.parse(raw) : {};
-        } catch (e) {
-            console.error('রিজিয়ন লোড করতে ত্রুটি:', e);
-            return {};
-        }
-    }
-
-    function saveRegionsToStorage() {
-        try {
-            localStorage.setItem(REGIONS_STORAGE_KEY, JSON.stringify(regionsStore));
-        } catch (e) {
-            console.error('রিজিয়ন সংরক্ষণ করতে ত্রুটি:', e);
-        }
-    }
-
-    function getPageRegions(pageNum) {
-        return regionsStore[String(pageNum)] || [];
-    }
-
-    // ===== পিডিএফ লোড করুন =====
+    // পিডিএফ লোড করুন
     async function loadPdf() {
         try {
             // উদাহরণ Quran পিডিএফ URL
             const pdfUrl = '/tilawat/Emdadia-Hafezi-Quran.pdf';
-
+            
             pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
             totalPages = pdfDoc.numPages;
-            populateTagSurahSelect();
             renderPage(1);
         } catch (e) {
             console.error('পিডিএফ লোড করতে ত্রুটি:', e);
@@ -1525,7 +1293,7 @@
         }
     }
 
-    // ===== পৃষ্ঠা রেন্ডার করুন =====
+    // পৃষ্ঠা রেন্ডার করুন
     async function renderPage(num) {
         if (!pdfDoc) return;
         currentPage = Math.max(1, Math.min(num, totalPages));
@@ -1543,75 +1311,87 @@
             console.error('পৃষ্ঠা রেন্ডার করতে ত্রুটি:', e);
         }
 
-        // এই পৃষ্ঠার জন্য আগে থেকে চিহ্নিত (সংরক্ষিত) আয়াত রিজিয়ন লোড করুন
-        loadCurrentPageAyahList();
+        // নমুনা আয়াত ডেটা তৈরি করুন
+        currentAyahList = generateSampleAyahs();
+        currentRegions = currentAyahList.map(a => ({
+            id: a.id,
+            x0: Math.random() * 0.5,
+            y0: Math.random() * 0.8,
+            x1: Math.random() * 0.5 + 0.5,
+            y1: Math.random() * 0.8 + 0.05,
+            text: a.text
+        }));
 
         selectedAyahId = null;
-        cancelPendingDraw();
         clearHighlight();
         hideActionButtons();
         renderAyahBar();
-        renderSavedRegionBoxes();
-        renderRegionListPanel();
 
-        // পুরনো ইভেন্ট সরিয়ে নতুন করে যুক্ত করুন
-        canvas.removeEventListener('click', handleCanvasClick);
-        canvas.addEventListener('click', handleCanvasClick);
-
-        setupDrawListeners();
+        // ক্লিক ইভেন্ট যুক্ত করুন
+        canvas.addEventListener('click', handleCanvasClick, { once: true });
     }
 
-    // সংরক্ষিত ডেটা থেকে বর্তমান পৃষ্ঠার আয়াত তালিকা তৈরি করুন
-    function loadCurrentPageAyahList() {
-        const saved = getPageRegions(currentPage);
-        currentAyahList = saved.map(r => {
-            const surah = SURAHS.find(s => s.num === r.surah);
-            return {
-                id: 'p' + currentPage + '-' + r.surah + '-' + r.ayah,
-                surahNum: r.surah,
-                ayahNum: r.ayah,
-                surahName: surah ? surah.bn : ('সূরা ' + r.surah),
-                surahArabic: surah ? surah.name : '',
-                text: (surah ? surah.name : '') + ' — আয়াত ' + toBengaliNumeral(r.ayah),
-                rects: r.rects
-            };
-        });
+    // নমুনা আয়াত ডেটা তৈরি করুন
+    function generateSampleAyahs() {
+        const ayahs = [
+            { surahNum: 1, ayahNum: 1, text: 'بسم الله الرحمن الرحيم' },
+            { surahNum: 1, ayahNum: 2, text: 'الحمد لله رب العالمين' },
+            { surahNum: 1, ayahNum: 3, text: 'الرحمن الرحيم' },
+            { surahNum: 1, ayahNum: 4, text: 'مالك يوم الدين' },
+            { surahNum: 2, ayahNum: 1, text: 'الم' }
+        ];
+        return ayahs.map((a, i) => ({
+            id: 'ayah-' + currentPage + '-' + i,
+            surahNum: a.surahNum,
+            ayahNum: a.ayahNum,
+            text: a.text,
+            surahName: 'السورة',
+            isLine: false
+        }));
     }
 
-    // ===== ক্যানভাস ক্লিক হ্যান্ডলার (সাধারণ পাঠমোডে আয়াত নির্বাচন) =====
+    // ক্যানভাস ক্লিক হ্যান্ডলার
     function handleCanvasClick(e) {
-        if (regionEditMode) return; // এডিট মোডে আলাদা ড্র্যাগ-লজিক কাজ করবে
-        if (!selectionModeEnabled) return;
+        if (!selectionModeEnabled) {
+            canvas.addEventListener('click', handleCanvasClick, { once: true });
+            return;
+        }
 
         const rect = canvas.getBoundingClientRect();
         const xFrac = (e.clientX - rect.left) / rect.width;
         const yFrac = (e.clientY - rect.top) / rect.height;
 
-        const hitAyah = currentAyahList.find(a =>
-            a.rects.some(r => xFrac >= r.x0 && xFrac < r.x1 && yFrac >= r.y0 && yFrac < r.y1)
+        const hit = currentRegions.find(r => 
+            xFrac >= r.x0 && xFrac < r.x1 && 
+            yFrac >= r.y0 && yFrac < r.y1
         );
 
-        if (hitAyah) {
-            if (hitAyah.id === selectedAyahId) {
+        if (hit) {
+            if (hit.id === selectedAyahId) {
+                // একই আয়াতে আবার ট্যাপ করলে নির্বাচন বন্ধ হবে
                 deselectAyah();
             } else {
-                selectAyah(hitAyah.id);
+                selectAyah(hit.id);
             }
         } else {
+            // খালি জায়গায় ট্যাপ করলে নির্বাচন বন্ধ হবে
             deselectAyah();
         }
+        
+        canvas.addEventListener('click', handleCanvasClick, { once: true });
     }
 
     // আয়াত নির্বাচন করুন (মার্ক + অ্যাকশন বার দেখান)
     function selectAyah(id) {
         const ayah = currentAyahList.find(a => a.id === id);
-        if (!ayah) return;
+        const region = currentRegions.find(r => r.id === id);
+        if (!ayah || !region) return;
 
         selectedAyahId = id;
         lastHit = { surahNum: ayah.surahNum, ayahNum: ayah.ayahNum };
 
-        showHighlight(ayah);
-        showActionButtons(ayah);
+        showHighlight(region);
+        showActionButtons(region);
         renderAyahBar();
     }
 
@@ -1624,33 +1404,33 @@
         renderAyahBar();
     }
 
-    // নির্বাচিত আয়াতের সবকটি অংশের (multi-line হলেও) উপর সবুজ হাইলাইট বসান
-    function showHighlight(ayah) {
+    // নির্বাচিত আয়াতের উপর সবুজ হাইলাইট বসান
+    function showHighlight(region) {
         clearHighlight();
         const w = canvas.offsetWidth;
         const h = canvas.offsetHeight;
-        ayah.rects.forEach((region, i) => {
-            const div = document.createElement('div');
-            div.className = 'ayah-highlight current-highlight-piece';
-            div.style.left = (region.x0 * w) + 'px';
-            div.style.top = (region.y0 * h) + 'px';
-            div.style.width = ((region.x1 - region.x0) * w) + 'px';
-            div.style.height = ((region.y1 - region.y0) * h) + 'px';
-            pageWrap.appendChild(div);
-        });
+        const div = document.createElement('div');
+        div.className = 'ayah-highlight';
+        div.id = 'currentHighlight';
+        div.style.left = (region.x0 * w) + 'px';
+        div.style.top = (region.y0 * h) + 'px';
+        div.style.width = ((region.x1 - region.x0) * w) + 'px';
+        div.style.height = ((region.y1 - region.y0) * h) + 'px';
+        pageWrap.appendChild(div);
     }
 
     // হাইলাইট মুছে ফেলুন
     function clearHighlight() {
-        document.querySelectorAll('.current-highlight-piece').forEach(el => el.remove());
+        const existing = document.getElementById('currentHighlight');
+        if (existing) existing.remove();
     }
 
-    // অ্যাকশন বোতাম দেখান — সবচেয়ে নিচের অংশের ঠিক নিচে বসবে
-    function showActionButtons(ayah) {
-        if (ayah && ayah.rects.length) {
+    // অ্যাকশন বোতাম দেখান — হাইলাইট করা আয়াতের ঠিক নিচে বসবে
+    function showActionButtons(region) {
+        if (region) {
             const h = canvas.offsetHeight;
-            const maxY1 = Math.max(...ayah.rects.map(r => r.y1));
-            actionButtonsBar.style.top = (maxY1 * h + 4) + 'px';
+            const top = region.y1 * h + 4;
+            actionButtonsBar.style.top = top + 'px';
         }
         actionButtonsBar.classList.add('active');
     }
@@ -1663,17 +1443,14 @@
     // আয়াত বার রেন্ডার করুন
     function renderAyahBar() {
         if (!selectedAyahId) {
-            const hint = getPageRegions(currentPage).length
-                ? 'আয়াতের উপর ট্যাপ করুন'
-                : 'এই পৃষ্ঠায় এখনো কোনো আয়াত চিহ্নিত করা হয়নি — উপরে ✏️ বাটনে ট্যাপ করে চিহ্নিত করুন';
-            ayahBar.innerHTML = `<div class="ayah-item" style="text-align:center; color:#999; direction:rtl;">${hint}</div>`;
+            ayahBar.innerHTML = '<div class="ayah-item" style="text-align:center; color:#999;">আয়াতের উপর ট্যাপ করুন</div>';
             return;
         }
 
         const ayah = currentAyahList.find(a => a.id === selectedAyahId);
         if (!ayah) return;
 
-        const meta = `سورة ${ayah.surahArabic || ayah.surahName} • آية ${ayah.ayahNum}`;
+        const meta = `سورة ${ayah.surahName} • آية ${ayah.ayahNum}`;
         ayahBar.innerHTML = `
             <div class="ayah-item selected" data-id="${escapeHtml(ayah.id)}">
                 <div>${escapeHtml(ayah.text)}</div>
@@ -1681,273 +1458,6 @@
             </div>
         `;
     }
-
-    /* =========================================================
-       আয়াত রিজিয়ন এডিটর (ক্যালিব্রেশন মোড)
-       — এই টুলটি দিয়ে যেকোনো সূরার যেকোনো পৃষ্ঠায় আয়াতের সঠিক
-         অবস্থান একবার চিহ্নিত করে স্থায়ীভাবে সংরক্ষণ করা যাবে,
-         যা পরে রিডিং মোডে ছবির মতো নির্ভুল সিলেকশন/হাইলাইট দেবে।
-       ========================================================= */
-
-    function populateTagSurahSelect() {
-        tagSurahSelect.innerHTML = SURAHS.map(s =>
-            `<option value="${s.num}">${s.num}. ${s.bn} (${s.name})</option>`
-        ).join('');
-    }
-
-    function toggleRegionEditMode(forceValue) {
-        regionEditMode = (typeof forceValue === 'boolean') ? forceValue : !regionEditMode;
-        document.getElementById('editRegionBtn').classList.toggle('active', regionEditMode);
-        editModeBanner.classList.toggle('active', regionEditMode);
-        regionListPanel.classList.toggle('active', regionEditMode);
-        cancelPendingDraw();
-        deselectAyah();
-        renderSavedRegionBoxes();
-        renderRegionListPanel();
-    }
-
-    // ক্যানভাসে বক্স আঁকার (drag) লজিক সেটআপ করুন — শুধু এডিট মোডে সক্রিয় থাকে
-    function setupDrawListeners() {
-        canvas.onpointerdown = (e) => {
-            if (!regionEditMode) return;
-            e.preventDefault();
-            const rect = canvas.getBoundingClientRect();
-            drawStart = {
-                x: (e.clientX - rect.left) / rect.width,
-                y: (e.clientY - rect.top) / rect.height
-            };
-            tempRectEl = document.createElement('div');
-            tempRectEl.className = 'draw-rect';
-            pageWrap.appendChild(tempRectEl);
-        };
-
-        canvas.onpointermove = (e) => {
-            if (!regionEditMode || !drawStart || !tempRectEl) return;
-            const rect = canvas.getBoundingClientRect();
-            const curX = (e.clientX - rect.left) / rect.width;
-            const curY = (e.clientY - rect.top) / rect.height;
-            paintTempRect(drawStart, { x: curX, y: curY });
-        };
-
-        canvas.onpointerup = (e) => {
-            if (!regionEditMode || !drawStart) return;
-            const rect = canvas.getBoundingClientRect();
-            const endX = (e.clientX - rect.left) / rect.width;
-            const endY = (e.clientY - rect.top) / rect.height;
-
-            const box = normalizeBox(drawStart, { x: endX, y: endY });
-            drawStart = null;
-            if (tempRectEl) { tempRectEl.remove(); tempRectEl = null; }
-
-            // খুব ছোট বক্স (একটা সাধারণ ট্যাপ) হলে বাতিল
-            if ((box.x1 - box.x0) < 0.02 || (box.y1 - box.y0) < 0.01) return;
-
-            pendingRects.push(box);
-            paintPendingRects();
-            openTagPopup();
-        };
-    }
-
-    function paintTempRect(start, cur) {
-        const box = normalizeBox(start, cur);
-        const w = canvas.offsetWidth, h = canvas.offsetHeight;
-        tempRectEl.style.left = (box.x0 * w) + 'px';
-        tempRectEl.style.top = (box.y0 * h) + 'px';
-        tempRectEl.style.width = ((box.x1 - box.x0) * w) + 'px';
-        tempRectEl.style.height = ((box.y1 - box.y0) * h) + 'px';
-    }
-
-    function normalizeBox(a, b) {
-        return {
-            x0: Math.min(a.x, b.x), x1: Math.max(a.x, b.x),
-            y0: Math.min(a.y, b.y), y1: Math.max(a.y, b.y)
-        };
-    }
-
-    function paintPendingRects() {
-        document.querySelectorAll('.pending-rect').forEach(el => el.remove());
-        const w = canvas.offsetWidth, h = canvas.offsetHeight;
-        pendingRects.forEach(box => {
-            const div = document.createElement('div');
-            div.className = 'pending-rect';
-            div.style.left = (box.x0 * w) + 'px';
-            div.style.top = (box.y0 * h) + 'px';
-            div.style.width = ((box.x1 - box.x0) * w) + 'px';
-            div.style.height = ((box.y1 - box.y0) * h) + 'px';
-            pageWrap.appendChild(div);
-        });
-    }
-
-    function openTagPopup() {
-        tagPopup.classList.add('active');
-    }
-
-    function closeTagPopup() {
-        tagPopup.classList.remove('active');
-    }
-
-    function cancelPendingDraw() {
-        pendingRects = [];
-        drawStart = null;
-        if (tempRectEl) { tempRectEl.remove(); tempRectEl = null; }
-        document.querySelectorAll('.pending-rect').forEach(el => el.remove());
-        closeTagPopup();
-    }
-
-    // "আরেকটি অংশ" — একই আয়াতের জন্য (যেমন পরের লাইনে চলে যাওয়া আয়াত) আরও একটি বক্স আঁকতে দিন
-    document.getElementById('tagAddMoreBtn').addEventListener('click', () => {
-        closeTagPopup(); // পপআপ সরিয়ে দিন, ব্যবহারকারী আরেকটি বক্স আঁকবেন — pendingRects অক্ষত থাকবে
-    });
-
-    document.getElementById('tagCancelBtn').addEventListener('click', () => {
-        cancelPendingDraw();
-    });
-
-    document.getElementById('tagSaveBtn').addEventListener('click', () => {
-        const surahNum = parseInt(tagSurahSelect.value);
-        const ayahNum = parseInt(tagAyahInput.value);
-        const surah = SURAHS.find(s => s.num === surahNum);
-
-        if (!surahNum || !ayahNum || ayahNum < 1) {
-            alert('সূরা ও সঠিক আয়াত নম্বর দিন।');
-            return;
-        }
-        if (surah && ayahNum > surah.ayahs) {
-            alert(`${surah.bn} সূরায় মোট ${surah.ayahs} টি আয়াত আছে। সঠিক নম্বর দিন।`);
-            return;
-        }
-        if (!pendingRects.length) {
-            alert('প্রথমে আয়াতের উপর টেনে একটি বক্স আঁকুন।');
-            return;
-        }
-
-        const pageKey = String(currentPage);
-        if (!regionsStore[pageKey]) regionsStore[pageKey] = [];
-
-        let existing = regionsStore[pageKey].find(r => r.surah === surahNum && r.ayah === ayahNum);
-        if (existing) {
-            existing.rects = existing.rects.concat(pendingRects);
-        } else {
-            regionsStore[pageKey].push({ surah: surahNum, ayah: ayahNum, rects: pendingRects.slice() });
-        }
-
-        saveRegionsToStorage();
-        pendingRects = [];
-        tagAyahInput.value = '';
-        closeTagPopup();
-        document.querySelectorAll('.pending-rect').forEach(el => el.remove());
-
-        loadCurrentPageAyahList();
-        renderSavedRegionBoxes();
-        renderRegionListPanel();
-        renderAyahBar();
-    });
-
-    // এডিট মোডে আগে থেকে সংরক্ষিত রিজিয়নগুলো হালকা বক্স হিসেবে দেখান (রেফারেন্সের জন্য)
-    function renderSavedRegionBoxes() {
-        document.querySelectorAll('.saved-region-box').forEach(el => el.remove());
-        if (!regionEditMode) return;
-
-        const w = canvas.offsetWidth, h = canvas.offsetHeight;
-        currentAyahList.forEach(ayah => {
-            ayah.rects.forEach((region, i) => {
-                const div = document.createElement('div');
-                div.className = 'saved-region-box';
-                div.style.left = (region.x0 * w) + 'px';
-                div.style.top = (region.y0 * h) + 'px';
-                div.style.width = ((region.x1 - region.x0) * w) + 'px';
-                div.style.height = ((region.y1 - region.y0) * h) + 'px';
-                if (i === 0) {
-                    const tag = document.createElement('span');
-                    tag.className = 'rb-tag';
-                    tag.textContent = ayah.surahNum + ':' + ayah.ayahNum;
-                    div.appendChild(tag);
-                }
-                pageWrap.appendChild(div);
-            });
-        });
-    }
-
-    // "এই পৃষ্ঠায় চিহ্নিত আয়াতসমূহ" প্যানেল রেন্ডার করুন
-    function renderRegionListPanel() {
-        if (!regionEditMode) return;
-        if (!currentAyahList.length) {
-            regionListBody.innerHTML = '<div style="text-align:center; color:#999; padding:8px 0;">এখনো কিছু চিহ্নিত করা হয়নি।</div>';
-            return;
-        }
-        regionListBody.innerHTML = currentAyahList.map(a => `
-            <div class="region-list-item">
-                <span>সূরা ${a.surahNum} — আয়াত ${a.ayahNum} (${a.rects.length} অংশ)</span>
-                <button data-surah="${a.surahNum}" data-ayah="${a.ayahNum}" class="rl-delete-btn" title="মুছুন">×</button>
-            </div>
-        `).join('');
-
-        regionListBody.querySelectorAll('.rl-delete-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const s = parseInt(btn.dataset.surah), a = parseInt(btn.dataset.ayah);
-                const pageKey = String(currentPage);
-                regionsStore[pageKey] = (regionsStore[pageKey] || []).filter(r => !(r.surah === s && r.ayah === a));
-                saveRegionsToStorage();
-                loadCurrentPageAyahList();
-                deselectAyah();
-                renderSavedRegionBoxes();
-                renderRegionListPanel();
-                renderAyahBar();
-            });
-        });
-    }
-
-    document.getElementById('clearPageRegionsBtn').addEventListener('click', () => {
-        if (!confirm('এই পৃষ্ঠার সব চিহ্নিত আয়াত মুছে ফেলতে চান?')) return;
-        delete regionsStore[String(currentPage)];
-        saveRegionsToStorage();
-        loadCurrentPageAyahList();
-        deselectAyah();
-        renderSavedRegionBoxes();
-        renderRegionListPanel();
-        renderAyahBar();
-    });
-
-    document.getElementById('exportRegionsBtn').addEventListener('click', () => {
-        const blob = new Blob([JSON.stringify(regionsStore, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'quran-ayah-regions.json';
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        URL.revokeObjectURL(url);
-    });
-
-    document.getElementById('importRegionsBtn').addEventListener('click', () => {
-        document.getElementById('importRegionsFile').click();
-    });
-
-    document.getElementById('importRegionsFile').addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = () => {
-            try {
-                const imported = JSON.parse(reader.result);
-                // বিদ্যমান ডেটার সাথে মার্জ করুন (ইম্পোর্ট করা ডেটা অগ্রাধিকার পাবে)
-                regionsStore = Object.assign({}, regionsStore, imported);
-                saveRegionsToStorage();
-                loadCurrentPageAyahList();
-                renderSavedRegionBoxes();
-                renderRegionListPanel();
-                renderAyahBar();
-                alert('রিজিয়ন ডেটা সফলভাবে ইম্পোর্ট করা হয়েছে।');
-            } catch (err) {
-                alert('ফাইলটি সঠিক JSON ফরম্যাটে নেই।');
-            }
-        };
-        reader.readAsText(file);
-        e.target.value = '';
-    });
-
-    document.getElementById('editRegionBtn').addEventListener('click', () => toggleRegionEditMode());
 
     // HTML এস্কেপ
     function escapeHtml(str) {
