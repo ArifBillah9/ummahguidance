@@ -1277,32 +1277,13 @@
     let selectedAyahId = null;
     let lastHit = null;
     let selectionModeEnabled = true;
-    // পৃষ্ঠাভিত্তিক আয়াত কো-অর্ডিনেট ডেটা { "1":[{surahNum,ayahNum,text,x0,y0,x1,y1}, ...], "2":[...] }
-    // এই ডেটা regions.json ফাইল থেকে লোড হয়, এটি ayah-mapper.html টুল দিয়ে তৈরি করতে হবে
-    let ALL_REGIONS = {};
-
-    // আয়াতের কো-অর্ডিনেট ডেটা লোড করুন (regions.json)
-    async function loadRegions() {
-        try {
-            const res = await fetch('regions.json', { cache: 'no-store' });
-            if (res.ok) {
-                ALL_REGIONS = await res.json();
-            } else {
-                ALL_REGIONS = {};
-            }
-        } catch (e) {
-            console.warn('regions.json পাওয়া যায়নি, আয়াত নির্বাচন এখনও সক্রিয় করা হয়নি এমন পৃষ্ঠা দেখানো হবে।', e);
-            ALL_REGIONS = {};
-        }
-    }
 
     // পিডিএফ লোড করুন
     async function loadPdf() {
         try {
             // উদাহরণ Quran পিডিএফ URL
             const pdfUrl = '/tilawat/Emdadia-Hafezi-Quran.pdf';
-
-            await loadRegions();
+            
             pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
             totalPages = pdfDoc.numPages;
             renderPage(1);
@@ -1330,14 +1311,14 @@
             console.error('পৃষ্ঠা রেন্ডার করতে ত্রুটি:', e);
         }
 
-        // এই পৃষ্ঠার জন্য প্রকৃত আয়াত কো-অর্ডিনেট লোড করুন (regions.json থেকে)
-        currentAyahList = buildAyahListForPage(currentPage);
+        // নমুনা আয়াত ডেটা তৈরি করুন
+        currentAyahList = generateSampleAyahs();
         currentRegions = currentAyahList.map(a => ({
             id: a.id,
-            x0: a.x0,
-            y0: a.y0,
-            x1: a.x1,
-            y1: a.y1,
+            x0: Math.random() * 0.5,
+            y0: Math.random() * 0.8,
+            x1: Math.random() * 0.5 + 0.5,
+            y1: Math.random() * 0.8 + 0.05,
             text: a.text
         }));
 
@@ -1350,21 +1331,23 @@
         canvas.addEventListener('click', handleCanvasClick, { once: true });
     }
 
-    // regions.json থেকে এই পৃষ্ঠার আয়াত তালিকা তৈরি করুন
-    function buildAyahListForPage(pageNum) {
-        const regions = ALL_REGIONS[String(pageNum)] || [];
-        return regions.map((r, i) => {
-            const surah = SURAHS.find(s => s.num === r.surahNum);
-            return {
-                id: 'ayah-' + pageNum + '-' + i,
-                surahNum: r.surahNum,
-                ayahNum: r.ayahNum,
-                text: r.text || '',
-                surahName: surah ? surah.name : '',
-                x0: r.x0, y0: r.y0, x1: r.x1, y1: r.y1,
-                isLine: false
-            };
-        });
+    // নমুনা আয়াত ডেটা তৈরি করুন
+    function generateSampleAyahs() {
+        const ayahs = [
+            { surahNum: 1, ayahNum: 1, text: 'بسم الله الرحمن الرحيم' },
+            { surahNum: 1, ayahNum: 2, text: 'الحمد لله رب العالمين' },
+            { surahNum: 1, ayahNum: 3, text: 'الرحمن الرحيم' },
+            { surahNum: 1, ayahNum: 4, text: 'مالك يوم الدين' },
+            { surahNum: 2, ayahNum: 1, text: 'الم' }
+        ];
+        return ayahs.map((a, i) => ({
+            id: 'ayah-' + currentPage + '-' + i,
+            surahNum: a.surahNum,
+            ayahNum: a.ayahNum,
+            text: a.text,
+            surahName: 'السورة',
+            isLine: false
+        }));
     }
 
     // ক্যানভাস ক্লিক হ্যান্ডলার
@@ -1460,11 +1443,7 @@
     // আয়াত বার রেন্ডার করুন
     function renderAyahBar() {
         if (!selectedAyahId) {
-            if (currentAyahList.length === 0) {
-                ayahBar.innerHTML = '<div class="ayah-item" style="text-align:center; color:#999; direction:ltr; font-family:\'Kalpurush\',\'Hind Siliguri\',sans-serif; font-size:13px;">এই পৃষ্ঠার আয়াত এখনো ম্যাপ করা হয়নি — ayah-mapper.html টুল দিয়ে ম্যাপ করুন।</div>';
-            } else {
-                ayahBar.innerHTML = '<div class="ayah-item" style="text-align:center; color:#999;">আয়াতের উপর ট্যাপ করুন</div>';
-            }
+            ayahBar.innerHTML = '<div class="ayah-item" style="text-align:center; color:#999;">আয়াতের উপর ট্যাপ করুন</div>';
             return;
         }
 
