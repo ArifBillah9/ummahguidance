@@ -110,10 +110,10 @@
     .ayah-highlight{
         position:absolute;
         pointer-events:none;
-        background:rgba(201,151,63,.28);
-        border:1px solid rgba(23,90,69,.45);
-        border-radius:4px;
+        background:rgba(139,195,74,.4);
+        border-radius:3px;
         transition:opacity .2s;
+        z-index:5;
     }
 
     .region-note{
@@ -134,18 +134,20 @@
         user-select:none;
     }
 
-    /* ===== ACTION BUTTONS BAR ===== */
+    /* ===== ACTION BUTTONS BAR (হাইলাইট করা আয়াতের ঠিক নিচে ওভারলে হিসেবে দেখাবে) ===== */
     .action-buttons-bar{
-        background:linear-gradient(180deg,var(--brand),var(--brand-dark));
-        border-bottom:1px solid var(--line);
+        position:absolute;
+        left:0;
+        right:0;
+        background:rgba(15,69,52,.95);
         display:none;
-        flex-shrink:0;
-        padding:8px 0;
         flex-direction:row;
         align-items:center;
-        justify-content:center;
-        gap:0;
-        z-index:25;
+        justify-content:space-evenly;
+        padding:9px 8px;
+        gap:2px;
+        z-index:40;
+        box-shadow:0 3px 12px rgba(0,0,0,.28);
     }
 
     .action-buttons-bar.active{
@@ -153,35 +155,39 @@
     }
 
     .action-btn{
-        width:50px;
-        height:50px;
-        border:none;
+        width:38px;
+        height:38px;
+        border-radius:50%;
+        border:1.5px solid rgba(255,255,255,.55);
         background:transparent;
         color:#fff;
         cursor:pointer;
         display:flex;
         align-items:center;
         justify-content:center;
-        flex-direction:column;
-        gap:2px;
-        font-size:10px;
-        transition:background .2s;
         flex-shrink:0;
+        transition:background .2s, transform .12s;
+        padding:0;
         position:relative;
     }
 
     .action-btn:hover{
-        background:rgba(255,255,255,.1);
+        background:rgba(255,255,255,.12);
+    }
+
+    .action-btn:active{
+        transform:scale(.9);
+        background:rgba(255,255,255,.2);
     }
 
     .action-btn svg{
-        width:22px;
-        height:22px;
-        stroke-width:1.5;
+        width:17px;
+        height:17px;
+        stroke-width:1.6;
     }
 
     .action-btn.active{
-        background:rgba(255,255,255,.2);
+        background:rgba(255,255,255,.25);
     }
 
     /* ===== AYAH SELECTION AREA ===== */
@@ -762,47 +768,48 @@
     <!-- MAIN CONTENT AREA -->
     <div class="content-area">
         <div class="page-display" id="pageDisplay">
-            <canvas id="pdfCanvas"></canvas>
-        </div>
+            <div class="page-wrap" id="pageWrap">
+                <canvas id="pdfCanvas"></canvas>
 
-        <!-- ACTION BUTTONS BAR (শুধু আয়াত সিলেক্ট হলে দেখাবে) -->
-        <div class="action-buttons-bar" id="actionButtonsBar">
-            <button class="action-btn" id="playBtn" title="অডিও চালান">
-                <svg viewBox="0 0 24 24" fill="currentColor">
-                    <polygon points="5 3 19 12 5 21 5 3"/>
-                </svg>
-                <span>বাচন</span>
-            </button>
-            <button class="action-btn" id="docBtn" title="নথি">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-                </svg>
-                <span>নথি</span>
-            </button>
-            <button class="action-btn" id="shareBtn" title="শেয়ার করুন">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-                </svg>
-                <span>শেয়ার</span>
-            </button>
-            <button class="action-btn" id="copyBtn" title="অনুলিপি করুন">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-                </svg>
-                <span>অনুলিপি</span>
-            </button>
-            <button class="action-btn" id="bookmarkBtn" title="বুকমার্ক করুন">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-                </svg>
-                <span>বুকমার্ক</span>
-            </button>
-            <button class="action-btn" id="closeSelectionBtn" title="বন্ধ করুন">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-                <span>বন্ধ</span>
-            </button>
+                <!-- ACTION BUTTONS BAR (আয়াত সিলেক্ট হলে হাইলাইটের ঠিক নিচে ওভারলে হয়ে দেখাবে) -->
+                <div class="action-buttons-bar" id="actionButtonsBar">
+                    <button class="action-btn" id="playBtn" title="অডিও চালান">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn" id="copyBtn" title="অনুলিপি করুন">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn" id="shareBtn" title="শেয়ার করুন">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn" id="tafsirBtn" title="তাফসীর / অনুবাদ">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn" id="bookmarkBtn" title="বুকমার্ক করুন">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </button>
+                    <button class="action-btn" id="expandBtn" title="ফুলস্ক্রিন">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M8 3H5a2 2 0 0 0-2 2v3"/>
+                            <path d="M21 8V5a2 2 0 0 0-2-2h-3"/>
+                            <path d="M3 16v3a2 2 0 0 0 2 2h3"/>
+                            <path d="M16 21h3a2 2 0 0 0 2-2v-3"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- AYAH SELECTION BAR (হিডেন থাকবে) -->
@@ -1256,6 +1263,7 @@
 
     // ডিএস এবং রেফারেন্সেস
     const pageDisplay = document.getElementById('pageDisplay');
+    const pageWrap = document.getElementById('pageWrap');
     const canvas = document.getElementById('pdfCanvas');
     const ctx = canvas.getContext('2d');
     const ayahBar = document.getElementById('ayahBar');
@@ -1315,6 +1323,7 @@
         }));
 
         selectedAyahId = null;
+        clearHighlight();
         hideActionButtons();
         renderAyahBar();
 
@@ -1358,26 +1367,71 @@
         );
 
         if (hit) {
-            selectAyah(hit.id);
+            if (hit.id === selectedAyahId) {
+                // একই আয়াতে আবার ট্যাপ করলে নির্বাচন বন্ধ হবে
+                deselectAyah();
+            } else {
+                selectAyah(hit.id);
+            }
+        } else {
+            // খালি জায়গায় ট্যাপ করলে নির্বাচন বন্ধ হবে
+            deselectAyah();
         }
         
         canvas.addEventListener('click', handleCanvasClick, { once: true });
     }
 
-    // আয়াত নির্বাচন করুন
+    // আয়াত নির্বাচন করুন (মার্ক + অ্যাকশন বার দেখান)
     function selectAyah(id) {
         const ayah = currentAyahList.find(a => a.id === id);
-        if (!ayah) return;
+        const region = currentRegions.find(r => r.id === id);
+        if (!ayah || !region) return;
 
         selectedAyahId = id;
         lastHit = { surahNum: ayah.surahNum, ayahNum: ayah.ayahNum };
-        
-        showActionButtons();
+
+        showHighlight(region);
+        showActionButtons(region);
         renderAyahBar();
     }
 
-    // অ্যাকশন বোতাম দেখান
-    function showActionButtons() {
+    // নির্বাচন বাতিল করুন
+    function deselectAyah() {
+        if (!selectedAyahId) return;
+        selectedAyahId = null;
+        clearHighlight();
+        hideActionButtons();
+        renderAyahBar();
+    }
+
+    // নির্বাচিত আয়াতের উপর সবুজ হাইলাইট বসান
+    function showHighlight(region) {
+        clearHighlight();
+        const w = canvas.offsetWidth;
+        const h = canvas.offsetHeight;
+        const div = document.createElement('div');
+        div.className = 'ayah-highlight';
+        div.id = 'currentHighlight';
+        div.style.left = (region.x0 * w) + 'px';
+        div.style.top = (region.y0 * h) + 'px';
+        div.style.width = ((region.x1 - region.x0) * w) + 'px';
+        div.style.height = ((region.y1 - region.y0) * h) + 'px';
+        pageWrap.appendChild(div);
+    }
+
+    // হাইলাইট মুছে ফেলুন
+    function clearHighlight() {
+        const existing = document.getElementById('currentHighlight');
+        if (existing) existing.remove();
+    }
+
+    // অ্যাকশন বোতাম দেখান — হাইলাইট করা আয়াতের ঠিক নিচে বসবে
+    function showActionButtons(region) {
+        if (region) {
+            const h = canvas.offsetHeight;
+            const top = region.y1 * h + 4;
+            actionButtonsBar.style.top = top + 'px';
+        }
         actionButtonsBar.classList.add('active');
     }
 
@@ -1435,8 +1489,8 @@
         }
     });
 
-    document.getElementById('docBtn').addEventListener('click', () => {
-        alert('নথি ফিচার শীঘ্রই উপলব্ধ হবে।');
+    document.getElementById('tafsirBtn').addEventListener('click', () => {
+        alert('তাফসীর/অনুবাদ ফিচার শীঘ্রই উপলব্ধ হবে।');
     });
 
     document.getElementById('shareBtn').addEventListener('click', () => {
@@ -1465,10 +1519,8 @@
         alert('পৃষ্ঠা বুকমার্ক করা হয়েছে।');
     });
 
-    document.getElementById('closeSelectionBtn').addEventListener('click', () => {
-        selectedAyahId = null;
-        hideActionButtons();
-        renderAyahBar();
+    document.getElementById('expandBtn').addEventListener('click', () => {
+        alert('ফুলস্ক্রিন মোড শীঘ্রই আসছে।');
     });
 
     // আয়াত নির্বাচন মোড টগল
