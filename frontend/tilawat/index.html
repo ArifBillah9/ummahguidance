@@ -134,6 +134,56 @@
         user-select:none;
     }
 
+    /* ===== ACTION BUTTONS BAR ===== */
+    .action-buttons-bar{
+        background:linear-gradient(180deg,var(--brand),var(--brand-dark));
+        border-bottom:1px solid var(--line);
+        display:none;
+        flex-shrink:0;
+        padding:8px 0;
+        flex-direction:row;
+        align-items:center;
+        justify-content:center;
+        gap:0;
+        z-index:25;
+    }
+
+    .action-buttons-bar.active{
+        display:flex;
+    }
+
+    .action-btn{
+        width:50px;
+        height:50px;
+        border:none;
+        background:transparent;
+        color:#fff;
+        cursor:pointer;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        flex-direction:column;
+        gap:2px;
+        font-size:10px;
+        transition:background .2s;
+        flex-shrink:0;
+        position:relative;
+    }
+
+    .action-btn:hover{
+        background:rgba(255,255,255,.1);
+    }
+
+    .action-btn svg{
+        width:22px;
+        height:22px;
+        stroke-width:1.5;
+    }
+
+    .action-btn.active{
+        background:rgba(255,255,255,.2);
+    }
+
     /* ===== AYAH SELECTION AREA ===== */
     .ayah-selection-bar{
         background:#fff;
@@ -142,6 +192,11 @@
         overflow-y:auto;
         flex-shrink:0;
         padding:8px 0;
+        display:none;
+    }
+
+    .ayah-selection-bar.active{
+        display:block;
     }
 
     .ayah-item{
@@ -201,8 +256,8 @@
     }
 
     .nav-btn:disabled{
-        opacity:.4;
-        cursor:default;
+        opacity:0.5;
+        cursor:not-allowed;
     }
 
     .nav-btn svg{
@@ -211,849 +266,500 @@
     }
 
     .page-info{
-        flex:1;
-        text-align:center;
         font-size:13px;
+        min-width:60px;
+        text-align:center;
     }
 
-    /* ===== ACTION TOOLBAR ===== */
-    .action-toolbar{
+    /* ===== CUSTOM TOOLBAR ===== */
+    .custom-toolbar{
         display:flex;
-        justify-content:space-around;
         align-items:center;
+        justify-content:space-between;
+        padding:8px 12px;
         background:linear-gradient(180deg,var(--brand),var(--brand-dark));
         color:#fff;
-        padding:8px 0;
         flex-shrink:0;
-        gap:0;
+        gap:8px;
     }
 
-    .toolbar-btn{
-        flex:1;
-        height:44px;
-        border:none;
-        background:transparent;
-        color:#fff;
-        cursor:pointer;
+    .toolbar-left{
         display:flex;
-        flex-direction:column;
+        align-items:center;
+        gap:8px;
+    }
+
+    .toolbar-play-btn{
+        width:36px;
+        height:36px;
+        border-radius:4px;
+        background:transparent;
+        border:1px solid rgba(255,255,255,.3);
+        color:#fff;
+        display:flex;
         align-items:center;
         justify-content:center;
-        gap:2px;
-        font-size:11px;
+        cursor:pointer;
+        flex-shrink:0;
         transition:background .2s;
     }
 
-    .toolbar-btn:active{
-        background:rgba(0,0,0,.1);
+    .toolbar-play-btn:hover{
+        background:rgba(255,255,255,.1);
     }
 
-    .toolbar-btn svg{
-        width:20px;
-        height:20px;
+    .toolbar-play-btn svg{
+        width:18px;
+        height:18px;
     }
 
-    /* ===== MODAL/OVERLAY ===== */
-    .modal{
-        position:fixed;
-        inset:0;
-        background:rgba(0,0,0,.5);
-        display:none;
-        z-index:100;
-        align-items:center;
-        justify-content:center;
-    }
-
-    .modal.show{
+    .toolbar-title{
+        font-size:14px;
+        font-weight:500;
+        direction:rtl;
         display:flex;
+        flex-direction:column;
+        gap:2px;
     }
 
-    .modal-content{
-        background:#fff;
-        border-radius:12px;
-        padding:20px;
-        max-width:90%;
-        max-height:80vh;
-        overflow-y:auto;
-    }
-
-    /* ===== LOADING ===== */
-    .loading{
+    .toolbar-dropdown{
+        background:transparent;
+        border:none;
+        color:#fff;
+        cursor:pointer;
         display:flex;
         align-items:center;
+        gap:4px;
+        font-size:12px;
+        padding:4px 6px;
+        transition:background .2s;
+    }
+
+    .toolbar-dropdown:hover{
+        background:rgba(255,255,255,.1);
+        border-radius:4px;
+    }
+
+    .toolbar-dropdown svg{
+        width:14px;
+        height:14px;
+    }
+
+    .toolbar-right{
+        display:flex;
+        align-items:center;
+        gap:4px;
+    }
+
+    .toolbar-icon-btn{
+        width:32px;
+        height:32px;
+        border-radius:4px;
+        background:transparent;
+        border:none;
+        color:#fff;
+        display:flex;
+        align-items:center;
         justify-content:center;
-        gap:10px;
-        color:#8a8370;
+        cursor:pointer;
+        flex-shrink:0;
+        transition:background .2s;
     }
 
-    .spinner{
-        width:20px;
-        height:20px;
-        border:2px solid var(--line);
-        border-top-color:var(--brand);
-        border-radius:50%;
-        animation:spin .6s linear infinite;
+    .toolbar-icon-btn:hover{
+        background:rgba(255,255,255,.1);
     }
 
-    @keyframes spin{
-        to{transform:rotate(360deg)}
+    .toolbar-icon-btn svg{
+        width:18px;
+        height:18px;
+        stroke-width:1.5;
     }
 
+    /* Night mode */
+    body.night{
+        background:#1b1b1b;
+    }
+
+    body.night #app{
+        background:#2d2d2d;
+        color:#e0e0e0;
+    }
+
+    body.night .page-display{
+        background:#1a1a1a;
+    }
+
+    body.night .ayah-item{
+        color:#e0e0e0;
+    }
+
+    body.night .ayah-selection-bar{
+        background:#2d2d2d;
+        border-top-color:#444;
+    }
+
+    body.night .ayah-item.selected{
+        background:rgba(23,90,69,.15);
+        color:#6be59d;
+    }
 </style>
 </head>
 <body>
+
 <div id="app">
     <!-- HEADER -->
     <header>
         <div class="left">
-            <button class="icon-btn" id="homeBtn" title="হোম">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <button class="icon-btn" id="homeBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
                     <polyline points="9 22 9 12 15 12 15 22"/>
                 </svg>
             </button>
-            <h1>কুরআন শরীফ</h1>
+            <h1>কুরআন</h1>
         </div>
         <div class="right">
-            <button class="icon-btn" id="moonBtn" title="রাত মোড">
-                <svg viewBox="0 0 24 24" fill="currentColor">
+            <button class="icon-btn" id="moonBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
                 </svg>
             </button>
-            <button class="icon-btn" id="searchBtn" title="সার্চ">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"/>
-                    <path d="M21 21l-4.35-4.35"/>
+            <button class="icon-btn" id="searchBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
                 </svg>
             </button>
-            <button class="icon-btn" id="menuBtn" title="মেনু">
+            <button class="icon-btn" id="menuBtn">
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                    <circle cx="6" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="18" cy="12" r="2"/>
+                    <circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/>
                 </svg>
             </button>
         </div>
     </header>
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN CONTENT AREA -->
     <div class="content-area">
         <div class="page-display" id="pageDisplay">
-            <div class="loading">
-                <div class="spinner"></div>
-                <span>পাতা লোড হচ্ছে...</span>
+            <canvas id="pdfCanvas"></canvas>
+        </div>
+
+        <!-- ACTION BUTTONS BAR (শুধু আয়াত সিলেক্ট হলে দেখাবে) -->
+        <div class="action-buttons-bar" id="actionButtonsBar">
+            <button class="action-btn" id="playBtn" title="অডিও চালান">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                <span>বাচন</span>
+            </button>
+            <button class="action-btn" id="docBtn" title="নথি">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                </svg>
+                <span>নথি</span>
+            </button>
+            <button class="action-btn" id="shareBtn" title="শেয়ার করুন">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                </svg>
+                <span>শেয়ার</span>
+            </button>
+            <button class="action-btn" id="copyBtn" title="অনুলিপি করুন">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                </svg>
+                <span>অনুলিপি</span>
+            </button>
+            <button class="action-btn" id="bookmarkBtn" title="বুকমার্ক করুন">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                </svg>
+                <span>বুকমার্ক</span>
+            </button>
+            <button class="action-btn" id="closeSelectionBtn" title="বন্ধ করুন">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+                <span>বন্ধ</span>
+            </button>
+        </div>
+
+        <!-- AYAH SELECTION BAR (হিডেন থাকবে) -->
+        <div class="ayah-selection-bar" id="ayahBar"></div>
+    </div>
+
+    <!-- Custom Toolbar -->
+    <div class="custom-toolbar">
+        <div class="toolbar-left">
+            <button class="toolbar-play-btn" title="প্লে">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21"/>
+                </svg>
+            </button>
+            <div class="toolbar-title">
+                <span style="font-size:12px; opacity:0.9;">মুসাইকিন</span>
+                <span style="font-size:11px; opacity:0.8;">কুরআন</span>
             </div>
+            <button class="toolbar-dropdown">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
         </div>
-    </div>
 
-    <!-- AYAH SELECTION BAR -->
-    <div class="ayah-selection-bar" id="ayahBar">
-        <div class="ayah-item" style="text-align:center; color:#999;">আয়াতের উপর ট্যাপ করুন</div>
-    </div>
-
-    <!-- PAGE CONTROLS -->
-    <div class="page-controls">
-        <button class="nav-btn" id="prevBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="15 18 9 12 15 6"/>
-            </svg>
-        </button>
-        <div class="page-info">
-            <span id="pageNum">১</span> / <span id="totalPages">১</span>
+        <div class="toolbar-right">
+            <button class="toolbar-icon-btn" id="selectionModeBtn" title="আয়াত নির্বাচন">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 3l7 7M3 3h6v6M21 3l-7 7M21 3h-6v6M3 21l7-7M3 21v-6h6M21 21l-7-7M21 21v-6h-6"/>
+                </svg>
+            </button>
+            <button class="toolbar-icon-btn" title="সুরক্ষা">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+            </button>
+            <button class="toolbar-icon-btn" title="বুকমার্ক">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+                </svg>
+            </button>
+            <button class="toolbar-icon-btn" title="শেয়ার">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M22 2l-7 20-4-9-9-4 20-7z"/>
+                </svg>
+            </button>
         </div>
-        <button class="nav-btn" id="nextBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="9 18 15 12 9 6"/>
-            </svg>
-        </button>
-    </div>
-
-    <!-- ACTION TOOLBAR -->
-    <div class="action-toolbar">
-        <button class="toolbar-btn" id="playBtn" title="পড়ুন">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-                <polygon points="5 3 19 12 5 21 5 3"/>
-            </svg>
-            <span>পড়ুন</span>
-        </button>
-        <button class="toolbar-btn" id="bookmarkBtn" title="বুকমার্ক">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
-            </svg>
-            <span>বুকমার্ক</span>
-        </button>
-        <button class="toolbar-btn" id="shareBtn" title="শেয়ার">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-            </svg>
-            <span>শেয়ার</span>
-        </button>
-        <button class="toolbar-btn" id="tafsirBtn" title="তাফসীর">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-            </svg>
-            <span>তাফসীর</span>
-        </button>
-        <button class="toolbar-btn" id="moreBtn" title="আরও">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="6" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="18" cy="12" r="2"/>
-            </svg>
-            <span>আরও</span>
-        </button>
     </div>
 </div>
 
-<audio id="audio"></audio>
-
 <script>
-    // PDF.js সেটআপ
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    // ডিএস এবং রেফারেন্সেস
+    const pageDisplay = document.getElementById('pageDisplay');
+    const canvas = document.getElementById('pdfCanvas');
+    const ctx = canvas.getContext('2d');
+    const ayahBar = document.getElementById('ayahBar');
+    const actionButtonsBar = document.getElementById('actionButtonsBar');
 
     let pdfDoc = null;
     let currentPage = 1;
     let totalPages = 0;
-    let selectedMushaf = 'emdadia';
-    const pdfUrls = {
-        emdadia: '/tilawat/Emdadia-Hafezi-Quran.pdf' // একই ডিরেক্টরিতে PDF ফাইল রাখুন
-    };
-
-    const pageDisplay = document.getElementById('pageDisplay');
-    const ayahBar = document.getElementById('ayahBar');
-    const pageNum = document.getElementById('pageNum');
-    const totalPagesSpan = document.getElementById('totalPages');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
+    let currentAyahList = [];
+    let currentRegions = [];
+    let selectedAyahId = null;
+    let lastHit = null;
+    let selectionModeEnabled = true;
 
     // পিডিএফ লোড করুন
     async function loadPdf() {
         try {
-            const pdfUrl = pdfUrls[selectedMushaf];
+            // উদাহরণ Quran পিডিএফ URL
+            const pdfUrl = 'https://data.qurancdn.com/asanfuqaha/Tanzil_ver_1_0.pdf';
+            
             pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
             totalPages = pdfDoc.numPages;
-            totalPagesSpan.textContent = toBengaliNumeral(totalPages);
-            
-            // সংরক্ষিত পৃষ্ঠা লোড করুন
-            const savedPage = localStorage.getItem('currentPage_' + selectedMushaf);
-            currentPage = savedPage ? parseInt(savedPage) : 1;
-            
-            await renderPage(currentPage);
-        } catch (error) {
-            console.error('PDF লোড করা যায়নি:', error);
-            pageDisplay.innerHTML = '<div class="loading"><span>পিডিএফ লোড করা যায়নি।</span></div>';
+            renderPage(1);
+        } catch (e) {
+            console.error('পিডিএফ লোড করতে ত্রুটি:', e);
+            canvas.textContent = 'পিডিএফ লোড করতে ত্রুটি';
         }
     }
 
     // পৃষ্ঠা রেন্ডার করুন
-    async function renderPage(pageNumber) {
+    async function renderPage(num) {
         if (!pdfDoc) return;
-        
+        currentPage = Math.max(1, Math.min(num, totalPages));
+
+        const page = await pdfDoc.getPage(currentPage);
+        const scale = Math.min(pageDisplay.clientWidth / page.getViewport({ scale: 1 }).width, 1.5);
+        const viewport = page.getViewport({ scale });
+
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
         try {
-            const page = await pdfDoc.getPage(pageNumber);
-            const scale = 1.5;
-            const viewport = page.getViewport({ scale });
-            
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-            canvas.width = viewport.width;
-            canvas.height = viewport.height;
-            
-            await page.render({ canvasContext: context, viewport }).promise;
-            
-            // ক্যানভাস প্রদর্শন করুন
-            pageDisplay.innerHTML = '';
-            canvas.id = 'pdfCanvas';
-            const wrap = document.createElement('div');
-            wrap.className = 'page-wrap';
-            wrap.appendChild(canvas);
-            const highlight = document.createElement('div');
-            highlight.className = 'ayah-highlight';
-            highlight.style.display = 'none';
-            wrap.appendChild(highlight);
-            pageDisplay.appendChild(wrap);
-            currentHighlight = highlight;
-
-            // স্ক্লিক হ্যান্ডলার যোগ করুন
-            setupPageClickHandlers(canvas, viewport);
-
-            // এই পৃষ্ঠার আয়াত-অঞ্চল তৈরি/লোড করুন (সব পৃষ্ঠার জন্য স্বয়ংক্রিয়)
-            currentRegions = null;
-            currentAyahList = [];
-            selectedAyahId = null;
-            lastHit = null;
-            setAyahBarMessage('আয়াত প্রস্তুত হচ্ছে...');
-            ensureRegionsForPage(pageNumber, canvas).then(regions => {
-                if (currentPage !== pageNumber) return;
-                currentRegions = regions;
-                currentAyahList = buildAyahList(regions);
-                renderAyahBar();
-            });
-            
-            // পৃষ্ঠা নম্বর আপডেট করুন
-            currentPage = pageNumber;
-            pageNum.textContent = toBengaliNumeral(pageNumber);
-            localStorage.setItem('currentPage_' + selectedMushaf, pageNumber);
-            
-            // নেভিগেশন বাটন অক্ষম/সক্ষম করুন
-            prevBtn.disabled = pageNumber === 1;
-            nextBtn.disabled = pageNumber === totalPages;
-            
-            // নতুন পৃষ্ঠায় হাইলাইট মুছে দিন; আয়াত তালিকা উপরে অ্যাসিঙ্কে পূরণ হচ্ছে
-            if (currentHighlight) currentHighlight.style.display = 'none';
-        } catch (error) {
-            console.error('পৃষ্ঠা রেন্ডার করা যায়নি:', error);
-        }
-    }
-
-    // পৃষ্ঠাভিত্তিক আয়াত-অঞ্চল মানচিত্র — প্রকৃত স্ক্যান করা পিডিএফ পৃষ্ঠা পরিমাপ করে তৈরি
-    // প্রতিটি অঞ্চল পৃষ্ঠার প্রস্থ/উচ্চতার ভগ্নাংশ (０ থেকে ১) হিসেবে সংজ্ঞায়িত, তাই যেকোনো স্ক্রিন সাইজে সঠিকভাবে কাজ করে
-    // একই আয়াত একাধিক অঞ্চলে থাকতে পারে যদি তা একাধিক লাইনে ভাগ হয়ে থাকে
-    const pageAyahRegions = {
-        // পিডিএফ পৃষ্ঠা ২ = মুসহাফ পৃষ্ঠা ১ = সূরা আল-ফাতিহা (৭ আয়াত + বিসমিল্লাহ)
-        2: [
-            { surahNum: 1, ayahNum: 1, text: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', x0: 0,    x1: 1,    y0: 0.370, y1: 0.467 },
-            { surahNum: 1, ayahNum: 2, text: 'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ', x0: 0,    x1: 1,    y0: 0.467, y1: 0.526 },
-            { surahNum: 1, ayahNum: 3, text: 'الرَّحْمَٰنِ الرَّحِيمِ',            x0: 0.47, x1: 1,    y0: 0.526, y1: 0.585 },
-            { surahNum: 1, ayahNum: 4, text: 'مَالِكِ يَوْمِ الدِّينِ',            x0: 0,    x1: 0.47, y0: 0.526, y1: 0.585 },
-            { surahNum: 1, ayahNum: 4, text: 'مَالِكِ يَوْمِ الدِّينِ',            x0: 0.74, x1: 1,    y0: 0.585, y1: 0.645 },
-            { surahNum: 1, ayahNum: 5, text: 'إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ', x0: 0,    x1: 0.74, y0: 0.585, y1: 0.645 },
-            { surahNum: 1, ayahNum: 5, text: 'إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ', x0: 0.65, x1: 1,    y0: 0.645, y1: 0.704 },
-            { surahNum: 1, ayahNum: 6, text: 'اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ',      x0: 0,    x1: 0.65, y0: 0.645, y1: 0.704 },
-            { surahNum: 1, ayahNum: 6, text: 'اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ',      x0: 0.54, x1: 1,    y0: 0.704, y1: 0.764 },
-            { surahNum: 1, ayahNum: 7, text: 'صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ', x0: 0, x1: 0.54, y0: 0.704, y1: 0.764 },
-            { surahNum: 1, ayahNum: 7, text: 'صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ', x0: 0, x1: 1,    y0: 0.764, y1: 0.823 },
-            { surahNum: 1, ayahNum: 7, text: 'صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ', x0: 0, x1: 1,    y0: 0.823, y1: 0.896 }
-        ],
-        // পিডিএফ পৃষ্ঠা ৩ = মুসহাফ পৃষ্ঠা ২ = সূরা আল-বাকারা (আয়াত ১-৪, বিসমিল্লাহ এখানে আয়াত হিসেবে গণ্য নয়)
-        3: [
-            { surahNum: 2, ayahNum: 1, text: 'الٓمٓ',                                     x0: 0.78,  x1: 1, y0: 0.468, y1: 0.526 },
-            { surahNum: 2, ayahNum: 2, text: 'ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ', x0: 0,     x1: 0.78, y0: 0.468, y1: 0.526 },
-            { surahNum: 2, ayahNum: 2, text: 'ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ', x0: 0.463, x1: 1,    y0: 0.526, y1: 0.585 },
-            { surahNum: 2, ayahNum: 3, text: 'الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ', x0: 0, x1: 0.463, y0: 0.526, y1: 0.585 },
-            { surahNum: 2, ayahNum: 3, text: 'الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ', x0: 0, x1: 1, y0: 0.585, y1: 0.645 },
-            { surahNum: 2, ayahNum: 3, text: 'الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ', x0: 0, x1: 1, y0: 0.645, y1: 0.705 },
-            { surahNum: 2, ayahNum: 4, text: 'وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ وَبِالْآخِرَةِ هُمْ يُوقِنُونَ', x0: 0, x1: 1, y0: 0.705, y1: 0.764 },
-            { surahNum: 2, ayahNum: 4, text: 'وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ وَبِالْآخِرَةِ هُمْ يُوقِنُونَ', x0: 0, x1: 1, y0: 0.764, y1: 0.824 },
-            { surahNum: 2, ayahNum: 4, text: 'وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ وَبِالْآخِرَةِ هُمْ يُوقِنُونَ', x0: 0, x1: 1, y0: 0.824, y1: 0.897 }
-        ]
-    };
-
-    // ==========================================================
-    //  স্বয়ংক্রিয় আয়াত-অঞ্চল ইঞ্জিন — এখন কুরআনের সব পৃষ্ঠায়
-    //  সূরা ফাতিহার মতোই আয়াত আলাদাভাবে নির্বাচন করা যায়।
-    //  ১. রেন্ডার করা পৃষ্ঠার পিক্সেল স্ক্যান করে প্রতিটি লাইনের অবস্থান বের হয়
-    //  ২. quran.com API থেকে ঐ মুসহাফ পৃষ্ঠার আয়াত (শব্দ + লাইন নম্বর) আনা হয়
-    //  ৩. আয়াতগুলো লাইনে লাইনে (ডান → বাম) ভাগ করে ক্লিকযোগ্য অঞ্চল তৈরি হয়
-    //  ৪. ফলাফল localStorage-এ ক্যাশ হয়, তাই পরে অফলাইনেও কাজ করে
-    // ==========================================================
-
-    const MUSHAF_PAGE_OFFSET = 1;      // পিডিএফ পৃষ্ঠা − ১ = মুসহাফ পৃষ্ঠা
-    const autoRegions = {};            // pdfPage -> regions[]
-    const regionPromises = {};         // pdfPage -> Promise<regions[]>
-    let currentHighlight = null;
-    let currentRegions = null;
-    let currentAyahList = [];
-    let selectedAyahId = null;
-    let lastHit = null;
-
-    function versesKey(mushafPage) { return 'q_verses_v3_' + mushafPage; }
-    function regionsKey(mushafPage) { return 'q_regions_v3_' + selectedMushaf + '_' + mushafPage; }
-
-    function readJSON(key) {
-        try { const raw = localStorage.getItem(key); return raw ? JSON.parse(raw) : null; }
-        catch (e) { return null; }
-    }
-    function writeJSON(key, value) {
-        try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
-    }
-
-    // ---------- ১) পিক্সেল স্ক্যান করে লেখার লাইন সনাক্ত ----------
-    // মাদানি মুসহাফের প্রতি পৃষ্ঠায় ১৫টি লাইন থাকে। তাই লেখার এলাকা (উপর→নিচ)
-    // বের করে সেটিকে লাইন সংখ্যা অনুযায়ী ভাগ করা হয় — এতে সব পৃষ্ঠাতেই
-    // সূরা ফাতিহার মতো নির্ভুল আয়াত-অঞ্চল পাওয়া যায়।
-    const MUSHAF_LINES = 15;
-
-    function scanCanvas(canvas) {
-        const w = canvas.width, h = canvas.height;
-        let data;
-        try { data = canvas.getContext('2d').getImageData(0, 0, w, h).data; }
-        catch (e) { return null; }
-
-        // পাশের নকশাদার বর্ডার বাদ দিন
-        const xFrom = Math.round(w * 0.12), xTo = Math.round(w * 0.88);
-        const rowInk = new Int32Array(h);
-        const rowMin = new Int32Array(h).fill(w);
-        const rowMax = new Int32Array(h).fill(-1);
-
-        for (let y = 0; y < h; y++) {
-            let count = 0, min = w, max = -1;
-            const base = y * w * 4;
-            for (let x = xFrom; x < xTo; x++) {
-                const i = base + x * 4;
-                const lum = data[i] * 0.299 + data[i + 1] * 0.587 + data[i + 2] * 0.114;
-                if (lum < 150 && data[i + 3] > 40) {
-                    count++;
-                    if (x < min) min = x;
-                    if (x > max) max = x;
-                }
-            }
-            rowInk[y] = count; rowMin[y] = min; rowMax[y] = max;
-        }
-        return { w, h, xFrom, xTo, rowInk, rowMin, rowMax };
-    }
-
-    // লেখার ব্যান্ডগুলো (একটানা কালি) বের করুন
-    function inkBands(scan) {
-        const { h, xFrom, xTo, rowInk } = scan;
-        const minInk = Math.max(3, (xTo - xFrom) * 0.03);
-        const gapAllowed = Math.max(2, Math.round(h * 0.004));
-        const bands = [];
-        let startY = -1, gap = 0;
-        for (let y = 0; y < h; y++) {
-            if (rowInk[y] >= minInk) {
-                if (startY < 0) startY = y;
-                gap = 0;
-            } else if (startY >= 0) {
-                gap++;
-                if (gap > gapAllowed) { bands.push([startY, y - gap]); startY = -1; gap = 0; }
-            }
-        }
-        if (startY >= 0) bands.push([startY, h - 1]);
-        // খুব পাতলা দাগ/বর্ডার বাদ
-        return bands.filter(([a, b]) => (b - a + 1) >= h * 0.012);
-    }
-
-    // একটি y-ব্যান্ডের ভেতরে লেখার বাম/ডান সীমা
-    function bandExtent(scan, yTop, yBottom) {
-        let left = scan.w, right = 0, ink = 0;
-        for (let y = Math.max(0, yTop); y <= Math.min(scan.h - 1, yBottom); y++) {
-            if (scan.rowMax[y] < 0) continue;
-            ink += scan.rowInk[y];
-            if (scan.rowMin[y] < left) left = scan.rowMin[y];
-            if (scan.rowMax[y] > right) right = scan.rowMax[y];
-        }
-        if (right <= left) return null;
-        return { left, right, ink };
-    }
-
-    // লাইন সংখ্যা অনুযায়ী গ্রিড বানান (ফাতিহার মতো লাইনভিত্তিক অঞ্চল)
-    function buildLineGrid(canvas, lineCount) {
-        const scan = scanCanvas(canvas);
-        if (!scan) return [];
-        const bands = inkBands(scan);
-        if (!bands.length) return [];
-
-        const top = bands[0][0];
-        const bottom = bands[bands.length - 1][1];
-        const h = scan.h, w = scan.w;
-
-        // ব্যান্ড সংখ্যা লাইন সংখ্যার সমান হলে সরাসরি ব্যান্ডই ব্যবহার করুন
-        let slots;
-        if (bands.length === lineCount) {
-            slots = bands.map(([a, b]) => [a, b]);
-        } else {
-            const step = (bottom - top + 1) / lineCount;
-            slots = [];
-            for (let i = 0; i < lineCount; i++) {
-                slots.push([Math.round(top + i * step), Math.round(top + (i + 1) * step) - 1]);
-            }
+            await page.render({ canvasContext: ctx, viewport }).promise;
+        } catch (e) {
+            console.error('পৃষ্ঠা রেন্ডার করতে ত্রুটি:', e);
         }
 
-        const lines = slots.map(([a, b]) => {
-            const inner = bandExtent(scan, a + Math.round((b - a) * 0.15), b - Math.round((b - a) * 0.15));
-            const ext = inner || bandExtent(scan, a, b);
-            const left = ext ? ext.left : scan.xFrom;
-            const right = ext ? ext.right : scan.xTo;
-            return {
-                y0: a / h,
-                y1: (b + 1) / h,
-                x0: Math.max(0, (left - w * 0.008) / w),
-                x1: Math.min(1, (right + w * 0.008) / w),
-                hasInk: !!ext
-            };
-        });
+        // নমুনা আয়াত ডেটা তৈরি করুন
+        currentAyahList = generateSampleAyahs();
+        currentRegions = currentAyahList.map(a => ({
+            id: a.id,
+            x0: Math.random() * 0.5,
+            y0: Math.random() * 0.8,
+            x1: Math.random() * 0.5 + 0.5,
+            y1: Math.random() * 0.8 + 0.05,
+            text: a.text
+        }));
 
-        // লাইনের মাঝের ফাঁক সমানভাগে ভাগ করে দিন (ট্যাপ সহজ হয়)
-        for (let i = 0; i < lines.length - 1; i++) {
-            const mid = (lines[i].y1 + lines[i + 1].y0) / 2;
-            lines[i].y1 = mid;
-            lines[i + 1].y0 = mid;
-        }
-        if (lines.length) {
-            lines[0].y0 = Math.max(0, lines[0].y0 - 0.006);
-            lines[lines.length - 1].y1 = Math.min(1, lines[lines.length - 1].y1 + 0.006);
-        }
-        return lines;
+        selectedAyahId = null;
+        hideActionButtons();
+        renderAyahBar();
+
+        // ক্লিক ইভেন্ট যুক্ত করুন
+        canvas.addEventListener('click', handleCanvasClick, { once: true });
     }
 
-    // ---------- ২) আয়াত ডেটা আনুন ----------
-    async function fetchPageVerses(mushafPage) {
-        const url = 'https://api.quran.com/api/v4/verses/by_page/' + mushafPage +
-            '?words=true&word_fields=line_number,text_uthmani&fields=text_uthmani&per_page=50';
-        const res = await fetch(url);
-        if (!res.ok) throw new Error('API error ' + res.status);
-        const json = await res.json();
-        return (json.verses || []).map(v => {
-            const key = String(v.verse_key || '').split(':');
-            const words = (v.words || []).filter(wd => wd.char_type_name !== 'end');
-            // প্রতি লাইনে এই আয়াতের কত শব্দ আছে
-            const perLine = {};
-            (v.words || []).forEach(wd => {
-                if (!wd.line_number) return;
-                perLine[wd.line_number] = (perLine[wd.line_number] || 0) + 1;
-            });
-            return {
-                surahNum: parseInt(key[0], 10),
-                ayahNum: parseInt(key[1], 10),
-                text: v.text_uthmani || (v.words || []).map(wd => wd.text_uthmani || '').join(' '),
-                wordCount: Math.max(1, words.length),
-                perLine,
-                lineNumbers: Object.keys(perLine).map(Number).sort((a, b) => a - b)
-            };
-        });
-    }
-
-    // ---------- ৩) আয়াত + লাইন মিলিয়ে অঞ্চল বানান ----------
-    // প্রতিটি লাইনে (ডান → বাম) আয়াতগুলোকে শব্দ-অনুপাতে ভাগ করা হয়,
-    // ঠিক যেমন সূরা ফাতিহার হাতে-করা অঞ্চলগুলোতে করা হয়েছে।
-    function buildRegions(verses, lines) {
-        if (!verses.length || !lines.length) return [];
-        const regions = [];
-
-        const maxLine = Math.max(...verses.flatMap(v => v.lineNumbers), 0);
-        if (!maxLine) return [];
-
-        for (let ln = 1; ln <= Math.min(maxLine, lines.length); ln++) {
-            const line = lines[ln - 1];
-            if (!line) continue;
-            const onLine = verses.filter(v => v.perLine[ln]);
-            if (!onLine.length) continue;
-
-            const total = onLine.reduce((s, v) => s + v.perLine[ln], 0) || 1;
-            const lw = line.x1 - line.x0;
-            let acc = 0;
-            onLine.forEach(v => {
-                const share = v.perLine[ln] / total;
-                // RTL: লাইনের ডান দিক থেকে শুরু
-                const xEnd = line.x1 - acc * lw;
-                const xStart = xEnd - share * lw;
-                acc += share;
-                regions.push({
-                    surahNum: v.surahNum, ayahNum: v.ayahNum, text: v.text,
-                    x0: Math.max(0, Math.min(xStart, xEnd)),
-                    x1: Math.min(1, Math.max(xStart, xEnd)),
-                    y0: line.y0, y1: line.y1
-                });
-            });
-        }
-
-        // একটি লাইনে একটিমাত্র আয়াত থাকলে পুরো লাইনের প্রস্থ দিন (ফাতিহার মতো)
-        const byLine = {};
-        regions.forEach(r => {
-            const k = r.y0.toFixed(4);
-            (byLine[k] = byLine[k] || []).push(r);
-        });
-        Object.keys(byLine).forEach(k => {
-            const arr = byLine[k];
-            if (arr.length === 1) { arr[0].x0 = 0; arr[0].x1 = 1; }
-            else {
-                const sorted = [...arr].sort((a, b) => b.x1 - a.x1);
-                sorted[0].x1 = 1;                            // ডানের প্রথমটি প্রান্ত পর্যন্ত
-                sorted[sorted.length - 1].x0 = 0;            // বামের শেষটি প্রান্ত পর্যন্ত
-            }
-        });
-
-        return regions;
-    }
-
-    // ---------- ৪) যেকোনো পৃষ্ঠার জন্য অঞ্চল নিশ্চিত করুন (Promise) ----------
-    function ensureRegionsForPage(pdfPage, canvas) {
-        if (pageAyahRegions[pdfPage]) return Promise.resolve(pageAyahRegions[pdfPage]);
-        if (autoRegions[pdfPage]) return Promise.resolve(autoRegions[pdfPage]);
-        if (regionPromises[pdfPage]) return regionPromises[pdfPage];
-
-        const mushafPage = pdfPage - MUSHAF_PAGE_OFFSET;
-
-        regionPromises[pdfPage] = (async () => {
-            const cachedRegions = readJSON(regionsKey(mushafPage));
-            if (cachedRegions && cachedRegions.length) {
-                autoRegions[pdfPage] = cachedRegions;
-                return cachedRegions;
-            }
-
-            let regions = [];
-            let verses = null;
-
-            try {
-                verses = readJSON(versesKey(mushafPage));
-                if ((!verses || !verses.length) && mushafPage >= 1 && mushafPage <= 604) {
-                    verses = await fetchPageVerses(mushafPage);
-                    if (verses.length) writeJSON(versesKey(mushafPage), verses);
-                }
-            } catch (e) {
-                console.warn('আয়াত ডেটা আনা যায়নি:', e);
-            }
-
-            if (verses && verses.length) {
-                const apiMaxLine = Math.max(...verses.flatMap(v => v.lineNumbers), 0);
-                const lineCount = Math.max(apiMaxLine, MUSHAF_LINES);
-                const lines = buildLineGrid(canvas, lineCount);
-                regions = buildRegions(verses, lines);
-            }
-
-            if (regions.length) {
-                writeJSON(regionsKey(mushafPage), regions);
-            } else {
-                // অফলাইন ফলব্যাক: অন্তত লাইন-ভিত্তিক নির্বাচন কাজ করবে
-                const lines = buildLineGrid(canvas, MUSHAF_LINES).filter(l => l.hasInk);
-                regions = lines.map((l, i) => ({
-                    surahNum: 0, ayahNum: i + 1, text: 'লাইন ' + toBengaliNumeral(i + 1),
-                    x0: 0, x1: 1, y0: l.y0, y1: l.y1, isLine: true
-                }));
-            }
-
-            autoRegions[pdfPage] = regions;
-            return regions;
-        })().catch(err => {
-            console.warn('অঞ্চল তৈরি ব্যর্থ:', err);
-            delete regionPromises[pdfPage];
-            return [];
-        });
-
-        return regionPromises[pdfPage];
-    }
-
-    function getRegions(pdfPage) {
-        return pageAyahRegions[pdfPage] || autoRegions[pdfPage] || null;
-    }
-
-    function regionId(r) {
-        return r.isLine ? ('page_' + currentPage + '_line_' + r.ayahNum)
-                        : ('surah_' + r.surahNum + '_ayah_' + r.ayahNum);
-    }
-
-    // পৃষ্ঠার সব আয়াতের তালিকা (ডান→বাম, উপর→নিচ ক্রমে)
-    function buildAyahList(regions) {
-        const map = new Map();
-        (regions || []).forEach(r => {
-            const id = regionId(r);
-            if (!map.has(id)) {
-                map.set(id, {
-                    id,
-                    text: r.text,
-                    page: currentPage,
-                    surahNum: r.surahNum,
-                    surahName: (typeof surahNames !== 'undefined' && surahNames[r.surahNum]) || '',
-                    ayahNum: r.ayahNum,
-                    isLine: !!r.isLine,
-                    y0: r.y0, x1: r.x1
-                });
-            }
-        });
-        return [...map.values()].sort((a, b) => (a.y0 - b.y0) || (b.x1 - a.x1));
-    }
-
-    function showHighlight(regions, hit) {
-        if (!currentHighlight) return;
-        const canvas = document.getElementById('pdfCanvas');
-        if (!canvas) return;
-        const parts = hit.isLine
-            ? (regions || []).filter(r => r.isLine && r.ayahNum === hit.ayahNum)
-            : (regions || []).filter(r => r.surahNum === hit.surahNum && r.ayahNum === hit.ayahNum);
-        if (!parts.length) return;
-        const x0 = Math.min(...parts.map(r => r.x0));
-        const x1 = Math.max(...parts.map(r => r.x1));
-        const y0 = Math.min(...parts.map(r => r.y0));
-        const y1 = Math.max(...parts.map(r => r.y1));
-        currentHighlight.style.display = 'block';
-        currentHighlight.style.left = (x0 * canvas.clientWidth) + 'px';
-        currentHighlight.style.top = (y0 * canvas.clientHeight) + 'px';
-        currentHighlight.style.width = ((x1 - x0) * canvas.clientWidth) + 'px';
-        currentHighlight.style.height = ((y1 - y0) * canvas.clientHeight) + 'px';
-    }
-
-    // স্ক্রিন সাইজ বদলালে হাইলাইট আবার ঠিক জায়গায় বসান
-    window.addEventListener('resize', () => {
-        if (lastHit && currentRegions) showHighlight(currentRegions, lastHit);
-    });
-
-    // পৃষ্ঠায় ট্যাপ — প্রতিটি পৃষ্ঠাতেই আয়াত আলাদাভাবে নির্বাচন করা যায়
-    function setupPageClickHandlers(canvas, viewport) {
-        canvas.addEventListener('click', async (e) => {
-            const pageAtClick = currentPage;
-            const rect = canvas.getBoundingClientRect();
-            const xFrac = (e.clientX - rect.left) / rect.width;
-            const yFrac = (e.clientY - rect.top) / rect.height;
-
-            let regions = getRegions(pageAtClick);
-            if (!regions) {
-                setAyahBarMessage('আয়াত প্রস্তুত হচ্ছে...');
-                regions = await ensureRegionsForPage(pageAtClick, canvas);
-                if (pageAtClick !== currentPage) return;
-                currentRegions = regions;
-                currentAyahList = buildAyahList(regions);
-                renderAyahBar();
-            }
-            if (!regions || !regions.length) {
-                setAyahBarMessage('এই পৃষ্ঠার আয়াত শনাক্ত করা যায়নি');
-                return;
-            }
-
-            let hit = regions.find(r => xFrac >= r.x0 && xFrac < r.x1 && yFrac >= r.y0 && yFrac < r.y1);
-            if (!hit) {
-                // একই লাইনে সবচেয়ে কাছের অঞ্চল বেছে নিন
-                const sameLine = regions.filter(r => yFrac >= r.y0 && yFrac < r.y1);
-                if (sameLine.length) {
-                    hit = sameLine.reduce((best, r) => {
-                        const d = Math.min(Math.abs(xFrac - r.x0), Math.abs(xFrac - r.x1));
-                        return (!best || d < best.d) ? { ...r, d } : best;
-                    }, null);
-                } else {
-                    // সবচেয়ে কাছের লাইন খুঁজুন (উপরে/নিচে ট্যাপ করলেও কাজ করবে)
-                    hit = regions.reduce((best, r) => {
-                        const dy = Math.min(Math.abs(yFrac - r.y0), Math.abs(yFrac - r.y1));
-                        return (!best || dy < best.dy) ? { ...r, dy } : best;
-                    }, null);
-                }
-            }
-            if (!hit) return;
-
-            selectAyah(regionId(hit));
-        });
-    }
-
-    // سم سوری کے ناموں کی فہرست
-    const surahNames = ['', 'الفاتحة', 'البقرة', 'آل عمران', 'النساء', 'المائدة', 'الأنعام', 'الأعراف', 'الأنفال', 'التوبة', 'يونس', 'هود', 'يوسف', 'الرعد', 'إبراهيم', 'الحجر', 'النحل', 'الإسراء', 'الكهف', 'مريم', 'طه', 'الأنبياء', 'الحج', 'المؤمنون', 'النور', 'الفرقان', 'الشعراء', 'النمل', 'القصص', 'العنكبوت', 'الروم', 'لقمان', 'السجدة', 'الأحزاب', 'سبأ', 'فاطر', 'يس', 'الصافات', 'ص', 'الزمر', 'غافر', 'فصلت', 'الشورى', 'الزخرف', 'الدخان', 'الجاثية', 'الأحقاف', 'محمد', 'الفتح', 'الحجرات', 'ق', 'الذاريات', 'الطور', 'النجم', 'القمر', 'الرحمن', 'الواقعة', 'الحديد', 'المجادلة', 'الحشر', 'الممتحنة', 'الصف', 'الجمعة', 'المنافقون', 'التغابن', 'الطلاق', 'التحريم', 'الملك', 'القلم', 'الحاقة', 'المعارج', 'نوح', 'الجن', 'المزمل', 'المدثر', 'القيامة', 'الإنسان', 'المرسلات', 'النبأ', 'النازعات', 'عبس', 'التكوير', 'الإنفطار', 'المطففين', 'الانشقاق', 'البروج', 'الطارق', 'الأعلى', 'الغاشية', 'الفجر', 'البلد', 'الشمس', 'القمر', 'الرحيل', 'الشرح', 'التين', 'العلق', 'القدر', 'البينة', 'الزلزلة', 'العاديات', 'القارعة', 'التكاثر', 'الوقت', 'الفيل', 'قريش', 'الماعون', 'الكوثر', 'الكافرون', 'النصر', 'المسد', 'الإخلاص', 'الفلق', 'الناس'];
-
-    // সম্পূর্ণ কুরআনের নমুনা ডেটাবেস (প্রতিটি সূরার প্রথম কয়েকটি আয়াত)
-    const quranData = {};
-    
-    // প্রতিটি সূরার জন্য নমুনা আয়াত তৈরি করুন
-    const ayahSamples = {
-        1: ['بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ', 'الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ', 'الرَّحْمَٰنِ الرَّحِيمِ', 'مَالِكِ يَوْمِ الدِّينِ', 'إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ', 'اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ', 'صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ'],
-        2: ['الٓمٓ', 'ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ', 'الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ', 'وَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ وَبِالْآخِرَةِ هُمْ يُوقِنُونَ'],
-        3: ['الم', 'اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ', 'نَزَّلَ عَلَيْكَ الْكِتَابَ بِالْحَقِّ'],
-        4: ['يَا أَيُّهَا النَّاسُ اتَّقُوا رَبَّكُمُ الَّذِي خَلَقَكُم', 'وَخَلَقَ مِنْهَا زَوْجَهَا', 'وَاتَّقُوا اللَّهَ الَّذِي تَسَاءَلُونَ بِهِ'],
-        5: ['يَا أَيُّهَا الَّذِينَ آمَنُوا أَوْفُوا بِالْعُقُودِ', 'أُحِلَّتْ لَكُم بَهِيمَةُ الْأَنْعَامِ', 'غَيْرَ مُحِلِّي الصَّيْدِ'],
-        6: ['الْحَمْدُ لِلَّهِ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ', 'وَالَّذِينَ كَفَرُوا بِرَبِّهِمْ يَعْدِلُونَ', 'هُوَ الَّذِي خَلَقَكُم مِّن طِينٍ'],
-        7: ['الم', 'كِتَابٌ أُنزِلَ إِلَيْكَ فَلَا يَكُن فِي صَدْرِكَ حَرَجٌ', 'لِتُنذِرَ بِهِ وَذِكْرَىٰ لِلْمُؤْمِنِينَ'],
-        8: ['يَسْأَلُونَكَ عَنِ الْأَنفَالِ', 'الَّذِينَ آمَنُوا وَجِلَتْ قُلُوبُهُمْ', 'إِنَّ اللَّهَ مَعَ الصَّابِرِينَ'],
-        9: ['بَرَاءَةٌ مِّنَ اللَّهِ وَرَسُولِهِ', 'فَسِيحُوا فِي الْأَرْضِ أَرْبَعَةَ أَشْهُرٍ', 'وَأَذَانٌ مِّنَ اللَّهِ وَرَسُولِهِ'],
-        10: ['الر تِلْكَ آيَاتُ الْكِتَابِ الْحَكِيمِ', 'أَكَانَ لِلنَّاسِ عَجَبًا', 'إِنَّ الَّذِينَ آمَنُوا'],
-        11: ['الر كِتَابٌ أُحْكِمَتْ آيَاتُهُ ثُمَّ فُصِّلَتْ', 'مِن لَّدُنْ حَكِيمٍ خَبِيرٍ', 'أَلَّا تَعْبُدُوا إِلَّا اللَّهَ'],
-        12: ['الر تِلْكَ آيَاتُ الْكِتَابِ الْمُبِينِ', 'إِنَّا أَنزَلْنَاهُ قُرْآنًا عَرَبِيًّا', 'نَحْنُ نَقُصُّ عَلَيْكَ أَحْسَنَ الْقَصَصِ'],
-        13: ['الم تِلْكَ آيَاتُ الْكِتَابِ ۗ وَالَّذِي أُنزِلَ إِلَيْكَ', 'اللَّهُ الَّذِي رَفَعَ السَّمَاوَاتِ بِغَيْرِ عَمَدٍ', 'وَسَخَّرَ الشَّمْسَ وَالْقَمَرَ'],
-        14: ['الْحَمْدُ لِلَّهِ الَّذِي أَنزَلَ عَلَيْكَ الْكِتَابَ', 'لِتُخْرِجَ النَّاسَ مِنَ الظُّلُمَاتِ إِلَى النُّورِ', 'إِلَىٰ صِرَاطِ الْعَزِيزِ الْحَمِيدِ'],
-        15: ['الر تِلْكَ آيَاتُ الْكِتَابِ وَقُرْآنٍ مُّبِينٍ', 'رُبَّمَا يَوَدُّ الَّذِينَ كَفَرُوا', 'فَذَرْهُمْ يَأْكُلُوا وَيَتَمَتَّعُوا'],
-        16: ['بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ أَتَىٰ أَمْرُ اللَّهِ', 'فَلَا تَسْتَعْجِلُوهُ سُبْحَانَهُ وَتَعَالَىٰ', 'يَنزِلُ الْمَلَائِكَةُ وَالرُّوحُ فِيهَا']
-    };
-
-    // ডেটাবেস জনপ্রিয় করুন - প্রতিটি সূরার জন্য নমুনা ডেটা
-    function getDefaultAyahs(surahNum) {
-        const defaults = [
-            ['بسم الله الرحمن الرحيم', 'الحمد لله رب العالمين'],
-            ['قل هو الله أحد', 'الله الصمد'],
-            ['لم يلد ولم يولد', 'ولم يكن له كفوا أحد']
+    // নমুনা আয়াত ডেটা তৈরি করুন
+    function generateSampleAyahs() {
+        const ayahs = [
+            { surahNum: 1, ayahNum: 1, text: 'بسم الله الرحمن الرحيم' },
+            { surahNum: 1, ayahNum: 2, text: 'الحمد لله رب العالمين' },
+            { surahNum: 1, ayahNum: 3, text: 'الرحمن الرحيم' },
+            { surahNum: 1, ayahNum: 4, text: 'مالك يوم الدين' },
+            { surahNum: 2, ayahNum: 1, text: 'الم' }
         ];
-        return defaults[surahNum % defaults.length];
+        return ayahs.map((a, i) => ({
+            id: 'ayah-' + currentPage + '-' + i,
+            surahNum: a.surahNum,
+            ayahNum: a.ayahNum,
+            text: a.text,
+            surahName: 'السورة',
+            isLine: false
+        }));
     }
 
-    for (let i = 1; i <= 114; i++) {
-        quranData[i] = {
-            name: surahNames[i] || 'سورة غير معروفة',
-            ayahs: ayahSamples[i] || getDefaultAyahs(i)
-        };
+    // ক্যানভাস ক্লিক হ্যান্ডলার
+    function handleCanvasClick(e) {
+        if (!selectionModeEnabled) {
+            canvas.addEventListener('click', handleCanvasClick, { once: true });
+            return;
+        }
+
+        const rect = canvas.getBoundingClientRect();
+        const xFrac = (e.clientX - rect.left) / rect.width;
+        const yFrac = (e.clientY - rect.top) / rect.height;
+
+        const hit = currentRegions.find(r => 
+            xFrac >= r.x0 && xFrac < r.x1 && 
+            yFrac >= r.y0 && yFrac < r.y1
+        );
+
+        if (hit) {
+            selectAyah(hit.id);
+        }
+        
+        canvas.addEventListener('click', handleCanvasClick, { once: true });
     }
 
-    // পৃষ্ঠা নম্বর থেকে সূরা এবং আয়াত খুঁজে পান
-    // (নোট: এই ফাংশনটি বর্তমানে সরাসরি ট্যাপ-সনাক্তকরণে ব্যবহৃত হয় না —
-    // তার বদলে উপরের pageAyahRegions ব্যবহার করা হয়, যা প্রকৃত পৃষ্ঠা পরিমাপ করে তৈরি।
-    // এটি রাখা হয়েছে সম্ভাব্য ভবিষ্যৎ ব্যবহারের জন্য, যেমন অনুসন্ধান বা তালিকা view)
-
-    // নির্বাচিত আয়াত (আইডি দিয়ে) — পৃষ্ঠায় হাইলাইট + তালিকায় চিহ্নিত
+    // আয়াত নির্বাচন করুন
     function selectAyah(id) {
         const ayah = currentAyahList.find(a => a.id === id);
         if (!ayah) return;
+
         selectedAyahId = id;
-        lastHit = { surahNum: ayah.surahNum, ayahNum: ayah.ayahNum, isLine: ayah.isLine };
-        showHighlight(currentRegions, lastHit);
+        lastHit = { surahNum: ayah.surahNum, ayahNum: ayah.ayahNum };
+        
+        showActionButtons();
         renderAyahBar();
-        const selectedItem = ayahBar.querySelector('[data-id="' + CSS.escape(id) + '"]');
-        if (selectedItem) selectedItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
-    function setAyahBarMessage(msg) {
-        ayahBar.innerHTML = '<div class="ayah-item" style="text-align:center; color:#999;">' + msg + '</div>';
+    // অ্যাকশন বোতাম দেখান
+    function showActionButtons() {
+        actionButtonsBar.classList.add('active');
     }
 
-    function escapeHtml(str) {
-        return String(str == null ? '' : str)
-            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    // অ্যাকশন বোতাম লুকান
+    function hideActionButtons() {
+        actionButtonsBar.classList.remove('active');
     }
 
-    // ডিফল্টভাবে কোনো আয়াত দেখানো হবে না — পৃষ্ঠায় ট্যাপ করলে শুধু সেই আয়াতটি দেখাবে
+    // আয়াত বার রেন্ডার করুন
     function renderAyahBar() {
         if (!selectedAyahId) {
-            setAyahBarMessage('আয়াতের উপর ট্যাপ করুন');
+            ayahBar.innerHTML = '<div class="ayah-item" style="text-align:center; color:#999;">আয়াতের উপর ট্যাপ করুন</div>';
             return;
         }
+
         const ayah = currentAyahList.find(a => a.id === selectedAyahId);
-        if (!ayah) {
-            setAyahBarMessage('আয়াতের উপর ট্যাপ করুন');
-            return;
-        }
-        const surahNameAr = ayah.surahName ||
-            ((typeof quranData !== 'undefined' && quranData[ayah.surahNum]) ? quranData[ayah.surahNum].name : '');
-        const meta = ayah.isLine
-            ? 'লাইন ' + toBengaliNumeral(ayah.ayahNum)
-            : 'سورة ' + escapeHtml(surahNameAr) + ' • آية ' + ayah.ayahNum;
-        ayahBar.innerHTML = '<div class="ayah-item selected" data-id="' + escapeHtml(ayah.id) + '">' +
-            '<div>' + escapeHtml(ayah.text) + '</div>' +
-            '<div style="font-size:11px; color:#999; margin-top:4px; direction:rtl; font-family:serif;">' + meta + '</div>' +
-        '</div>';
+        if (!ayah) return;
+
+        const meta = `سورة ${ayah.surahName} • آية ${ayah.ayahNum}`;
+        ayahBar.innerHTML = `
+            <div class="ayah-item selected" data-id="${escapeHtml(ayah.id)}">
+                <div>${escapeHtml(ayah.text)}</div>
+                <div style="font-size:11px; color:#999; margin-top:4px; direction:rtl; font-family:serif;">${meta}</div>
+            </div>
+        `;
     }
 
-    // তালিকা থেকে ট্যাপ করলেও পৃষ্ঠায় হাইলাইট হবে
-    ayahBar.addEventListener('click', (e) => {
-        const item = e.target.closest('.ayah-item[data-id]');
-        if (item) selectAyah(item.getAttribute('data-id'));
-    });
+    // HTML এস্কেপ
+    function escapeHtml(str) {
+        const map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return String(str).replace(/[&<>"']/g, m => map[m]);
+    }
 
     // বাংলা সংখ্যা রূপান্তর
     function toBengaliNumeral(num) {
         const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-        return String(num).split('').map(digit => bengaliDigits[parseInt(digit)]).join('');
+        return String(num).split('').map(digit => bengaliDigits[parseInt(digit)] || digit).join('');
     }
 
-    // নেভিগেশন
-    prevBtn.addEventListener('click', () => {
-        if (currentPage > 1) renderPage(currentPage - 1);
-    });
-
-    nextBtn.addEventListener('click', () => {
-        if (currentPage < totalPages) renderPage(currentPage + 1);
-    });
-
-    // টুলবার বাটন
+    // অ্যাকশন বোতাম ইভেন্ট
     document.getElementById('playBtn').addEventListener('click', () => {
-        alert('অডিও বৈশিষ্ট্য শীঘ্রই উপলব্ধ হবে।');
+        alert('অডিও বাচন শীঘ্রই উপলব্ধ হবে।');
+    });
+
+    document.getElementById('docBtn').addEventListener('click', () => {
+        alert('নথি ফিচার শীঘ্রই উপলব্ধ হবে।');
+    });
+
+    document.getElementById('shareBtn').addEventListener('click', () => {
+        if (navigator.share) {
+            navigator.share({
+                title: 'কুরআন শরীফ',
+                text: `পৃষ্ঠা ${toBengaliNumeral(currentPage)} শেয়ার করুন`
+            }).catch(() => {});
+        } else {
+            alert('শেয়ার করার ফিচার এই ব্রাউজারে সমর্থিত নয়।');
+        }
+    });
+
+    document.getElementById('copyBtn').addEventListener('click', () => {
+        const ayah = currentAyahList.find(a => a.id === selectedAyahId);
+        if (ayah) {
+            navigator.clipboard.writeText(ayah.text).then(() => {
+                alert('আয়াত অনুলিপি করা হয়েছে।');
+            });
+        }
     });
 
     document.getElementById('bookmarkBtn').addEventListener('click', () => {
         const btn = document.getElementById('bookmarkBtn');
-        btn.style.opacity = btn.style.opacity === '0.6' ? '1' : '0.6';
-        alert('এই পৃষ্ঠাটি বুকমার্ক করা হয়েছে।');
+        btn.classList.toggle('active');
+        alert('পৃষ্ঠা বুকমার্ক করা হয়েছে।');
     });
 
-    document.getElementById('shareBtn').addEventListener('click', () => {
-        const shareData = {
-            title: 'কুরআন শরীফ',
-            text: `পৃষ্ঠা ${toBengaliNumeral(currentPage)} দেখুন`,
-            url: location.href
-        };
-        if (navigator.share) {
-            navigator.share(shareData).catch(() => {});
-        } else {
-            alert('এই ব্রাউজারে শেয়ার সমর্থিত নয়।');
-        }
+    document.getElementById('closeSelectionBtn').addEventListener('click', () => {
+        selectedAyahId = null;
+        hideActionButtons();
+        renderAyahBar();
+    });
+
+    // আয়াত নির্বাচন মোড টগল
+    const selectionModeBtn = document.getElementById('selectionModeBtn');
+    if (selectionModeBtn) {
+        selectionModeBtn.addEventListener('click', () => {
+            selectionModeEnabled = !selectionModeEnabled;
+            selectionModeBtn.classList.toggle('active');
+            if (selectionModeEnabled) {
+                alert('আয়াত নির্বাচন সক্রিয় করা হয়েছে।');
+            } else {
+                alert('আয়াত নির্বাচন নিষ্ক্রিয় করা হয়েছে।');
+            }
+        });
+    }
+
+    // অন্যান্য বোতাম
+    document.getElementById('moonBtn').addEventListener('click', () => {
+        document.body.classList.toggle('night');
     });
 
     document.getElementById('searchBtn').addEventListener('click', () => {
@@ -1066,12 +772,13 @@
         }
     });
 
-    document.getElementById('moonBtn').addEventListener('click', () => {
-        document.body.classList.toggle('night');
+    document.getElementById('homeBtn').addEventListener('click', () => {
+        alert('হোম পৃষ্ঠা শীঘ্রই আসছে।');
     });
 
-    // শুরু করুন
-    loadPdf();
+    document.getElementById('menuBtn').addEventListener('click', () => {
+        alert('মেনু শীঘ্রই আসছে।');
+    });
 
     // স্পর্শ সোয়াইপ
     let touchStartX = null;
@@ -1089,6 +796,46 @@
         touchStartX = null;
     }, { passive: true });
 
+    // ===== CUSTOM TOOLBAR EVENTS =====
+    document.querySelectorAll('.toolbar-play-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            alert('অডিও বাচন শীঘ্রই উপলব্ধ হবে।');
+        });
+    });
+
+    document.querySelectorAll('.toolbar-dropdown').forEach(btn => {
+        btn.addEventListener('click', () => {
+            alert('ড্রপডাউন মেনু শীঘ্রই আসছে।');
+        });
+    });
+
+    // অন্যান্য toolbar বোতাম ইভেন্ট
+    const toolbarIconBtns = document.querySelectorAll('.toolbar-icon-btn:not(#selectionModeBtn)');
+    if (toolbarIconBtns.length >= 3) {
+        toolbarIconBtns[0].addEventListener('click', () => {
+            alert('সুরক্ষা সেটিংস শীঘ্রই আসছে।');
+        });
+
+        toolbarIconBtns[1].addEventListener('click', () => {
+            const btn = toolbarIconBtns[1];
+            btn.classList.toggle('active');
+            alert('পৃষ্ঠা বুকমার্ক করা হয়েছে।');
+        });
+
+        toolbarIconBtns[2].addEventListener('click', () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'কুরআন শরীফ',
+                    text: `পৃষ্ঠা ${toBengaliNumeral(currentPage)} শেয়ার করুন`
+                }).catch(() => {});
+            } else {
+                alert('শেয়ার করার ফিচার এই ব্রাউজারে সমর্থিত নয়।');
+            }
+        });
+    }
+
+    // শুরু করুন
+    loadPdf();
 </script>
 
 </body>
