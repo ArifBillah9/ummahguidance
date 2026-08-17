@@ -447,6 +447,201 @@
     .image-modal-close:hover {
         color: #bbb;
     }
+
+    /* ===== SURAH MODAL ===== */
+    .surah-modal {
+        display: none;
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    .surah-modal.active {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+    }
+
+    .surah-modal-content {
+        background: var(--cream);
+        width: 100%;
+        max-height: 85vh;
+        border-radius: 16px 16px 0 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    .surah-modal-header {
+        background: linear-gradient(180deg, var(--brand), var(--brand-dark));
+        color: #fff;
+        padding: 16px;
+        text-align: center;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .surah-modal-header h2 {
+        font-size: 18px;
+        flex: 1;
+    }
+
+    .surah-modal-close-btn {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 0;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .surah-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0;
+    }
+
+    .surah-item {
+        padding: 14px 16px;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+        transition: background 0.2s;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .surah-item:active {
+        background: #f0f0f0;
+    }
+
+    .surah-item-left {
+        flex: 1;
+    }
+
+    .surah-item-name {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--ink);
+        direction: rtl;
+        text-align: right;
+    }
+
+    .surah-item-info {
+        font-size: 12px;
+        color: #999;
+        margin-top: 3px;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .surah-item-num {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--brand), var(--brand-light));
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 14px;
+        flex-shrink: 0;
+        margin-left: 12px;
+    }
+
+    /* ===== AUDIO PLAYER ===== */
+    .audio-player {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(180deg, var(--brand), var(--brand-dark));
+        color: #fff;
+        padding: 12px 16px;
+        z-index: 20;
+        max-width: 480px;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .audio-player.hidden {
+        display: none;
+    }
+
+    .audio-info {
+        font-size: 12px;
+        margin-bottom: 8px;
+        text-align: center;
+    }
+
+    .audio-controls {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    .audio-btn {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: #fff;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .audio-btn:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .audio-progress {
+        flex: 1;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 2px;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .audio-progress-bar {
+        height: 100%;
+        background: #fff;
+        border-radius: 2px;
+        width: 0%;
+    }
+
+    .audio-time {
+        font-size: 11px;
+        min-width: 40px;
+        text-align: right;
+    }
 </style>
 </head>
 <body>
@@ -582,7 +777,301 @@
     <img class="image-modal-content" id="modalImage" alt="বড় ছবি">
 </div>
 
+<!-- SURAH MODAL -->
+<div class="surah-modal" id="surahModal">
+    <div class="surah-modal-content">
+        <div class="surah-modal-header">
+            <h2>সূরা নির্বাচন করুন</h2>
+            <button class="surah-modal-close-btn" id="closeSurahModal">&times;</button>
+        </div>
+        <div class="surah-list" id="surahList"></div>
+    </div>
+</div>
+
+<!-- AUDIO PLAYER -->
+<div class="audio-player hidden" id="audioPlayer">
+    <div class="audio-info">
+        <span id="audioTitle">আয়াত চালু হচ্ছে...</span>
+    </div>
+    <div class="audio-controls">
+        <button class="audio-btn" id="audioPlayBtn">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+        </button>
+        <div class="audio-progress" id="audioProgress">
+            <div class="audio-progress-bar" id="audioProgressBar"></div>
+        </div>
+        <span class="audio-time" id="audioTime">0:00</span>
+        <button class="audio-btn" id="audioCloseBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- HIDDEN AUDIO ELEMENT -->
+<audio id="quranAudio" preload="none"></audio>
+
 <script>
+    // ===== SURAH DATA (১১৪টি সূরা) =====
+    const SURAHS = [
+        { num: 1, name: 'الفاتحة', bn: 'ফাতিহা', ayahs: 7 },
+        { num: 2, name: 'البقرة', bn: 'বাকারা', ayahs: 286 },
+        { num: 3, name: 'آل عمران', bn: 'আল ইমরান', ayahs: 200 },
+        { num: 4, name: 'النساء', bn: 'নিসা', ayahs: 176 },
+        { num: 5, name: 'المائدة', bn: 'মায়িদা', ayahs: 120 },
+        { num: 6, name: 'الأنعام', bn: 'আনআম', ayahs: 165 },
+        { num: 7, name: 'الأعراف', bn: 'আরাফ', ayahs: 206 },
+        { num: 8, name: 'الأنفال', bn: 'আনফাল', ayahs: 75 },
+        { num: 9, name: 'التوبة', bn: 'তাওবা', ayahs: 129 },
+        { num: 10, name: 'يونس', bn: 'ইউনুস', ayahs: 109 },
+        { num: 11, name: 'هود', bn: 'হুদ', ayahs: 123 },
+        { num: 12, name: 'يوسف', bn: 'ইউসুফ', ayahs: 111 },
+        { num: 13, name: 'الرعد', bn: 'রাদ', ayahs: 43 },
+        { num: 14, name: 'إبراهيم', bn: 'ইবরাহিম', ayahs: 52 },
+        { num: 15, name: 'الحجر', bn: 'হিজর', ayahs: 99 },
+        { num: 16, name: 'النحل', bn: 'নাহল', ayahs: 128 },
+        { num: 17, name: 'الإسراء', bn: 'ইসরা', ayahs: 111 },
+        { num: 18, name: 'الكهف', bn: 'কাহফ', ayahs: 110 },
+        { num: 19, name: 'مريم', bn: 'মারিয়াম', ayahs: 98 },
+        { num: 20, name: 'طه', bn: 'তাহা', ayahs: 135 },
+        { num: 21, name: 'الأنبياء', bn: 'আম্বিয়া', ayahs: 112 },
+        { num: 22, name: 'الحج', bn: 'হাজ', ayahs: 78 },
+        { num: 23, name: 'المؤمنون', bn: 'মুমিনুন', ayahs: 118 },
+        { num: 24, name: 'النور', bn: 'নুর', ayahs: 64 },
+        { num: 25, name: 'الفرقان', bn: 'ফুরকান', ayahs: 77 },
+        { num: 26, name: 'الشعراء', bn: 'শোয়ারা', ayahs: 227 },
+        { num: 27, name: 'النمل', bn: 'নামল', ayahs: 93 },
+        { num: 28, name: 'القصص', bn: 'কাসাস', ayahs: 88 },
+        { num: 29, name: 'العنكبوت', bn: 'আনকাবুত', ayahs: 69 },
+        { num: 30, name: 'الروم', bn: 'রুম', ayahs: 60 },
+        { num: 31, name: 'لقمان', bn: 'লুকমান', ayahs: 34 },
+        { num: 32, name: 'السجدة', bn: 'সাজদাহ', ayahs: 30 },
+        { num: 33, name: 'الأحزاب', bn: 'আহজাব', ayahs: 73 },
+        { num: 34, name: 'سبأ', bn: 'সাবা', ayahs: 54 },
+        { num: 35, name: 'فاطر', bn: 'ফাতির', ayahs: 45 },
+        { num: 36, name: 'يس', bn: 'ইয়াসিন', ayahs: 83 },
+        { num: 37, name: 'الصافات', bn: 'সাফফাত', ayahs: 182 },
+        { num: 38, name: 'ص', bn: 'সাদ', ayahs: 88 },
+        { num: 39, name: 'الزمر', bn: 'জুমার', ayahs: 75 },
+        { num: 40, name: 'غافر', bn: 'গাফির', ayahs: 85 },
+        { num: 41, name: 'فصلت', bn: 'ফুস্সিলাত', ayahs: 54 },
+        { num: 42, name: 'الشورى', bn: 'শুরা', ayahs: 53 },
+        { num: 43, name: 'الزخرف', bn: 'জুখরুফ', ayahs: 89 },
+        { num: 44, name: 'الدخان', bn: 'দুখান', ayahs: 59 },
+        { num: 45, name: 'الجاثية', bn: 'জাসিয়া', ayahs: 37 },
+        { num: 46, name: 'الأحقاف', bn: 'আহকাফ', ayahs: 35 },
+        { num: 47, name: 'محمد', bn: 'মুহাম্মাদ', ayahs: 38 },
+        { num: 48, name: 'الفتح', bn: 'ফাতাহ', ayahs: 29 },
+        { num: 49, name: 'الحجرات', bn: 'হুজুরাত', ayahs: 18 },
+        { num: 50, name: 'ق', bn: 'কাফ', ayahs: 45 },
+        { num: 51, name: 'الذاريات', bn: 'জারিয়াত', ayahs: 60 },
+        { num: 52, name: 'الطور', bn: 'তুর', ayahs: 49 },
+        { num: 53, name: 'النجم', bn: 'নাজম', ayahs: 62 },
+        { num: 54, name: 'القمر', bn: 'কামার', ayahs: 55 },
+        { num: 55, name: 'الرحمن', bn: 'রাহমান', ayahs: 78 },
+        { num: 56, name: 'الواقعة', bn: 'ওয়াকিয়া', ayahs: 96 },
+        { num: 57, name: 'الحديد', bn: 'হাদিদ', ayahs: 29 },
+        { num: 58, name: 'المجادلة', bn: 'মুজাদালা', ayahs: 22 },
+        { num: 59, name: 'الحشر', bn: 'হাশর', ayahs: 24 },
+        { num: 60, name: 'الممتحنة', bn: 'মুমতাহানা', ayahs: 13 },
+        { num: 61, name: 'الصف', bn: 'সাফ', ayahs: 14 },
+        { num: 62, name: 'الجمعة', bn: 'জুমুআ', ayahs: 11 },
+        { num: 63, name: 'المنافقون', bn: 'মুনাফিকুন', ayahs: 11 },
+        { num: 64, name: 'التغابن', bn: 'তাগাবুন', ayahs: 18 },
+        { num: 65, name: 'الطلاق', bn: 'তালাক', ayahs: 12 },
+        { num: 66, name: 'التحريم', bn: 'তাহরিম', ayahs: 12 },
+        { num: 67, name: 'الملك', bn: 'মুলক', ayahs: 30 },
+        { num: 68, name: 'القلم', bn: 'কালাম', ayahs: 52 },
+        { num: 69, name: 'الحاقة', bn: 'হাক্কা', ayahs: 52 },
+        { num: 70, name: 'المعارج', bn: 'মারিজ', ayahs: 44 },
+        { num: 71, name: 'نوح', bn: 'নুহ', ayahs: 28 },
+        { num: 72, name: 'الجن', bn: 'জিন', ayahs: 28 },
+        { num: 73, name: 'المزمل', bn: 'মুজাম্মিল', ayahs: 20 },
+        { num: 74, name: 'المدثر', bn: 'মুদাস্সির', ayahs: 56 },
+        { num: 75, name: 'القيامة', bn: 'কিয়ামা', ayahs: 40 },
+        { num: 76, name: 'الإنسان', bn: 'ইনসান', ayahs: 31 },
+        { num: 77, name: 'المرسلات', bn: 'মুরসালাত', ayahs: 50 },
+        { num: 78, name: 'النبأ', bn: 'নাবা', ayahs: 40 },
+        { num: 79, name: 'الناشئات', bn: 'নাজিয়াত', ayahs: 46 },
+        { num: 80, name: 'عبس', bn: 'আবাসা', ayahs: 42 },
+        { num: 81, name: 'التكوير', bn: 'তাকভির', ayahs: 29 },
+        { num: 82, name: 'الإنفطار', bn: 'ইনফিতার', ayahs: 19 },
+        { num: 83, name: 'المطففين', bn: 'মুতাফফিফিন', ayahs: 36 },
+        { num: 84, name: 'الانشقاق', bn: 'ইনশিকাক', ayahs: 25 },
+        { num: 85, name: 'البروج', bn: 'বুরুজ', ayahs: 22 },
+        { num: 86, name: 'الطارق', bn: 'তারিক', ayahs: 17 },
+        { num: 87, name: 'الأعلى', bn: 'আলা', ayahs: 19 },
+        { num: 88, name: 'الغاشية', bn: 'গাশিয়া', ayahs: 26 },
+        { num: 89, name: 'الفجر', bn: 'ফাজর', ayahs: 30 },
+        { num: 90, name: 'البلد', bn: 'বালাদ', ayahs: 20 },
+        { num: 91, name: 'الشمس', bn: 'শামস', ayahs: 15 },
+        { num: 92, name: 'الليل', bn: 'লাইল', ayahs: 21 },
+        { num: 93, name: 'الضحى', bn: 'দুহা', ayahs: 11 },
+        { num: 94, name: 'الشرح', bn: 'শারাহ', ayahs: 8 },
+        { num: 95, name: 'التين', bn: 'তিন', ayahs: 8 },
+        { num: 96, name: 'العلق', bn: 'আলাক', ayahs: 19 },
+        { num: 97, name: 'القدر', bn: 'কদর', ayahs: 5 },
+        { num: 98, name: 'البينة', bn: 'বাইয়িনা', ayahs: 8 },
+        { num: 99, name: 'الزلزلة', bn: 'জালজালা', ayahs: 8 },
+        { num: 100, name: 'العاديات', bn: 'আদিয়াত', ayahs: 11 },
+        { num: 101, name: 'القارعة', bn: 'কারিআ', ayahs: 11 },
+        { num: 102, name: 'التكاثر', bn: 'তাকাসুর', ayahs: 8 },
+        { num: 103, name: 'العصر', bn: 'আসর', ayahs: 3 },
+        { num: 104, name: 'الهمزة', bn: 'হুমাজা', ayahs: 9 },
+        { num: 105, name: 'الفيل', bn: 'ফিল', ayahs: 5 },
+        { num: 106, name: 'قريش', bn: 'কুরাইশ', ayahs: 4 },
+        { num: 107, name: 'الماعون', bn: 'মাউন', ayahs: 7 },
+        { num: 108, name: 'الكوثر', bn: 'কাউসার', ayahs: 3 },
+        { num: 109, name: 'الكافرون', bn: 'কাফিরুন', ayahs: 6 },
+        { num: 110, name: 'النصر', bn: 'নাসর', ayahs: 3 },
+        { num: 111, name: 'المسد', bn: 'মাসাদ', ayahs: 5 },
+        { num: 112, name: 'الإخلاص', bn: 'ইখলাস', ayahs: 4 },
+        { num: 113, name: 'الفلق', bn: 'ফালাক', ayahs: 5 },
+        { num: 114, name: 'الناس', bn: 'নাস', ayahs: 6 }
+    ];
+
+    // ===== AUDIO ELEMENTS =====
+    const audioPlayer = document.getElementById('audioPlayer');
+    const quranAudio = document.getElementById('quranAudio');
+    const audioPlayBtn = document.getElementById('audioPlayBtn');
+    const audioCloseBtn = document.getElementById('audioCloseBtn');
+    const audioTitle = document.getElementById('audioTitle');
+    const audioProgress = document.getElementById('audioProgress');
+    const audioProgressBar = document.getElementById('audioProgressBar');
+    const audioTime = document.getElementById('audioTime');
+
+    // ===== SURAH MODAL ELEMENTS =====
+    const surahModal = document.getElementById('surahModal');
+    const surahList = document.getElementById('surahList');
+    const closeSurahModal = document.getElementById('closeSurahModal');
+
+    // ===== AUDIO STATE =====
+    let currentSurah = null;
+    let currentAyah = null;
+    let isPlaying = false;
+
+    // ===== SURAH MODAL FUNCTIONS =====
+    function openSurahModal() {
+        surahModal.classList.add('active');
+        if (surahList.children.length === 0) {
+            renderSurahList();
+        }
+    }
+
+    function closeSurahModalFn() {
+        surahModal.classList.remove('active');
+    }
+
+    function renderSurahList() {
+        surahList.innerHTML = SURAHS.map(surah => `
+            <div class="surah-item" onclick="selectSurah(${surah.num})">
+                <div class="surah-item-left">
+                    <div class="surah-item-name">${surah.name}</div>
+                    <div class="surah-item-info">${surah.bn} • ${surah.ayahs} আয়াত</div>
+                </div>
+                <div class="surah-item-num">${surah.num}</div>
+            </div>
+        `).join('');
+    }
+
+    function selectSurah(surahNum) {
+        currentSurah = SURAHS.find(s => s.num === surahNum);
+        closeSurahModalFn();
+        alert(`${currentSurah.name} (${currentSurah.bn}) সূরা নির্বাচিত হয়েছে।`);
+    }
+
+    // ===== AUDIO FUNCTIONS =====
+    function playAyah(surahNum, ayahNum) {
+        currentSurah = SURAHS.find(s => s.num === surahNum);
+        currentAyah = ayahNum;
+
+        // Alafasy Quran Audio URL
+        const audioUrl = `https://cdn.alquran.cloud/media/audio/en.alafasy/${surahNum}${String(ayahNum).padStart(3, '0')}.wav`;
+        
+        quranAudio.src = audioUrl;
+        audioTitle.textContent = `${currentSurah.name} • আয়াত ${ayahNum}`;
+        
+        audioPlayer.classList.remove('hidden');
+        quranAudio.play();
+        isPlaying = true;
+        updatePlayButton();
+    }
+
+    function togglePlayPause() {
+        if (isPlaying) {
+            quranAudio.pause();
+            isPlaying = false;
+        } else {
+            quranAudio.play();
+            isPlaying = true;
+        }
+        updatePlayButton();
+    }
+
+    function updatePlayButton() {
+        if (isPlaying) {
+            audioPlayBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
+        } else {
+            audioPlayBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
+        }
+    }
+
+    function closeAudioPlayer() {
+        quranAudio.pause();
+        audioPlayer.classList.add('hidden');
+        isPlaying = false;
+    }
+
+    // ===== AUDIO EVENT LISTENERS =====
+    quranAudio.addEventListener('play', () => {
+        isPlaying = true;
+        updatePlayButton();
+    });
+
+    quranAudio.addEventListener('pause', () => {
+        isPlaying = false;
+        updatePlayButton();
+    });
+
+    quranAudio.addEventListener('timeupdate', () => {
+        if (quranAudio.duration) {
+            const progress = (quranAudio.currentTime / quranAudio.duration) * 100;
+            audioProgressBar.style.width = progress + '%';
+            audioTime.textContent = formatTime(quranAudio.currentTime);
+        }
+    });
+
+    quranAudio.addEventListener('ended', () => {
+        isPlaying = false;
+        updatePlayButton();
+    });
+
+    audioProgress.addEventListener('click', (e) => {
+        const rect = audioProgress.getBoundingClientRect();
+        const percent = (e.clientX - rect.left) / rect.width;
+        quranAudio.currentTime = percent * quranAudio.duration;
+    });
+
+    audioPlayBtn.addEventListener('click', togglePlayPause);
+    audioCloseBtn.addEventListener('click', closeAudioPlayer);
+
+    // ===== MODAL CLOSE EVENTS =====
+    closeSurahModal.addEventListener('click', closeSurahModalFn);
+    surahModal.addEventListener('click', (e) => {
+        if (e.target === surahModal) closeSurahModalFn();
+    });
+
+    // ===== UTILITY FUNCTIONS =====
+    function formatTime(seconds) {
+        if (isNaN(seconds)) return '0:00';
+        const mins = Math.floor(seconds / 60);
+        const secs = Math.floor(seconds % 60);
+        return `${mins}:${String(secs).padStart(2, '0')}`;
+    }
+
     // ডিএস এবং রেফারেন্সেস
     const pageDisplay = document.getElementById('pageDisplay');
     const canvas = document.getElementById('pdfCanvas');
@@ -754,7 +1243,14 @@
 
     // অ্যাকশন বোতাম ইভেন্ট
     document.getElementById('playBtn').addEventListener('click', () => {
-        alert('অডিও বাচন শীঘ্রই উপলব্ধ হবে।');
+        if (!lastHit) {
+            alert('দয়া করে প্রথমে একটি আয়াত নির্বাচন করুন।');
+            return;
+        }
+        const ayah = currentAyahList.find(a => a.id === selectedAyahId);
+        if (ayah) {
+            playAyah(ayah.surahNum, ayah.ayahNum);
+        }
     });
 
     document.getElementById('docBtn').addEventListener('click', () => {
@@ -895,9 +1391,9 @@
     // অন্যান্য toolbar বোতাম ইভেন্ট
     const toolbarIconBtns = document.querySelectorAll('.toolbar-icon-btn:not(#selectionModeBtn)');
     if (toolbarIconBtns.length >= 3) {
-        // প্রথম বোতাম - ইমেজ দেখান (সুরক্ষা)
+        // প্রথম বোতাম - সূরা নির্বাচন
         toolbarIconBtns[0].addEventListener('click', () => {
-            openImageModal();
+            openSurahModal();
         });
 
         // দ্বিতীয় বোতাম - বুকমার্ক
