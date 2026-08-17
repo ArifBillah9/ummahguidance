@@ -214,17 +214,16 @@
 
     .ayah-item:active,
     .ayah-item.selected{
-        background:linear-gradient(90deg, #c8e6c9 0%, #a5d6a7 100%);
+        background:#e8f5e9;
         border-left-color:var(--brand);
         color:var(--brand-dark);
-        box-shadow: inset 0 0 8px rgba(23,90,69,0.25), 0 2px 8px rgba(23,90,69,0.1);
+        box-shadow: inset 0 0 8px rgba(23,90,69,0.15);
     }
 
     .ayah-item.selected{
-        background:linear-gradient(90deg, #81c784 0%, #66bb6a 100%);
+        background:linear-gradient(90deg, rgba(23,90,69,.15) 0%, rgba(23,90,69,.08) 100%);
         font-weight:600;
-        border-left: 4px solid var(--brand-dark);
-        color:#fff;
+        border-left: 4px solid var(--brand);
     }
 
     .ayah-item.now-playing {
@@ -1323,239 +1322,6 @@
         canvas.addEventListener('click', handleCanvasClick, { once: true });
     }
 
-    // সূরার সম্পূর্ণ তালিকা (ক্রম ১ থেকে ১১৪)
-    const SURAH_LIST = [
-        { num: 1, arName: 'الفاتحة', bnName: 'আল ফাতিহা', pages: '১' },
-        { num: 2, arName: 'البقرة', bnName: 'আল বাকারা', pages: '২-৯' },
-        { num: 3, arName: 'آل عمران', bnName: 'আল ইমরান', pages: '৯' },
-        { num: 4, arName: 'النساء', bnName: 'আন নিসা', pages: '১১' },
-        { num: 5, arName: 'المائدة', bnName: 'আল মায়িদাহ', pages: '१३' },
-        { num: 6, arName: 'الأنعام', bnName: 'আল আনআম', pages: '१४' },
-        { num: 7, arName: 'الأعراف', bnName: 'আল আরাফ', pages: '१५-१७' },
-        { num: 8, arName: 'الأنفال', bnName: 'আল আনফাল', pages: '१७-१८' },
-        { num: 9, arName: 'التوبة', bnName: 'আত তাওবা', pages: '१८-२०' },
-        { num: 10, arName: 'يونس', bnName: 'ইউনুস', pages: '२०-२१' },
-        { num: 11, arName: 'هود', bnName: 'হুদ', pages: '२१-२३' },
-        { num: 12, arName: 'يوسف', bnName: 'ইউসুফ', pages: '२३-२४' },
-        { num: 13, arName: 'الرعد', bnName: 'আর রাদ', pages: '२४-२५' },
-        { num: 14, arName: 'إبراهيم', bnName: 'ইব্রাহিম', pages: '२५' },
-        { num: 15, arName: 'الحجر', bnName: 'আল হিজর', pages: '२६' },
-        { num: 16, arName: 'النحل', bnName: 'আন নাহল', pages: '२६-२८' },
-        { num: 17, arName: 'الإسراء', bnName: 'আল ইসরা', pages: '२८-२९' },
-        { num: 18, arName: 'الكهف', bnName: 'আল কাহাফ', pages: '२९-३१' },
-        { num: 19, arName: 'مريم', bnName: 'মারিয়াম', pages: '३१-३२' },
-        { num: 20, arName: 'طه', bnName: 'তা হা', pages: '३२-३४' },
-        { num: 21, arName: 'الأنبياء', bnName: 'আল আম্বিয়া', pages: '३४-३५' },
-        { num: 22, arName: 'الحج', bnName: 'আল হাজ', pages: '३५-३७' },
-        { num: 23, arName: 'المؤمنون', bnName: 'আল মু আমিনুন', pages: '३७-३८' },
-        { num: 24, arName: 'النور', bnName: 'আন নুর', pages: '३८-४०' },
-        { num: 25, arName: 'الفرقان', bnName: 'আল ফুরকান', pages: '४०-४१' },
-        { num: 26, arName: 'الشعراء', bnName: 'আস শুআরা', pages: '४१-४३' },
-        { num: 27, arName: 'النمل', bnName: 'আন নামল', pages: '४३-४५' },
-        { num: 28, arName: 'القصص', bnName: 'আল কাসাস', pages: '४५-४६' },
-        { num: 29, arName: 'العنكبوت', bnName: 'আল আনকাবুত', pages: '४६-४८' },
-        { num: 30, arName: 'الروم', bnName: 'আর রুম', pages: '४८-४९' },
-        { num: 31, arName: 'لقمان', bnName: 'লুকমান', pages: '४९-५०' },
-        { num: 32, arName: 'السجدة', bnName: 'আস সাজদা', pages: '५०' },
-        { num: 33, arName: 'الأحزاب', bnName: 'আল আহজাব', pages: '५०-५२' },
-        { num: 34, arName: 'سبأ', bnName: 'সাবা', pages: '५२-५३' },
-        { num: 35, arName: 'فاطر', bnName: 'ফাতির', pages: '५३-५४' },
-        { num: 36, arName: 'يس', bnName: 'ইয়াসিন', pages: '५४-५५' },
-        { num: 37, arName: 'الصافات', bnName: 'আস সাফফাত', pages: '५५-५७' },
-        { num: 38, arName: 'ص', bnName: 'সাদ', pages: '५७-५८' },
-        { num: 39, arName: 'الزمر', bnName: 'আজ জুমার', pages: '५८-६०' },
-        { num: 40, arName: 'غافر', bnName: 'গাফির', pages: '६०-६२' },
-        { num: 41, arName: 'فصلت', bnName: 'ফুসিলাত', pages: '६२-६३' },
-        { num: 42, arName: 'الشورى', bnName: 'আশ শুরা', pages: '६३-६४' },
-        { num: 43, arName: 'الزخرف', bnName: 'আজ জুখরুফ', pages: '६४-६६' },
-        { num: 44, arName: 'الدخان', bnName: 'আদ দুখান', pages: '६६' },
-        { num: 45, arName: 'الجاثية', bnName: 'আল জাসিয়া', pages: '६६-६७' },
-        { num: 46, arName: 'الأحقاف', bnName: 'আল আহকাফ', pages: '६७-६८' },
-        { num: 47, arName: 'محمد', bnName: 'মুহাম্মদ', pages: '६८' },
-        { num: 48, arName: 'الفتح', bnName: 'আল ফাতহ', pages: '६८-६९' },
-        { num: 49, arName: 'الحجرات', bnName: 'আল হুজুরাত', pages: '६९' },
-        { num: 50, arName: 'ق', bnName: 'কাফ', pages: '७०' },
-        { num: 51, arName: 'الذاريات', bnName: 'আজ জারিয়াত', pages: '७०-७१' },
-        { num: 52, arName: 'الطور', bnName: 'আত তুর', pages: '७१' },
-        { num: 53, arName: 'النجم', bnName: 'আন নাজম', pages: '७१-७२' },
-        { num: 54, arName: 'القمر', bnName: 'আল কামার', pages: '७२' },
-        { num: 55, arName: 'الرحمن', bnName: 'আর রহমান', pages: '७२-७३' },
-        { num: 56, arName: 'الواقعة', bnName: 'আল ওয়াকিয়া', pages: '७३-७४' },
-        { num: 57, arName: 'الحديد', bnName: 'আল হাদিদ', pages: '७४-७५' },
-        { num: 58, arName: 'المجادلة', bnName: 'আল মুজাদালা', pages: '७५' },
-        { num: 59, arName: 'الحشر', bnName: 'আল হাশর', pages: '७५-७६' },
-        { num: 60, arName: 'الممتحنة', bnName: 'আল মুমতাহিনা', pages: '७६' },
-        { num: 61, arName: 'الصف', bnName: 'আস সাফ', pages: '७६-७७' },
-        { num: 62, arName: 'الجمعة', bnName: 'আল জুমুআ', pages: '७७' },
-        { num: 63, arName: 'المنافقون', bnName: 'আল মুনাফিকুন', pages: '७७' },
-        { num: 64, arName: 'التغابن', bnName: 'আত তাগাবুন', pages: '७७-७८' },
-        { num: 65, arName: 'الطلاق', bnName: 'আত তালাক', pages: '७८' },
-        { num: 66, arName: 'التحريم', bnName: 'আত তাহরিম', pages: '७८' },
-        { num: 67, arName: 'الملك', bnName: 'আল মুলক', pages: '७९' },
-        { num: 68, arName: 'القلم', bnName: 'আল কালাম', pages: '७९' },
-        { num: 69, arName: 'الحاقة', bnName: 'আল হাক্কা', pages: '८०' },
-        { num: 70, arName: 'المعارج', bnName: 'আল মাআরিজ', pages: '८०' },
-        { num: 71, arName: 'نوح', bnName: 'নুহ', pages: '८०-८१' },
-        { num: 72, arName: 'الجن', bnName: 'আল জিন্ন', pages: '८१' },
-        { num: 73, arName: 'المزمل', bnName: 'আল মুজাম্মিল', pages: '८१' },
-        { num: 74, arName: 'المدثر', bnName: 'আল মুদ্দাসির', pages: '८२' },
-        { num: 75, arName: 'القيامة', bnName: 'আল কিয়ামা', pages: '८२' },
-        { num: 76, arName: 'الإنسان', bnName: 'আল ইনসান', pages: '८२-८३' },
-        { num: 77, arName: 'المرسلات', bnName: 'আল মুরসালাত', pages: '८३' },
-        { num: 78, arName: 'النبأ', bnName: 'আন নাবা', pages: '८३' },
-        { num: 79, arName: 'الناعت', bnName: 'আন নাজিআত', pages: '८४' },
-        { num: 80, arName: 'عبس', bnName: 'আবাসা', pages: '८४' },
-        { num: 81, arName: 'التكوير', bnName: 'আত তাকভির', pages: '८४' },
-        { num: 82, arName: 'الانفطار', bnName: 'আল ইনফিতার', pages: '८४-८५' },
-        { num: 83, arName: 'المطففين', bnName: 'আল মুতাফফিফিন', pages: '८५' },
-        { num: 84, arName: 'الانشقاق', bnName: 'আল ইনশিকাক', pages: '८५' },
-        { num: 85, arName: 'البروج', bnName: 'আল বুরুজ', pages: '८५' },
-        { num: 86, arName: 'الطارق', bnName: 'আত তারিক', pages: '८६' },
-        { num: 87, arName: 'الأعلى', bnName: 'আল আআলা', pages: '८६' },
-        { num: 88, arName: 'الغاشية', bnName: 'আল গাশিয়া', pages: '८६' },
-        { num: 89, arName: 'الفجر', bnName: 'আল ফাজর', pages: '८६-८७' },
-        { num: 90, arName: 'البلد', bnName: 'আল বালাদ', pages: '८७' },
-        { num: 91, arName: 'الشمس', bnName: 'আশ শামস', pages: '८७' },
-        { num: 92, arName: 'الليل', bnName: 'আল লাইল', pages: '८७' },
-        { num: 93, arName: 'الضحى', bnName: 'আদ দুহা', pages: '८८' },
-        { num: 94, arName: 'الشرح', bnName: 'আল শারহ', pages: '८८' },
-        { num: 95, arName: 'التين', bnName: 'আত তিন', pages: '८८' },
-        { num: 96, arName: 'العلق', bnName: 'আল আলাক', pages: '८८' },
-        { num: 97, arName: 'القدر', bnName: 'আল কাদর', pages: '८९' },
-        { num: 98, arName: 'البينة', bnName: 'আল বাইয়িনা', pages: '८९' },
-        { num: 99, arName: 'الزلزلة', bnName: 'আজ জালজালা', pages: '८९' },
-        { num: 100, arName: 'العاديات', bnName: 'আল আদিয়াত', pages: '८९' },
-        { num: 101, arName: 'القارعة', bnName: 'আল কারিআ', pages: '९०' },
-        { num: 102, arName: 'التكاثر', bnName: 'আত তাকাসুর', pages: '९०' },
-        { num: 103, arName: 'العصر', bnName: 'আল আসর', pages: '९०' },
-        { num: 104, arName: 'الهمزة', bnName: 'আল হুমাজা', pages: '९०' },
-        { num: 105, arName: 'الفيل', bnName: 'আল ফিল', pages: '९०-९१' },
-        { num: 106, arName: 'قريش', bnName: 'কুরাইশ', pages: '९१' },
-        { num: 107, arName: 'الماعون', bnName: 'আল মাউন', pages: '९१' },
-        { num: 108, arName: 'الكوثر', bnName: 'আল কাউসার', pages: '९१' },
-        { num: 109, arName: 'الكافرون', bnName: 'আল কাফিরুন', pages: '९१' },
-        { num: 110, arName: 'النصر', bnName: 'আন নাসর', pages: '९२' },
-        { num: 111, arName: 'المسد', bnName: 'আল মাসাদ', pages: '९२' },
-        { num: 112, arName: 'الإخلاص', bnName: 'আল ইখলাস', pages: '९२' },
-        { num: 113, arName: 'الفلق', bnName: 'আল ফালাক', pages: '९२' },
-        { num: 114, arName: 'الناس', bnName: 'আন নাস', pages: '९२' }
-    ];
-
-    // বর্তমানে চলমান অডিও ট্র্যাক করুন
-    let currentAudioElement = null;
-
-    // Quran.com API দিয়ে অডিও চালান (আল্লাহ Reciter - ID: 5)
-    function playAyah(surahNum, ayahNum) {
-        // ইতিমধ্যে চলমান অডিও বন্ধ করুন
-        if (currentAudioElement) {
-            currentAudioElement.pause();
-            currentAudioElement = null;
-        }
-
-        // Quran.com API ব্যবহার করে অডিও URL তৈরি করুন
-        // Reciter: 5 (Abdullah Al-Juhany)
-        const audioUrl = `https://cdn.islamic.network/quran/audio-surah/128/5_${surahNum}.mp3`;
-        
-        const audio = new Audio(audioUrl);
-        audio.onerror = () => {
-            // ফলব্যাক রিসিটার (Mishary Alafasy)
-            const fallbackUrl = `https://cdn.islamic.network/quran/audio-surah/128/7_${surahNum}.mp3`;
-            audio.src = fallbackUrl;
-        };
-
-        currentAudioElement = audio;
-        audio.play().catch(() => {
-            alert(`অডিও চালাতে সমস্যা হয়েছে। দয়া করে পরে চেষ্টা করুন।`);
-        });
-
-        // আয়াতকে "এখন চালু" হিসাবে চিহ্নিত করুন
-        updateNowPlayingUI(surahNum, ayahNum);
-    }
-
-    // UI তে বর্তমান চলমান অবস্থা আপডেট করুন
-    function updateNowPlayingUI(surahNum, ayahNum) {
-        // পূর্ববর্তী "এখন চালু" হাইলাইট সরান
-        document.querySelectorAll('.ayah-item.now-playing').forEach(el => {
-            el.classList.remove('now-playing');
-        });
-
-        // নতুন "এখন চালু" হাইলাইট যোগ করুন
-        const playingAyahs = document.querySelectorAll('.ayah-item');
-        playingAyahs.forEach(el => {
-            if (el.textContent.includes(surahNum.toString())) {
-                el.classList.add('now-playing');
-            }
-        });
-    }
-
-    // সূরা নির্বাচন মোডাল খোলার ফাংশন
-    function openSurahModal() {
-        const modal = document.createElement('div');
-        modal.className = 'surah-modal-overlay';
-        modal.style.cssText = `
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
-            background: rgba(0,0,0,0.5); z-index: 1000;
-            display: flex; align-items: center; justify-content: center;
-        `;
-
-        const content = document.createElement('div');
-        content.style.cssText = `
-            background: white; border-radius: 12px; width: 90%; max-height: 80vh;
-            overflow-y: auto; max-width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        `;
-
-        let html = `
-            <div style="position: sticky; top: 0; background: linear-gradient(180deg, var(--brand), var(--brand-dark)); 
-                        color: white; padding: 16px; text-align: center; font-weight: bold; border-radius: 12px 12px 0 0;">
-                সূরা নির্বাচন করুন
-                <button onclick="this.closest('.surah-modal-overlay').remove()" style="
-                    position: absolute; right: 12px; top: 12px; background: none; border: none; 
-                    color: white; font-size: 20px; cursor: pointer; width: 30px; height: 30px;">✕</button>
-            </div>
-            <div style="padding: 12px;">
-        `;
-
-        SURAH_LIST.forEach((surah, idx) => {
-            html += `
-                <div onclick="navigateToSurah(${surah.num}); document.querySelector('.surah-modal-overlay').remove();" style="
-                    padding: 12px 14px; border-bottom: 1px solid var(--line); cursor: pointer;
-                    display: flex; justify-content: space-between; align-items: center;
-                    transition: background 0.2s; direction: rtl;
-                " onmouseover="this.style.background='#f5f5f5'" onmouseout="this.style.background='white'">
-                    <div style="flex: 1;">
-                        <div style="font-size: 14px; color: var(--brand); font-weight: 600;">
-                            ${surah.bnName}
-                        </div>
-                        <div style="font-size: 12px; color: #999; margin-top: 2px;">
-                            ${surah.arName}
-                        </div>
-                    </div>
-                    <div style="text-align: center; min-width: 50px;">
-                        <div style="font-size: 16px; font-weight: 700; color: var(--brand);">
-                            ${surah.num}
-                        </div>
-                        <div style="font-size: 11px; color: #999;">
-                            ${surah.pages}
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-
-        html += '</div>';
-        content.innerHTML = html;
-        modal.appendChild(content);
-        document.body.appendChild(modal);
-
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.remove();
-        });
-    }
-
-    function navigateToSurah(surahNum) {
-        alert(`সূরা ${surahNum} এর পৃষ্ঠায় যাওয়ার সুবিধা শীঘ্রই যুক্ত হবে।`);
-    }
-
     // নমুনা আয়াত ডেটা তৈরি করুন
     function generateSampleAyahs() {
         const ayahs = [
@@ -1570,7 +1336,7 @@
             surahNum: a.surahNum,
             ayahNum: a.ayahNum,
             text: a.text,
-            surahName: SURAH_LIST[a.surahNum - 1]?.bnName || 'السورة',
+            surahName: 'السورة',
             isLine: false
         }));
     }
@@ -1659,22 +1425,13 @@
 
     // অ্যাকশন বোতাম ইভেন্ট
     document.getElementById('playBtn').addEventListener('click', () => {
-        if (!lastHit || !selectedAyahId) {
+        if (!lastHit) {
             alert('দয়া করে প্রথমে একটি আয়াত নির্বাচন করুন।');
             return;
         }
         const ayah = currentAyahList.find(a => a.id === selectedAyahId);
         if (ayah) {
-            const playBtn = document.getElementById('playBtn');
-            playBtn.style.opacity = '0.5';
-            playBtn.disabled = true;
-            
             playAyah(ayah.surahNum, ayah.ayahNum);
-            
-            setTimeout(() => {
-                playBtn.style.opacity = '1';
-                playBtn.disabled = false;
-            }, 500);
         }
     });
 
@@ -1814,27 +1571,25 @@
     });
 
     // অন্যান্য toolbar বোতাম ইভেন্ট
-    document.querySelectorAll('.toolbar-icon-btn').forEach((btn, index) => {
-        if (btn.id === 'selectionModeBtn') return;
-
-        btn.addEventListener('click', () => {
-            if (index === 0) {
-                // প্রথম বোতাম - সূরা নির্বাচন
-                openSurahModal();
-            } else if (index === 1) {
-                // দ্বিতীয় বোতাম - বুকমার্ক
-                btn.classList.toggle('active');
-                if (btn.classList.contains('active')) {
-                    alert('পৃষ্ঠা বুকমার্ক করা হয়েছে।');
-                } else {
-                    alert('বুকমার্ক সরানো হয়েছে।');
-                }
-            } else if (index === 2) {
-                // তৃতীয় বোতাম - ইমেজ/সূরা তালিকা
-                openImageModal();
-            }
+    const toolbarIconBtns = document.querySelectorAll('.toolbar-icon-btn:not(#selectionModeBtn)');
+    if (toolbarIconBtns.length >= 3) {
+        // প্রথম বোতাম - সূরা নির্বাচন
+        toolbarIconBtns[0].addEventListener('click', () => {
+            openSurahModal();
         });
-    });
+
+        // দ্বিতীয় বোতাম - বুকমার্ক
+        toolbarIconBtns[1].addEventListener('click', () => {
+            const btn = toolbarIconBtns[1];
+            btn.classList.toggle('active');
+            alert('পৃষ্ঠা বুকমার্ক করা হয়েছে।');
+        });
+
+        // তৃতীয় বোতাম - ইমেজ দেখান (সূরা তালিকা)
+        toolbarIconBtns[2].addEventListener('click', () => {
+            openImageModal();
+        });
+    }
 
     // শুরু করুন
     loadPdf();
