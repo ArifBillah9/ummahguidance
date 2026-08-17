@@ -1277,20 +1277,67 @@
     let selectedAyahId = null;
     let lastHit = null;
     let selectionModeEnabled = true;
+    // পৃষ্ঠাভিত্তিক আয়াত কো-অর্ডিনেট ডেটা { "1":[{surahNum,ayahNum,text,x0,y0,x1,y1}, ...], "2":[...] }
+    // এই ডেটা regions.json ফাইল থেকে লোড হয়, এটি ayah-mapper.html টুল দিয়ে তৈরি করতে হবে
+    let ALL_REGIONS = {};
+
+    // সূরা ফাতিহা (পৃষ্ঠা ২) — হাতে-কলমে নিখুঁতভাবে ম্যাপ করা, regions.json ফাইল লোড না হলেও কাজ করবে যাতে
+    // ফাইল সার্ভারে regions.json ঠিকভাবে না বসালেও/বা file:// দিয়ে খুললেও ফাতিহা সবসময় কাজ করে
+    const BUILTIN_REGIONS = {
+        "2": [
+            { "surahNum": 1, "ayahNum": 1, "text": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ", "x0": 0.1119, "x1": 0.8944, "y0": 0.3994, "y1": 0.4603 },
+            { "surahNum": 1, "ayahNum": 2, "text": "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ", "x0": 0.1119, "x1": 0.8944, "y0": 0.4727, "y1": 0.5189 },
+            { "surahNum": 1, "ayahNum": 3, "text": "الرَّحْمَٰنِ الرَّحِيمِ", "x0": 0.5427, "x1": 0.8944, "y0": 0.5322, "y1": 0.5771 },
+            { "surahNum": 1, "ayahNum": 4, "text": "مَالِكِ يَوْمِ الدِّينِ", "x0": 0.1119, "x1": 0.5427, "y0": 0.5322, "y1": 0.5771 },
+            { "surahNum": 1, "ayahNum": 4, "text": "مَالِكِ يَوْمِ الدِّينِ", "x0": 0.7538, "x1": 0.8944, "y0": 0.5909, "y1": 0.6371 },
+            { "surahNum": 1, "ayahNum": 5, "text": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", "x0": 0.1119, "x1": 0.7538, "y0": 0.5909, "y1": 0.6371 },
+            { "surahNum": 1, "ayahNum": 5, "text": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ", "x0": 0.6993, "x1": 0.8944, "y0": 0.6508, "y1": 0.6948 },
+            { "surahNum": 1, "ayahNum": 6, "text": "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", "x0": 0.1119, "x1": 0.6993, "y0": 0.6508, "y1": 0.6948 },
+            { "surahNum": 1, "ayahNum": 6, "text": "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ", "x0": 0.6601, "x1": 0.8944, "y0": 0.7095, "y1": 0.7557 },
+            { "surahNum": 1, "ayahNum": 7, "text": "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", "x0": 0.1119, "x1": 0.6601, "y0": 0.7095, "y1": 0.7557 },
+            { "surahNum": 1, "ayahNum": 7, "text": "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", "x0": 0.1119, "x1": 0.8944, "y0": 0.7690, "y1": 0.8174 },
+            { "surahNum": 1, "ayahNum": 7, "text": "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ", "x0": 0.1119, "x1": 0.8944, "y0": 0.8299, "y1": 0.8752 }
+        ]
+    };
+
+    // আয়াতের কো-অর্ডিনেট ডেটা লোড করুন (built-in ডেটা + regions.json, দুটো মার্জ করা হয়)
+    async function loadRegions() {
+        // প্রথমে বিল্ট-ইন ডেটা (সূরা ফাতিহা) সেট করে দিন, যাতে fetch ব্যর্থ হলেও এটি কাজ করে
+        ALL_REGIONS = JSON.parse(JSON.stringify(BUILTIN_REGIONS));
+        try {
+            const res = await fetch('regions.json', { cache: 'no-store' });
+            if (res.ok) {
+                const fetched = await res.json();
+                // fetch করা ডেটা বিল্ট-ইন ডেটার উপর মার্জ/ওভাররাইড করুন (fetch করা ডেটা অগ্রাধিকার পাবে)
+                Object.assign(ALL_REGIONS, fetched);
+            }
+        } catch (e) {
+            console.warn('regions.json ফেচ করা যায়নি (built-in ফাতিহা ডেটা দিয়ে কাজ চলবে):', e);
+        }
+    }
 
     // পিডিএফ লোড করুন
     async function loadPdf() {
-        try {
-            // উদাহরণ Quran পিডিএফ URL
-            const pdfUrl = '/tilawat/Emdadia-Hafezi-Quran.pdf';
-            
-            pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
-            totalPages = pdfDoc.numPages;
-            renderPage(1);
-        } catch (e) {
-            console.error('পিডিএফ লোড করতে ত্রুটি:', e);
-            canvas.textContent = 'পিডিএফ লোড করতে ত্রুটি';
+        await loadRegions();
+        // একাধিক সম্ভাব্য পাথ চেষ্টা করুন, যেটা কাজ করবে সেটাই ব্যবহার হবে
+        const candidatePaths = [
+            '/tilawat/Emdadia-Hafezi-Quran.pdf',
+            './Emdadia-Hafezi-Quran.pdf',
+            'Emdadia-Hafezi-Quran.pdf'
+        ];
+        let lastError = null;
+        for (const pdfUrl of candidatePaths) {
+            try {
+                pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
+                totalPages = pdfDoc.numPages;
+                renderPage(1);
+                return;
+            } catch (e) {
+                lastError = e;
+            }
         }
+        console.error('পিডিএফ লোড করতে ত্রুটি:', lastError);
+        canvas.textContent = 'পিডিএফ লোড করতে ত্রুটি';
     }
 
     // পৃষ্ঠা রেন্ডার করুন
@@ -1311,14 +1358,14 @@
             console.error('পৃষ্ঠা রেন্ডার করতে ত্রুটি:', e);
         }
 
-        // নমুনা আয়াত ডেটা তৈরি করুন
-        currentAyahList = generateSampleAyahs();
+        // এই পৃষ্ঠার জন্য প্রকৃত আয়াত কো-অর্ডিনেট লোড করুন (regions.json থেকে)
+        currentAyahList = buildAyahListForPage(currentPage);
         currentRegions = currentAyahList.map(a => ({
             id: a.id,
-            x0: Math.random() * 0.5,
-            y0: Math.random() * 0.8,
-            x1: Math.random() * 0.5 + 0.5,
-            y1: Math.random() * 0.8 + 0.05,
+            x0: a.x0,
+            y0: a.y0,
+            x1: a.x1,
+            y1: a.y1,
             text: a.text
         }));
 
@@ -1331,23 +1378,21 @@
         canvas.addEventListener('click', handleCanvasClick, { once: true });
     }
 
-    // নমুনা আয়াত ডেটা তৈরি করুন
-    function generateSampleAyahs() {
-        const ayahs = [
-            { surahNum: 1, ayahNum: 1, text: 'بسم الله الرحمن الرحيم' },
-            { surahNum: 1, ayahNum: 2, text: 'الحمد لله رب العالمين' },
-            { surahNum: 1, ayahNum: 3, text: 'الرحمن الرحيم' },
-            { surahNum: 1, ayahNum: 4, text: 'مالك يوم الدين' },
-            { surahNum: 2, ayahNum: 1, text: 'الم' }
-        ];
-        return ayahs.map((a, i) => ({
-            id: 'ayah-' + currentPage + '-' + i,
-            surahNum: a.surahNum,
-            ayahNum: a.ayahNum,
-            text: a.text,
-            surahName: 'السورة',
-            isLine: false
-        }));
+    // regions.json থেকে এই পৃষ্ঠার আয়াত তালিকা তৈরি করুন
+    function buildAyahListForPage(pageNum) {
+        const regions = ALL_REGIONS[String(pageNum)] || [];
+        return regions.map((r, i) => {
+            const surah = SURAHS.find(s => s.num === r.surahNum);
+            return {
+                id: 'ayah-' + pageNum + '-' + i,
+                surahNum: r.surahNum,
+                ayahNum: r.ayahNum,
+                text: r.text || '',
+                surahName: surah ? surah.name : '',
+                x0: r.x0, y0: r.y0, x1: r.x1, y1: r.y1,
+                isLine: false
+            };
+        });
     }
 
     // ক্যানভাস ক্লিক হ্যান্ডলার
@@ -1443,7 +1488,11 @@
     // আয়াত বার রেন্ডার করুন
     function renderAyahBar() {
         if (!selectedAyahId) {
-            ayahBar.innerHTML = '<div class="ayah-item" style="text-align:center; color:#999;">আয়াতের উপর ট্যাপ করুন</div>';
+            if (currentAyahList.length === 0) {
+                ayahBar.innerHTML = '<div class="ayah-item" style="text-align:center; color:#999; direction:ltr; font-family:\'Kalpurush\',\'Hind Siliguri\',sans-serif; font-size:13px;">এই পৃষ্ঠার আয়াত এখনো ম্যাপ করা হয়নি — ayah-mapper.html টুল দিয়ে ম্যাপ করুন।</div>';
+            } else {
+                ayahBar.innerHTML = '<div class="ayah-item" style="text-align:center; color:#999;">আয়াতের উপর ট্যাপ করুন</div>';
+            }
             return;
         }
 
