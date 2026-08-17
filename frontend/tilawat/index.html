@@ -217,11 +217,22 @@
         background:#e8f5e9;
         border-left-color:var(--brand);
         color:var(--brand-dark);
+        box-shadow: inset 0 0 8px rgba(23,90,69,0.15);
     }
 
     .ayah-item.selected{
-        background:linear-gradient(90deg, rgba(23,90,69,.08) 0%, transparent 100%);
+        background:linear-gradient(90deg, rgba(23,90,69,.15) 0%, rgba(23,90,69,.08) 100%);
         font-weight:600;
+        border-left: 4px solid var(--brand);
+    }
+
+    .ayah-item.now-playing {
+        animation: pulse-ayah 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-ayah {
+        0%, 100% { box-shadow: inset 0 0 8px rgba(201,151,63,0.2); }
+        50% { box-shadow: inset 0 0 12px rgba(201,151,63,0.4); }
     }
 
     /* ===== PAGE CONTROLS ===== */
@@ -988,14 +999,39 @@
         currentSurah = SURAHS.find(s => s.num === surahNum);
         currentAyah = ayahNum;
 
-        // Alafasy Quran Audio URL
-        const audioUrl = `https://cdn.alquran.cloud/media/audio/en.alafasy/${surahNum}${String(ayahNum).padStart(3, '0')}.wav`;
+        // EveryAyah API - Alafasy reciter
+        // Format: https://everyayah.com/data/[reciter]/[surah][ayah].mp3
+        const reciter = 'Alafasy_64kbps'; // উচ্চমানের অডিও
+        const surahPad = String(surahNum).padStart(3, '0');
+        const ayahPad = String(ayahNum).padStart(3, '0');
+        const audioUrl = `https://everyayah.com/data/${reciter}/${surahPad}${ayahPad}.mp3`;
+        
+        // Add now-playing animation to selected ayah
+        document.querySelectorAll('.ayah-item').forEach(el => {
+            el.classList.remove('now-playing');
+        });
+        const selectedItem = document.querySelector('.ayah-item.selected');
+        if (selectedItem) {
+            selectedItem.classList.add('now-playing');
+        }
         
         quranAudio.src = audioUrl;
-        audioTitle.textContent = `${currentSurah.name} • আয়াত ${ayahNum}`;
+        audioTitle.textContent = `${currentSurah.name} (${currentSurah.bn}) • আয়াত ${ayahNum}`;
         
         audioPlayer.classList.remove('hidden');
-        quranAudio.play();
+        
+        // Reset progress
+        audioProgressBar.style.width = '0%';
+        audioTime.textContent = '0:00';
+        
+        quranAudio.load();
+        quranAudio.play().catch(err => {
+            console.error('অডিও প্লে করতে ত্রুটি:', err);
+            alert('অডিও লোড করতে সমস্যা হয়েছে। ইন্টারনেট সংযোগ চেক করুন।');
+            document.querySelectorAll('.ayah-item.now-playing').forEach(el => {
+                el.classList.remove('now-playing');
+            });
+        });
         isPlaying = true;
         updatePlayButton();
     }
@@ -1023,6 +1059,11 @@
         quranAudio.pause();
         audioPlayer.classList.add('hidden');
         isPlaying = false;
+        
+        // Remove now-playing indicator
+        document.querySelectorAll('.ayah-item.now-playing').forEach(el => {
+            el.classList.remove('now-playing');
+        });
     }
 
     // ===== AUDIO EVENT LISTENERS =====
@@ -1047,6 +1088,9 @@
     quranAudio.addEventListener('ended', () => {
         isPlaying = false;
         updatePlayButton();
+        document.querySelectorAll('.ayah-item.now-playing').forEach(el => {
+            el.classList.remove('now-playing');
+        });
     });
 
     audioProgress.addEventListener('click', (e) => {
@@ -1403,16 +1447,9 @@
             alert('পৃষ্ঠা বুকমার্ক করা হয়েছে।');
         });
 
-        // তৃতীয় বোতাম - শেয়ার
+        // তৃতীয় বোতাম - ইমেজ দেখান (সূরা তালিকা)
         toolbarIconBtns[2].addEventListener('click', () => {
-            if (navigator.share) {
-                navigator.share({
-                    title: 'কুরআন শরীফ',
-                    text: `পৃষ্ঠা ${toBengaliNumeral(currentPage)} শেয়ার করুন`
-                }).catch(() => {});
-            } else {
-                alert('শেয়ার করার ফিচার এই ব্রাউজারে সমর্থিত নয়।');
-            }
+            openImageModal();
         });
     }
 
