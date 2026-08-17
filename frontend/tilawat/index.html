@@ -1670,7 +1670,11 @@
         applyRegions(regions);
         updatePageIndicator();
 
-        canvas.addEventListener('click', handleCanvasClick, { once: true });
+        // ক্লিক লিসেনার একবার যোগ করুন, সর্বদা সক্রিয় থাকবে
+        if (!canvas.hasClickListener) {
+            canvas.addEventListener('click', handleCanvasClick);
+            canvas.hasClickListener = true;
+        }
     }
 
     function updatePageIndicator() {
@@ -1691,7 +1695,6 @@
     // ক্যানভাস ক্লিক হ্যান্ডলার
     function handleCanvasClick(e) {
         if (!selectionModeEnabled) {
-            canvas.addEventListener('click', handleCanvasClick, { once: true });
             return;
         }
 
@@ -1722,8 +1725,6 @@
         } else {
             deselectAyah();
         }
-
-        canvas.addEventListener('click', handleCanvasClick, { once: true });
     }
 
     // আয়াত নির্বাচন করুন (একই আয়াতের সব অংশ একসাথে হাইলাইট হবে)
