@@ -603,7 +603,7 @@
     async function loadPdf() {
         try {
             // উদাহরণ Quran পিডিএফ URL
-            const pdfUrl = 'https://data.qurancdn.com/asanfuqaha/Tanzil_ver_1_0.pdf';
+            const pdfUrl = '/tilawat/Emdadia-Hafezi-Quran.pdf';
             
             pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
             totalPages = pdfDoc.numPages;
