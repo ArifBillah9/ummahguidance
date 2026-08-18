@@ -1483,7 +1483,8 @@
     // =====================================================================
     let AUTO_REGIONS = {};                 // pageNum -> regions[]
     const PAGE_CTX = {};                   // pageNum -> {surahNum, ayahNum} (পৃষ্ঠার শুরুর অবস্থা)
-    const CACHE_KEY = 'tilawat_auto_regions_v4'; // v4: সূরা বাকারার প্রথম পৃষ্ঠার (ও একই রকম মুকাত্তাআত-যুক্ত অন্যান্য পৃষ্ঠার) লাইন-বিভাজন বাগ ফিক্সের পর পুরনো ভুল ক্যাশ বাতিল করতে সংস্করণ বাড়ানো হয়েছে
+    const CACHE_KEY = 'tilawat_auto_regions_v5'; // v5: লাইন-বিভাজনের স্থিতিশীল থ্রেশহোল্ড, অজানা মার্কার-গ্লিফ (AUTO) হ্যান্ডলিং, ও বহু-লাইন pending সুরক্ষা যোগ করার পর পুরনো ভুল ক্যাশ বাতিল করতে সংস্করণ বাড়ানো হয়েছে
+
     let scanRunning = false;
 
     // আরবি-হিন্দি সংখ্যা → ইংরেজি সংখ্যা
@@ -1498,19 +1499,51 @@
         return out ? parseInt(out, 10) : null;
     }
 
+    // এই টোকেনটা সাধারণ আরবি লেখার (হরফ/হরকত) না হয়ে, খুব ছোট ও অস্বাভাবিক
+    // কোনো কোডপয়েন্ট (যেমন Private Use Area — অনেক কাস্টম মুসহাফ-ফন্টে
+    // আয়াত-নম্বরের বৃত্ত-চিহ্ন এভাবেই এনকোড করা থাকে) দিয়ে তৈরি কি না তা
+    // যাচাই করুন — হলে এটা সম্ভবত এই ফন্টের নিজস্ব আয়াত-মার্কার গ্লিফ
+    function isLikelyMarkerGlyph(str) {
+        if (!str || str.length > 4) return false;
+        for (const ch of str) {
+            const c = ch.codePointAt(0);
+            // স্বাভাবিক আরবি হরফ/হরকত/মুকাত্তাআত-চিহ্ন রেঞ্জ হলে এটা সাধারণ লেখা, মার্কার না
+            const isNormalArabic = (c >= 0x0621 && c <= 0x065F) || (c >= 0x0670 && c <= 0x06D5) || (c >= 0x0600 && c <= 0x0605);
+            if (isNormalArabic) return false;
+        }
+        return true;
+    }
+
     // আয়াত-শেষের চিহ্ন কি না (۝ ، ﴿١﴾ ، বা শুধু সংখ্যা)
     // এখানে আরও কিছু সাধারণ সাজাসজ্জা/ফাঁকা-চিহ্ন চরিত্র যোগ করা হয়েছে, যাতে
-    // বিভিন্ন মুসহাফ ফন্টে ব্যবহৃত আয়াত-নম্বর মার্কার গ্লিফ মিস না হয়ে যায়
+    // বিভিন্ন মুসহাফ ফন্টে ব্যবহৃত আয়াত-নম্বর মার্কার গ্লিফ মিস না হয়ে যায়।
+    // রিটার্ন ভ্যালু তিন রকম হতে পারে:
+    //   • একটা সংখ্যা (১-২৮৬)         → নিশ্চিতভাবে চেনা আয়াত-নম্বর
+    //   • 'AUTO' (স্ট্রিং)              → এটা যে আয়াত-বিভাজন চিহ্ন তা প্রায় নিশ্চিত,
+    //                                     কিন্তু এই মুসহাফ-ফন্টে ঠিক সংখ্যাটা বোঝা যায়নি —
+    //                                     এক্ষেত্রে ধারাবাহিকভাবে (lastAyah+1) গণনা করা হবে
+    //   • null                        → এটা আয়াত-মার্কার নয়, সাধারণ লেখা
     function markerValue(str) {
         const s = String(str).trim();
         if (!s) return null;
         // চিহ্ন ছাড়া বাকি সব অক্ষর সরিয়ে দেখুন কেবল সংখ্যা/বিরাম-চিহ্ন আছে কি না
         const cleaned = s.replace(/[\u06D6-\u06ED\u08E2\uFD3E\uFD3F()﴾﴿\[\]{}<>\s\u06E9\u0640\.\-–—,،:؛'"*٭۞]/g, '');
-        if (!cleaned) return null;
-        if (!/^[\u0660-\u0669\u06F0-\u06F90-9]+$/.test(cleaned)) return null;
-        const v = arabicToInt(cleaned);
-        if (v === null || v < 1 || v > 286) return null;
-        return v;
+        if (cleaned) {
+            if (/^[\u0660-\u0669\u06F0-\u06F90-9]+$/.test(cleaned)) {
+                const v = arabicToInt(cleaned);
+                if (v !== null && v >= 1 && v <= 286) return v;
+            }
+            // সংখ্যা হিসেবে মেলেনি — সাধারণ ডেকোরেশন বাদ দেওয়ার পরও যা বাকি
+            // আছে সেটা যদি স্বাভাবিক আরবি লেখা না হয়ে অস্বাভাবিক/কাস্টম গ্লিফ
+            // হয়, তাহলে সেটাকেও একটা মার্কার বিভাজন-বিন্দু হিসেবে ধরা হবে
+            if (isLikelyMarkerGlyph(cleaned)) return 'AUTO';
+            return null;
+        }
+        // ডেকোরেশন বাদ দেওয়ার পর কিছুই বাকি নেই — টোকেনটা পুরোপুরি আয়াত-শেষ
+        // চিহ্নের ডেকোরেশন ক্যারেক্টার (যেমন শুধু ۝ বা ۞) দিয়ে তৈরি, যা প্রায়
+        // নিশ্চিতভাবেই একটি আয়াত-বিভাজন চিহ্ন, শুধু সংখ্যাটা আলাদা এনকোড না
+        if (s.length <= 3) return 'AUTO';
+        return null;
     }
 
     function surahAyahCount(n) {
@@ -1616,7 +1649,19 @@
         // আলাদাভাবে ট্যাপ করে সিলেক্ট করা যায়।
         function flushPending(ayahNum) {
             if (!pending.length) return;
-            const forceLine = pending.length > 4;
+            let forceLine = pending.length > 4;
+            // দ্বিতীয় সুরক্ষা-স্তর: আইটেম সংখ্যা কম (≤৪) হলেও যদি সেগুলো
+            // পৃষ্ঠার একাধিক লাইন জুড়ে বিস্তৃত হয় (অর্থাৎ উল্লম্ব ব্যবধান
+            // একটা সাধারণ লাইনের উচ্চতার প্রায় দ্বিগুণের বেশি), তাহলেও ধরে
+            // নিতে হবে মাঝে একটা আয়াত-শেষ চিহ্ন মিস হয়ে গেছে — তাই এক্ষেত্রেও
+            // প্রতিটি লাইন আলাদাভাবে ট্যাপযোগ্য করে দেওয়া হচ্ছে, যাতে একাধিক
+            // ভিন্ন আয়াত ভুলবশত একই ব্লকে সিলেক্ট না হয়ে যায়
+            if (!forceLine && pending.length > 1) {
+                const heights = pending.map(p => p.y1 - p.y0).slice().sort((a, b) => a - b);
+                const typicalH = heights[Math.floor(heights.length / 2)] || 0;
+                const span = Math.max(...pending.map(p => p.y1)) - Math.min(...pending.map(p => p.y0));
+                if (typicalH > 0 && span > typicalH * 1.8) forceLine = true;
+            }
             for (const p of pending) {
                 out.push({
                     surahNum: surah, ayahNum: ayahNum, text: p.text,
@@ -1630,6 +1675,22 @@
         for (const s of segs) {
             pending.push(s);
             if (s.ayahNum === null) continue;
+
+            if (s.ayahNum === 'AUTO') {
+                // এই মুসহাফ-ফন্টে ঠিক সংখ্যাটা বোঝা যায়নি, কিন্তু এটা যে একটা
+                // আয়াত-বিভাজন চিহ্ন তা প্রায় নিশ্চিত — তাই ধারাবাহিকভাবে
+                // পরের আয়াত ধরে নেওয়া হচ্ছে। এতে "নতুন সূরা শুরু হলো কি না"
+                // এই অনুমান করার দরকার নেই — নিচের surahAyahCount চেক-টাই
+                // স্বয়ংক্রিয়ভাবে সূরা পরিবর্তন সামলে নেবে।
+                const num = lastAyah + 1;
+                flushPending(num);
+                lastAyah = num;
+                if (lastAyah >= surahAyahCount(surah)) {
+                    surah = Math.min(114, surah + 1);
+                    lastAyah = 0;
+                }
+                continue;
+            }
 
             let num = s.ayahNum;
             // নতুন সূরা শুরু হয়েছে কি না
