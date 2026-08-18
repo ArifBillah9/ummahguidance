@@ -1483,7 +1483,7 @@
     // =====================================================================
     let AUTO_REGIONS = {};                 // pageNum -> regions[]
     const PAGE_CTX = {};                   // pageNum -> {surahNum, ayahNum} (পৃষ্ঠার শুরুর অবস্থা)
-    const CACHE_KEY = 'tilawat_auto_regions_v3'; // v3: আয়াত-ম্যাপিং বাগ ফিক্সের পর পুরনো ভুল ক্যাশ বাতিল করতে সংস্করণ বাড়ানো হয়েছে
+    const CACHE_KEY = 'tilawat_auto_regions_v4'; // v4: সূরা বাকারার প্রথম পৃষ্ঠার (ও একই রকম মুকাত্তাআত-যুক্ত অন্যান্য পৃষ্ঠার) লাইন-বিভাজন বাগ ফিক্সের পর পুরনো ভুল ক্যাশ বাতিল করতে সংস্করণ বাড়ানো হয়েছে
     let scanRunning = false;
 
     // আরবি-হিন্দি সংখ্যা → ইংরেজি সংখ্যা
@@ -1541,10 +1541,26 @@
 
         // লাইনে গ্রুপ করুন (y অনুযায়ী)
         boxes.sort((a, b) => a.yTop - b.yTop);
+
+        // লাইন শনাক্তকরণের জন্য একটি স্থিতিশীল (stable) থ্রেশহোল্ড দরকার।
+        // আগে এটি প্রতিটি অক্ষরের নিজের উচ্চতা (b.h/line.h) থেকে গতিশীলভাবে
+        // হিসাব হতো — কিন্তু সূরা আল-বাকারার প্রথম পৃষ্ঠার মতো যেখানে
+        // "الٓمٓ" (মুকাত্তাআত) সাধারণ লেখার চেয়ে অনেক বড়/লম্বা ছাপা হয়,
+        // সেই একটি বড় অক্ষরের কারণে থ্রেশহোল্ড অস্বাভাবিক বেড়ে গিয়ে
+        // পরের কয়েকটি লাইনকেও ভুলবশত একই লাইনে (এবং ফলে একই আয়াতে)
+        // মিশিয়ে ফেলত — এতে বিসমিল্লাহ + আয়াত ১ + আয়াত ২ + আয়াত ৩-এর
+        // কিছু অংশ একসাথে একটি বড় ব্লক হিসেবে সিলেক্ট হয়ে যেত।
+        // এর বদলে পুরো পৃষ্ঠার সাধারণ (median) অক্ষর-উচ্চতা ধরে একটি
+        // স্থির থ্রেশহোল্ড ব্যবহার করা হচ্ছে, যাতে দুই-একটি অস্বাভাবিক
+        // বড়/ছোট অক্ষর সামগ্রিক লাইন-বিভাজনকে নষ্ট করতে না পারে।
+        const sortedHeights = boxes.map(b => b.h).slice().sort((a, b) => a - b);
+        const medianH = sortedHeights[Math.floor(sortedHeights.length / 2)] || 12;
+        const lineGapThreshold = medianH * 0.65;
+
         const lines = [];
         for (const b of boxes) {
             const line = lines[lines.length - 1];
-            if (line && Math.abs(b.yTop - line.yTop) < Math.max(b.h, line.h) * 0.7) {
+            if (line && Math.abs(b.yTop - line.yTop) < lineGapThreshold) {
                 line.items.push(b);
                 line.yTop = Math.min(line.yTop, b.yTop);
                 line.yBot = Math.max(line.yBot, b.yBot);
