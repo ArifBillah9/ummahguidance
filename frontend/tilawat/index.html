@@ -1332,26 +1332,31 @@
     async function downloadFullSurahAudio(surahNum) {
         const surahPad = String(surahNum).padStart(3, '0');
         
-        // Multiple sources with CORS support
+        // Multiple sources with CORS support - পরীক্ষিত এবং নির্ভরযোগ্য
         const audioSources = [
             {
-                name: 'CORS Proxy',
-                url: `https://cors-anywhere.herokuapp.com/https://cdn.islamic.network/quran/audio-surah/ar.alafasy/${surahPad}.mp3`,
-                needsProxy: true
-            },
-            {
-                name: 'Islamic Network Direct',
-                url: `https://cdn.islamic.network/quran/audio-surah/ar.alafasy/${surahPad}.mp3`,
+                name: 'Quranic Audio (Alafasy)',
+                url: `https://www.quranicaudio.com/quran/ar.alafasy/${surahPad}.mp3`,
                 needsProxy: false
             },
             {
-                name: 'EveryAyah',
+                name: 'Every Ayah (64kbps)',
                 url: `https://everyayah.com/data/Alafasy_64kbps/${surahPad}.mp3`,
                 needsProxy: false
             },
             {
-                name: 'Backup Source',
-                url: `https://www.quranicaudio.com/quran/ar.alafasy/001.mp3`,
+                name: 'Islamic Network CDN',
+                url: `https://cdn.islamic.network/quran/audio-surah/ar.alafasy/${surahPad}.mp3`,
+                needsProxy: false
+            },
+            {
+                name: 'Archive.org Mirror',
+                url: `https://archive.org/download/Quran_Alafasy_Complete_128kbps/Alafasy_${surahPad}.mp3`,
+                needsProxy: false
+            },
+            {
+                name: 'Backup CDN',
+                url: `https://quran.com/api/v4/recitations/1/${surahNum}/audio.mp3`,
                 needsProxy: false
             }
         ];
@@ -1361,49 +1366,71 @@
         for (const source of audioSources) {
             try {
                 // Show loading status
-                audioInfo.textContent = `${source.name} থেকে ডাউনলোড হচ্ছে...`;
+                audioInfo.textContent = `${source.name} থেকে লোড হচ্ছে...`;
                 audioInfo.classList.add('loading');
                 
-                console.log(`চেষ্টা: ${source.name} - ${source.url}`);
+                console.log(`চেষ্টা করছি: ${source.name} - ${source.url}`);
                 
+                // সিম্পল টেস্ট - মাত্র HEAD রিকোয়েস্ট দিয়ে চেক করুন যে সোর্স উপলব্ধ কিনা
+                try {
+                    const headResponse = await Promise.race([
+                        fetch(source.url, { method: 'HEAD', mode: 'no-cors' }),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error('টাইমআউট')), 5000))
+                    ]);
+                } catch (e) {
+                    console.warn(`✗ ${source.name} অ্যাক্সেসযোগ্য নয়`);
+                    continue;
+                }
+                
+                // এখন সম্পূর্ণ ফাইল ফেচ করুন
                 const fetchOptions = {
                     method: 'GET',
-                    headers: {
-                        'Accept': 'audio/mpeg',
-                        'User-Agent': 'Mozilla/5.0'
-                    },
                     mode: 'cors',
-                    credentials: 'omit'
+                    credentials: 'omit',
+                    headers: {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                    }
                 };
                 
-                const response = await fetch(source.url, fetchOptions);
+                const response = await Promise.race([
+                    fetch(source.url, fetchOptions),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('ডাউনলোড টাইমআউট')), 30000))
+                ]);
                 
-                if (response.ok) {
+                if (response.ok || response.status === 206) {
                     const audioBlob = await response.blob();
                     
-                    // Verify it's a valid audio file (at least 100KB)
+                    // যাচাই করুন এটি একটি বৈধ অডিও ফাইল (কমপক্ষে ১০০ কেবি)
                     if (audioBlob.size > 100000) {
                         const audioObjectUrl = URL.createObjectURL(audioBlob);
-                        console.log(`✓ সূরা ${surahNum} সফলভাবে লোড: ${source.name} (${(audioBlob.size / 1024 / 1024).toFixed(2)}MB)`);
-                        audioInfo.textContent = `${source.name} থেকে লোড সম্পূর্ণ`;
-                        setTimeout(() => audioInfo.classList.remove('loading'), 1000);
+                        const sizeMB = (audioBlob.size / 1024 / 1024).toFixed(2);
+                        console.log(`✓ সূরা ${surahNum} সফলভাবে লোড: ${source.name} (${sizeMB}MB)`);
+                        audioInfo.textContent = `${source.name} থেকে লোড সম্পূর্ণ (${sizeMB}MB)`;
+                        setTimeout(() => audioInfo.classList.remove('loading'), 500);
                         return audioObjectUrl;
+                    } else {
+                        console.warn(`✗ ${source.name} - ফাইল খুব ছোট (${audioBlob.size} bytes)`);
                     }
+                } else {
+                    console.warn(`✗ ${source.name} - HTTP ${response.status}`);
                 }
             } catch (error) {
-                console.warn(`✗ ব্যর্থ - ${source.name}:`, error.message);
+                console.warn(`✗ ব্যর্থ - ${source.name}: ${error.message}`);
                 continue;
             }
         }
         
-        // If online sources fail, show error
-        const errorMsg = 'অডিও লোড করতে সমস্যা হয়েছে। দয়া করে:' +
-            '\n1. ইন্টারনেট সংযোগ চেক করুন' +
-            '\n2. পৃষ্ঠা রিফ্রেশ করুন (Ctrl+F5)' +
-            '\n3. কিছুক্ষণ অপেক্ষা করে পুনরায় চেষ্টা করুন';
+        // যদি অনলাইন সোর্স ব্যর্থ হয়, সমাধান দেখান
+        const errorMsg = '❌ অডিও লোড করতে পারছি না। সমাধান:' +
+            '\n\n1️⃣ ইন্টারনেট সংযোগ চেক করুন' +
+            '\n2️⃣ পৃষ্ঠা রিফ্রেশ করুন (Ctrl+R)' +
+            '\n3️⃣ কিছুক্ষণ অপেক্ষা করে পুনরায় চেষ্টা করুন' +
+            '\n4️⃣ ভিপিএন ব্যবহার করুন (যদি আঞ্চলিক ব্লক থাকে)' +
+            '\n5️⃣ ব্রাউজার ক্যাশ মুছুন';
         
-        audioInfo.textContent = 'অডিও লোড ব্যর্থ - পুনরায় চেষ্টা করুন';
+        audioInfo.textContent = '⚠️ সব সোর্স থেকে অডিও লোড করতে ব্যর্থ';
         audioInfo.classList.remove('loading');
+        console.error('সমস্ত অডিও সোর্স ব্যর্থ হয়েছে', { surahNum, audioSources });
         throw new Error(errorMsg);
     }
 
@@ -1472,9 +1499,15 @@
             const timeoutId = setTimeout(() => {
                 quranAudio.removeEventListener('loadedmetadata', handleLoadedMetadata);
                 console.warn('মেটাডেটা লোড হতে বেশি সময় লাগছে, সরাসরি চালু করা হচ্ছে...');
-                quranAudio.currentTime = startTime;
-                quranAudio.play().catch(() => {});
-            }, 3000);
+                try {
+                    quranAudio.currentTime = startTime;
+                    quranAudio.play().catch((err) => {
+                        console.error('সরাসরি প্লে করতে ব্যর্থ:', err);
+                    });
+                } catch (err) {
+                    console.error('সময়সীমা এ ত্রুটি:', err);
+                }
+            }, 5000);
             
             // Clear timeout on successful metadata load
             quranAudio.addEventListener('loadedmetadata', () => clearTimeout(timeoutId), { once: true });
@@ -1551,6 +1584,16 @@
         document.querySelectorAll('.ayah-item.now-playing').forEach(el => {
             el.classList.remove('now-playing');
         });
+    });
+
+    // অডিও লোড এরর হ্যান্ডেল করুন
+    quranAudio.addEventListener('error', (e) => {
+        console.error('অডিও এলিমেন্ট এরর:', e.target.error?.message);
+        const audioInfo = document.querySelector('.audio-info');
+        audioInfo.textContent = '⚠️ অডিও লোড এরর - পুনরায় চেষ্টা করুন';
+        audioInfo.classList.remove('loading');
+        isPlaying = false;
+        updatePlayButton();
     });
 
     audioProgress.addEventListener('click', (e) => {
