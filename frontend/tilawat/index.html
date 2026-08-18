@@ -1483,7 +1483,7 @@
     // =====================================================================
     let AUTO_REGIONS = {};                 // pageNum -> regions[]
     const PAGE_CTX = {};                   // pageNum -> {surahNum, ayahNum} (পৃষ্ঠার শুরুর অবস্থা)
-    const CACHE_KEY = 'tilawat_auto_regions_v2';
+    const CACHE_KEY = 'tilawat_auto_regions_v3'; // v3: আয়াত-ম্যাপিং বাগ ফিক্সের পর পুরনো ভুল ক্যাশ বাতিল করতে সংস্করণ বাড়ানো হয়েছে
     let scanRunning = false;
 
     // আরবি-হিন্দি সংখ্যা → ইংরেজি সংখ্যা
@@ -1499,11 +1499,13 @@
     }
 
     // আয়াত-শেষের চিহ্ন কি না (۝ ، ﴿١﴾ ، বা শুধু সংখ্যা)
+    // এখানে আরও কিছু সাধারণ সাজাসজ্জা/ফাঁকা-চিহ্ন চরিত্র যোগ করা হয়েছে, যাতে
+    // বিভিন্ন মুসহাফ ফন্টে ব্যবহৃত আয়াত-নম্বর মার্কার গ্লিফ মিস না হয়ে যায়
     function markerValue(str) {
         const s = String(str).trim();
         if (!s) return null;
         // চিহ্ন ছাড়া বাকি সব অক্ষর সরিয়ে দেখুন কেবল সংখ্যা/বিরাম-চিহ্ন আছে কি না
-        const cleaned = s.replace(/[\u06DD\u08E2\uFD3E\uFD3F()﴾﴿\[\]{}<>\s\u06E9\u0640\.\-–—]/g, '');
+        const cleaned = s.replace(/[\u06D6-\u06ED\u08E2\uFD3E\uFD3F()﴾﴿\[\]{}<>\s\u06E9\u0640\.\-–—,،:؛'"*٭۞]/g, '');
         if (!cleaned) return null;
         if (!/^[\u0660-\u0669\u06F0-\u06F90-9]+$/.test(cleaned)) return null;
         const v = arabicToInt(cleaned);
@@ -1589,6 +1591,26 @@
         let surah = ctx.surahNum, lastAyah = ctx.ayahNum;
         let pending = [];
 
+        // pending-এ জমে থাকা খণ্ডগুলো একটি আয়াত নম্বরে ফ্লাশ করুন।
+        // যদি কোনো পৃষ্ঠায়/অংশে আয়াত-শেষের চিহ্ন একেবারেই শনাক্ত করা না যায়
+        // (যেমন এই মুসহাফের বিশেষ মার্কার গ্লিফ চেনা যায়নি), তাহলে একগাদা ভিন্ন
+        // ভিন্ন আয়াত ভুলবশত একই আইডিতে মিশে গিয়ে "সব একসাথে সিলেক্ট হওয়া" সমস্যা
+        // তৈরি করে। এটা ঠেকাতে অস্বাভাবিক রকম বড় pending (৪+ লাইন) পেলে প্রতিটি
+        // লাইনকে আলাদা লাইন-ভিত্তিক আইডি দেওয়া হয়, যাতে অন্তত প্রতিটি লাইন
+        // আলাদাভাবে ট্যাপ করে সিলেক্ট করা যায়।
+        function flushPending(ayahNum) {
+            if (!pending.length) return;
+            const forceLine = pending.length > 4;
+            for (const p of pending) {
+                out.push({
+                    surahNum: surah, ayahNum: ayahNum, text: p.text,
+                    x0: p.x0, x1: p.x1, y0: p.y0, y1: p.y1,
+                    isLine: forceLine
+                });
+            }
+            pending = [];
+        }
+
         for (const s of segs) {
             pending.push(s);
             if (s.ayahNum === null) continue;
@@ -1602,21 +1624,16 @@
             } else if (num !== lastAyah + 1 && num === 1) {
                 surah = Math.min(114, surah + 1);
             }
-            for (const p of pending) {
-                out.push({ surahNum: surah, ayahNum: num, text: p.text, x0: p.x0, x1: p.x1, y0: p.y0, y1: p.y1 });
-            }
+            flushPending(num);
             lastAyah = num;
             if (lastAyah >= surahAyahCount(surah)) {
                 // সূরা শেষ — পরের আয়াত নতুন সূরার
                 surah = Math.min(114, surah + 1);
                 lastAyah = 0;
             }
-            pending = [];
         }
         // শেষের অসম্পূর্ণ অংশ = পরের আয়াতের শুরু
-        for (const p of pending) {
-            out.push({ surahNum: surah, ayahNum: lastAyah + 1, text: p.text, x0: p.x0, x1: p.x1, y0: p.y0, y1: p.y1 });
-        }
+        flushPending(lastAyah + 1);
         return { regions: out, next: { surahNum: surah, ayahNum: lastAyah } };
     }
 
@@ -1714,7 +1731,17 @@
 
     // এই পৃষ্ঠার আয়াত অঞ্চল নিশ্চিত করুন (দরকার হলে এখনই বের করুন)
     async function ensureRegions(pageNum, page) {
-        if (ALL_REGIONS[String(pageNum)]) return ALL_REGIONS[String(pageNum)];
+        if (ALL_REGIONS[String(pageNum)]) {
+            const regions = ALL_REGIONS[String(pageNum)];
+            // ম্যানুয়াল (হাতে ম্যাপ করা) পৃষ্ঠার পরের পৃষ্ঠাগুলো যেন স্বয়ংক্রিয়
+            // ম্যাপিং-এ ভুল সূরা/আয়াত থেকে শুরু না হয়, তাই এখানেও পরবর্তী
+            // পৃষ্ঠার প্রেক্ষাপট (context) সংরক্ষণ করা হয়
+            if (!PAGE_CTX[String(pageNum + 1)] && regions.length) {
+                const last = regions[regions.length - 1];
+                PAGE_CTX[String(pageNum + 1)] = { surahNum: last.surahNum, ayahNum: last.ayahNum };
+            }
+            return regions;
+        }
         if (AUTO_REGIONS[String(pageNum)]) return AUTO_REGIONS[String(pageNum)];
 
         const segs = await extractSegments(page);
@@ -1734,6 +1761,18 @@
         scanRunning = true;
         let ctx0 = { surahNum: 1, ayahNum: 0 };
         for (let p = 1; p <= totalPages; p++) {
+            // ম্যানুয়ালি (হাতে) ম্যাপ করা পৃষ্ঠা (যেমন ফাতিহা) থাকলে সেটা
+            // স্বয়ংক্রিয়ভাবে পুনরায় স্ক্যান/ওভাররাইট না করে সেই সঠিক ডেটা
+            // থেকেই পরের পৃষ্ঠার প্রেক্ষাপট বের করুন
+            if (ALL_REGIONS[String(p)]) {
+                const manualRegions = ALL_REGIONS[String(p)];
+                if (manualRegions.length) {
+                    const last = manualRegions[manualRegions.length - 1];
+                    ctx0 = { surahNum: last.surahNum, ayahNum: last.ayahNum };
+                    PAGE_CTX[String(p + 1)] = ctx0;
+                }
+                continue;
+            }
             if (AUTO_REGIONS[String(p)] && PAGE_CTX[String(p + 1)]) {
                 ctx0 = PAGE_CTX[String(p + 1)];
                 continue;
