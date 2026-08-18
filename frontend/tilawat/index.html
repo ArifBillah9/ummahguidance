@@ -659,159 +659,101 @@
         display: block;
     }
 
-    /* ===== AUDIO MODAL POPUP ===== */
-    .audio-modal {
+    /* ===== FULLSCREEN AUDIO DOWNLOAD SCREEN ===== */
+    .fullscreen-download {
         display: none;
-        position: fixed;
+        position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 100;
+        background: #3f6f52;
+        z-index: 200;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
-        animation: fadeIn 0.3s ease-in-out;
+        animation: fadeIn 0.25s ease-in-out;
     }
 
-    .audio-modal.active {
+    .fullscreen-download.active {
         display: flex;
     }
 
     @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: scale(0.9);
-        }
-        to {
-            opacity: 1;
-            transform: scale(1);
-        }
+        from { opacity: 0; }
+        to { opacity: 1; }
     }
 
-    .audio-modal-content {
-        background: #fff;
-        border-radius: 20px;
-        padding: 32px 24px;
-        max-width: 320px;
-        width: 90%;
-        text-align: center;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        animation: slideUp 0.3s ease-in-out;
-    }
-
-    @keyframes slideUp {
-        from {
-            transform: translateY(20px);
-            opacity: 0;
-        }
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
-
-    .audio-modal-title {
-        font-size: 20px;
-        font-weight: 700;
-        color: #1b1b1b;
-        margin-bottom: 12px;
-        font-family: 'Kalpurush', 'Hind Siliguri', sans-serif;
-    }
-
-    .audio-modal-subtitle {
-        font-size: 14px;
-        color: #666;
-        margin-bottom: 28px;
-        line-height: 1.5;
-        font-family: 'Kalpurush', 'Hind Siliguri', sans-serif;
-    }
-
-    .audio-modal-buttons {
-        display: flex;
-        gap: 12px;
-        justify-content: center;
-    }
-
-    .audio-modal-btn {
-        flex: 1;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 10px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-family: 'Kalpurush', 'Hind Siliguri', sans-serif;
-    }
-
-    .audio-modal-btn.primary {
-        background: var(--brand);
+    .fs-download-title {
         color: #fff;
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 22px;
+        text-align: center;
+        padding: 0 30px;
+        font-family: 'Kalpurush', 'Hind Siliguri', sans-serif;
+        opacity: .92;
     }
 
-    .audio-modal-btn.primary:hover {
-        background: var(--brand-dark);
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(23, 90, 69, 0.3);
+    .download-circle-wrap {
+        position: relative;
+        width: 160px;
+        height: 160px;
     }
 
-    .audio-modal-btn.secondary {
-        background: #f0f0f0;
-        color: #1b1b1b;
-        border: 1px solid #ddd;
-    }
-
-    .audio-modal-btn.secondary:hover {
-        background: #e8e8e8;
-        transform: translateY(-2px);
-    }
-
-    .audio-modal-btn:active {
-        transform: translateY(0);
-    }
-
-    /* ===== DOWNLOAD PROGRESS STYLES ===== */
-    .download-progress-section {
-        display: none;
-        margin-top: 20px;
-    }
-
-    .download-progress-section.active {
-        display: block;
-    }
-
-    .download-progress-bar {
+    .download-circle-svg {
         width: 100%;
-        height: 6px;
-        background: #f0f0f0;
-        border-radius: 3px;
-        overflow: hidden;
-        margin-bottom: 10px;
-    }
-
-    .download-progress-fill {
         height: 100%;
-        background: linear-gradient(90deg, var(--brand), var(--brand-light));
-        width: 0%;
-        transition: width 0.3s ease;
+        transform: rotate(-90deg);
     }
 
-    .download-status {
-        font-size: 12px;
-        color: #666;
-        margin-bottom: 10px;
+    .download-circle-bg {
+        fill: none;
+        stroke: rgba(255,255,255,.28);
+        stroke-width: 6;
+    }
+
+    .download-circle-fg {
+        fill: none;
+        stroke: #fff;
+        stroke-width: 6;
+        stroke-linecap: round;
+        stroke-dasharray: 326.7256;
+        stroke-dashoffset: 326.7256;
+        transition: stroke-dashoffset .15s linear;
+    }
+
+    .download-percent {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 22px;
+        font-weight: 600;
         font-family: 'Kalpurush', 'Hind Siliguri', sans-serif;
     }
 
-    .download-status.success {
-        color: #4caf50;
-        font-weight: 600;
+    .download-cancel-btn {
+        position: absolute;
+        left: 24px;
+        right: 24px;
+        bottom: 40px;
+        background: rgba(0,0,0,.35);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 16px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: 'Kalpurush', 'Hind Siliguri', sans-serif;
+        transition: background .2s ease;
     }
 
-    .download-status.error {
-        color: #f44336;
-        font-weight: 600;
+    .download-cancel-btn:active {
+        background: rgba(0,0,0,.5);
     }
 
     .spinner {
@@ -978,26 +920,17 @@
     </div>
 </div>
 
-<!-- AUDIO MODAL POPUP -->
-<div class="audio-modal" id="audioModal">
-    <div class="audio-modal-content">
-        <div class="audio-modal-title">পরে পরে কুরআন</div>
-        <div class="audio-modal-subtitle">আপনি কি ডাউনলোড করতে চান?</div>
-        <div class="audio-modal-buttons">
-            <button class="audio-modal-btn primary" id="audioDownloadBtn">ডাউনলোড</button>
-            <button class="audio-modal-btn secondary" id="audioBrowseBtn">ব্রাউজ করুন</button>
-        </div>
-        
-        <!-- ডাউনলোড প্রগ্রেস সেকশন -->
-        <div class="download-progress-section" id="downloadProgressSection">
-            <div class="download-status" id="downloadStatus">
-                <span class="spinner"></span>ডাউনলোড হচ্ছে...
-            </div>
-            <div class="download-progress-bar">
-                <div class="download-progress-fill" id="downloadProgressFill"></div>
-            </div>
-        </div>
+<!-- FULLSCREEN AUDIO DOWNLOAD স্ক্রিন (আয়াতে ট্যাপ করলে দেখাবে) -->
+<div class="fullscreen-download" id="fullscreenDownload">
+    <div class="fs-download-title" id="fsDownloadTitle">সূরা ডাউনলোড হচ্ছে...</div>
+    <div class="download-circle-wrap">
+        <svg class="download-circle-svg" viewBox="0 0 120 120">
+            <circle class="download-circle-bg" cx="60" cy="60" r="52"></circle>
+            <circle class="download-circle-fg" id="downloadCircleFg" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="download-percent" id="downloadPercent">0%</div>
     </div>
+    <button class="download-cancel-btn" id="downloadCancelBtn">ডাউনলোড বাতিল করুন</button>
 </div>
 
 <!-- HIDDEN AUDIO ELEMENT -->
@@ -1378,54 +1311,103 @@
         return 5.5;
     }
 
-    // নতুন সরল playAyah ফাংশন - শুধু মডাল দেখায়
+    // ===== FULLSCREEN ডাউনলোড স্ক্রিন - এলিমেন্ট =====
+    const fullscreenDownload = document.getElementById('fullscreenDownload');
+    const fsDownloadTitle = document.getElementById('fsDownloadTitle');
+    const downloadCircleFg = document.getElementById('downloadCircleFg');
+    const downloadPercent = document.getElementById('downloadPercent');
+    const downloadCancelBtn = document.getElementById('downloadCancelBtn');
+    const DOWNLOAD_CIRCLE_CIRCUMFERENCE = 326.7256; // 2 * π * 52 (SVG circle radius)
+    let downloadAbortController = null;
+
+    // পূর্ণ সূরার অডিও লিংক তৈরি করুন (mp3quran.net - মিশারী আলাফাসি)
+    // প্রয়োজনে রিসাইটার/সার্ভার পরিবর্তন করতে শুধু এই ফাংশনটি বদলান
+    function getSurahAudioUrl(surahNum) {
+        const padded = String(surahNum).padStart(3, '0');
+        return `https://server8.mp3quran.net/afs/${padded}.mp3`;
+    }
+
+    function setDownloadProgress(percent) {
+        const clamped = Math.max(0, Math.min(100, percent));
+        const offset = DOWNLOAD_CIRCLE_CIRCUMFERENCE - (DOWNLOAD_CIRCLE_CIRCUMFERENCE * clamped / 100);
+        downloadCircleFg.style.strokeDashoffset = offset;
+        downloadPercent.textContent = Math.round(clamped) + '%';
+    }
+
+    // পূর্ণ সূরাটি ডাউনলোড করুন এবং ফুলস্ক্রিন প্রগ্রেস স্ক্রিন দেখান
+    async function downloadFullSurah(surahNum) {
+        const surah = SURAHS.find(s => s.num === surahNum);
+        fsDownloadTitle.textContent = surah
+            ? `সূরা ${surah.name} (${surah.bn}) ডাউনলোড হচ্ছে...`
+            : 'সূরা ডাউনলোড হচ্ছে...';
+
+        setDownloadProgress(0);
+        fullscreenDownload.classList.add('active');
+
+        downloadAbortController = new AbortController();
+        const url = getSurahAudioUrl(surahNum);
+
+        try {
+            const response = await fetch(url, { signal: downloadAbortController.signal });
+            if (!response.ok || !response.body) throw new Error('ডাউনলোড ব্যর্থ হয়েছে');
+
+            const totalStr = response.headers.get('Content-Length');
+            const total = totalStr ? parseInt(totalStr, 10) : 0;
+            let loaded = 0;
+            const reader = response.body.getReader();
+            const chunks = [];
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                chunks.push(value);
+                loaded += value.length;
+                if (total) {
+                    setDownloadProgress((loaded / total) * 100);
+                } else {
+                    // মোট সাইজ জানা না থাকলে একটি অনুমানভিত্তিক প্রগ্রেস দেখান
+                    setDownloadProgress(Math.min(95, (loaded / (1024 * 1024)) * 10));
+                }
+            }
+
+            setDownloadProgress(100);
+
+            const blob = new Blob(chunks, { type: 'audio/mpeg' });
+            const objectUrl = URL.createObjectURL(blob);
+
+            setTimeout(() => {
+                fullscreenDownload.classList.remove('active');
+                quranAudio.src = objectUrl;
+                quranAudio.play().catch(() => {});
+            }, 350);
+
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                console.log('ডাউনলোড বাতিল করা হয়েছে।');
+            } else {
+                console.error('ডাউনলোড ত্রুটি:', error);
+                fullscreenDownload.classList.remove('active');
+                alert('ডাউনলোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।');
+            }
+        } finally {
+            downloadAbortController = null;
+        }
+    }
+
+    // ডাউনলোড বাতিল বাটন
+    downloadCancelBtn.addEventListener('click', () => {
+        if (downloadAbortController) {
+            downloadAbortController.abort();
+        }
+        fullscreenDownload.classList.remove('active');
+    });
+
+    // আয়াতে ট্যাপ করলে সরাসরি পূর্ণ সূরার ডাউনলোড স্ক্রিন দেখায়
     function playAyah(surahNum, ayahNum) {
         currentSurah = SURAHS.find(s => s.num === surahNum);
         currentAyah = ayahNum;
-
-        // মডাল দেখান
-        const audioModal = document.getElementById('audioModal');
-        audioModal.classList.add('active');
-        
-        console.log(`নির্বাচিত: সূরা ${currentSurah.name} (${currentSurah.bn}) - আয়াত ${ayahNum}`);
+        downloadFullSurah(surahNum);
     }
-
-    // মডাল এলিমেন্ট এবং বাটন
-    const audioModal = document.getElementById('audioModal');
-    const audioDownloadBtn = document.getElementById('audioDownloadBtn');
-    const audioBrowseBtn = document.getElementById('audioBrowseBtn');
-
-    // ডাউনলোড বাটন ক্লিক ইভেন্ট
-    audioDownloadBtn.addEventListener('click', () => {
-        if (currentSurah) {
-            alert(`সূরা ${currentSurah.name} (${currentSurah.bn}) - আয়াত ${currentAyah} ডাউনলোড করছি...`);
-            audioModal.classList.remove('active');
-            // এখানে আপনার ডাউনলোড লজিক যোগ করুন
-        }
-    });
-
-    // ব্রাউজ করুন বাটন ক্লিক ইভেন্ট
-    audioBrowseBtn.addEventListener('click', () => {
-        if (currentSurah) {
-            alert(`সূরা ${currentSurah.name} (${currentSurah.bn}) - আয়াত ${currentAyah} ব্রাউজ করছি...`);
-            audioModal.classList.remove('active');
-            // এখানে আপনার ব্রাউজ লজিক যোগ করুন
-        }
-    });
-
-    // মডাল বাইরে ক্লিক করলে বন্ধ করা
-    audioModal.addEventListener('click', (e) => {
-        if (e.target === audioModal) {
-            audioModal.classList.remove('active');
-        }
-    });
-
-    // ESC কী দিয়ে বন্ধ করা
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && audioModal.classList.contains('active')) {
-            audioModal.classList.remove('active');
-        }
-    });
 
     // ===== MODAL CLOSE EVENTS =====
     closeSurahModal.addEventListener('click', closeSurahModalFn);
