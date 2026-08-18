@@ -659,107 +659,116 @@
         display: block;
     }
 
-    /* ===== AUDIO PLAYER ===== */
-    .audio-player {
+    /* ===== AUDIO MODAL POPUP ===== */
+    .audio-modal {
+        display: none;
         position: fixed;
-        bottom: 0;
+        top: 0;
         left: 0;
         right: 0;
-        background: linear-gradient(180deg, var(--brand), var(--brand-dark));
-        color: #fff;
-        padding: 12px 16px;
-        z-index: 20;
-        max-width: 480px;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-    .audio-player.hidden {
-        display: none;
-    }
-
-    .audio-info {
-        font-size: 12px;
-        margin-bottom: 8px;
-        text-align: center;
-    }
-
-    .audio-controls {
-        display: flex;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 100;
         align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .audio-modal.active {
+        display: flex;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .audio-modal-content {
+        background: #fff;
+        border-radius: 20px;
+        padding: 32px 24px;
+        max-width: 320px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        animation: slideUp 0.3s ease-in-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(20px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .audio-modal-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1b1b1b;
+        margin-bottom: 12px;
+        font-family: 'Kalpurush', 'Hind Siliguri', sans-serif;
+    }
+
+    .audio-modal-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 28px;
+        line-height: 1.5;
+        font-family: 'Kalpurush', 'Hind Siliguri', sans-serif;
+    }
+
+    .audio-modal-buttons {
+        display: flex;
         gap: 12px;
         justify-content: center;
     }
 
-    .audio-btn {
-        background: rgba(255, 255, 255, 0.2);
-        border: none;
-        color: #fff;
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-
-    .audio-btn:hover {
-        background: rgba(255, 255, 255, 0.3);
-    }
-
-    .audio-progress {
+    .audio-modal-btn {
         flex: 1;
-        height: 4px;
-        background: rgba(255, 255, 255, 0.2);
-        border-radius: 2px;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
         cursor: pointer;
-        position: relative;
+        transition: all 0.2s ease;
+        font-family: 'Kalpurush', 'Hind Siliguri', sans-serif;
     }
 
-    .audio-progress-bar {
-        height: 100%;
-        background: #fff;
-        border-radius: 2px;
-        width: 0%;
+    .audio-modal-btn.primary {
+        background: var(--brand);
+        color: #fff;
     }
 
-    .audio-time {
-        font-size: 11px;
-        min-width: 40px;
-        text-align: right;
+    .audio-modal-btn.primary:hover {
+        background: var(--brand-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(23, 90, 69, 0.3);
     }
 
-    /* ===== AUDIO LOADING INDICATOR ===== */
-    .audio-loading {
-        display: inline-block;
-        position: relative;
-        width: 14px;
-        height: 14px;
-        margin-left: 6px;
+    .audio-modal-btn.secondary {
+        background: #f0f0f0;
+        color: #1b1b1b;
+        border: 1px solid #ddd;
     }
 
-    .audio-loading::after {
-        content: "";
-        position: absolute;
-        width: 14px;
-        height: 14px;
-        top: 0;
-        left: 0;
-        border: 2px solid rgba(255,255,255,.3);
-        border-top-color: #fff;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
+    .audio-modal-btn.secondary:hover {
+        background: #e8e8e8;
+        transform: translateY(-2px);
     }
 
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-
-    .audio-info.loading {
-        color: #ffd740;
-        font-weight: 500;
+    .audio-modal-btn:active {
+        transform: translateY(0);
     }
 </style>
 </head>
@@ -910,26 +919,15 @@
     </div>
 </div>
 
-<!-- AUDIO PLAYER -->
-<div class="audio-player hidden" id="audioPlayer">
-    <div class="audio-info">
-        <span id="audioTitle">আয়াত চালু হচ্ছে...</span>
-    </div>
-    <div class="audio-controls">
-        <button class="audio-btn" id="audioPlayBtn">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                <polygon points="5 3 19 12 5 21 5 3"/>
-            </svg>
-        </button>
-        <div class="audio-progress" id="audioProgress">
-            <div class="audio-progress-bar" id="audioProgressBar"></div>
+<!-- AUDIO MODAL POPUP -->
+<div class="audio-modal" id="audioModal">
+    <div class="audio-modal-content">
+        <div class="audio-modal-title">পরে পরে কুরআন</div>
+        <div class="audio-modal-subtitle">আপনি কি ডাউনলোড করতে চান?</div>
+        <div class="audio-modal-buttons">
+            <button class="audio-modal-btn primary" id="audioDownloadBtn">ডাউনলোড</button>
+            <button class="audio-modal-btn secondary" id="audioBrowseBtn">ব্রাউজ করুন</button>
         </div>
-        <span class="audio-time" id="audioTime">0:00</span>
-        <button class="audio-btn" id="audioCloseBtn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-        </button>
     </div>
 </div>
 
@@ -1311,299 +1309,54 @@
         return 5.5;
     }
 
-    // Get ayah start time by calculating cumulative duration
-    function getAyahStartTime(surahNum, ayahNum) {
-        const surahKey = String(surahNum);
-        const durations = AYAH_DURATIONS[surahKey];
-        
-        if (!durations) {
-            console.warn(`সূরা ${surahNum} এর জন্য সময় তথ্য পাওয়া যায়নি`);
-            return 0;
-        }
-        
-        let totalTime = 0;
-        for (let i = 1; i < ayahNum; i++) {
-            totalTime += durations[String(i)] || 0;
-        }
-        return totalTime;
-    }
-
-    // Download full surah audio from multiple sources with CORS handling
-    async function downloadFullSurahAudio(surahNum) {
-        const surahPad = String(surahNum).padStart(3, '0');
-        
-        // Multiple sources with CORS support - পরীক্ষিত এবং নির্ভরযোগ্য
-        const audioSources = [
-            {
-                name: 'Quranic Audio (Alafasy)',
-                url: `https://www.quranicaudio.com/quran/ar.alafasy/${surahPad}.mp3`,
-                needsProxy: false
-            },
-            {
-                name: 'Every Ayah (64kbps)',
-                url: `https://everyayah.com/data/Alafasy_64kbps/${surahPad}.mp3`,
-                needsProxy: false
-            },
-            {
-                name: 'Islamic Network CDN',
-                url: `https://cdn.islamic.network/quran/audio-surah/ar.alafasy/${surahPad}.mp3`,
-                needsProxy: false
-            },
-            {
-                name: 'Archive.org Mirror',
-                url: `https://archive.org/download/Quran_Alafasy_Complete_128kbps/Alafasy_${surahPad}.mp3`,
-                needsProxy: false
-            },
-            {
-                name: 'Backup CDN',
-                url: `https://quran.com/api/v4/recitations/1/${surahNum}/audio.mp3`,
-                needsProxy: false
-            }
-        ];
-        
-        const audioInfo = document.querySelector('.audio-info');
-        
-        for (const source of audioSources) {
-            try {
-                // Show loading status
-                audioInfo.textContent = `${source.name} থেকে লোড হচ্ছে...`;
-                audioInfo.classList.add('loading');
-                
-                console.log(`চেষ্টা করছি: ${source.name} - ${source.url}`);
-                
-                // সিম্পল টেস্ট - মাত্র HEAD রিকোয়েস্ট দিয়ে চেক করুন যে সোর্স উপলব্ধ কিনা
-                try {
-                    const headResponse = await Promise.race([
-                        fetch(source.url, { method: 'HEAD', mode: 'no-cors' }),
-                        new Promise((_, reject) => setTimeout(() => reject(new Error('টাইমআউট')), 5000))
-                    ]);
-                } catch (e) {
-                    console.warn(`✗ ${source.name} অ্যাক্সেসযোগ্য নয়`);
-                    continue;
-                }
-                
-                // এখন সম্পূর্ণ ফাইল ফেচ করুন
-                const fetchOptions = {
-                    method: 'GET',
-                    mode: 'cors',
-                    credentials: 'omit',
-                    headers: {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                    }
-                };
-                
-                const response = await Promise.race([
-                    fetch(source.url, fetchOptions),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('ডাউনলোড টাইমআউট')), 30000))
-                ]);
-                
-                if (response.ok || response.status === 206) {
-                    const audioBlob = await response.blob();
-                    
-                    // যাচাই করুন এটি একটি বৈধ অডিও ফাইল (কমপক্ষে ১০০ কেবি)
-                    if (audioBlob.size > 100000) {
-                        const audioObjectUrl = URL.createObjectURL(audioBlob);
-                        const sizeMB = (audioBlob.size / 1024 / 1024).toFixed(2);
-                        console.log(`✓ সূরা ${surahNum} সফলভাবে লোড: ${source.name} (${sizeMB}MB)`);
-                        audioInfo.textContent = `${source.name} থেকে লোড সম্পূর্ণ (${sizeMB}MB)`;
-                        setTimeout(() => audioInfo.classList.remove('loading'), 500);
-                        return audioObjectUrl;
-                    } else {
-                        console.warn(`✗ ${source.name} - ফাইল খুব ছোট (${audioBlob.size} bytes)`);
-                    }
-                } else {
-                    console.warn(`✗ ${source.name} - HTTP ${response.status}`);
-                }
-            } catch (error) {
-                console.warn(`✗ ব্যর্থ - ${source.name}: ${error.message}`);
-                continue;
-            }
-        }
-        
-        // যদি অনলাইন সোর্স ব্যর্থ হয়, সমাধান দেখান
-        const errorMsg = '❌ অডিও লোড করতে পারছি না। সমাধান:' +
-            '\n\n1️⃣ ইন্টারনেট সংযোগ চেক করুন' +
-            '\n2️⃣ পৃষ্ঠা রিফ্রেশ করুন (Ctrl+R)' +
-            '\n3️⃣ কিছুক্ষণ অপেক্ষা করে পুনরায় চেষ্টা করুন' +
-            '\n4️⃣ ভিপিএন ব্যবহার করুন (যদি আঞ্চলিক ব্লক থাকে)' +
-            '\n5️⃣ ব্রাউজার ক্যাশ মুছুন';
-        
-        audioInfo.textContent = '⚠️ সব সোর্স থেকে অডিও লোড করতে ব্যর্থ';
-        audioInfo.classList.remove('loading');
-        console.error('সমস্ত অডিও সোর্স ব্যর্থ হয়েছে', { surahNum, audioSources });
-        throw new Error(errorMsg);
-    }
-
-    // New enhanced playAyah function with full surah download
-    async function playAyah(surahNum, ayahNum) {
+    // নতুন সরল playAyah ফাংশন - শুধু মডাল দেখায়
+    function playAyah(surahNum, ayahNum) {
         currentSurah = SURAHS.find(s => s.num === surahNum);
         currentAyah = ayahNum;
 
-        // Add now-playing animation to selected ayah
-        document.querySelectorAll('.ayah-item').forEach(el => {
-            el.classList.remove('now-playing');
-        });
-        const selectedItem = document.querySelector('.ayah-item.selected');
-        if (selectedItem) {
-            selectedItem.classList.add('now-playing');
-        }
+        // মডাল দেখান
+        const audioModal = document.getElementById('audioModal');
+        audioModal.classList.add('active');
         
-        audioPlayer.classList.remove('hidden');
-        
-        // Reset progress
-        audioProgressBar.style.width = '0%';
-        audioTime.textContent = '0:00';
-        
-        try {
-            // Download full surah audio
-            const audioUrl = await downloadFullSurahAudio(surahNum);
-            
-            // Set the audio source to full surah
-            quranAudio.src = audioUrl;
-            
-            // Calculate start time for the selected ayah
-            const startTime = getAyahStartTime(surahNum, ayahNum);
-            
-            // Load the audio
-            quranAudio.load();
-            
-            // Create a handler for when metadata is loaded
-            const handleLoadedMetadata = async () => {
-                quranAudio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-                
-                // Seek to the selected ayah's start time
-                quranAudio.currentTime = startTime;
-                
-                // Update UI
-                const audioInfo = document.querySelector('.audio-info');
-                audioInfo.textContent = `${currentSurah.name} (${currentSurah.bn}) • আয়াত ${ayahNum} থেকে সম্পূর্ণ সূরা`;
-                audioInfo.classList.remove('loading');
-                
-                // Play audio
-                try {
-                    await quranAudio.play();
-                    isPlaying = true;
-                    updatePlayButton();
-                } catch (err) {
-                    console.error('অডিও প্লে করতে ত্রুটি:', err);
-                    alert('অডিও চালাতে সমস্যা হয়েছে। দয়া করে পুনরায় চেষ্টা করুন।');
-                    document.querySelectorAll('.ayah-item.now-playing').forEach(el => {
-                        el.classList.remove('now-playing');
-                    });
-                }
-            };
-            
-            quranAudio.addEventListener('loadedmetadata', handleLoadedMetadata, { once: true });
-            
-            // Timeout fallback if metadata doesn't load
-            const timeoutId = setTimeout(() => {
-                quranAudio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-                console.warn('মেটাডেটা লোড হতে বেশি সময় লাগছে, সরাসরি চালু করা হচ্ছে...');
-                try {
-                    quranAudio.currentTime = startTime;
-                    quranAudio.play().catch((err) => {
-                        console.error('সরাসরি প্লে করতে ব্যর্থ:', err);
-                    });
-                } catch (err) {
-                    console.error('সময়সীমা এ ত্রুটি:', err);
-                }
-            }, 5000);
-            
-            // Clear timeout on successful metadata load
-            quranAudio.addEventListener('loadedmetadata', () => clearTimeout(timeoutId), { once: true });
-            
-        } catch (error) {
-            console.error('অডিও প্লেব্যাক ত্রুটি:', error);
-            const audioInfo = document.querySelector('.audio-info');
-            audioInfo.textContent = 'অডিও লোড ব্যর্থ - পুনরায় চেষ্টা করুন';
-            audioInfo.classList.remove('loading');
-            document.querySelectorAll('.ayah-item.now-playing').forEach(el => {
-                el.classList.remove('now-playing');
-            });
-            
-            // ত্রুটি তথ্য সঞ্চয় করুন
-            console.error('সম্পূর্ণ ত্রুটি:', {
-                message: error.message,
-                stack: error.stack
-            });
-        }
+        console.log(`নির্বাচিত: সূরা ${currentSurah.name} (${currentSurah.bn}) - আয়াত ${ayahNum}`);
     }
 
-    function togglePlayPause() {
-        if (isPlaying) {
-            quranAudio.pause();
-            isPlaying = false;
-        } else {
-            quranAudio.play();
-            isPlaying = true;
-        }
-        updatePlayButton();
-    }
+    // মডাল এলিমেন্ট এবং বাটন
+    const audioModal = document.getElementById('audioModal');
+    const audioDownloadBtn = document.getElementById('audioDownloadBtn');
+    const audioBrowseBtn = document.getElementById('audioBrowseBtn');
 
-    function updatePlayButton() {
-        if (isPlaying) {
-            audioPlayBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`;
-        } else {
-            audioPlayBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><polygon points="5 3 19 12 5 21 5 3"/></svg>`;
-        }
-    }
-
-    function closeAudioPlayer() {
-        quranAudio.pause();
-        audioPlayer.classList.add('hidden');
-        isPlaying = false;
-        
-        // Remove now-playing indicator
-        document.querySelectorAll('.ayah-item.now-playing').forEach(el => {
-            el.classList.remove('now-playing');
-        });
-    }
-
-    // ===== AUDIO EVENT LISTENERS =====
-    quranAudio.addEventListener('play', () => {
-        isPlaying = true;
-        updatePlayButton();
-    });
-
-    quranAudio.addEventListener('pause', () => {
-        isPlaying = false;
-        updatePlayButton();
-    });
-
-    quranAudio.addEventListener('timeupdate', () => {
-        if (quranAudio.duration) {
-            const progress = (quranAudio.currentTime / quranAudio.duration) * 100;
-            audioProgressBar.style.width = progress + '%';
-            audioTime.textContent = formatTime(quranAudio.currentTime);
+    // ডাউনলোড বাটন ক্লিক ইভেন্ট
+    audioDownloadBtn.addEventListener('click', () => {
+        if (currentSurah) {
+            alert(`সূরা ${currentSurah.name} (${currentSurah.bn}) - আয়াত ${currentAyah} ডাউনলোড করছি...`);
+            audioModal.classList.remove('active');
+            // এখানে আপনার ডাউনলোড লজিক যোগ করুন
         }
     });
 
-    quranAudio.addEventListener('ended', () => {
-        isPlaying = false;
-        updatePlayButton();
-        document.querySelectorAll('.ayah-item.now-playing').forEach(el => {
-            el.classList.remove('now-playing');
-        });
+    // ব্রাউজ করুন বাটন ক্লিক ইভেন্ট
+    audioBrowseBtn.addEventListener('click', () => {
+        if (currentSurah) {
+            alert(`সূরা ${currentSurah.name} (${currentSurah.bn}) - আয়াত ${currentAyah} ব্রাউজ করছি...`);
+            audioModal.classList.remove('active');
+            // এখানে আপনার ব্রাউজ লজিক যোগ করুন
+        }
     });
 
-    // অডিও লোড এরর হ্যান্ডেল করুন
-    quranAudio.addEventListener('error', (e) => {
-        console.error('অডিও এলিমেন্ট এরর:', e.target.error?.message);
-        const audioInfo = document.querySelector('.audio-info');
-        audioInfo.textContent = '⚠️ অডিও লোড এরর - পুনরায় চেষ্টা করুন';
-        audioInfo.classList.remove('loading');
-        isPlaying = false;
-        updatePlayButton();
+    // মডাল বাইরে ক্লিক করলে বন্ধ করা
+    audioModal.addEventListener('click', (e) => {
+        if (e.target === audioModal) {
+            audioModal.classList.remove('active');
+        }
     });
 
-    audioProgress.addEventListener('click', (e) => {
-        const rect = audioProgress.getBoundingClientRect();
-        const percent = (e.clientX - rect.left) / rect.width;
-        quranAudio.currentTime = percent * quranAudio.duration;
+    // ESC কী দিয়ে বন্ধ করা
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && audioModal.classList.contains('active')) {
+            audioModal.classList.remove('active');
+        }
     });
-
-    audioPlayBtn.addEventListener('click', togglePlayPause);
-    audioCloseBtn.addEventListener('click', closeAudioPlayer);
 
     // ===== MODAL CLOSE EVENTS =====
     closeSurahModal.addEventListener('click', closeSurahModalFn);
