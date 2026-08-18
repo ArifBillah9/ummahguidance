@@ -770,6 +770,65 @@
     .audio-modal-btn:active {
         transform: translateY(0);
     }
+
+    /* ===== DOWNLOAD PROGRESS STYLES ===== */
+    .download-progress-section {
+        display: none;
+        margin-top: 20px;
+    }
+
+    .download-progress-section.active {
+        display: block;
+    }
+
+    .download-progress-bar {
+        width: 100%;
+        height: 6px;
+        background: #f0f0f0;
+        border-radius: 3px;
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+
+    .download-progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--brand), var(--brand-light));
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+
+    .download-status {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 10px;
+        font-family: 'Kalpurush', 'Hind Siliguri', sans-serif;
+    }
+
+    .download-status.success {
+        color: #4caf50;
+        font-weight: 600;
+    }
+
+    .download-status.error {
+        color: #f44336;
+        font-weight: 600;
+    }
+
+    .spinner {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border: 2px solid #f3f3f3;
+        border-top: 2px solid var(--brand);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 6px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 </style>
 </head>
 <body>
@@ -927,6 +986,16 @@
         <div class="audio-modal-buttons">
             <button class="audio-modal-btn primary" id="audioDownloadBtn">ডাউনলোড</button>
             <button class="audio-modal-btn secondary" id="audioBrowseBtn">ব্রাউজ করুন</button>
+        </div>
+        
+        <!-- ডাউনলোড প্রগ্রেস সেকশন -->
+        <div class="download-progress-section" id="downloadProgressSection">
+            <div class="download-status" id="downloadStatus">
+                <span class="spinner"></span>ডাউনলোড হচ্ছে...
+            </div>
+            <div class="download-progress-bar">
+                <div class="download-progress-fill" id="downloadProgressFill"></div>
+            </div>
         </div>
     </div>
 </div>
