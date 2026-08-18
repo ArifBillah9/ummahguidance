@@ -1328,19 +1328,31 @@
         return totalTime;
     }
 
-    // Download full surah audio from Islamic Network or EveryAyah
+    // Download full surah audio from multiple sources with CORS handling
     async function downloadFullSurahAudio(surahNum) {
         const surahPad = String(surahNum).padStart(3, '0');
         
-        // Try multiple sources for full surah audio
+        // Multiple sources with CORS support
         const audioSources = [
             {
-                name: 'Islamic Network',
-                url: `https://cdn.islamic.network/quran/audio-surah/ar.alafasy/${surahPad}.mp3`
+                name: 'CORS Proxy',
+                url: `https://cors-anywhere.herokuapp.com/https://cdn.islamic.network/quran/audio-surah/ar.alafasy/${surahPad}.mp3`,
+                needsProxy: true
             },
             {
-                name: 'EveryAyah Direct',
-                url: `https://everyayah.com/data/Alafasy_64kbps/${surahPad}.mp3`
+                name: 'Islamic Network Direct',
+                url: `https://cdn.islamic.network/quran/audio-surah/ar.alafasy/${surahPad}.mp3`,
+                needsProxy: false
+            },
+            {
+                name: 'EveryAyah',
+                url: `https://everyayah.com/data/Alafasy_64kbps/${surahPad}.mp3`,
+                needsProxy: false
+            },
+            {
+                name: 'Backup Source',
+                url: `https://www.quranicaudio.com/quran/ar.alafasy/001.mp3`,
+                needsProxy: false
             }
         ];
         
@@ -1352,31 +1364,47 @@
                 audioInfo.textContent = `${source.name} থেকে ডাউনলোড হচ্ছে...`;
                 audioInfo.classList.add('loading');
                 
-                const response = await fetch(source.url, {
+                console.log(`চেষ্টা: ${source.name} - ${source.url}`);
+                
+                const fetchOptions = {
                     method: 'GET',
                     headers: {
-                        'Accept': 'audio/mpeg'
-                    }
-                });
+                        'Accept': 'audio/mpeg',
+                        'User-Agent': 'Mozilla/5.0'
+                    },
+                    mode: 'cors',
+                    credentials: 'omit'
+                };
+                
+                const response = await fetch(source.url, fetchOptions);
                 
                 if (response.ok) {
                     const audioBlob = await response.blob();
                     
-                    // Verify it's a valid audio file
-                    if (audioBlob.size > 0 && audioBlob.type.includes('audio')) {
+                    // Verify it's a valid audio file (at least 100KB)
+                    if (audioBlob.size > 100000) {
                         const audioObjectUrl = URL.createObjectURL(audioBlob);
-                        console.log(`সূরা ${surahNum} সফলভাবে লোড হয়েছে ${source.name} থেকে`);
+                        console.log(`✓ সূরা ${surahNum} সফলভাবে লোড: ${source.name} (${(audioBlob.size / 1024 / 1024).toFixed(2)}MB)`);
+                        audioInfo.textContent = `${source.name} থেকে লোড সম্পূর্ণ`;
+                        setTimeout(() => audioInfo.classList.remove('loading'), 1000);
                         return audioObjectUrl;
                     }
                 }
             } catch (error) {
-                console.warn(`${source.name} থেকে লোড ব্যর্থ:`, error.message);
+                console.warn(`✗ ব্যর্থ - ${source.name}:`, error.message);
                 continue;
             }
         }
         
-        // If all sources fail, throw error
-        throw new Error('কোনো সোর্স থেকে সূরার অডিও ডাউনলোড করা যায়নি। ইন্টারনেট সংযোগ চেক করুন।');
+        // If online sources fail, show error
+        const errorMsg = 'অডিও লোড করতে সমস্যা হয়েছে। দয়া করে:' +
+            '\n1. ইন্টারনেট সংযোগ চেক করুন' +
+            '\n2. পৃষ্ঠা রিফ্রেশ করুন (Ctrl+F5)' +
+            '\n3. কিছুক্ষণ অপেক্ষা করে পুনরায় চেষ্টা করুন';
+        
+        audioInfo.textContent = 'অডিও লোড ব্যর্থ - পুনরায় চেষ্টা করুন';
+        audioInfo.classList.remove('loading');
+        throw new Error(errorMsg);
     }
 
     // New enhanced playAyah function with full surah download
@@ -1453,12 +1481,17 @@
             
         } catch (error) {
             console.error('অডিও প্লেব্যাক ত্রুটি:', error);
-            alert(`অডিও লোড করতে সমস্যা হয়েছে:\n${error.message}\n\nইন্টারনেট সংযোগ চেক করুন।`);
             const audioInfo = document.querySelector('.audio-info');
-            audioInfo.textContent = 'অডিও লোড ব্যর্থ';
+            audioInfo.textContent = 'অডিও লোড ব্যর্থ - পুনরায় চেষ্টা করুন';
             audioInfo.classList.remove('loading');
             document.querySelectorAll('.ayah-item.now-playing').forEach(el => {
                 el.classList.remove('now-playing');
+            });
+            
+            // ত্রুটি তথ্য সঞ্চয় করুন
+            console.error('সম্পূর্ণ ত্রুটি:', {
+                message: error.message,
+                stack: error.stack
             });
         }
     }
