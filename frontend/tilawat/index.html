@@ -730,6 +730,37 @@
         min-width: 40px;
         text-align: right;
     }
+
+    /* ===== AUDIO LOADING INDICATOR ===== */
+    .audio-loading {
+        display: inline-block;
+        position: relative;
+        width: 14px;
+        height: 14px;
+        margin-left: 6px;
+    }
+
+    .audio-loading::after {
+        content: "";
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        top: 0;
+        left: 0;
+        border: 2px solid rgba(255,255,255,.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .audio-info.loading {
+        color: #ffd740;
+        font-weight: 500;
+    }
 </style>
 </head>
 <body>
@@ -1105,9 +1136,13 @@
         event.target.closest('.surah-ayah-item').classList.add('selected');
 
         // Play the ayah
-        setTimeout(() => {
+        setTimeout(async () => {
             closeSurahModalFn();
-            playAyah(surahNum, ayahNum);
+            try {
+                await playAyah(surahNum, ayahNum);
+            } catch (error) {
+                console.error('আয়াত চালাতে ত্রুটি:', error);
+            }
         }, 300);
     }
 
@@ -1130,17 +1165,95 @@
     }
 
     // ===== AUDIO FUNCTIONS =====
-    function playAyah(surahNum, ayahNum) {
+    // Surah-wise ayah duration mapping (in seconds) - Alafasy recitation
+    // These are approximate durations - they can be refined based on actual audio analysis
+    const AYAH_DURATIONS = {
+        '1': { // Surah Al-Fatihah (Fatiha)
+            // Approximate timings for Alafasy recitation
+            '1': 11.0,  // Bismillah
+            '2': 8.5,   // Al-hamdu lillahi rabbil aalameen
+            '3': 7.2,   // Ar-Rahman ar-Rahim
+            '4': 6.8,   // Maliki yawmid-Din
+            '5': 5.5,   // Iyyaka na'budu wa iyyaka nasta'een
+            '6': 5.8,   // Ihdinas-sirat al-mustaqeem
+            '7': 9.0    // Sirat al-ladheena an'amta alayhim
+        }
+        // Add more surahs as needed in future updates
+    };
+
+    // Get ayah start time by calculating cumulative duration
+    function getAyahStartTime(surahNum, ayahNum) {
+        const surahKey = String(surahNum);
+        const durations = AYAH_DURATIONS[surahKey];
+        
+        if (!durations) {
+            console.warn(`সূরা ${surahNum} এর জন্য সময় তথ্য পাওয়া যায়নি`);
+            return 0;
+        }
+        
+        let totalTime = 0;
+        for (let i = 1; i < ayahNum; i++) {
+            totalTime += durations[String(i)] || 0;
+        }
+        return totalTime;
+    }
+
+    // Download full surah audio from Islamic Network or EveryAyah
+    async function downloadFullSurahAudio(surahNum) {
+        const surahPad = String(surahNum).padStart(3, '0');
+        
+        // Try multiple sources for full surah audio
+        const audioSources = [
+            {
+                name: 'Islamic Network',
+                url: `https://cdn.islamic.network/quran/audio-surah/ar.alafasy/${surahPad}.mp3`
+            },
+            {
+                name: 'EveryAyah Direct',
+                url: `https://everyayah.com/data/Alafasy_64kbps/${surahPad}.mp3`
+            }
+        ];
+        
+        const audioInfo = document.querySelector('.audio-info');
+        
+        for (const source of audioSources) {
+            try {
+                // Show loading status
+                audioInfo.textContent = `${source.name} থেকে ডাউনলোড হচ্ছে...`;
+                audioInfo.classList.add('loading');
+                
+                const response = await fetch(source.url, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'audio/mpeg'
+                    }
+                });
+                
+                if (response.ok) {
+                    const audioBlob = await response.blob();
+                    
+                    // Verify it's a valid audio file
+                    if (audioBlob.size > 0 && audioBlob.type.includes('audio')) {
+                        const audioObjectUrl = URL.createObjectURL(audioBlob);
+                        console.log(`সূরা ${surahNum} সফলভাবে লোড হয়েছে ${source.name} থেকে`);
+                        return audioObjectUrl;
+                    }
+                }
+            } catch (error) {
+                console.warn(`${source.name} থেকে লোড ব্যর্থ:`, error.message);
+                continue;
+            }
+        }
+        
+        // If all sources fail, throw error
+        throw new Error('কোনো সোর্স থেকে সূরার অডিও ডাউনলোড করা যায়নি। ইন্টারনেট সংযোগ চেক করুন।');
+    }
+
+    // New enhanced playAyah function with full surah download
+    async function playAyah(surahNum, ayahNum) {
         currentSurah = SURAHS.find(s => s.num === surahNum);
         currentAyah = ayahNum;
 
-        // EveryAyah API - Alafasy reciter
-        // Format: https://everyayah.com/data/[reciter]/[surah][ayah].mp3
-        const reciter = 'Alafasy_64kbps'; // উচ্চমানের অডিও
-        const surahPad = String(surahNum).padStart(3, '0');
-        const ayahPad = String(ayahNum).padStart(3, '0');
-        const audioUrl = `https://everyayah.com/data/${reciter}/${surahPad}${ayahPad}.mp3`;
-        
         // Add now-playing animation to selected ayah
         document.querySelectorAll('.ayah-item').forEach(el => {
             el.classList.remove('now-playing');
@@ -1150,25 +1263,74 @@
             selectedItem.classList.add('now-playing');
         }
         
-        quranAudio.src = audioUrl;
-        audioTitle.textContent = `${currentSurah.name} (${currentSurah.bn}) • আয়াত ${ayahNum}`;
-        
         audioPlayer.classList.remove('hidden');
         
         // Reset progress
         audioProgressBar.style.width = '0%';
         audioTime.textContent = '0:00';
         
-        quranAudio.load();
-        quranAudio.play().catch(err => {
-            console.error('অডিও প্লে করতে ত্রুটি:', err);
-            alert('অডিও লোড করতে সমস্যা হয়েছে। ইন্টারনেট সংযোগ চেক করুন।');
+        try {
+            // Download full surah audio
+            const audioUrl = await downloadFullSurahAudio(surahNum);
+            
+            // Set the audio source to full surah
+            quranAudio.src = audioUrl;
+            
+            // Calculate start time for the selected ayah
+            const startTime = getAyahStartTime(surahNum, ayahNum);
+            
+            // Load the audio
+            quranAudio.load();
+            
+            // Create a handler for when metadata is loaded
+            const handleLoadedMetadata = async () => {
+                quranAudio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+                
+                // Seek to the selected ayah's start time
+                quranAudio.currentTime = startTime;
+                
+                // Update UI
+                const audioInfo = document.querySelector('.audio-info');
+                audioInfo.textContent = `${currentSurah.name} (${currentSurah.bn}) • আয়াত ${ayahNum} থেকে সম্পূর্ণ সূরা`;
+                audioInfo.classList.remove('loading');
+                
+                // Play audio
+                try {
+                    await quranAudio.play();
+                    isPlaying = true;
+                    updatePlayButton();
+                } catch (err) {
+                    console.error('অডিও প্লে করতে ত্রুটি:', err);
+                    alert('অডিও চালাতে সমস্যা হয়েছে। দয়া করে পুনরায় চেষ্টা করুন।');
+                    document.querySelectorAll('.ayah-item.now-playing').forEach(el => {
+                        el.classList.remove('now-playing');
+                    });
+                }
+            };
+            
+            quranAudio.addEventListener('loadedmetadata', handleLoadedMetadata, { once: true });
+            
+            // Timeout fallback if metadata doesn't load
+            const timeoutId = setTimeout(() => {
+                quranAudio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+                console.warn('মেটাডেটা লোড হতে বেশি সময় লাগছে, সরাসরি চালু করা হচ্ছে...');
+                quranAudio.currentTime = startTime;
+                quranAudio.play().catch(() => {});
+            }, 3000);
+            
+            // Clear timeout on successful metadata load
+            quranAudio.addEventListener('loadedmetadata', () => clearTimeout(timeoutId), { once: true });
+            
+        } catch (error) {
+            console.error('অডিও প্লেব্যাক ত্রুটি:', error);
+            alert(`অডিও লোড করতে সমস্যা হয়েছে:\n${error.message}\n\nইন্টারনেট সংযোগ চেক করুন।`);
+            const audioInfo = document.querySelector('.audio-info');
+            audioInfo.textContent = 'অডিও লোড ব্যর্থ';
+            audioInfo.classList.remove('loading');
             document.querySelectorAll('.ayah-item.now-playing').forEach(el => {
                 el.classList.remove('now-playing');
             });
-        });
-        isPlaying = true;
-        updatePlayButton();
+        }
     }
 
     function togglePlayPause() {
@@ -1834,7 +1996,7 @@
     }
 
     // অ্যাকশন বোতাম ইভেন্ট
-    document.getElementById('playBtn').addEventListener('click', () => {
+    document.getElementById('playBtn').addEventListener('click', async () => {
         if (!lastHit) {
             alert('দয়া করে প্রথমে একটি আয়াত নির্বাচন করুন।');
             return;
@@ -1850,7 +2012,11 @@
                 alert('এই আয়াতের সূরা/আয়াত নম্বর এখনও নির্ভুলভাবে ম্যাপ করা হয়নি, তাই সঠিক অডিও চালানো সম্ভব হচ্ছে না। বর্তমানে শুধু সূরা ফাতিহার আয়াতগুলো নির্ভুলভাবে ম্যাপ করা আছে। এই সমস্যার সমাধানের জন্য regions.json ফাইলে বাকি পৃষ্ঠাগুলোর সঠিক সূরা/আয়াত তথ্য যোগ করা প্রয়োজন।');
                 return;
             }
-            playAyah(ayah.surahNum, ayah.ayahNum);
+            try {
+                await playAyah(ayah.surahNum, ayah.ayahNum);
+            } catch (error) {
+                console.error('আয়াত চালাতে ত্রুটি:', error);
+            }
         }
     });
 
