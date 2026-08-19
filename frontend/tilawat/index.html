@@ -537,7 +537,7 @@
         flex: 1;
         overflow-y: auto;
         padding: 0;
-        background: #fff;
+        background: var(--brand);
     }
 
     .surah-item {
@@ -771,6 +771,320 @@
         0% { transform: rotate(0deg); }
         100% { transform: rotate(360deg); }
     }
+
+    /* ===== SURAH LIST MODAL ===== */
+    .surah-list-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: flex-end;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+        z-index: 900;
+    }
+
+    .surah-list-modal.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .surah-list-container {
+        width: 100%;
+        max-width: none;
+        height: 100%;
+        max-height: none;
+        background: #175a45;
+        border-radius: 0;
+        display: flex;
+        flex-direction: column;
+        box-shadow: none;
+        position: relative;
+        overflow: hidden;
+        --slh-header: #04231b;
+        --slh-colhead: #1c5c47;
+        --slh-left: #1b5643;
+        --slh-right: #123f30;
+        --slh-border: rgba(255,255,255,0.14);
+        --slh-active: #2f7a5c;
+    }
+
+    /* পুরোনো decorative ornament strip — Reference Image-এ নেই, তাই বাতিল করা হলো */
+    .surah-list-container::after {
+        display: none;
+    }
+
+    @keyframes slideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+
+    .surah-list-header {
+        background: var(--slh-header);
+        color: white;
+        padding: 18px 44px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-shrink: 0;
+        position: relative;
+        min-height: 68px;
+        z-index: 10;
+    }
+
+    .surah-list-header h2 {
+        font-size: 32px;
+        font-weight: 500;
+        margin: 0;
+        text-align: center;
+        font-family: 'Amiri', 'Noto Naskh Arabic', serif;
+        direction: rtl;
+        line-height: 1.25;
+    }
+
+    .surah-list-header button {
+        background: transparent;
+        border: none;
+        color: rgba(255,255,255,0.55);
+        cursor: pointer;
+        font-size: 18px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        flex-shrink: 0;
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    /* ===== "সূরা | আয়াত" কলাম হেডার ===== */
+    .surah-list-colheads {
+        display: flex;
+        flex-shrink: 0;
+        background: var(--slh-colhead);
+        border-bottom: 1px solid var(--slh-border);
+    }
+
+    .surah-list-colhead-surah,
+    .surah-list-colhead-ayah {
+        padding: 13px 8px;
+        color: #fff;
+        text-align: center;
+        font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+        font-size: 22px;
+        font-weight: 600;
+    }
+
+    .surah-list-colhead-surah { flex: 0 0 68%; max-width: 68%; }
+    .surah-list-colhead-ayah { flex: 0 0 32%; max-width: 32%; border-left: 1px solid var(--slh-border); }
+
+    /* ===== মূল বডি — দুইটি independently scrolling কলাম ===== */
+    .surah-list-body {
+        flex: 1;
+        display: flex;
+        min-height: 0;
+        overflow: hidden;
+        background: var(--slh-left);
+    }
+
+    .surah-list-col {
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+
+    .surah-list-col-surah {
+        flex: 0 0 68%;
+        max-width: 68%;
+        background: var(--slh-left);
+    }
+
+    .surah-list-col-ayah {
+        flex: 0 0 32%;
+        max-width: 32%;
+        background: var(--slh-right);
+        border-left: 1px solid var(--slh-border);
+    }
+
+    .surah-list-empty {
+        padding: 40px 16px;
+        text-align: center;
+        color: rgba(255,255,255,0.65);
+        font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+        font-size: 15px;
+    }
+
+    /* Para tab-এর sub-header (পারা ১, পারা ২ ...) */
+    .surah-list-column-header {
+        background: var(--slh-colhead);
+        border-bottom: 1px solid var(--slh-border);
+        border-top: 1px solid var(--slh-border);
+        padding: 9px 16px;
+    }
+
+    .surah-list-column-header .col-label {
+        color: white;
+        font-size: 14px;
+        font-weight: 600;
+        font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    }
+
+    /* ===== SURAH ROW (বাম কলাম) — Reference Image অনুযায়ী flat দুই-লাইন row ===== */
+    #surahListBody .surah-item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 2px;
+        padding: 13px 16px;
+        border-bottom: 1px solid var(--slh-border);
+        cursor: pointer;
+        transition: background 0.15s;
+        min-height: 62px;
+        background: transparent;
+    }
+
+    #surahListBody .surah-item:hover,
+    #surahListBody .surah-item:active {
+        background: rgba(255,255,255,0.06);
+    }
+
+    #surahListBody .surah-item.expanded {
+        background: rgba(255,255,255,0.1);
+    }
+
+    #surahListBody .surah-item-name-row {
+        display: flex;
+        align-items: baseline;
+        gap: 6px;
+        font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+        color: #fff;
+    }
+
+    #surahListBody .surah-item-num {
+        font-size: 22px;
+        font-weight: 600;
+        color: #fff;
+        flex-shrink: 0;
+    }
+
+    #surahListBody .surah-item-name {
+        font-size: 22px;
+        font-weight: 600;
+        color: #fff;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #surahListBody .surah-item-desc {
+        font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+        font-size: 17px;
+        font-weight: 400;
+        color: rgba(255,255,255,0.68);
+        padding-left: 28px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+    }
+
+    /* ===== PARA (পারা) ROW (বাম কলাম) — সূরা রো থেকে আলাদা: single-line, centered ===== */
+    #surahListBody .para-item {
+        padding: 18px 16px;
+        text-align: center;
+        color: #fff;
+        font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+        font-size: 24px;
+        font-weight: 600;
+        border-bottom: 1px solid var(--slh-border);
+        cursor: pointer;
+        transition: background 0.15s;
+    }
+
+    #surahListBody .para-item:hover,
+    #surahListBody .para-item:active {
+        background: rgba(255,255,255,0.08);
+    }
+
+    #surahListBody .para-item.expanded {
+        background: var(--slh-active);
+    }
+
+    /* ===== AYAH NUMBER কলাম (ডান কলাম) ===== */
+    .ayah-number-grid {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .ayah-number-badge {
+        padding: 15px 8px;
+        text-align: center;
+        background: transparent;
+        color: #fff;
+        font-weight: 600;
+        font-size: 22px;
+        font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+        cursor: pointer;
+        transition: background 0.15s;
+        border-bottom: 1px solid var(--slh-border);
+    }
+
+    .ayah-number-badge:hover {
+        background: rgba(255,255,255,0.08);
+    }
+    .ayah-number-badge:active {
+        background: rgba(255,255,255,0.14);
+    }
+    .ayah-number-badge.selected {
+        background: #fff;
+        color: var(--slh-right);
+        font-weight: 700;
+    }
+
+    /* ===== SURAH LIST BOTTOM TABS (সূরা / পারা / বুকমার্ক) ===== */
+    .surah-list-tabs {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        background: var(--slh-header);
+        flex-shrink: 0;
+        border-top: 1px solid var(--slh-border);
+        padding: 8px;
+        gap: 6px;
+    }
+
+    .surah-list-tab-btn {
+        background: transparent;
+        border: none;
+        color: rgba(255,255,255,0.75);
+        font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+        font-size: 20px;
+        font-weight: 600;
+        padding: 12px 8px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+    }
+
+    .surah-list-tab-btn.active {
+        background: rgba(255, 255, 255, 0.16);
+        color: #fff;
+    }
+
+    .surah-list-tab-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
 </style>
 </head>
 <body>
@@ -935,6 +1249,29 @@
 
 <!-- HIDDEN AUDIO ELEMENT -->
 <audio id="quranAudio" preload="none"></audio>
+
+<!-- SURAH LIST MODAL -->
+<div id="surahListModal" class="surah-list-modal">
+    <div class="surah-list-container">
+        <div class="surah-list-header">
+            <button id="closeSurahListBtn" aria-label="বন্ধ করুন">✕</button>
+            <h2 id="selectedSurahName">الفاتحة</h2>
+        </div>
+        <div class="surah-list-colheads">
+            <div class="surah-list-colhead-surah" id="surahListColheadLeft">সূরা</div>
+            <div class="surah-list-colhead-ayah" id="surahListColheadRight">আয়াত</div>
+        </div>
+        <div id="surahListBody" class="surah-list-body">
+            <div class="surah-list-col surah-list-col-surah" id="surahListColSurah"></div>
+            <div class="surah-list-col surah-list-col-ayah" id="surahListColAyah"></div>
+        </div>
+        <div class="surah-list-tabs">
+            <button class="surah-list-tab-btn active" id="surahTabBtn" data-tab="surah">সূরা</button>
+            <button class="surah-list-tab-btn" id="paraTabBtn" data-tab="para">পারা</button>
+            <button class="surah-list-tab-btn" id="bookmarkTabBtn" data-tab="bookmark">বুকমার্ক</button>
+        </div>
+    </div>
+</div>
 
 <script>
     // ===== SURAH DATA (১১৪টি সূরা) =====
@@ -2311,14 +2648,418 @@
             alert('পৃষ্ঠা বুকমার্ক করা হয়েছে।');
         });
 
-        // তৃতীয় বোতাম - ইমেজ দেখান (সূরা তালিকা)
+        // তৃতীয় বোতাম - সূরা লিস্ট মডাল খোলা
         toolbarIconBtns[2].addEventListener('click', () => {
-            openImageModal();
+            openSurahListModal();
         });
     }
 
     // শুরু করুন
     loadPdf();
+
+    // ===== SURAH LIST MODAL FUNCTIONS =====
+    const surahData = [
+        { num: 1, name: 'الفاتحة', bn: 'ফাতিহা', ayahs: 7, juz: 1, desc: 'সুরা' },
+        { num: 2, name: 'البقرة', bn: 'বাকারা', ayahs: 286, juz: 1, desc: 'গক/পাঠী' },
+        { num: 3, name: 'آل عمران', bn: 'আল-ইমরান', ayahs: 200, juz: 3, desc: 'ইমরানের পরিবার' },
+        { num: 4, name: 'النساء', bn: 'নিসা', ayahs: 176, juz: 4, desc: 'নারী' },
+        { num: 5, name: 'المائدة', bn: 'মায়েদা', ayahs: 120, juz: 6, desc: 'খাওয়ার টেবিল' },
+        { num: 6, name: 'الأنعام', bn: 'আনআম', ayahs: 165, juz: 7, desc: 'গবাদি পশু' },
+        { num: 7, name: 'الأعراف', bn: 'আরাফ', ayahs: 206, juz: 8, desc: 'উচ্চ স্থান' },
+        { num: 8, name: 'الأنفال', bn: 'আনফাল', ayahs: 75, juz: 9, desc: 'যুদ্ধের লুণ্ঠন' },
+        { num: 9, name: 'التوبة', bn: 'তাওবা', ayahs: 129, juz: 10, desc: 'অনুতাপ' },
+        { num: 10, name: 'يونس', bn: 'ইউনুস', ayahs: 109, juz: 11, desc: 'ইউনুস' },
+        { num: 11, name: 'هود', bn: 'হুদ', ayahs: 123, juz: 11, desc: 'হুদ' },
+        { num: 12, name: 'يوسف', bn: 'ইউসুফ', ayahs: 111, juz: 12, desc: 'ইউসুফের গল্প' },
+        { num: 13, name: 'الرعد', bn: 'রাদ', ayahs: 43, juz: 13, desc: 'বজ্র' },
+        { num: 14, name: 'إبراهيم', bn: 'ইবরাহিম', ayahs: 52, juz: 13, desc: 'ইবরাহিম' },
+        { num: 15, name: 'الحجر', bn: 'হিজর', ayahs: 99, juz: 14, desc: 'পাথর উপত্যকা' },
+        { num: 16, name: 'النحل', bn: 'নাহল', ayahs: 128, juz: 14, desc: 'মৌমাছি' },
+        { num: 17, name: 'الإسراء', bn: 'ইসরা', ayahs: 111, juz: 15, desc: 'রাত্রিকালীন ভ্রমণ' },
+        { num: 18, name: 'الكهف', bn: 'কাহফ', ayahs: 110, juz: 15, desc: 'গুহা' },
+        { num: 19, name: 'مريم', bn: 'মারিয়াম', ayahs: 98, juz: 16, desc: 'মারিয়াম' },
+        { num: 20, name: 'طه', bn: 'তাহা', ayahs: 135, juz: 16, desc: 'তাহা' },
+        { num: 21, name: 'الأنبياء', bn: 'আম্বিয়া', ayahs: 112, juz: 17, desc: 'নবিগণ' },
+        { num: 22, name: 'الحج', bn: 'হাজ', ayahs: 78, juz: 17, desc: 'হজ' },
+        { num: 23, name: 'المؤمنون', bn: 'মুমিনুন', ayahs: 118, juz: 18, desc: 'বিশ্বাসীগণ' },
+        { num: 24, name: 'النور', bn: 'নুর', ayahs: 64, juz: 18, desc: 'আলো' },
+        { num: 25, name: 'الفرقان', bn: 'ফুরকান', ayahs: 77, juz: 18, desc: 'পার্থক্য' },
+        { num: 26, name: 'الشعراء', bn: 'শোয়ারা', ayahs: 227, juz: 19, desc: 'কবি' },
+        { num: 27, name: 'النمل', bn: 'নামল', ayahs: 93, juz: 19, desc: 'পিপীলিকা' },
+        { num: 28, name: 'القصص', bn: 'কাসাস', ayahs: 88, juz: 20, desc: 'বর্ণনা' },
+        { num: 29, name: 'العنكبوت', bn: 'আনকাবুত', ayahs: 69, juz: 20, desc: 'মকড়া' },
+        { num: 30, name: 'الروم', bn: 'রুম', ayahs: 60, juz: 21, desc: 'রোমান' },
+        { num: 31, name: 'لقمان', bn: 'লুকমান', ayahs: 34, juz: 21, desc: 'লুকমান' },
+        { num: 32, name: 'السجدة', bn: 'সাজদাহ', ayahs: 30, juz: 21, desc: 'সিজদা' },
+        { num: 33, name: 'الأحزاب', bn: 'আহজাব', ayahs: 73, juz: 21, desc: 'সম্প্রদায়' },
+        { num: 34, name: 'سبأ', bn: 'সাবা', ayahs: 54, juz: 22, desc: 'সাবা' },
+        { num: 35, name: 'فاطر', bn: 'ফাতির', ayahs: 45, juz: 22, desc: 'সৃষ্টিকর্তা' },
+        { num: 36, name: 'يس', bn: 'ইয়াসিন', ayahs: 83, juz: 22, desc: 'ইয়াসিন' },
+        { num: 37, name: 'الصافات', bn: 'সাফফাত', ayahs: 182, juz: 23, desc: 'সারিবদ্ধকারী' },
+        { num: 38, name: 'ص', bn: 'সাদ', ayahs: 88, juz: 23, desc: 'সাদ' },
+        { num: 39, name: 'الزمر', bn: 'জুমার', ayahs: 75, juz: 23, desc: 'দল' },
+        { num: 40, name: 'غافر', bn: 'গাফির', ayahs: 85, juz: 24, desc: 'ক্ষমাশীল' },
+        { num: 41, name: 'فصلت', bn: 'ফুস্সিলাত', ayahs: 54, juz: 24, desc: 'স্পষ্টভাবে বর্ণিত' },
+        { num: 42, name: 'الشورى', bn: 'শুরা', ayahs: 53, juz: 25, desc: 'পরামর্শ' },
+        { num: 43, name: 'الزخرف', bn: 'জুখরুফ', ayahs: 89, juz: 25, desc: 'সজ্জা' },
+        { num: 44, name: 'الدخان', bn: 'দুখান', ayahs: 59, juz: 25, desc: 'ধোঁয়া' },
+        { num: 45, name: 'الجاثية', bn: 'জাসিয়া', ayahs: 37, juz: 25, desc: 'নতিস্বীকারকারী' },
+        { num: 46, name: 'الأحقاف', bn: 'আহকাফ', ayahs: 35, juz: 26, desc: 'বালির ঢিবি' },
+        { num: 47, name: 'محمد', bn: 'মুহাম্মাদ', ayahs: 38, juz: 26, desc: 'মুহাম্মাদ' },
+        { num: 48, name: 'الفتح', bn: 'ফাতাহ', ayahs: 29, juz: 26, desc: 'বিজয়' },
+        { num: 49, name: 'الحجرات', bn: 'হুজুরাত', ayahs: 18, juz: 26, desc: 'ঘর' },
+        { num: 50, name: 'ق', bn: 'কাফ', ayahs: 45, juz: 26, desc: 'কাফ' },
+        { num: 51, name: 'الذاريات', bn: 'জারিয়াত', ayahs: 60, juz: 27, desc: 'বায়ু' },
+        { num: 52, name: 'الطور', bn: 'তুর', ayahs: 49, juz: 27, desc: 'পর্বত' },
+        { num: 53, name: 'النجم', bn: 'নাজম', ayahs: 62, juz: 27, desc: 'তারকা' },
+        { num: 54, name: 'القمر', bn: 'কামার', ayahs: 55, juz: 27, desc: 'চন্দ্র' },
+        { num: 55, name: 'الرحمن', bn: 'রাহমান', ayahs: 78, juz: 27, desc: 'করুণাময়' },
+        { num: 56, name: 'الواقعة', bn: 'ওয়াকিয়া', ayahs: 96, juz: 27, desc: 'ঘটনা' },
+        { num: 57, name: 'الحديد', bn: 'হাদিদ', ayahs: 29, juz: 27, desc: 'লোহা' },
+        { num: 58, name: 'المجادلة', bn: 'মুজাদালা', ayahs: 22, juz: 28, desc: 'বিতর্ক' },
+        { num: 59, name: 'الحشر', bn: 'হাশর', ayahs: 24, juz: 28, desc: 'সমাবেশ' },
+        { num: 60, name: 'الممتحنة', bn: 'মুমতাহানা', ayahs: 13, juz: 28, desc: 'পরীক্ষিতা' },
+        { num: 61, name: 'الصف', bn: 'সাফ', ayahs: 14, juz: 28, desc: 'সারি' },
+        { num: 62, name: 'الجمعة', bn: 'জুমুআ', ayahs: 11, juz: 28, desc: 'জুমা' },
+        { num: 63, name: 'المنافقون', bn: 'মুনাফিকুন', ayahs: 11, juz: 28, desc: 'মুনাফিক' },
+        { num: 64, name: 'التغابن', bn: 'তাগাবুন', ayahs: 18, juz: 28, desc: 'ধোঁকা' },
+        { num: 65, name: 'الطلاق', bn: 'তালাক', ayahs: 12, juz: 28, desc: 'তালাক' },
+        { num: 66, name: 'التحريم', bn: 'তাহরিম', ayahs: 12, juz: 28, desc: 'নিষেধ' },
+        { num: 67, name: 'الملك', bn: 'মুলক', ayahs: 30, juz: 29, desc: 'রাজত্ব' },
+        { num: 68, name: 'القلم', bn: 'কালাম', ayahs: 52, juz: 29, desc: 'কলম' },
+        { num: 69, name: 'الحاقة', bn: 'হাক্কা', ayahs: 52, juz: 29, desc: 'নিশ্চিত বাস্তব' },
+        { num: 70, name: 'المعارج', bn: 'মারিজ', ayahs: 44, juz: 29, desc: 'সোপান' },
+        { num: 71, name: 'نوح', bn: 'নুহ', ayahs: 28, juz: 29, desc: 'নূহ' },
+        { num: 72, name: 'الجن', bn: 'জিন', ayahs: 28, juz: 29, desc: 'জিন' },
+        { num: 73, name: 'المزمل', bn: 'মুজাম্মিল', ayahs: 20, juz: 29, desc: 'গায়ে মোড়ানো' },
+        { num: 74, name: 'المدثر', bn: 'মুদাস্সির', ayahs: 56, juz: 29, desc: 'চাদরে ঢাকা' },
+        { num: 75, name: 'القيامة', bn: 'কিয়ামা', ayahs: 40, juz: 30, desc: 'পুনরুত্থান' },
+        { num: 76, name: 'الإنسان', bn: 'ইনসান', ayahs: 31, juz: 30, desc: 'মানুষ' },
+        { num: 77, name: 'المرسلات', bn: 'মুরসালাত', ayahs: 50, juz: 30, desc: 'প্রেরিত' },
+        { num: 78, name: 'النبأ', bn: 'নাবা', ayahs: 40, juz: 30, desc: 'সংবাদ' },
+        { num: 79, name: 'الناشئات', bn: 'নাজিয়াত', ayahs: 46, juz: 30, desc: 'উদ্বুদ্ধকারী' },
+        { num: 80, name: 'عبس', bn: 'আবাসা', ayahs: 42, juz: 30, desc: 'ভ্রূকুটি' },
+        { num: 81, name: 'التكوير', bn: 'তাকভির', ayahs: 29, juz: 30, desc: 'মোড়ানো' },
+        { num: 82, name: 'الإنفطار', bn: 'ইনফিতার', ayahs: 19, juz: 30, desc: 'বিভাজন' },
+        { num: 83, name: 'المطففين', bn: 'মুতাফফিফিন', ayahs: 36, juz: 30, desc: 'কম দেওয়া' },
+        { num: 84, name: 'الانشقاق', bn: 'ইনশিকাক', ayahs: 25, juz: 30, desc: 'বিদীর্ণ' },
+        { num: 85, name: 'البروج', bn: 'বুরুজ', ayahs: 22, juz: 30, desc: 'তারকারাশি' },
+        { num: 86, name: 'الطارق', bn: 'তারিক', ayahs: 17, juz: 30, desc: 'রাত্রিভ্রমণকারী' },
+        { num: 87, name: 'الأعلى', bn: 'আলা', ayahs: 19, juz: 30, desc: 'সর্বোচ্চ' },
+        { num: 88, name: 'الغاشية', bn: 'গাশিয়া', ayahs: 26, juz: 30, desc: 'আবৃত' },
+        { num: 89, name: 'الفجر', bn: 'ফাজর', ayahs: 30, juz: 30, desc: 'ভোর' },
+        { num: 90, name: 'البلد', bn: 'বালাদ', ayahs: 20, juz: 30, desc: 'দেশ' },
+        { num: 91, name: 'الشمس', bn: 'শামস', ayahs: 15, juz: 30, desc: 'সূর্য' },
+        { num: 92, name: 'الليل', bn: 'লাইল', ayahs: 21, juz: 30, desc: 'রাত' },
+        { num: 93, name: 'الضحى', bn: 'দুহা', ayahs: 11, juz: 30, desc: 'দিনের আলো' },
+        { num: 94, name: 'الشرح', bn: 'শারাহ', ayahs: 8, juz: 30, desc: 'সম্প্রসারণ' },
+        { num: 95, name: 'التين', bn: 'তিন', ayahs: 8, juz: 30, desc: 'ডুমুর' },
+        { num: 96, name: 'العلق', bn: 'আলাক', ayahs: 19, juz: 30, desc: 'জমাট' },
+        { num: 97, name: 'القدر', bn: 'কদর', ayahs: 5, juz: 30, desc: 'মহিমা' },
+        { num: 98, name: 'البينة', bn: 'বাইয়িনা', ayahs: 8, juz: 30, desc: 'প্রমাণ' },
+        { num: 99, name: 'الزلزلة', bn: 'জালজালা', ayahs: 8, juz: 30, desc: 'কম্পন' },
+        { num: 100, name: 'العاديات', bn: 'আদিয়াত', ayahs: 11, juz: 30, desc: 'দৌড়বাজ' },
+        { num: 101, name: 'القارعة', bn: 'কারিআ', ayahs: 11, juz: 30, desc: 'আঘাত' },
+        { num: 102, name: 'التكاثر', bn: 'তাকাসুর', ayahs: 8, juz: 30, desc: 'প্রতিযোগিতা' },
+        { num: 103, name: 'العصر', bn: 'আসর', ayahs: 3, juz: 30, desc: 'কাল' },
+        { num: 104, name: 'الهمزة', bn: 'হুমাজা', ayahs: 9, juz: 30, desc: 'নিন্দুক' },
+        { num: 105, name: 'الفيل', bn: 'ফিল', ayahs: 5, juz: 30, desc: 'হাতি' },
+        { num: 106, name: 'قريش', bn: 'কুরাইশ', ayahs: 4, juz: 30, desc: 'কুরাইশ' },
+        { num: 107, name: 'الماعون', bn: 'মাউন', ayahs: 7, juz: 30, desc: 'পাত্র' },
+        { num: 108, name: 'الكوثر', bn: 'কাউসার', ayahs: 3, juz: 30, desc: 'প্রাচুর্য' },
+        { num: 109, name: 'الكافرون', bn: 'কাফিরুন', ayahs: 6, juz: 30, desc: 'অস্বীকারকারী' },
+        { num: 110, name: 'النصر', bn: 'নাসর', ayahs: 3, juz: 30, desc: 'সাহায্য' },
+        { num: 111, name: 'المسد', bn: 'মাসাদ', ayahs: 5, juz: 30, desc: 'রজ্জু' },
+        { num: 112, name: 'الإخلاص', bn: 'ইখলাস', ayahs: 4, juz: 30, desc: 'একত্ব' },
+        { num: 113, name: 'الفلق', bn: 'ফালাক', ayahs: 5, juz: 30, desc: 'ভোর' },
+        { num: 114, name: 'الناس', bn: 'নাস', ayahs: 6, juz: 30, desc: 'মানুষ' }
+    ];
+
+    let bookmarkedSurahs = new Set();
+
+    // বুকমার্ক লোড করুন localStorage থেকে
+    function loadBookmarks() {
+        const saved = localStorage.getItem('surahBookmarks');
+        if (saved) {
+            bookmarkedSurahs = new Set(JSON.parse(saved));
+        }
+    }
+
+    // বুকমার্ক সংরক্ষণ করুন localStorage তে
+    function saveBookmarks() {
+        localStorage.setItem('surahBookmarks', JSON.stringify(Array.from(bookmarkedSurahs)));
+    }
+
+    // বর্তমানে কোন সূরাটি expanded আছে — ডিফল্ট সূরা ফাতিহা (নং ১)
+    let expandedSurahNum = 1;
+
+    // ===== পারা (Juz) ট্যাবের জন্য হেল্পার =====
+    // দ্রষ্টব্য: নিচের পৃষ্ঠা-ম্যাপিং আনুমানিক — totalPages-কে ৩০ পারায় সমানভাবে ভাগ করে গণনা করা হয়েছে।
+    // আপনার Mushaf PDF-এ প্রতিটি পারা ঠিক কোন পৃষ্ঠা থেকে শুরু হয় তা জানা থাকলে
+    // নিচের JUZ_START_PAGE array-টি বাস্তব পৃষ্ঠা নম্বর দিয়ে পূরণ করুন (৩০টি সংখ্যা, পারা ১ থেকে ৩০ পর্যন্ত)।
+    // উদাহরণ: let JUZ_START_PAGE = [1, 22, 42, 62, ...]; (মোট ৩০টি এন্ট্রি)
+    let JUZ_START_PAGE = null; // null থাকলে auto-calculate (আনুমানিক) হবে
+
+    function getJuzStartPage(juzNum) {
+        if (Array.isArray(JUZ_START_PAGE) && JUZ_START_PAGE[juzNum - 1]) {
+            return JUZ_START_PAGE[juzNum - 1];
+        }
+        const tp = totalPages || 604;
+        return Math.max(1, Math.round((juzNum - 1) * tp / 30) + 1);
+    }
+
+    function getJuzPageCount(juzNum) {
+        const tp = totalPages || 604;
+        const start = getJuzStartPage(juzNum);
+        const nextStart = juzNum < 30 ? getJuzStartPage(juzNum + 1) : (tp + 1);
+        return Math.max(1, nextStart - start);
+    }
+
+    function getJuzForPage(pageNum) {
+        for (let j = 30; j >= 1; j--) {
+            if (pageNum >= getJuzStartPage(j)) return j;
+        }
+        return 1;
+    }
+
+    // বর্তমান পৃষ্ঠায় থাকা প্রথম আয়াত/লাইনের আরবি টেক্সট (regions.json থেকে আসা currentAyahList-এর real data)
+    function getCurrentPageArabicLine() {
+        if (currentAyahList && currentAyahList.length) {
+            const withText = currentAyahList.find(a => a.text && a.text.trim());
+            if (withText) return withText.text.trim();
+        }
+        return '';
+    }
+
+    // বর্তমানে কোন পারা expanded আছে (ডান কলামে পৃষ্ঠা তালিকা দেখানোর জন্য)
+    let expandedJuzNum = null;
+
+    // একটি পারা-আইটেম এলিমেন্ট তৈরি করুন (বাম কলামে)
+    function createParaItemEl(juzNum) {
+        const isExpanded = expandedJuzNum === juzNum;
+        const item = document.createElement('div');
+        item.className = 'para-item' + (isExpanded ? ' expanded' : '');
+        item.dataset.juzNum = juzNum;
+        item.textContent = toBengaliNumeral(juzNum);
+
+        item.addEventListener('click', () => {
+            toggleExpandedJuz(juzNum);
+        });
+
+        return item;
+    }
+
+    // পারায় ক্লিক করলে ডান পাশের পৃষ্ঠা-তালিকা টগল করুন
+    function toggleExpandedJuz(juzNum) {
+        expandedJuzNum = (expandedJuzNum === juzNum) ? null : juzNum;
+        renderSurahListBody();
+    }
+
+    // একটি পারার পৃষ্ঠা-নম্বর তালিকা তৈরি করুন (ডান কলামে)
+    function buildPageGridEl(juzNum) {
+        const wrap = document.createElement('div');
+        wrap.className = 'ayah-number-grid';
+        const count = getJuzPageCount(juzNum);
+        for (let i = 1; i <= count; i++) {
+            const badge = document.createElement('div');
+            badge.className = 'ayah-number-badge';
+            badge.textContent = toBengaliNumeral(i);
+            badge.dataset.page = i;
+            badge.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.ayah-number-badge.selected').forEach(el => el.classList.remove('selected'));
+                badge.classList.add('selected');
+            });
+            wrap.appendChild(badge);
+        }
+        return wrap;
+    }
+
+    // একটি সূরা-আইটেম এলিমেন্ট তৈরি করুন (শুধুমাত্র বাম প্যানেলে দেখাবে)
+    function createSurahItemEl(surah) {
+        const isExpanded = expandedSurahNum === surah.num;
+
+        const item = document.createElement('div');
+        item.className = 'surah-item' + (isExpanded ? ' expanded' : '');
+        item.dataset.surahNum = surah.num;
+
+        item.innerHTML = `
+            <div class="surah-item-name-row">
+                <span class="surah-item-num">${toBengaliNumeral(String(surah.num).padStart(2,'0'))}.</span>
+                <span class="surah-item-name">${surah.bn}</span>
+            </div>
+            ${surah.desc ? `<span class="surah-item-desc">${surah.desc}</span>` : ''}
+        `;
+
+        /* ── সুরার উপর ক্লিক = toggle ── */
+        item.addEventListener('click', () => {
+            toggleAyahGridForSurah(surah.num);
+        });
+
+        return item;
+    }
+
+    // সূরায় ক্লিক করলে toggle এবং হেডার আপডেট করুন
+    function toggleAyahGridForSurah(surahNum) {
+        if (expandedSurahNum === surahNum) {
+            // একই সুরায় আবার ক্লিক = বন্ধ করো
+            expandedSurahNum = null;
+        } else {
+            expandedSurahNum = surahNum;
+        }
+        renderSurahListBody();
+        updateSelectedSurahHeader();
+    }
+
+    // হেডার আপডেট করুন — ট্যাব অনুযায়ী (সূরা/বুকমার্ক ট্যাবে সূরার আরবি নাম, পারা ট্যাবে বর্তমান পৃষ্ঠার আরবি লাইন)
+    function updateSelectedSurahHeader() {
+        const headerEl = document.getElementById('selectedSurahName');
+        if (activeSurahListTab === 'para') {
+            const line = getCurrentPageArabicLine();
+            headerEl.textContent = line || ('পৃষ্ঠা ' + toBengaliNumeral(currentPage));
+        } else if (expandedSurahNum) {
+            const selectedSurah = surahData.find(s => s.num === expandedSurahNum);
+            if (selectedSurah) {
+                headerEl.textContent = selectedSurah.name;
+            }
+        }
+    }
+
+    // একটি সূরার আয়াত নম্বর গ্রিড তৈরি করুন
+    function buildAyahGridEl(surah) {
+        const wrap = document.createElement('div');
+        wrap.className = 'ayah-number-grid';
+        for (let i = 1; i <= surah.ayahs; i++) {
+            const badge = document.createElement('div');
+            badge.className = 'ayah-number-badge';
+            badge.textContent = toBengaliNumeral(i);
+            badge.dataset.ayah = i;
+            badge.addEventListener('click', (e) => {
+                e.stopPropagation();
+                selectAyahFromGrid(surah.num, i, badge);
+            });
+            wrap.appendChild(badge);
+        }
+        return wrap;
+    }
+
+    // একটি আয়াত নম্বর নির্বাচন করা হলে
+    function selectAyahFromGrid(surahNum, ayahNum, badgeEl) {
+        document.querySelectorAll('.ayah-number-badge.selected').forEach(el => el.classList.remove('selected'));
+        badgeEl.classList.add('selected');
+    }
+
+    // সূরা লিস্ট বডি রেন্ডার করুন (বর্তমান ট্যাব অনুযায়ী)
+    let activeSurahListTab = 'surah';
+
+    function renderSurahListBody() {
+        const leftCol = document.getElementById('surahListColSurah');
+        const rightCol = document.getElementById('surahListColAyah');
+        leftCol.innerHTML = '';
+        rightCol.innerHTML = '';
+
+        // প্রতিটি সূরার আইটেম তৈরি করুন (বাম কলামে)
+        const appendSurahWithGrid = (surah) => {
+            leftCol.appendChild(createSurahItemEl(surah));
+        };
+
+        // নির্বাচিত সূরার আয়াত গ্রিড তৈরি করুন (ডান কলামে)
+        const renderAyahGrid = () => {
+            if (expandedSurahNum) {
+                const selectedSurah = surahData.find(s => s.num === expandedSurahNum);
+                if (selectedSurah) {
+                    rightCol.appendChild(buildAyahGridEl(selectedSurah));
+                }
+            }
+        };
+
+        if (activeSurahListTab === 'surah') {
+            surahData.forEach(appendSurahWithGrid);
+            renderAyahGrid();
+
+        } else if (activeSurahListTab === 'bookmark') {
+            const bookmarked = surahData.filter(s => bookmarkedSurahs.has(s.num));
+            if (bookmarked.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'surah-list-empty';
+                empty.textContent = 'কোনো বুকমার্ক করা সূরা নেই।';
+                leftCol.appendChild(empty);
+            } else {
+                bookmarked.forEach(appendSurahWithGrid);
+                renderAyahGrid();
+            }
+
+        } else if (activeSurahListTab === 'para') {
+            // বাম কলামে ১-৩০ পারার তালিকা
+            for (let juz = 1; juz <= 30; juz++) {
+                leftCol.appendChild(createParaItemEl(juz));
+            }
+            // ডান কলামে নির্বাচিত পারার পৃষ্ঠা তালিকা
+            if (expandedJuzNum) {
+                rightCol.appendChild(buildPageGridEl(expandedJuzNum));
+            }
+        }
+    }
+
+    // ট্যাব পরিবর্তন করুন
+    function setSurahListTab(tab) {
+        activeSurahListTab = tab;
+        document.querySelectorAll('.surah-list-tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tab === tab);
+        });
+        // পারা ট্যাবে প্রথমবার গেলে ডিফল্টভাবে বর্তমান পৃষ্ঠা যে পারায় আছে সেটি expand থাকবে
+        if (tab === 'para' && !expandedJuzNum) {
+            expandedJuzNum = getJuzForPage(currentPage);
+        }
+        // কলাম হেডারের লেবেল ট্যাব অনুযায়ী পরিবর্তন করুন
+        const leftHead = document.getElementById('surahListColheadLeft');
+        const rightHead = document.getElementById('surahListColheadRight');
+        if (leftHead && rightHead) {
+            if (tab === 'para') {
+                leftHead.textContent = 'পারা';
+                rightHead.textContent = 'পৃষ্ঠা';
+            } else {
+                leftHead.textContent = 'সূরা';
+                rightHead.textContent = 'আয়াত';
+            }
+        }
+        renderSurahListBody();
+        updateSelectedSurahHeader();
+    }
+
+    document.getElementById('surahTabBtn')?.addEventListener('click', () => setSurahListTab('surah'));
+    document.getElementById('paraTabBtn')?.addEventListener('click', () => setSurahListTab('para'));
+    document.getElementById('bookmarkTabBtn')?.addEventListener('click', () => setSurahListTab('bookmark'));
+
+    // সূরা লিস্ট মডাল খোলা
+    function openSurahListModal() {
+        const modal = document.getElementById('surahListModal');
+        expandedSurahNum = 1; // ডিফল্টভাবে সূরা ফাতিহা সিলেক্ট থাকবে
+        expandedJuzNum = null; // পারা ট্যাবে গেলে বর্তমান পৃষ্ঠা অনুযায়ী auto-detect হবে
+        setSurahListTab('surah');
+        modal.classList.add('active');
+    }
+
+    // সূরা লিস্ট মডাল বন্ধ করুন
+    function closeSurahListModal() {
+        const modal = document.getElementById('surahListModal');
+        modal.classList.remove('active');
+    }
+
+    // মডাল ক্লোজ বোতাম এবং পটভূমি ক্লিক ইভেন্ট
+    document.getElementById('surahListModal')?.addEventListener('click', (e) => {
+        if (e.target.id === 'surahListModal') {
+            closeSurahListModal();
+        }
+    });
+
+    document.getElementById('closeSurahListBtn')?.addEventListener('click', () => {
+        closeSurahListModal();
+    });
+
+    // স্টার্টআপে বুকমার্ক লোড করুন
+    loadBookmarks();
+
 </script>
 
 </body>
