@@ -1811,6 +1811,378 @@
         background:#f0f0f0;
     }
 
+    /* ===== কাস্টম মডাল স্টাইল ===== */
+    .custom-modal{
+        position:fixed;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        display:none;
+        align-items:flex-end;
+        justify-content:center;
+        z-index:1000;
+    }
+
+    .custom-modal.active{
+        display:flex;
+    }
+
+    .modal-overlay{
+        position:absolute;
+        top:0;
+        left:0;
+        right:0;
+        bottom:0;
+        background:rgba(0,0,0,.5);
+        z-index:-1;
+    }
+
+    .modal-content{
+        background:#fff;
+        border-radius:16px 16px 0 0;
+        display:flex;
+        flex-direction:column;
+        max-height:90vh;
+        width:100%;
+        max-width:480px;
+        box-shadow:0 -5px 30px rgba(0,0,0,.2);
+        animation:slideUp .3s ease;
+    }
+
+    @keyframes slideUp {
+        from { transform:translateY(100%); }
+        to { transform:translateY(0); }
+    }
+
+    /* ===== সূরা মডাল ===== */
+    .surah-modal {
+        max-height:85vh;
+    }
+
+    .modal-header{
+        padding:20px;
+        border-bottom:1px solid var(--line);
+        text-align:center;
+        flex-shrink:0;
+    }
+
+    .modal-header h2{
+        font-size:18px;
+        font-weight:600;
+        color:var(--ink);
+        margin:0;
+    }
+
+    .modal-body{
+        flex:1;
+        display:flex;
+        flex-direction:column;
+        overflow:hidden;
+    }
+
+    .surah-list-scroll{
+        flex:1;
+        overflow-y:auto;
+        padding:12px 0;
+    }
+
+    .surah-item{
+        padding:12px 16px;
+        display:flex;
+        align-items:center;
+        gap:12px;
+        cursor:pointer;
+        border-bottom:1px solid #f0f0f0;
+        transition:background .2s;
+    }
+
+    .surah-item:active{
+        background:#f5f5f5;
+    }
+
+    .surah-radio{
+        width:20px;
+        height:20px;
+        border:2px solid var(--brand);
+        border-radius:50%;
+        flex-shrink:0;
+        position:relative;
+        cursor:pointer;
+    }
+
+    .surah-radio.checked::after{
+        content:'';
+        position:absolute;
+        width:10px;
+        height:10px;
+        background:var(--brand);
+        border-radius:50%;
+        top:50%;
+        left:50%;
+        transform:translate(-50%,-50%);
+    }
+
+    .surah-name{
+        font-size:15px;
+        color:var(--ink);
+    }
+
+    .range-section{
+        padding:16px;
+        border-top:2px solid var(--line);
+        flex-shrink:0;
+    }
+
+    .range-inputs{
+        display:flex;
+        align-items:center;
+        gap:12px;
+    }
+
+    .range-input-group{
+        flex:1;
+        display:flex;
+        flex-direction:column;
+        gap:6px;
+    }
+
+    .range-input-group label{
+        font-size:13px;
+        color:#666;
+        font-weight:500;
+    }
+
+    .range-input-group input{
+        padding:8px 10px;
+        border:1px solid var(--line);
+        border-radius:8px;
+        font-size:16px;
+        font-family:var(--main-font);
+        text-align:center;
+    }
+
+    .divider{
+        width:2px;
+        height:40px;
+        background:var(--line);
+        align-self:flex-end;
+        margin-bottom:4px;
+    }
+
+    /* ===== অনুবাদক মডাল ===== */
+    .translator-modal {
+        max-height:85vh;
+    }
+
+    .translator-header{
+        background:linear-gradient(180deg,var(--brand),var(--brand-dark));
+        color:#fff;
+        padding:12px 16px;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        flex-shrink:0;
+    }
+
+    .translator-header h2{
+        font-size:18px;
+        font-weight:600;
+        margin:0;
+        flex:1;
+        text-align:center;
+    }
+
+    .back-btn{
+        width:36px;
+        height:36px;
+        border-radius:50%;
+        background:transparent;
+        border:2px solid rgba(255,255,255,.5);
+        color:#fff;
+        cursor:pointer;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:18px;
+        transition:all .2s;
+    }
+
+    .back-btn:active{
+        background:rgba(255,255,255,.1);
+    }
+
+    .search-box{
+        padding:12px 16px;
+        display:flex;
+        align-items:center;
+        gap:10px;
+        background:#f9f9f9;
+        border-bottom:1px solid var(--line);
+        flex-shrink:0;
+    }
+
+    .search-box i{
+        color:#999;
+        font-size:16px;
+    }
+
+    .search-box input{
+        flex:1;
+        border:1px solid var(--line);
+        padding:10px 12px;
+        border-radius:8px;
+        font-size:14px;
+        font-family:var(--main-font);
+    }
+
+    .translator-body{
+        flex:1;
+        overflow-y:auto;
+        padding:0;
+    }
+
+    .translator-section{
+        padding:16px;
+        flex-shrink:0;
+    }
+
+    .translator-section h3{
+        font-size:13px;
+        font-weight:600;
+        color:#666;
+        margin:0 0 12px 0;
+        text-transform:uppercase;
+    }
+
+    .translator-item{
+        display:flex;
+        align-items:center;
+        gap:12px;
+        padding:12px;
+        margin-bottom:8px;
+        border:2px solid var(--line);
+        border-radius:8px;
+        cursor:pointer;
+        transition:all .2s;
+    }
+
+    .translator-item:active{
+        background:#f9f9f9;
+    }
+
+    .translator-checkbox{
+        width:22px;
+        height:22px;
+        border:2px solid var(--brand);
+        border-radius:4px;
+        flex-shrink:0;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        cursor:pointer;
+        position:relative;
+    }
+
+    .translator-checkbox.checked{
+        background:var(--brand);
+    }
+
+    .translator-checkbox.checked::after{
+        content:'✓';
+        color:#fff;
+        font-size:14px;
+        font-weight:bold;
+    }
+
+    .translator-info{
+        flex:1;
+    }
+
+    .translator-lang{
+        font-size:14px;
+        font-weight:600;
+        color:var(--ink);
+    }
+
+    .translator-author{
+        font-size:12px;
+        color:#999;
+        margin-top:2px;
+    }
+
+    .translator-action{
+        width:32px;
+        height:32px;
+        border-radius:50%;
+        background:transparent;
+        border:none;
+        cursor:pointer;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:var(--brand);
+        font-size:16px;
+        transition:all .2s;
+    }
+
+    .translator-action:active{
+        background:rgba(23,90,69,.1);
+    }
+
+    .modal-footer{
+        padding:12px;
+        display:flex;
+        gap:8px;
+        border-top:1px solid var(--line);
+        flex-shrink:0;
+    }
+
+    .translator-footer{
+        padding:16px;
+    }
+
+    .btn{
+        flex:1;
+        padding:12px;
+        border:none;
+        border-radius:8px;
+        font-size:14px;
+        font-weight:600;
+        cursor:pointer;
+        font-family:var(--main-font);
+        transition:all .2s;
+    }
+
+    .btn-success{
+        background:var(--brand);
+        color:#fff;
+    }
+
+    .btn-success:active{
+        opacity:.9;
+    }
+
+    .btn-danger{
+        background:#fff;
+        color:#e74c3c;
+        border:2px solid #e74c3c;
+    }
+
+    .btn-danger:active{
+        background:#f9f9f9;
+    }
+
+    .btn-secondary{
+        background:#fff;
+        color:var(--brand);
+        border:2px solid var(--brand);
+    }
+
+    .btn-secondary:active{
+        background:rgba(23,90,69,.05);
+    }
+
 </style>
 </head>
 <body>
@@ -4393,7 +4765,274 @@
     // স্টার্টআপে বুকমার্ক লোড করুন
     loadBookmarks();
 
+    // ===== সূরা ডেটা =====
+    const surahData = [
+        {num: 1, name: 'আল ফাতিহা', bn: 'আল ফাতিহা', ayahs: 7},
+        {num: 2, name: 'আল বাকারা', bn: 'আল বাকারা', ayahs: 286},
+        {num: 3, name: 'আল ইমরান', bn: 'আল ইমরান', ayahs: 200},
+        {num: 4, name: 'আন নিসা', bn: 'আন নিসা', ayahs: 176},
+        {num: 5, name: 'আল মাইদা', bn: 'আল মাইদা', ayahs: 120},
+        {num: 6, name: 'আল আনআম', bn: 'আল আনআম', ayahs: 165},
+        {num: 7, name: 'আল আরাফ', bn: 'আল আরাফ', ayahs: 206},
+        {num: 8, name: 'আল আনফাল', bn: 'আল আনফাল', ayahs: 75},
+        {num: 9, name: 'আত তাওবা', bn: 'আত তাওবা', ayahs: 129},
+        {num: 10, name: 'ইউনুস', bn: 'ইউনুস', ayahs: 109},
+        {num: 11, name: 'হুদ', bn: 'হুদ', ayahs: 123},
+        {num: 12, name: 'ইউসুফ', bn: 'ইউসুফ', ayahs: 111},
+        {num: 13, name: 'আর রা\'দ', bn: 'আর রা\'দ', ayahs: 43},
+        {num: 14, name: 'ইব্রাহীম', bn: 'ইব্রাহীম', ayahs: 52},
+        {num: 15, name: 'আল হিজর', bn: 'আল হিজর', ayahs: 99},
+    ];
+
+    // ===== অনুবাদক ডেটা =====
+    const translators = {
+        installed: [
+            {id: 1, lang: 'Bangla', author: 'মুফতি ফারুকী উসমানী', checked: false},
+            {id: 2, lang: 'Bangla', author: 'ইসলামিক ফাউন্ডেশন', checked: false},
+            {id: 3, lang: 'Albanian', author: 'Feti Mehdiu', checked: true},
+        ],
+        downloadable: [
+            {id: 4, lang: 'Bangla', author: 'মাওলানা মুহিউদ্দিন খান', downloadable: true},
+            {id: 5, lang: 'Albanian', author: 'Sherif Ahmeti', downloadable: true},
+            {id: 6, lang: 'Albanian', author: 'Hasan Efendi Nahi', downloadable: true},
+            {id: 7, lang: 'Amharic', author: 'Muhammed Sadiq and Muhammed Sani Habib', downloadable: true},
+            {id: 8, lang: 'Assamese', author: 'Shaykh Rafeequl Islam Habibur-Rahman', downloadable: true},
+            {id: 9, lang: 'Azerbaijani', author: 'Vasim Mammadaliyev and Ziya Bunyadov', downloadable: true},
+            {id: 10, lang: 'Azerbaijani', author: 'Ali Hemmet Ata', downloadable: true},
+        ]
+    };
+
+    let selectedSurah = 1;
+    let selectedTranslators = new Set([3]); // Albanian ডিফল্ট সিলেক্টেড
+
+    // ===== সূরা মডাল ফাংশন =====
+    function openSurahModal() {
+        const modal = document.getElementById('surahSelectionModal');
+        if (modal) {
+            modal.classList.add('active');
+            renderSurahList();
+        }
+    }
+
+    function closeSurahModal() {
+        const modal = document.getElementById('surahSelectionModal');
+        if (modal) modal.classList.remove('active');
+    }
+
+    function renderSurahList() {
+        const container = document.getElementById('surahListContainer');
+        container.innerHTML = '';
+        
+        surahData.forEach(surah => {
+            const item = document.createElement('div');
+            item.className = 'surah-item';
+            item.innerHTML = `
+                <div class="surah-radio ${selectedSurah === surah.num ? 'checked' : ''}"></div>
+                <span class="surah-name">${surah.bn}</span>
+            `;
+            item.addEventListener('click', () => {
+                selectedSurah = surah.num;
+                document.querySelectorAll('.surah-radio').forEach(r => r.classList.remove('checked'));
+                item.querySelector('.surah-radio').classList.add('checked');
+                
+                // আয়াত সংখ্যা আপডেট করুন
+                document.getElementById('endAyahInput').value = surah.ayahs;
+                document.getElementById('startAyahInput').value = 1;
+            });
+            container.appendChild(item);
+        });
+
+        // প্রথম সূরা সিলেক্টেড করুন
+        if (container.firstChild) {
+            container.firstChild.querySelector('.surah-radio').classList.add('checked');
+        }
+    }
+
+    // ===== অনুবাদক মডাল ফাংশন =====
+    function openTranslatorModal() {
+        const modal = document.getElementById('translatorSelectionModal');
+        if (modal) {
+            modal.classList.add('active');
+            renderTranslators();
+        }
+    }
+
+    function closeTranslatorModal() {
+        const modal = document.getElementById('translatorSelectionModal');
+        if (modal) modal.classList.remove('active');
+    }
+
+    function renderTranslators() {
+        const installedContainer = document.getElementById('installedTranslatorsContainer');
+        const downloadableContainer = document.getElementById('downloadableTranslatorsContainer');
+        
+        installedContainer.innerHTML = '';
+        downloadableContainer.innerHTML = '';
+
+        // নির্বাচিত অনুবাদক
+        translators.installed.forEach(t => {
+            const item = document.createElement('div');
+            item.className = 'translator-item';
+            item.innerHTML = `
+                <div class="translator-checkbox ${selectedTranslators.has(t.id) ? 'checked' : ''}"></div>
+                <div class="translator-info">
+                    <div class="translator-lang">${t.lang}</div>
+                    <div class="translator-author">${t.author}</div>
+                </div>
+                <button class="translator-action">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            item.addEventListener('click', (e) => {
+                if (!e.target.closest('.translator-action')) {
+                    if (selectedTranslators.has(t.id)) {
+                        selectedTranslators.delete(t.id);
+                    } else {
+                        selectedTranslators.add(t.id);
+                    }
+                    renderTranslators();
+                }
+            });
+            installedContainer.appendChild(item);
+        });
+
+        // ডাউনলোডযোগ্য অনুবাদক
+        translators.downloadable.forEach(t => {
+            const item = document.createElement('div');
+            item.className = 'translator-item';
+            item.innerHTML = `
+                <button class="translator-action">
+                    <i class="fas fa-download"></i>
+                </button>
+                <div class="translator-info">
+                    <div class="translator-lang">${t.lang}</div>
+                    <div class="translator-author">${t.author}</div>
+                </div>
+            `;
+            downloadableContainer.appendChild(item);
+        });
+    }
+
+    // ===== ইভেন্ট লিসেনার সেটআপ =====
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('toolbar-play-btn') || e.target.closest('.toolbar-play-btn')) {
+            openSurahModal();
+        }
+        
+        if (e.target.textContent.includes('অনুবাদক পরিবর্তন') || e.target.closest('[data-action="change-translator"]')) {
+            openTranslatorModal();
+        }
+    });
+
+    // সূরা মডাল বাটন
+    document.getElementById('surahCancelBtn')?.addEventListener('click', closeSurahModal);
+    document.getElementById('surahConfirmBtn')?.addEventListener('click', () => {
+        console.log('সূরা:', selectedSurah);
+        closeSurahModal();
+    });
+
+    // অনুবাদক মডাল বাটন
+    document.getElementById('translatorBackBtn')?.addEventListener('click', closeTranslatorModal);
+    document.getElementById('translatorCancelBtn')?.addEventListener('click', closeTranslatorModal);
+    document.getElementById('translatorConfirmBtn')?.addEventListener('click', () => {
+        console.log('নির্বাচিত অনুবাদক:', selectedTranslators);
+        closeTranslatorModal();
+    });
+
+    // মডাল ওভারলে ক্লিক
+    document.getElementById('surahSelectionModal')?.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-overlay')) closeSurahModal();
+    });
+
+    document.getElementById('translatorSelectionModal')?.addEventListener('click', (e) => {
+        if (e.target.classList.contains('modal-overlay')) closeTranslatorModal();
+    });
+
+    // সার্চ ফাংশনালিটি
+    document.getElementById('translatorSearch')?.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        document.querySelectorAll('.translator-item').forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(query) ? 'flex' : 'none';
+        });
+    });
+
 </script>
+
+<!-- ===== সূরা নির্বাচন মডাল ===== -->
+<div id="surahSelectionModal" class="custom-modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content surah-modal">
+        <div class="modal-header">
+            <h2>সূরা নির্বাচন করুন</h2>
+        </div>
+        
+        <div class="modal-body">
+            <!-- সূরা তালিকা -->
+            <div class="surah-list-scroll">
+                <div id="surahListContainer"></div>
+            </div>
+            
+            <!-- রেঞ্জ নির্বাচন -->
+            <div class="range-section">
+                <div class="range-inputs">
+                    <div class="range-input-group">
+                        <label>শুরু</label>
+                        <input type="number" id="startAyahInput" min="1" max="286" value="1">
+                    </div>
+                    <div class="divider"></div>
+                    <div class="range-input-group">
+                        <label>শেষ</label>
+                        <input type="number" id="endAyahInput" min="1" max="286" value="286">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal-footer">
+            <button class="btn btn-success" id="surahConfirmBtn">অনুবাদ দেখুন</button>
+            <button class="btn btn-danger" id="surahCancelBtn">বাতিল করুন</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== অনুবাদক নির্বাচন মডাল ===== -->
+<div id="translatorSelectionModal" class="custom-modal">
+    <div class="modal-overlay"></div>
+    <div class="modal-content translator-modal">
+        <div class="translator-header">
+            <button class="back-btn" id="translatorBackBtn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <h2>অনুবাদক</h2>
+            <div style="width: 36px;"></div>
+        </div>
+        
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="translatorSearch" placeholder="অনুসন্ধান">
+        </div>
+        
+        <div class="modal-body translator-body">
+            <!-- নির্বাচিত অনুবাদক সেকশন -->
+            <div class="translator-section">
+                <h3>অনুবাদক নির্বাচন করুন</h3>
+                <div id="installedTranslatorsContainer"></div>
+            </div>
+            
+            <!-- ডাউনলোডযোগ্য অনুবাদক সেকশন -->
+            <div class="translator-section">
+                <h3>অনুবাদ ডাউনলোড করুন</h3>
+                <div id="downloadableTranslatorsContainer"></div>
+            </div>
+        </div>
+        
+        <div class="modal-footer translator-footer">
+            <button class="btn btn-secondary" id="translatorCancelBtn">বাতিল করুন</button>
+            <button class="btn btn-success" id="translatorConfirmBtn">ঠিক আছে</button>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
