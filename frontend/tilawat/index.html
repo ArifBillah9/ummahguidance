@@ -1388,22 +1388,22 @@
     .surah-list-header {
         background: var(--slh-header);
         color: white;
-        padding: 18px 44px;
+        padding: 12px 44px;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-shrink: 0;
         position: relative;
-        min-height: 68px;
+        min-height: 50px;
         z-index: 10;
     }
 
     .surah-list-header h2 {
-        font-size: 32px;
+        font-size: 26px;
         font-weight: 500;
         margin: 0;
         text-align: center;
-        font-family: var(--main-font);
+        font-family: var(--arabic-font);
         direction: rtl;
         line-height: 1.25;
     }
@@ -1422,7 +1422,7 @@
         padding: 0;
         flex-shrink: 0;
         position: absolute;
-        left: 10px;
+        right: 10px;
         top: 50%;
         transform: translateY(-50%);
     }
@@ -1437,11 +1437,11 @@
 
     .surah-list-colhead-surah,
     .surah-list-colhead-ayah {
-        padding: 13px 8px;
+        padding: 8px 8px;
         color: #fff;
         text-align: center;
         font-family: var(--main-font);
-        font-size: 22px;
+        font-size: 15px;
         font-weight: 600;
     }
 
@@ -1506,12 +1506,12 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: center;
-        gap: 2px;
-        padding: 13px 16px;
+        gap: 1px;
+        padding: 7px 14px;
         border-bottom: 1px solid var(--slh-border);
         cursor: pointer;
         transition: background 0.15s;
-        min-height: 62px;
+        min-height: 42px;
         background: transparent;
     }
 
@@ -1533,14 +1533,14 @@
     }
 
     #surahListBody .surah-item-num {
-        font-size: 22px;
+        font-size: 16px;
         font-weight: 600;
         color: #fff;
         flex-shrink: 0;
     }
 
     #surahListBody .surah-item-name {
-        font-size: 22px;
+        font-size: 16px;
         font-weight: 600;
         color: #fff;
         white-space: nowrap;
@@ -1550,10 +1550,10 @@
 
     #surahListBody .surah-item-desc {
         font-family: var(--main-font);
-        font-size: 17px;
+        font-size: 12.5px;
         font-weight: 400;
         color: rgba(255,255,255,0.68);
-        padding-left: 28px;
+        padding-left: 22px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -1562,11 +1562,11 @@
 
     /* ===== PARA (পারা) ROW (বাম কলাম) — সূরা রো থেকে আলাদা: single-line, centered ===== */
     #surahListBody .para-item {
-        padding: 18px 16px;
+        padding: 11px 16px;
         text-align: center;
         color: #fff;
         font-family: var(--main-font);
-        font-size: 24px;
+        font-size: 17px;
         font-weight: 600;
         border-bottom: 1px solid var(--slh-border);
         cursor: pointer;
@@ -1590,12 +1590,12 @@
     }
 
     .ayah-number-badge {
-        padding: 15px 8px;
+        padding: 9px 8px;
         text-align: center;
         background: transparent;
         color: #fff;
         font-weight: 600;
-        font-size: 22px;
+        font-size: 15px;
         font-family: var(--main-font);
         cursor: pointer;
         transition: background 0.15s;
@@ -1621,7 +1621,7 @@
         background: var(--slh-header);
         flex-shrink: 0;
         border-top: 1px solid var(--slh-border);
-        padding: 8px;
+        padding: 6px;
         gap: 6px;
     }
 
@@ -1630,9 +1630,9 @@
         border: none;
         color: rgba(255,255,255,0.75);
         font-family: var(--main-font);
-        font-size: 20px;
+        font-size: 15px;
         font-weight: 600;
-        padding: 12px 8px;
+        padding: 9px 8px;
         border-radius: 10px;
         cursor: pointer;
         transition: background 0.2s, color 0.2s;
@@ -3878,7 +3878,6 @@
         if (selectionModeBtn) {
             selectionModeBtn.classList.remove('active');
         }
-        alert('আয়াত সিলেকশন বন্ধ হয়েছে।');
     });
 
     // ডিলিট বাটন ক্লিক হ্যান্ডলার
