@@ -1476,6 +1476,37 @@
         100% { transform: rotate(360deg); }
     }
 
+    /* ===== আয়াত নেভিগেশন লোডিং টোস্ট ===== */
+    .ayah-nav-toast {
+        position: fixed;
+        left: 50%;
+        bottom: 90px;
+        transform: translateX(-50%) translateY(16px);
+        background: rgba(0, 0, 0, 0.82);
+        color: #fff;
+        padding: 10px 18px;
+        border-radius: 30px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        z-index: 1300;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease, transform 0.25s ease;
+        max-width: 86%;
+        white-space: nowrap;
+    }
+
+    .ayah-nav-toast.active {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    .ayah-nav-toast .spinner {
+        border-color: rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+    }
+
     /* ===== DROPDOWN MENU ===== */
     .dropdown-menu {
         position: absolute;
@@ -2320,6 +2351,14 @@
 <!-- HIDDEN AUDIO ELEMENT -->
 <audio id="quranAudio" preload="none"></audio>
 
+<!-- আয়াত নেভিগেশন লোডিং টোস্ট (সূরা তালিকা থেকে আয়াত সিলেক্ট করলে পিডিএফের সেই
+     আয়াত খুঁজে বের করার সময় দেখানো হয়) -->
+<div class="ayah-nav-toast" id="ayahNavToast">
+    <span class="spinner"></span>
+    <span>আয়াতটি খোঁজা হচ্ছে...</span>
+</div>
+
+
 <!-- ===== বুকমার্ক সেটিংস মডাল ===== -->
 <div id="bookmarkSettingsModal" class="bookmark-settings-modal">
     <div class="bookmark-settings-content">
@@ -2344,7 +2383,7 @@
 
         <div class="bookmark-settings-buttons">
             <button class="bookmark-settings-btn cancel" id="bookmarkSettingsCancelBtn">অনুরোধ দেখুন</button>
-            <button class="bookmark-settings-btn confirm" id="bookmarkSettingsConfirmBtn">বাটিল করুন</button>
+            <button class="bookmark-settings-btn confirm" id="bookmarkSettingsConfirmBtn">বাতিল করুন</button>
         </div>
     </div>
 </div>
@@ -3712,6 +3751,81 @@
         renderAyahBar();
     }
 
+    // ===== নির্দিষ্ট সূরা/আয়াত অনুযায়ী পিডিএফের পৃষ্ঠা খুঁজে বের করা =====
+    // ইতিমধ্যে ম্যানুয়ালি ম্যাপ করা (ALL_REGIONS) বা স্বয়ংক্রিয়ভাবে স্ক্যান করা
+    // (AUTO_REGIONS) পৃষ্ঠাগুলোর মধ্যে এই সূরা/আয়াতটি কোন পৃষ্ঠায় আছে তা খুঁজে দেয়
+    function findPageForAyah(surahNum, ayahNum) {
+        const sources = [ALL_REGIONS, AUTO_REGIONS];
+        for (const src of sources) {
+            for (const pageKey in src) {
+                const regions = src[pageKey];
+                if (regions && regions.some(r => r.surahNum === surahNum && r.ayahNum === ayahNum)) {
+                    return parseInt(pageKey, 10);
+                }
+            }
+        }
+        return null;
+    }
+
+    // আয়াত-নেভিগেশন লোডিং টোস্ট দেখান/লুকান (পিডিএফ প্রথমবার স্ক্যান হওয়ার সময় সামান্য সময় লাগতে পারে)
+    function showAyahNavLoading(show) {
+        const toast = document.getElementById('ayahNavToast');
+        if (toast) toast.classList.toggle('active', !!show);
+    }
+
+    // ===== "সূরা তালিকা" মোডাল থেকে নির্দিষ্ট আয়াত নির্বাচন করলে পিডিএফের সেই
+    // সূরার সেই আয়াতের পৃষ্ঠায় নিয়ে গিয়ে আয়াতটি স্বয়ংক্রিয়ভাবে সিলেক্ট/হাইলাইট করে =====
+    let ayahNavInProgress = false;
+    async function goToAyahInPdf(surahNum, ayahNum) {
+        if (!pdfDoc || ayahNavInProgress) return;
+        ayahNavInProgress = true;
+        showAyahNavLoading(true);
+
+        try {
+            let page = findPageForAyah(surahNum, ayahNum);
+
+            if (!page) {
+                // এখনো এই অংশ স্ক্যান করা না থাকলে ব্যাকগ্রাউন্ড স্ক্যান চালু/সচল রাখুন
+                // এবং প্রয়োজনীয় পৃষ্ঠা পাওয়া পর্যন্ত অপেক্ষা করুন
+                if (!scanRunning) backgroundScan();
+
+                const maxWaitMs = 90000; // বড়/শেষের দিকের সূরার জন্য পর্যাপ্ত সময়
+                const start = Date.now();
+                while (!page && (Date.now() - start) < maxWaitMs) {
+                    await new Promise(r => setTimeout(r, 150));
+                    page = findPageForAyah(surahNum, ayahNum);
+                    if (!page && !scanRunning) break; // স্ক্যান শেষ হয়ে গেছে তবুও পাওয়া যায়নি
+                }
+            }
+
+            if (!page) {
+                alert('দুঃখিত, এই আয়াতটি পিডিএফে খুঁজে পাওয়া যায়নি।');
+                return;
+            }
+
+            if (page !== currentPage) {
+                await renderPage(page);
+            }
+
+            const exactId = 'ayah-' + surahNum + '-' + ayahNum;
+            const matched = currentAyahList.find(a => a.id === exactId)
+                || currentAyahList.find(a => a.surahNum === surahNum && a.ayahNum === ayahNum);
+
+            if (matched) {
+                selectAyah(matched.id);
+                requestAnimationFrame(() => {
+                    const highlightEl = document.querySelector('.ayah-highlight');
+                    if (highlightEl && highlightEl.scrollIntoView) {
+                        highlightEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                });
+            }
+        } finally {
+            showAyahNavLoading(false);
+            ayahNavInProgress = false;
+        }
+    }
+
     // নির্বাচিত আয়াতের উপর সবুজ হাইলাইট বসান
     function showHighlight(regions) {
         clearHighlight();
@@ -4981,10 +5095,16 @@
         return wrap;
     }
 
-    // একটি আয়াত নম্বর নির্বাচন করা হলে
+    // একটি আয়াত নম্বর নির্বাচন করা হলে — মোডাল বন্ধ করে পিডিএফের সেই সূরার
+    // সেই আয়াতে নিয়ে গিয়ে আয়াতটি স্বয়ংক্রিয়ভাবে সিলেক্ট/হাইলাইট করে দেখানো হয়
     function selectAyahFromGrid(surahNum, ayahNum, badgeEl) {
         document.querySelectorAll('.ayah-number-badge.selected').forEach(el => el.classList.remove('selected'));
         badgeEl.classList.add('selected');
+
+        setTimeout(() => {
+            closeSurahListModal();
+            goToAyahInPdf(surahNum, ayahNum);
+        }, 200);
     }
 
     // সূরা লিস্ট বডি রেন্ডার করুন (বর্তমান ট্যাব অনুযায়ী)
