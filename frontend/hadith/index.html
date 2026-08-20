@@ -701,18 +701,39 @@
   /* Persistent bottom nav for the Hadith home screen — always visible on every screen size,
      not restricted to a "mobile only" media query like the Quran section's r-bottomnav. */
   .hh-bottomnav{
-    position:fixed; left:0; right:0; bottom:0; z-index:40;
-    max-width:520px; margin:0 auto;
-    background:var(--paper); border-top:1px solid var(--line);
-    display:flex; box-shadow:0 -10px 26px -18px rgba(14,59,49,.35);
+    position:fixed; left:50%; bottom:0; transform:translateX(-50%); z-index:40;
+    width:100%; max-width:520px; height:88px; padding:10px 13px 12px;
+    border:0; border-radius:30px 30px 0 0; background:#fbfbfb;
+    display:flex; align-items:flex-end; justify-content:space-around; gap:4px;
+    box-shadow:0 -8px 22px rgba(0,0,0,.14);
   }
   .hh-bn-item{
-    flex:1; background:none; border:none; cursor:pointer; padding:9px 4px 10px;
-    display:flex; flex-direction:column; align-items:center; gap:4px;
-    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif; font-size:11px; color:var(--muted);
+    position:relative; flex:1; min-width:0; height:58px; background:none; border:none; cursor:pointer; padding:7px 3px 5px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    border-radius:18px; font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:10.5px; line-height:1.25; color:#a5a5a5; transition:color .2s ease, transform .2s ease;
   }
-  .hh-bn-item svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.8; }
-  .hh-bn-item.active{ color:var(--mid-green); }
+  .hh-bn-item::before{ content:""; position:absolute; inset:3px 8px; border-radius:16px; background:transparent; }
+  .hh-bn-item svg{ position:relative; z-index:1; width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.8; transition:transform .2s ease; }
+  .hh-bn-item span{ position:relative; z-index:1; white-space:nowrap; }
+  .hh-bn-item.active{ color:#777; font-weight:700; }
+  .hh-bn-item.active::before{ background:#f0f0f0; }
+  .hh-bn-item.active svg{ color:#8c8c8c; transform:translateY(-1px); stroke-width:2.1; }
+  .hh-bn-item:hover{ color:#555; transform:translateY(-1px); }
+  .hh-bn-item:focus-visible{ outline:2px solid #e9003d; outline-offset:2px; }
+  .hh-bn-item:nth-child(3){ height:78px; margin-top:-38px; padding:0; color:#8b8b8b; }
+  .hh-bn-item:nth-child(3)::before{
+    inset:0; border-radius:50%; background:#fbfbfb; border:8px solid #e9003d;
+    box-shadow:0 5px 8px rgba(0,0,0,.12); z-index:0;
+  }
+  .hh-bn-item:nth-child(3) svg{ width:25px; height:25px; color:#292929; stroke-width:2.2; }
+  .hh-bn-item:nth-child(3) span{ display:none; }
+  @media (max-width:520px){
+    .hh-bottomnav{ height:82px; padding:8px 8px 10px; border-radius:25px 25px 0 0; }
+    .hh-bn-item{ font-size:10px; }
+    .hh-bn-item:nth-child(3){ height:72px; margin-top:-34px; }
+  }
+
 
   /* Hide hh-actions-card on all screens except the home/hadithView screen */
   #hadithTopicsScreen .hh-actions-card,
@@ -2013,21 +2034,29 @@
     </div>
   </div>
   <nav class="hh-bottomnav">
-    <button class="hh-bn-item" data-hhbn="home">
-      <svg viewBox="0 0 24 24"><path d="M3 11l9 -7l9 7"/><path d="M5 10v10h5v-6h4v6h5v-10"/></svg>
-      <span>হোম</span>
+    <button class="hh-action" data-hh-view="hadithBookView">
+      <span class="hh-action-ic">
+        <svg viewBox="0 0 24 24"><path stroke-width="1.8" d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path stroke-width="1.8" d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
+      </span>
+      <span class="hh-action-label">হাদিসের কিতাব</span>
     </button>
-    <button class="hh-bn-item" data-hhbn="books">
-      <svg viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
-      <span>কিতাব</span>
+    <button class="hh-action" data-hh-view="hadithTopicsScreen">
+      <span class="hh-action-ic">
+        <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linecap="round" d="M3 7h18M3 12h18M3 17h18"/></svg>
+      </span>
+      <span class="hh-action-label">বিষয়ভিত্তিক</span>
     </button>
-    <button class="hh-bn-item" data-hhbn="notes">
-      <svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13h-14z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
-      <span>নোট</span>
+    <button class="hh-action active" id="hhUlumBtn3">
+      <span class="hh-action-ic gold">
+        <svg viewBox="0 0 24 24"><path stroke-width="1.8" d="M12 2L2 7l10 5l10-5-10-5z"/><path stroke-width="1.8" d="M2 17l10 5l10-5"/><path stroke-width="1.8" d="M2 12l10 5l10-5"/></svg>
+      </span>
+      <span class="hh-action-label">উলুমূ হাদিস</span>
     </button>
-    <button class="hh-bn-item active" data-hhbn="bookmark">
-      <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6 -4l-6 4z"/></svg>
-      <span>বুকমার্ক</span>
+    <button class="hh-action" id="hhSavedBtn3">
+      <span class="hh-action-ic pink">
+        <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linejoin="round" d="M6 3h12v18l-6 -4l-6 4z"/></svg>
+      </span>
+      <span class="hh-action-label">সংরক্ষিত</span>
     </button>
   </nav>
 </div>
@@ -2415,7 +2444,7 @@ const surahs = [
   [22,"আল-হাজ্জ","الحج",78,"মাদানী"],
   [23,"আল-মুমিনূন","المؤمنون",118,"মক্কী"],
   [24,"আন-নূর","النور",64,"মাদানী"],
-  [25,"আল-ফুরকান","الفرقان",77,"মক্কী"],
+  [25,"���ল-ফুরকান","الفرقان",77,"মক্কী"],
   [26,"আশ-শুআরা","الشعراء",227,"মক্কী"],
   [27,"আন-নামল","النمل",93,"মক্কী"],
   [28,"আল-কাসাস","القصص",88,"মক্কী"],
@@ -2513,7 +2542,7 @@ const surahMeanings = {
   11:"হুদ", 12:"ইউসুফ", 13:"বজ্র", 14:"ইব্রাহীম", 15:"পাথুরে উপত্যকা",
   16:"মৌমাছি", 17:"রাত্রি ভ্রমণ", 18:"গুহা", 19:"মারইয়াম", 20:"ত্বা-হা",
   21:"নবীগণ", 22:"হজ্জ", 23:"মুমিনগণ", 24:"জ্যোতি", 25:"মানদণ্ড",
-  26:"কবিগণ", 27:"পিপীলিকা", 28:"কাহিনীসমূহ", 29:"মাকড়সা", 30:"রোমীয়গণ",
+  26:"কবিগণ", 27:"পিপীলিকা", 28:"ক���হিনীসমূহ", 29:"মাকড়সা", 30:"রোমীয়গণ",
   31:"লুকমান", 32:"সিজদাহ", 33:"সম্মিলিত বাহিনী", 34:"সাবা", 35:"আদি স্রষ্টা",
   36:"ইয়া-সীন", 37:"সারিবদ্ধকারীগণ", 38:"সোয়াদ", 39:"দলসমূহ", 40:"ক্ষমাশীল",
   41:"বিশদভাবে ব্যাখ্যাত", 42:"পরামর্শ", 43:"স্বর্ণালংকার", 44:"ধোঁয়া", 45:"নতজানু",
@@ -3476,7 +3505,7 @@ const HADITH_BOOKS = [
   { key:'soon-muhammad', comingSoon:true, lang:'ben', name:'মুয়াত্তা ইমাম মুহাম্মাদ', arabicName:'موطأ الإمام محمد', chapters:0, hadiths:0, short:'মুয়াত্তা ইমাম মুহাম্মাদ', author:'ইমাম মুহাম্মদ রহঃ', badge:'মু' },
   { key:'soon-fiqhussunan', comingSoon:true, lang:'ben', name:'ফিকহুস সুনান ওয়াল আসার', arabicName:'فقه السنن والآثار', chapters:0, hadiths:0, short:'ফিকহুস সুনান ওয়াল আসার', author:'', badge:'ফি' },
   { key:'soon-akhlaq',   comingSoon:true, lang:'ben', name:'আখলাকুন্নবী (ﷺ)', arabicName:'أخلاق النبي', chapters:0, hadiths:0, short:'আখলাকুন্নবী (ﷺ)', author:'ইমাম আবুশ শায়খ রহঃ', badge:'আখ' },
-  { key:'soon-maarif',   comingSoon:true, lang:'ben', name:'মা\'আরিফুল হাদীস', arabicName:'معارف الحديث', chapters:0, hadiths:0, short:'মা\'আরিফুল হাদীস', author:'মাওলানা মনযূর নোমানী রহঃ', badge:'মা' },
+  { key:'soon-maarif',   comingSoon:true, lang:'ben', name:'মা\'আরিফুল হাদীস', arabicName:'معارف الحديث', chapters:0, hadiths:0, short:'মা\'আরিফুল হাদীস', author:'মাওলানা মনযূর নোমানী র��ঃ', badge:'মা' },
   { key:'soon-targhib',  comingSoon:true, lang:'ben', name:'আত-তারগীব ওয়াত-তারহীব', arabicName:'الترغيب والترهيب', chapters:0, hadiths:0, short:'আত-তারগীব ওয়াত-তারহীব', author:'ইমাম মুনযিরী রহঃ', badge:'তা' },
   { key:'soon-hammam',   comingSoon:true, lang:'ben', name:'সহীফায়ে হাম্মাম ইবনে মুনাব্বিহ', arabicName:'صحيفة همام بن منبه', chapters:0, hadiths:0, short:'সহীফায়ে হাম্মাম', author:'হাম্মাম ইবনে মুনাব্বিহ রহঃ', badge:'স' }
 ];
@@ -3644,7 +3673,7 @@ const HADITH_CHAPTER_BN = {
     "49": "হৃদয়বিগলিতকারী বর্ণনা",
     "50": "তওবা",
     "51": "মুনাফিকদের বৈশিষ্ট্য",
-    "52": "কিয়ামত, জান্নাত ও জাহান্নামের বিবরণ",
+    "52": "���িয়ামত, জান্নাত ও জাহান্নামের বিবরণ",
     "53": "জান্নাতের বর্ণনা",
     "54": "ফিতনা ও কিয়ামতের আলামত",
     "55": "যুহদ (বৈরাগ্য)",
@@ -4227,7 +4256,7 @@ const TAHQIQ_DEFS = {
   'অন্যান্য': 'যেসব হাদিসের মান উপরের নির্দিষ্ট শ্রেণিগুলোর কোনোটির আওতায় সরাসরি পড়ে না, বা মুহাদ্দিসগণের মধ্যে যার মান নিয়ে ভিন্নমত রয়েছে, সেসব হাদিসকে এখানে "অন্যান্য" শ্রেণিতে অন্তর্ভুক্ত করা হয়েছে।',
   'সহিহ লিগাইরিহি': 'যে হাদিস মূলত হাসান পর্যায়ের, কিন্তু একাধিক সনদ বা সমর্থনকারী বর্ণনার মাধ্যমে শক্তিশালী হয়ে সহিহ হাদিসের মর্যাদা লাভ করে, তাকে সহিহ লিগাইরিহি (অন্যের কারণে সহিহ) বলা হয়।',
   'সহিহ মাকতু': 'মাকতু হাদিস বলা হয় তাবিয়ীর নিজস্ব উক্তি বা কর্মকে, যা সরাসরি রাসূলুল্লাহ (ﷺ) পর্যন্ত পৌঁছায় না। যখন এর সনদ সহিহ হওয়ার শর্তসমূহ পূরণ করে, তখন তাকে সহিহ মাকতু বলা হয়।',
-  'হাসান লিগাইরিহি': 'যে হাদিস মূলত দুর্বল সনদে বর্ণিত, কিন্তু অন্য সমর্থনকারী সনদের মাধ্যমে শক্তিশালী হয়ে হাসান হাদিসের মর্যাদা লাভ করে, তাকে হাসান লিগাইরিহি (অন্যের কারণে হাসান) বলা হয়।',
+  'হাসান লিগাইরিহি': 'যে হাদিস মূলত দ��র্বল সনদে বর্ণিত, কিন্তু অন্য সমর্থনকারী সনদের মাধ্যমে শক্তিশালী হয়ে হাসান হাদিসের মর্যাদা লাভ করে, তাকে হাসান লিগাইরিহি (অন্যের কারণে হাসান) বলা হয়।',
   'মুনকার': 'দুর্বল রাবী কর্তৃক বর্ণিত এমন হাদিস, যা নির্ভরযোগ্য রাবীদের বর্ণনার বিপরীত—তাকে মুনকার হাদিস বলা হয়। এটি দুর্বল হাদিসের একটি বিশেষ প্রকার, যা গ্রহণযোগ্য নয়।'
 };
 const tahqiqDetailTitle = document.getElementById('tahqiqDetailTitle');
