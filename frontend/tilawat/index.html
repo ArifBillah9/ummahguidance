@@ -3939,22 +3939,42 @@
 
     // ===== সূরা নির্বাচন করুন মডাল (toolbar-play-btn ক্লিকে) =====
     // ===== TOOLBAR PLAY BUTTON — অডিও চলার সময় পালসিং অ্যানিমেশন =====
+    // টুলবারের প্লে বাটনের আইকন প্লে (▶) / পজ (⏸) এর মধ্যে পরিবর্তন করুন
+    function setToolbarPlayIcon(isPlaying) {
+        document.querySelectorAll('.toolbar-play-btn').forEach(btn => {
+            const icon = btn.querySelector('i');
+            if (!icon) return;
+            if (isPlaying) {
+                icon.classList.remove('fa-play');
+                icon.classList.add('fa-pause');
+                btn.title = 'পজ করুন';
+            } else {
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+                btn.title = 'প্লে';
+            }
+        });
+    }
+
     quranAudio.addEventListener('play', () => {
         document.querySelectorAll('.toolbar-play-btn').forEach(btn => {
             btn.classList.add('playing');
         });
+        setToolbarPlayIcon(true);
     });
 
     quranAudio.addEventListener('pause', () => {
         document.querySelectorAll('.toolbar-play-btn').forEach(btn => {
             btn.classList.remove('playing');
         });
+        setToolbarPlayIcon(false);
     });
 
     quranAudio.addEventListener('ended', () => {
         document.querySelectorAll('.toolbar-play-btn').forEach(btn => {
             btn.classList.remove('playing');
         });
+        setToolbarPlayIcon(false);
     });
 
     // ===== অনুবাদক (Translator) সিলেকশন পেজ =====
@@ -4282,9 +4302,24 @@
     }, { passive: true });
 
     // ===== CUSTOM TOOLBAR EVENTS =====
+    // toolbar-play-btn ক্লিক করলে অডিও প্লে/পজ টগল হবে (অডিও চলতে থাকলে পজ করবে,
+    // পজ থাকলে আবার চালাবে)। এখনো কোনো অডিও লোড না হয়ে থাকলে সূরা নির্বাচন মোডাল খুলবে।
+    function toggleToolbarPlayback() {
+        if (quranAudio && quranAudio.src) {
+            if (quranAudio.paused) {
+                quranAudio.play().catch(() => {});
+            } else {
+                quranAudio.pause();
+            }
+        } else {
+            // এখনো কোনো অডিও নির্বাচন করা হয়নি — সূরা বেছে নেওয়ার জন্য মোডাল দেখান
+            openSurahModal();
+        }
+    }
+
     document.querySelectorAll('.toolbar-play-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-            openSurahPlayModal();
+            toggleToolbarPlayback();
         });
     });
 
