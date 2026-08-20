@@ -265,6 +265,159 @@
         background:rgba(255,255,255,.25);
     }
 
+    /* ===== TAFSIR MODAL ===== */
+    .tafsir-modal{
+        display:none;
+        position:fixed;
+        inset:0;
+        background:#f5f5f5;
+        z-index:100;
+        flex-direction:column;
+        animation:slideInRight .35s cubic-bezier(.4,.0,.2,1);
+    }
+
+    .tafsir-modal.active{
+        display:flex;
+    }
+
+    @keyframes slideInRight{
+        from{opacity:0;transform:translateX(100%);}
+        to{opacity:1;transform:translateX(0);}
+    }
+
+    @keyframes slideOutRight{
+        from{opacity:1;transform:translateX(0);}
+        to{opacity:0;transform:translateX(100%);}
+    }
+
+    .tafsir-modal.closing{
+        animation:slideOutRight .35s cubic-bezier(.4,.0,.2,1) forwards;
+    }
+
+    .tafsir-container{
+        display:flex;
+        flex-direction:column;
+        height:100vh;
+        max-width:480px;
+        width:100%;
+        margin:0 auto;
+        background:#fff;
+        box-shadow:0 0 30px rgba(0,0,0,.15);
+    }
+
+    .tafsir-header{
+        background:linear-gradient(180deg,var(--brand),var(--brand-dark));
+        color:#fff;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding:10px 12px;
+        height:56px;
+        flex-shrink:0;
+        z-index:30;
+    }
+
+    .tafsir-back-btn{
+        width:36px;
+        height:36px;
+        border-radius:50%;
+        border:none;
+        background:transparent;
+        color:#fff;
+        cursor:pointer;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        transition:background .2s;
+    }
+
+    .tafsir-back-btn:active{
+        background:rgba(255,255,255,.2);
+    }
+
+    .tafsir-back-btn svg{
+        width:20px;
+        height:20px;
+        stroke-width:2;
+    }
+
+    .tafsir-title{
+        font-size:18px;
+        font-weight:600;
+        flex:1;
+        text-align:center;
+    }
+
+    .tafsir-content{
+        flex:1;
+        overflow-y:auto;
+        padding:12px;
+        background:#fdfaf3;
+    }
+
+    .tafsir-section{
+        margin-bottom:12px;
+        background:#fff;
+        border-radius:8px;
+        overflow:hidden;
+        box-shadow:0 2px 6px rgba(0,0,0,.08);
+    }
+
+    .tafsir-section-header{
+        display:flex;
+        align-items:center;
+        padding:14px;
+        background:#b3cde0;
+        cursor:pointer;
+        user-select:none;
+        transition:background .2s;
+        gap:10px;
+    }
+
+    .tafsir-section-header:active{
+        background:#a0c5d8;
+    }
+
+    .tafsir-section-icon{
+        width:24px;
+        height:24px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-weight:600;
+        transition:transform .3s;
+        color:#333;
+        flex-shrink:0;
+    }
+
+    .tafsir-section.expanded .tafsir-section-icon{
+        transform:rotate(45deg);
+    }
+
+    .tafsir-section-title{
+        font-size:14px;
+        font-weight:500;
+        color:#333;
+    }
+
+    .tafsir-section-body{
+        display:none;
+        padding:14px;
+        color:#555;
+        line-height:1.6;
+        font-size:13px;
+    }
+
+    .tafsir-section.expanded .tafsir-section-body{
+        display:block;
+        animation:expandBody .3s ease;
+    }
+
+    @keyframes expandBody{
+        from{opacity:0;max-height:0;}
+        to{opacity:1;max-height:1000px;}
+    }
+
     /* ===== AYAH SELECTION AREA ===== */
     .ayah-selection-bar{
         background:#fff;
@@ -581,200 +734,6 @@
 
     .image-modal-close:hover {
         color: #bbb;
-    }
-
-    /* ===== SURAH MODAL ===== */
-    .surah-modal {
-        display: none;
-        position: fixed;
-        z-index: 999;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-    }
-
-    .surah-modal.active {
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
-    }
-
-    .surah-modal-content {
-        background: var(--cream);
-        width: 100%;
-        max-height: 85vh;
-        border-radius: 16px 16px 0 0;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        animation: slideUp 0.3s ease-out;
-    }
-
-    @keyframes slideUp {
-        from {
-            transform: translateY(100%);
-        }
-        to {
-            transform: translateY(0);
-        }
-    }
-
-    .surah-modal-header {
-        background: linear-gradient(180deg, var(--brand), var(--brand-dark));
-        color: #fff;
-        padding: 16px;
-        text-align: center;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .surah-modal-header h2 {
-        font-size: 18px;
-        flex: 1;
-    }
-
-    .surah-modal-close-btn {
-        background: none;
-        border: none;
-        color: #fff;
-        font-size: 24px;
-        cursor: pointer;
-        padding: 0;
-        width: 36px;
-        height: 36px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .surah-list {
-        flex: 1;
-        overflow-y: auto;
-        padding: 0;
-        background: var(--brand);
-    }
-
-    .surah-item {
-        padding: 16px 16px;
-        border-bottom: 1px solid #e0e0e0;
-        cursor: pointer;
-        transition: background 0.2s, box-shadow 0.2s;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: relative;
-    }
-
-    .surah-item:hover {
-        background: #f5f5f5;
-    }
-
-    .surah-item.selected {
-        background: rgba(23, 90, 69, 0.1);
-        border-left: 4px solid var(--brand);
-        padding-left: 12px;
-        box-shadow: inset 0 0 8px rgba(23, 90, 69, 0.08);
-    }
-
-    .surah-item-left {
-        flex: 1;
-    }
-
-    .surah-item-name {
-        font-size: 16px;
-        font-weight: 600;
-        color: var(--ink);
-        direction: rtl;
-        text-align: right;
-        font-family: var(--main-font);
-    }
-
-    .surah-item-info {
-        font-size: 13px;
-        color: #666;
-        margin-top: 4px;
-        direction: rtl;
-        text-align: right;
-    }
-
-    .surah-item-num {
-        width: 44px;
-        height: 44px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--brand), var(--brand-light));
-        color: #fff;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 700;
-        font-size: 16px;
-        flex-shrink: 0;
-        margin-left: 16px;
-        box-shadow: 0 2px 6px rgba(23, 90, 69, 0.25);
-    }
-
-    /* ===== SURAH AYAHS VIEW ===== */
-    .surah-ayahs-section {
-        display: none;
-        flex: 1;
-        overflow-y: auto;
-        padding: 0;
-        background: #fff;
-        flex-direction: column;
-    }
-
-    .surah-ayahs-section.active {
-        display: flex;
-    }
-
-    .surah-ayah-item {
-        padding: 12px 16px;
-        border-bottom: 1px solid #e0e0e0;
-        cursor: pointer;
-        transition: background 0.2s;
-        text-align: right;
-        direction: rtl;
-        font-family: var(--main-font);
-        font-size: 16px;
-        line-height: 1.8;
-        color: var(--ink);
-        position: relative;
-    }
-
-    .surah-ayah-item:hover {
-        background: #f9f9f9;
-    }
-
-    .surah-ayah-item.selected {
-        background: rgba(23, 90, 69, 0.12);
-        border-left: 4px solid var(--brand);
-        padding-left: 12px;
-        color: var(--brand-dark);
-        font-weight: 600;
-    }
-
-    .surah-back-btn {
-        padding: 14px 16px;
-        border-bottom: 1px solid #e0e0e0;
-        background: #f5f5f5;
-        border: none;
-        color: var(--brand);
-        font-weight: 600;
-        cursor: pointer;
-        text-align: right;
-        direction: rtl;
-        font-family: var(--main-font);
-        font-size: 14px;
-        width: 100%;
-        display: none;
-    }
-
-    .surah-back-btn.active {
-        display: block;
     }
 
     /* ===== FULLSCREEN AUDIO DOWNLOAD SCREEN ===== */
@@ -2214,7 +2173,7 @@
 
 <div id="app">
     <!-- HEADER -->
-    <header>
+    <header id="header">
         <div class="left">
             <button class="icon-btn" id="homeBtn">
                 <i class="fa-solid fa-house"></i>
@@ -2308,7 +2267,7 @@
     </div>
 
     <!-- Custom Toolbar -->
-    <div class="custom-toolbar">
+    <div class="custom-toolbar" id="customToolbar">
         <div class="toolbar-left">
             <button class="toolbar-play-btn" title="প্লে">
                 <i class="fa-solid fa-play"></i>
@@ -2343,19 +2302,6 @@
 <div class="image-modal" id="imageModal">
     <button class="image-modal-close" id="closeImageModal">&times;</button>
     <img class="image-modal-content" id="modalImage" alt="বড় ছবি">
-</div>
-
-<!-- SURAH MODAL -->
-<div class="surah-modal" id="surahModal">
-    <div class="surah-modal-content">
-        <div class="surah-modal-header">
-            <h2 id="modalTitle">সূরা নির্বাচন করুন</h2>
-            <button class="surah-modal-close-btn" id="closeSurahModal">&times;</button>
-        </div>
-        <button class="surah-back-btn" id="surahBackBtn">← সূরা তালিকায় ফিরুন</button>
-        <div class="surah-list" id="surahList"></div>
-        <div class="surah-ayahs-section" id="surahAyahsSection"></div>
-    </div>
 </div>
 
 <!-- FULLSCREEN AUDIO DOWNLOAD স্ক্রিন (আয়াতে ট্যাপ করলে দেখাবে) -->
@@ -2398,7 +2344,7 @@
 
         <div class="bookmark-settings-buttons">
             <button class="bookmark-settings-btn cancel" id="bookmarkSettingsCancelBtn">অনুরোধ দেখুন</button>
-            <button class="bookmark-settings-btn confirm" id="bookmarkSettingsConfirmBtn">বাটিল করুন</button>
+            <button class="bookmark-settings-btn confirm" id="bookmarkSettingsConfirmBtn">বাতিল করুন</button>
         </div>
     </div>
 </div>
@@ -2694,104 +2640,10 @@
     const audioProgressBar = document.getElementById('audioProgressBar');
     const audioTime = document.getElementById('audioTime');
 
-    // ===== SURAH MODAL ELEMENTS =====
-    const surahModal = document.getElementById('surahModal');
-    const surahList = document.getElementById('surahList');
-    const closeSurahModal = document.getElementById('closeSurahModal');
-
     // ===== AUDIO STATE =====
     let currentSurah = null;
     let currentAyah = null;
     let isPlaying = false;
-
-    // ===== SURAH MODAL FUNCTIONS =====
-    function openSurahModal() {
-        surahModal.classList.add('active');
-        if (surahList.children.length === 0) {
-            renderSurahList();
-        }
-    }
-
-    function closeSurahModalFn() {
-        surahModal.classList.remove('active');
-    }
-
-    function renderSurahList() {
-        surahList.innerHTML = SURAHS.map(surah => `
-            <div class="surah-item" onclick="selectSurah(${surah.num})">
-                <div class="surah-item-left">
-                    <div class="surah-item-name">${surah.name}</div>
-                    <div class="surah-item-info">${surah.bn} • ${surah.ayahs} আয়াত</div>
-                </div>
-                <div class="surah-item-num">${surah.num}</div>
-            </div>
-        `).join('');
-    }
-
-    function renderSurahAyahs(surahNum) {
-        const surah = SURAHS.find(s => s.num === surahNum);
-        if (!surah) return;
-
-        const ayahsSection = document.getElementById('surahAyahsSection');
-        const backBtn = document.getElementById('surahBackBtn');
-        const modalTitle = document.getElementById('modalTitle');
-        const surahList = document.getElementById('surahList');
-
-        // Update modal title
-        modalTitle.textContent = `${surah.name} (${surah.bn})`;
-
-        // Show back button and ayahs section
-        backBtn.classList.add('active');
-        surahList.style.display = 'none';
-        ayahsSection.classList.add('active');
-
-        // Generate ayah items (sample data for demonstration)
-        let ayahsHTML = '';
-        for (let i = 1; i <= Math.min(surah.ayahs, 10); i++) {
-            ayahsHTML += `
-                <div class="surah-ayah-item" onclick="selectAyahFromModal(${surahNum}, ${i})">
-                    <span>${i}</span>
-                </div>
-            `;
-        }
-
-        ayahsSection.innerHTML = ayahsHTML;
-    }
-
-    function selectAyahFromModal(surahNum, ayahNum) {
-        const ayahItems = document.querySelectorAll('.surah-ayah-item');
-        ayahItems.forEach(item => item.classList.remove('selected'));
-
-        event.target.closest('.surah-ayah-item').classList.add('selected');
-
-        // Play the ayah
-        setTimeout(async () => {
-            closeSurahModalFn();
-            try {
-                await playAyah(surahNum, ayahNum);
-            } catch (error) {
-                console.error('আয়াত চালাতে ত্রুটি:', error);
-            }
-        }, 300);
-    }
-
-    function selectSurah(surahNum) {
-        currentSurah = SURAHS.find(s => s.num === surahNum);
-        renderSurahAyahs(surahNum);
-    }
-
-    function goBackToSurahList() {
-        const backBtn = document.getElementById('surahBackBtn');
-        const surahList = document.getElementById('surahList');
-        const ayahsSection = document.getElementById('surahAyahsSection');
-        const modalTitle = document.getElementById('modalTitle');
-
-        modalTitle.textContent = 'সূরা নির্বাচন করুন';
-        backBtn.classList.remove('active');
-        surahList.style.display = 'flex';
-        ayahsSection.classList.remove('active');
-        ayahsSection.innerHTML = '';
-    }
 
     // ===== AUDIO FUNCTIONS =====
     // ===== QURAN COMPLETE DATA - ALL 114 SURAHS =====
@@ -2969,9 +2821,52 @@
         downloadPercent.textContent = Math.round(clamped) + '%';
     }
 
+    // ===== অডিও ক্যাশ (একই সূরা দ্বিতীয়বার ডাউনলোড না হওয়ার জন্য) =====
+    // ব্রাউজারের Cache Storage API ব্যবহার করে প্রতিটি সূরার (নির্বাচিত ক্বারী অনুযায়ী)
+    // অডিও ফাইল স্থায়ীভাবে সংরক্ষণ করা হয়, যাতে একবার ডাউনলোড করা সূরা পরবর্তীতে
+    // আবার ইন্টারনেট থেকে ডাউনলোড না হয়ে সরাসরি ক্যাশ থেকে প্লে হয়।
+    const AUDIO_CACHE_NAME = 'tilawat-surah-audio-v1';
+
+    async function getCachedAudioBlob(url) {
+        try {
+            if (!('caches' in window)) return null;
+            const cache = await caches.open(AUDIO_CACHE_NAME);
+            const cachedResponse = await cache.match(url);
+            if (cachedResponse) {
+                return await cachedResponse.blob();
+            }
+        } catch (err) {
+            console.warn('অডিও ক্যাশ পরীক্ষা করতে সমস্যা হয়েছে:', err);
+        }
+        return null;
+    }
+
+    async function cacheAudioBlob(url, blob) {
+        try {
+            if (!('caches' in window)) return;
+            const cache = await caches.open(AUDIO_CACHE_NAME);
+            await cache.put(url, new Response(blob, { headers: { 'Content-Type': 'audio/mpeg' } }));
+        } catch (err) {
+            console.warn('অডিও ক্যাশে সংরক্ষণ করতে সমস্যা হয়েছে:', err);
+        }
+    }
+
     // পূর্ণ সূরাটি ডাউনলোড করুন এবং ফুলস্ক্রিন প্রগ্রেস স্ক্রিন দেখান
+    // (আগে থেকে ডাউনলোড করা থাকলে পুনরায় ডাউনলোড না করে সরাসরি ক্যাশ থেকে প্লে করা হয়)
     async function downloadFullSurah(surahNum) {
         const surah = SURAHS.find(s => s.num === surahNum);
+        const url = getSurahAudioUrl(surahNum);
+
+        // ===== ধাপ ১: আগে থেকে ডাউনলোড/ক্যাশ করা আছে কিনা পরীক্ষা করুন =====
+        const cachedBlob = await getCachedAudioBlob(url);
+        if (cachedBlob) {
+            const objectUrl = URL.createObjectURL(cachedBlob);
+            quranAudio.src = objectUrl;
+            quranAudio.play().catch(() => {});
+            return;
+        }
+
+        // ===== ধাপ ২: ক্যাশে না থাকলে নতুন করে ডাউনলোড করুন =====
         fsDownloadTitle.textContent = surah
             ? `সূরা ${surah.name} (${surah.bn}) ডাউনলোড হচ্ছে...`
             : 'সূরা ডাউনলোড হচ্ছে...';
@@ -2980,7 +2875,6 @@
         fullscreenDownload.classList.add('active');
 
         downloadAbortController = new AbortController();
-        const url = getSurahAudioUrl(surahNum);
 
         try {
             const response = await fetch(url, { signal: downloadAbortController.signal });
@@ -3009,6 +2903,9 @@
 
             const blob = new Blob(chunks, { type: 'audio/mpeg' });
             const objectUrl = URL.createObjectURL(blob);
+
+            // পরবর্তীতে যেন সূরাটি আর দ্বিতীয়বার ডাউনলোড করতে না হয়, তাই ক্যাশে সংরক্ষণ করুন
+            cacheAudioBlob(url, blob);
 
             setTimeout(() => {
                 fullscreenDownload.classList.remove('active');
@@ -3043,22 +2940,6 @@
         currentAyah = ayahNum;
         downloadFullSurah(surahNum);
     }
-
-    // ===== MODAL CLOSE EVENTS =====
-    closeSurahModal.addEventListener('click', closeSurahModalFn);
-    surahModal.addEventListener('click', (e) => {
-        if (e.target === surahModal) closeSurahModalFn();
-    });
-
-    // Back button event listener
-    document.getElementById('surahBackBtn').addEventListener('click', goBackToSurahList);
-
-    // Update closeSurahModalFn to reset view
-    const originalCloseSurahModalFn = closeSurahModalFn;
-    closeSurahModalFn = function() {
-        goBackToSurahList();
-        surahModal.classList.remove('active');
-    };
 
     // ===== UTILITY FUNCTIONS =====
     function formatTime(seconds) {
@@ -3940,12 +3821,17 @@
         togglePdfFullscreen();
     });
 
-    // PDF canvas ক্লিকে fullscreen toggle
-    document.getElementById('pdfCanvas').addEventListener('click', () => {
+    // ফুলস্ক্রিন অবস্থায় পিডিএফের বাহিরে (canvas ছাড়া অন্য কোথাও) ক্লিক করলে
+    // হেডার ও কাস্টম টুলবার আবার ফিরিয়ে আনুন (ফুলস্ক্রিন থেকে বেরিয়ে আসুন)
+    document.addEventListener('click', (e) => {
         const isFullscreen = document.body.classList.contains('pdf-fullscreen');
-        if (isFullscreen) {
-            togglePdfFullscreen();
-        }
+        if (!isFullscreen) return;
+
+        const pdfCanvas = document.getElementById('pdfCanvas');
+        // পিডিএফ ক্যানভাস বা আয়াত অ্যাকশন বাটন বার-এ ক্লিক করলে ফুলস্ক্রিন থেকে বের হবে না
+        if (e.target === pdfCanvas || pdfCanvas.contains(e.target) || e.target.closest('#actionButtonsBar')) return;
+
+        togglePdfFullscreen();
     });
 
     // আয়াত নির্বাচন মোড টগল
@@ -4088,8 +3974,7 @@
         if (item) {
             const surahNum = parseInt(item.dataset.surah);
             closeSearchPage();
-            openSurahModal();
-            selectSurah(surahNum);
+            try { await playAyah(surahNum, 1); } catch (err) { console.error(err); }
         }
     });
 
@@ -4634,7 +4519,7 @@
             }
         } else {
             // এখনো কোনো অডিও নির্বাচন করা হয়নি — সূরা বেছে নেওয়ার জন্য মোডাল দেখান
-            openSurahModal();
+            openSurahListModal();
         }
     }
 
@@ -4682,7 +4567,7 @@
     if (toolbarIconBtns.length >= 3) {
         // প্রথম বোতাম - সূরা নির্বাচন
         toolbarIconBtns[0].addEventListener('click', () => {
-            openSurahModal();
+            openSurahListModal();
         });
 
         // দ্বিতীয় বোতাম - বুকমার্ক
