@@ -1034,6 +1034,52 @@
     }
     .spm-btn-cancel:active{ background:rgba(217,83,79,.1); }
 
+    /* ===== AUDIO PLAYER PROGRESS BAR ===== */
+    #audioProgressBar {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 4px;
+        border-radius: 2px;
+        background: #ddd;
+        outline: none;
+    }
+    #audioProgressBar::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--brand);
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(23, 90, 69, 0.3);
+    }
+    #audioProgressBar::-moz-range-thumb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--brand);
+        cursor: pointer;
+        border: none;
+        box-shadow: 0 2px 6px rgba(23, 90, 69, 0.3);
+    }
+
+    /* ===== FULLSCREEN PDF VIEW (মোবাইলে) ===== */
+    #header, #customToolbar {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    body.pdf-fullscreen #header,
+    body.pdf-fullscreen #customToolbar {
+        display: none !important;
+    }
+    body.pdf-fullscreen #pageWrap {
+        margin-top: 0 !important;
+        padding: 0 !important;
+    }
+    body.pdf-fullscreen #pdfCanvas {
+        cursor: pointer;
+    }
+
     /* ===== অনুবাদক (ট্রান্সলেটর) সিলেক্ট পেজ ===== */
     .translator-section-title{
         font-size:14px;
@@ -2255,29 +2301,27 @@
     </div>
 </div>
 
-<!-- ===== সূরা নির্বাচন করুন (toolbar-play-btn ক্লিকে দেখাবে) ===== -->
+<!-- ===== অডিও প্লেয়ার মডাল (toolbar-play-btn ক্লিকে / অডিও প্লে হলে দেখাবে) ===== -->
 <div id="surahPlayModal" class="surah-play-modal">
     <div class="surah-play-card">
-        <div class="spm-header">সূরা নির্বাচন করুন</div>
-        <div class="spm-body">
-            <div class="spm-radio-row">
-                <div class="spm-radio-circle"></div>
-                <div class="spm-radio-label" id="spmSurahName">আল বাকারা</div>
-            </div>
+        <div class="spm-header">
+            <span id="audioPlayerTitle">কুরআন শরীফ</span>
+            <button id="audioPlayerCloseBtn" style="position:absolute; right:12px; top:12px; background:none; border:none; color:var(--brand); font-size:20px; cursor:pointer; width:32px; height:32px; display:flex; align-items:center; justify-content:center;">✕</button>
         </div>
-        <div class="spm-range">
-            <div class="spm-range-col">
-                <div class="spm-range-label">শুরু</div>
-                <input type="number" class="spm-range-input" id="spmStartAyah" min="1" value="1">
+        <div class="spm-body" style="padding:20px; text-align:center;">
+            <div style="font-size:18px; font-weight:700; color:var(--brand); margin-bottom:16px;" id="audioPlayerSurah">সূরা নাম</div>
+            <div style="font-size:13px; color:#777; margin-bottom:20px;">অডিও চলছে...</div>
+            <div style="background:#f5f5f5; border-radius:10px; padding:14px; margin-bottom:16px;">
+                <div style="font-size:12px; color:#999; margin-bottom:6px;">সময়</div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600; color:var(--brand);">
+                    <span id="audioCurrentTime">0:00</span>
+                    <span id="audioDuration">0:00</span>
+                </div>
+                <input type="range" id="audioProgressBar" min="0" max="100" value="0" style="width:100%; margin-top:8px; cursor:pointer;">
             </div>
-            <div class="spm-range-col">
-                <div class="spm-range-label">শেষ</div>
-                <input type="number" class="spm-range-input" id="spmEndAyah" min="1" value="7">
+            <div style="display:flex; gap:10px; justify-content:center;">
+                <button id="audioPlayPauseBtn" style="width:50px; height:50px; border-radius:50%; background:var(--brand); color:#fff; border:none; cursor:pointer; font-size:20px; display:flex; align-items:center; justify-content:center;">▶</button>
             </div>
-        </div>
-        <div class="spm-footer">
-            <button class="spm-btn spm-btn-confirm" id="spmConfirmBtn">অনুবাদ দেখুন</button>
-            <button class="spm-btn spm-btn-cancel" id="spmCancelBtn">বাতিল করুন</button>
         </div>
     </div>
 </div>
@@ -3706,8 +3750,29 @@
         }
     });
 
-    document.getElementById('expandBtn').addEventListener('click', () => {
-        alert('ফুলস্ক্রিন মোড শীঘ্রই আসছে।');
+    // ===== FULLSCREEN PDF VIEW TOGGLE (মোবাইল) =====
+    function togglePdfFullscreen() {
+        document.body.classList.toggle('pdf-fullscreen');
+        const isFullscreen = document.body.classList.contains('pdf-fullscreen');
+        const expandBtn = document.getElementById('expandBtn');
+        if (expandBtn) {
+            expandBtn.innerHTML = isFullscreen 
+                ? '<i class="fa-solid fa-compress"></i>' 
+                : '<i class="fa-solid fa-expand"></i>';
+        }
+    }
+
+    document.getElementById('expandBtn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        togglePdfFullscreen();
+    });
+
+    // PDF canvas ক্লিকে fullscreen toggle
+    document.getElementById('pdfCanvas').addEventListener('click', () => {
+        const isFullscreen = document.body.classList.contains('pdf-fullscreen');
+        if (isFullscreen) {
+            togglePdfFullscreen();
+        }
     });
 
     // আয়াত নির্বাচন মোড টগল
@@ -4032,60 +4097,67 @@
         return SURAHS[1]; // ডিফল্ট: আল বাকারা
     }
 
-    function openSurahPlayModal() {
-        const surah = getCurrentSurahForPlay();
-        document.getElementById('spmSurahName').textContent = surah.bn;
-        const startInput = document.getElementById('spmStartAyah');
-        const endInput = document.getElementById('spmEndAyah');
-        startInput.min = 1;
-        startInput.max = surah.ayahs;
-        endInput.min = 1;
-        endInput.max = surah.ayahs;
-        // বর্তমান পৃষ্ঠায় প্রদর্শিত আয়াতের রেঞ্জ ধরে ডিফল্ট মান বসানো হয়
-        let startVal = 1, endVal = Math.min(surah.ayahs, surah.num === 2 ? 7 : surah.ayahs);
-        if (currentAyahList && currentAyahList.length > 0) {
-            const nums = currentAyahList.filter(a => a.surahNum === surah.num).map(a => a.ayahNum);
-            if (nums.length > 0) {
-                startVal = Math.min(...nums);
-                endVal = Math.max(...nums);
-            }
-        }
-        startInput.value = startVal;
-        endInput.value = endVal;
-        document.getElementById('surahPlayModal').dataset.surahNum = surah.num;
+    // ===== অডিও প্লেয়ার মডাল =====
+    function openAudioPlayerModal() {
+        const surah = currentSurah || SURAHS[0];
+        document.getElementById('audioPlayerSurah').textContent = surah.bn;
+        document.getElementById('audioPlayerTitle').textContent = `${surah.bn} অডিও`;
         document.getElementById('surahPlayModal').classList.add('active');
     }
 
-    function closeSurahPlayModal() {
+    function closeAudioPlayerModal() {
         document.getElementById('surahPlayModal').classList.remove('active');
     }
 
-    document.getElementById('spmCancelBtn').addEventListener('click', closeSurahPlayModal);
+    document.getElementById('audioPlayerCloseBtn').addEventListener('click', closeAudioPlayerModal);
     document.getElementById('surahPlayModal').addEventListener('click', (e) => {
-        if (e.target.id === 'surahPlayModal') closeSurahPlayModal();
+        if (e.target.id === 'surahPlayModal') closeAudioPlayerModal();
     });
 
-    document.getElementById('spmConfirmBtn').addEventListener('click', () => {
-        const modal = document.getElementById('surahPlayModal');
-        const surahNum = parseInt(modal.dataset.surahNum, 10);
-        const surah = SURAHS.find(s => s.num === surahNum);
-        const start = parseInt(document.getElementById('spmStartAyah').value, 10);
-        const end = parseInt(document.getElementById('spmEndAyah').value, 10);
+    // অডিও প্লেব্যাক ইভেন্ট হ্যান্ডলার
+    let audioUpdateInterval = null;
+    function updateAudioUI() {
+        const current = quranAudio.currentTime;
+        const duration = quranAudio.duration;
+        document.getElementById('audioCurrentTime').textContent = formatTime(current);
+        document.getElementById('audioDuration').textContent = formatTime(duration);
+        if (duration > 0) {
+            document.getElementById('audioProgressBar').value = (current / duration) * 100;
+        }
+    }
 
-        if (!start || !end || start < 1 || end < 1) {
-            alert('দয়া করে সঠিক আয়াত নম্বর দিন।');
-            return;
+    quranAudio.addEventListener('play', () => {
+        openAudioPlayerModal();
+        document.getElementById('audioPlayPauseBtn').textContent = '⏸';
+        if (audioUpdateInterval) clearInterval(audioUpdateInterval);
+        audioUpdateInterval = setInterval(updateAudioUI, 500);
+    });
+
+    quranAudio.addEventListener('pause', () => {
+        document.getElementById('audioPlayPauseBtn').textContent = '▶';
+        if (audioUpdateInterval) clearInterval(audioUpdateInterval);
+    });
+
+    quranAudio.addEventListener('ended', () => {
+        closeAudioPlayerModal();
+        document.getElementById('audioPlayPauseBtn').textContent = '▶';
+        if (audioUpdateInterval) clearInterval(audioUpdateInterval);
+    });
+
+    quranAudio.addEventListener('timeupdate', updateAudioUI);
+
+    document.getElementById('audioPlayPauseBtn').addEventListener('click', () => {
+        if (quranAudio.paused) {
+            quranAudio.play().catch(() => {});
+        } else {
+            quranAudio.pause();
         }
-        if (surah && (start > surah.ayahs || end > surah.ayahs)) {
-            alert(`${surah.bn} সূরায় সর্বমোট ${toBengaliNumeral(surah.ayahs)} টি আয়াত আছে।`);
-            return;
+    });
+
+    document.getElementById('audioProgressBar').addEventListener('change', (e) => {
+        if (!isNaN(quranAudio.duration)) {
+            quranAudio.currentTime = (e.target.value / 100) * quranAudio.duration;
         }
-        if (start > end) {
-            alert('শুরু আয়াত নম্বর শেষ আয়াত নম্বরের চেয়ে বড় হতে পারবে না।');
-            return;
-        }
-        closeSurahPlayModal();
-        alert(`${surah ? surah.bn : ''} সূরার ${toBengaliNumeral(start)}-${toBengaliNumeral(end)} নং আয়াতের অনুবাদ শীঘ্রই দেখানো হবে।`);
     });
 
     // ===== অনুবাদক (Translator) সিলেকশন পেজ =====
