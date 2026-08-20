@@ -3757,9 +3757,10 @@
         showActionButtons(lowest);
         renderAyahBar();
         
-        // সুরা ফাতেহা হলে অডিও প্লে করুন
+        // সুরা ফাতেহা হলে অডিও প্লে করুন এবং প্লেলিস্ট মোড চালু করুন
         if (ayah.surahNum === 1) {
-            playAyahAudio(ayah.surahNum, ayah.ayahNum);
+            isAutoPlayNext = true; // প্লেলিস্ট মোড চালু
+            playAyahAudio(ayah.surahNum, ayah.ayahNum, true); // সিকোয়েন্সিয়াল মোডে প্লে করুন
         }
     }
 
@@ -5119,6 +5120,8 @@
     /* ===== অডিও প্লেব্যাক ফাংশনালিটি - শুধুমাত্র সুরা ফাতেহার জন্য ===== */
     let currentAudioAyah = null;
     let isAudioPlaying = false;
+    let isAutoPlayNext = false; // সিকোয়েন্সিয়াল প্লেব্যাক ফ্ল্যাগ
+    let isPlaylistMode = false; // প্লেলিস্ট মোড (সব আয়াত একসাথে)
 
     // সুরা ফাতেহার আয়াত - বিভিন্ন ক্বারীর অডিও URL
     const surahFatihaAudio = {
@@ -5131,8 +5134,28 @@
         7: 'https://cdn.islamic.network/quran/recitations/128/1/7.mp3'
     };
 
+    // পরবর্তী আয়াত প্লে করার ফাংশন
+    function playNextAyah() {
+        if (!currentAudioAyah) return;
+        
+        const nextAyahNum = currentAudioAyah.ayah + 1;
+        
+        // যদি পরবর্তী আয়াত থাকে এবং প্লেলিস্ট মোড চালু থাকে
+        if (surahFatihaAudio[nextAyahNum] && isAutoPlayNext) {
+            playAyahAudio(1, nextAyahNum, true);
+        } else if (isAutoPlayNext && !surahFatihaAudio[nextAyahNum]) {
+            // সব আয়াত শেষ হয়ে গেছে
+            isAutoPlayNext = false;
+            const playBtn = document.querySelector('.toolbar-play-btn');
+            if (playBtn) {
+                playBtn.classList.remove('playing');
+            }
+            isAudioPlaying = false;
+        }
+    }
+
     // আয়াতের জন্য অডিও প্লে করুন
-    function playAyahAudio(surahNum, ayahNum) {
+    function playAyahAudio(surahNum, ayahNum, isSequential = false) {
         // শুধুমাত্র সুরা ফাতেহার জন্য (সুরা নম্বর ১)
         if (surahNum !== 1) return;
         
@@ -5154,25 +5177,50 @@
         }
         
         isAudioPlaying = true;
-        audioEl.play().catch(err => {
-            console.warn('অডিও প্লে করতে ব্যর্থ:', err);
-            if (playBtn) playBtn.classList.remove('playing');
-            isAudioPlaying = false;
-        });
+        
+        // যদি সিকোয়েন্সিয়াল প্লেব্যাক হয়, তাহলে PDF এ আয়াত সিলেক্ট করুন
+        if (isSequential) {
+            goToAyahInPdf(surahNum, ayahNum).then(() => {
+                // PDF এ আয়াত নেভিগেট করার পর প্লে করুন
+                audioEl.play().catch(err => {
+                    console.warn('অডিও প্লে করতে ব্যর্থ:', err);
+                    if (playBtn) playBtn.classList.remove('playing');
+                    isAudioPlaying = false;
+                });
+            }).catch(err => {
+                // যদি PDF নেভিগেশন ব্যর্থ হয়, শুধু প্লে করুন
+                audioEl.play().catch(err => {
+                    console.warn('অডিও প্লে করতে ব্যর্থ:', err);
+                    if (playBtn) playBtn.classList.remove('playing');
+                    isAudioPlaying = false;
+                });
+            });
+        } else {
+            audioEl.play().catch(err => {
+                console.warn('অডিও প্লে করতে ব্যর্থ:', err);
+                if (playBtn) playBtn.classList.remove('playing');
+                isAudioPlaying = false;
+            });
+        }
     }
 
-    // অডিও শেষ হলে হ্যান্ডলার
+    // অডিও শেষ হলে হ্যান্ডলার - পরবর্তী আয়াত অটো প্লে হবে
     document.getElementById('quranAudio')?.addEventListener('ended', () => {
-        const playBtn = document.querySelector('.toolbar-play-btn');
-        if (playBtn) {
-            playBtn.classList.remove('playing');
+        // যদি প্লেলিস্ট মোড চালু থাকে, পরবর্তী আয়াত প্লে করুন
+        if (isAutoPlayNext && currentAudioAyah) {
+            playNextAyah();
+        } else {
+            const playBtn = document.querySelector('.toolbar-play-btn');
+            if (playBtn) {
+                playBtn.classList.remove('playing');
+            }
+            isAudioPlaying = false;
         }
-        isAudioPlaying = false;
     });
 
     // একটি আয়াত নম্বর নির্বাচন করা হলে — মোডাল বন্ধ করে পিডিএফের সেই সূরার
     // সেই আয়াতে নিয়ে গিয়ে আয়াতটি স্বয়ংক্রিয়ভাবে সিলেক্ট/হাইলাইট করে দেখানো হয়
-    // এবং সুরা ফাতেহা হলে অডিও প্লে হয়
+    // এবং সুরা ফাতেহা হলে অডিও প্লে হয় এবং পরবর্তী আয়াত অটো প্লে হয়
     function selectAyahFromGrid(surahNum, ayahNum, badgeEl) {
         document.querySelectorAll('.ayah-number-badge.selected').forEach(el => el.classList.remove('selected'));
         badgeEl.classList.add('selected');
@@ -5181,9 +5229,10 @@
             closeSurahListModal();
             goToAyahInPdf(surahNum, ayahNum);
             
-            // সুরা ফাতেহা হলে অডিও প্লে করুন
+            // সুরা ফাতেহা হলে অডিও প্লে করুন এবং প্লেলিস্ট মোড চালু করুন
             if (surahNum === 1) {
-                playAyahAudio(surahNum, ayahNum);
+                isAutoPlayNext = true; // প্লেলিস্ট মোড চালু
+                playAyahAudio(surahNum, ayahNum, true); // সিকোয়েন্সিয়াল মোডে প্লে করুন
             }
         }, 200);
     }
@@ -5366,7 +5415,7 @@
         closeSurahSelectionModal();
     });
 
-    // প্লে বাটন ক্লিক ইভেন্ট - অডিও প্লে/পজ টগল
+    // প্লে বাটন ক্লিক ইভেন্ট - অডিও প্লে/পজ টগল এবং প্লেলিস্ট কন্ট্রোল
     document.querySelectorAll('.toolbar-play-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -5378,11 +5427,13 @@
                 audioEl.pause();
                 btn.classList.remove('playing');
                 isAudioPlaying = false;
+                isAutoPlayNext = false; // প্লেলিস্ট মোড বন্ধ করুন
             } else if (currentAudioAyah) {
                 // যদি আগে কোনো আয়াত নির্বাচিত ছিল, তার অডিও রিজিউম করুন
                 audioEl.play().catch(err => console.warn('অডিও প্লে করতে ব্যর্থ:', err));
                 btn.classList.add('playing');
                 isAudioPlaying = true;
+                isAutoPlayNext = true; // প্লেলিস্ট মোড চালু করুন
             } else {
                 // নতুন সুরা/আয়াত সিলেক্ট করার জন্য বুকমার্ক মোডাল খুলুন
                 openBookmarkSettingsModal();
