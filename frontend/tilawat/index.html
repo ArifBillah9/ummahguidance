@@ -112,7 +112,7 @@
         max-height:100%;
     }
 
-    /* ===== বাস্তব পৃষ্ঠা উল্টানোর (page-flip) অ্যানিমেশন — আঙুল/কার্সরের সাথে সরাসরি অনুসরণ করে ===== */
+    /* ===== বাস্তব পৃষ্ঠা উল্টানোর (page-flip / curl) অ্যানিমেশন — আঙুল/কার্সরের সাথে সরাসরি অনুসরণ করে ===== */
     .page-flip-preview{
         position:absolute;
         inset:0;
@@ -123,6 +123,18 @@
         pointer-events:none;
     }
 
+    /* পাতা উল্টানোর জন্য বাম/ডান ক্লিক-জোন (ক্লিক করেও পাতা উল্টানো যাবে) */
+    .page-click-zone{
+        position:absolute;
+        top:0;
+        bottom:0;
+        width:16%;
+        z-index:12;
+        cursor:pointer;
+    }
+    .page-click-zone.left{ left:0; }
+    .page-click-zone.right{ right:0; }
+
     .page-flip{
         position:absolute;
         top:0;
@@ -131,7 +143,7 @@
         pointer-events:none;
         transform-style:preserve-3d;
         transform:rotateY(0deg);
-        transition:transform .45s cubic-bezier(.45,.05,.35,1);
+        transition:transform .5s cubic-bezier(.45,.05,.35,1);
         will-change:transform;
     }
 
@@ -141,14 +153,13 @@
 
     .page-flip.flip-next{
         transform-origin:right center;
-        box-shadow:-6px 0 18px rgba(0,0,0,.25);
     }
     .page-flip.flip-prev{
         transform-origin:left center;
-        box-shadow:6px 0 18px rgba(0,0,0,.25);
     }
 
-    .page-flip-face{
+    .page-flip-face,
+    .page-flip-back{
         position:absolute;
         inset:0;
         background-repeat:no-repeat;
@@ -157,22 +168,59 @@
         -webkit-backface-visibility:hidden;
     }
 
+    /* পাতার পেছনের দিক — উল্টানোর সময় ৯০ ডিগ্রি পার হলে এটি দেখা যায়, কাগজের উলটো পিঠের মতো */
+    .page-flip-back{
+        background-color:#efece4;
+        filter:grayscale(35%) brightness(1.06) blur(.3px);
+        transform:rotateY(180deg);
+    }
+    .page-flip.flip-next .page-flip-back{ transform:rotateY(180deg) scaleX(-1); }
+    .page-flip.flip-prev .page-flip-back{ transform:rotateY(180deg) scaleX(-1); }
+
     /* কার্ল/ভাঁজ ছায়া — উল্টানোর সময় পৃষ্ঠার উপর ধীরে ধীরে গাঢ় হয় */
     .page-flip-shade{
         position:absolute;
         inset:0;
         opacity:0;
-        transition:opacity .45s ease;
+        transition:opacity .5s ease;
         pointer-events:none;
     }
     .page-flip.dragging .page-flip-shade{
         transition:none !important;
     }
     .page-flip.flip-next .page-flip-shade{
-        background:linear-gradient(to left, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 55%);
+        background:linear-gradient(to left, rgba(0,0,0,.5) 0%, rgba(0,0,0,.12) 30%, rgba(0,0,0,0) 60%);
     }
     .page-flip.flip-prev .page-flip-shade{
-        background:linear-gradient(to right, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 55%);
+        background:linear-gradient(to right, rgba(0,0,0,.5) 0%, rgba(0,0,0,.12) 30%, rgba(0,0,0,0) 60%);
+    }
+
+    /* কার্ল হাইলাইট — বাঁকানো কাগজে আলো পড়ার মতো একটি উজ্জ্বল রেখা, ভাঁজের কিনারা বরাবর */
+    .page-flip-curl-highlight{
+        position:absolute;
+        inset:0;
+        opacity:0;
+        transition:opacity .5s ease;
+        pointer-events:none;
+    }
+    .page-flip.dragging .page-flip-curl-highlight{
+        transition:none !important;
+    }
+    .page-flip.flip-next .page-flip-curl-highlight{
+        background:linear-gradient(to left, rgba(255,255,255,0) 0%, rgba(255,255,255,.65) 6%, rgba(255,255,255,0) 16%);
+    }
+    .page-flip.flip-prev .page-flip-curl-highlight{
+        background:linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,.65) 6%, rgba(255,255,255,0) 16%);
+    }
+
+    /* উল্টানো পাতার কিনারা বরাবর বাঁকা কাগজের নরম প্রান্ত-ছায়া */
+    .page-flip.flip-next .page-flip-face,
+    .page-flip.flip-next .page-flip-back{
+        box-shadow:inset -3px 0 10px rgba(0,0,0,.18);
+    }
+    .page-flip.flip-prev .page-flip-face,
+    .page-flip.flip-prev .page-flip-back{
+        box-shadow:inset 3px 0 10px rgba(0,0,0,.18);
     }
 
     /* উল্টানো পৃষ্ঠার নিচে নতুন পৃষ্ঠার উপর পড়া ছায়া (depth) */
@@ -182,16 +230,16 @@
         z-index:25;
         pointer-events:none;
         opacity:0;
-        transition:opacity .45s ease;
+        transition:opacity .5s ease;
     }
     .page-flip-cast-shadow.dragging{
         transition:none !important;
     }
     .page-flip-cast-shadow.flip-next{
-        background:linear-gradient(to right, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 35%);
+        background:linear-gradient(to right, rgba(0,0,0,.4) 0%, rgba(0,0,0,0) 40%);
     }
     .page-flip-cast-shadow.flip-prev{
-        background:linear-gradient(to left, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 35%);
+        background:linear-gradient(to left, rgba(0,0,0,.4) 0%, rgba(0,0,0,0) 40%);
     }
 
     .ayah-highlight{
@@ -1879,6 +1927,8 @@
         <div class="page-display" id="pageDisplay">
             <div class="page-wrap" id="pageWrap">
                 <canvas id="pdfCanvas"></canvas>
+                <div class="page-click-zone left" id="pageClickLeft"></div>
+                <div class="page-click-zone right" id="pageClickRight"></div>
 
                 <!-- ACTION BUTTONS BAR (আয়াত সিলেক্ট হলে হাইলাইটের ঠিক নিচে ওভারলে হয়ে দেখাবে) -->
                 <div class="action-buttons-bar" id="actionButtonsBar">
@@ -3226,21 +3276,34 @@
         flip.style.width = rect.width + 'px';
         flip.style.height = rect.height + 'px';
 
+        const snapshot = canvas.toDataURL('image/png');
+
         const face = document.createElement('div');
         face.className = 'page-flip-face';
-        face.style.backgroundImage = `url(${canvas.toDataURL('image/png')})`;
+        face.style.backgroundImage = `url(${snapshot})`;
+
+        // পাতার উলটো পিঠ — কাগজের মতো হালকা ধূসর টেক্সচার (মূল ছবিরই আয়না-করা, ঝাপসা সংস্করণ)
+        const back = document.createElement('div');
+        back.className = 'page-flip-back';
+        back.style.backgroundImage = `url(${snapshot})`;
+        back.style.opacity = '.16';
 
         const shade = document.createElement('div');
         shade.className = 'page-flip-shade';
 
+        const curlHighlight = document.createElement('div');
+        curlHighlight.className = 'page-flip-curl-highlight';
+
+        flip.appendChild(back);
         flip.appendChild(face);
         flip.appendChild(shade);
+        flip.appendChild(curlHighlight);
 
         pageWrap.appendChild(preview);
         pageWrap.appendChild(castShadow);
         pageWrap.appendChild(flip);
 
-        return { direction, dirClass, width: rect.width, preview, castShadow, flip, shade, progress: 0 };
+        return { direction, dirClass, width: rect.width, preview, castShadow, flip, face, back, shade, curlHighlight, progress: 0 };
     }
 
     function setFlipProgress(session, progress) {
@@ -3250,6 +3313,9 @@
         session.flip.style.transform = `rotateY(${angle}deg)`;
         session.shade.style.opacity = Math.min(progress * 1.3, 1);
         session.castShadow.style.opacity = Math.max(.55 * (1 - progress * 1.3), 0);
+        // কার্ল হাইলাইট: শুরুতে ও শেষে হালকা, মাঝামাঝি বাঁকে (~৪৫°-৯০°) সবচেয়ে উজ্জ্বল
+        const bend = Math.sin(Math.min(progress, 1) * Math.PI * 0.85);
+        session.curlHighlight.style.opacity = bend;
     }
 
     function destroyFlipSession(session) {
@@ -3262,6 +3328,35 @@
     let dragActive = false;
     let dragStartX = null, dragStartY = null;
     let dragSession = null, dragTargetPage = null;
+    let didDragFlip = false;
+
+    // ক্লিক করে (টানা ছাড়াই) স্বয়ংক্রিয়ভাবে সম্পূর্ণ পাতা উল্টানো
+    function autoFlip(direction) {
+        if (isFlipping || dragSession) return;
+        const target = direction === 'next' ? currentPage + 1 : currentPage - 1;
+        if (target < 1 || target > totalPages || !pdfDoc) return;
+
+        isFlipping = true;
+        const session = buildFlipSession(direction);
+        renderPageSnapshot(target).then(url => {
+            if (url) session.preview.style.backgroundImage = `url(${url})`;
+        });
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                session.flip.classList.remove('dragging');
+                session.shade.classList.remove('dragging');
+                session.castShadow.classList.remove('dragging');
+                setFlipProgress(session, 1);
+            });
+        });
+
+        session.flip.addEventListener('transitionend', async () => {
+            await renderPage(target);
+            destroyFlipSession(session);
+            isFlipping = false;
+        }, { once: true });
+    }
 
     function onDragStart(clientX, clientY) {
         if (isFlipping || dragSession) return;
@@ -3270,6 +3365,7 @@
         dragStartY = clientY;
         dragSession = null;
         dragTargetPage = null;
+        didDragFlip = false;
     }
 
     function onDragMove(clientX, clientY, ev) {
@@ -3287,6 +3383,7 @@
 
             dragTargetPage = target;
             dragSession = buildFlipSession(direction);
+            didDragFlip = true;
             renderPageSnapshot(target).then(url => {
                 if (url && dragSession) dragSession.preview.style.backgroundImage = `url(${url})`;
             });
@@ -3315,10 +3412,7 @@
         isFlipping = true;
 
         if (commit) {
-            const finalAngle = session.direction === 'next' ? -MAX_FLIP_ANGLE : MAX_FLIP_ANGLE;
-            session.flip.style.transform = `rotateY(${finalAngle}deg)`;
-            session.shade.style.opacity = 1;
-            session.castShadow.style.opacity = 0;
+            setFlipProgress(session, 1);
             session.flip.addEventListener('transitionend', async () => {
                 await renderPage(targetPage);
                 destroyFlipSession(session);
@@ -4026,6 +4120,22 @@
     pageDisplay.addEventListener('pointerleave', e => {
         if (e.pointerType === 'mouse') onDragEnd();
     });
+
+    // ক্লিক করে পাতা উল্টানো (বাম পাশে ক্লিক = পরের পৃষ্ঠা, ডান পাশে ক্লিক = আগের পৃষ্ঠা)
+    const pageClickLeft = document.getElementById('pageClickLeft');
+    const pageClickRight = document.getElementById('pageClickRight');
+    if (pageClickLeft) {
+        pageClickLeft.addEventListener('click', () => {
+            if (didDragFlip) { didDragFlip = false; return; }
+            autoFlip('next');
+        });
+    }
+    if (pageClickRight) {
+        pageClickRight.addEventListener('click', () => {
+            if (didDragFlip) { didDragFlip = false; return; }
+            autoFlip('prev');
+        });
+    }
 
     // ===== CUSTOM TOOLBAR EVENTS =====
     document.querySelectorAll('.toolbar-play-btn').forEach(btn => {
