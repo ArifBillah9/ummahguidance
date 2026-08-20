@@ -69,10 +69,10 @@
         transform:translateX(-50%);
         width:100%;
         max-width:480px;
-        z-index:50;
+        z-index:100;
         flex-shrink:0;
         height:56px;
-        box-shadow:0 2px 8px rgba(0,0,0,.15);
+        box-shadow:0 2px 8px rgba(0,0,0,.25);
     }
 
     header .left{display:flex; align-items:center; gap:10px;}
@@ -80,14 +80,16 @@
     header .right{display:flex; align-items:center; gap:2px; position:relative;}
 
     .icon-btn{
-        width:36px; height:36px; border-radius:50%;
+        width:44px; height:44px; border-radius:50%;
         display:flex; align-items:center; justify-content:center;
         background:transparent; border:none; color:#fff; cursor:pointer;
         flex-shrink:0;
+        transition:background .2s;
     }
 
-    .icon-btn svg{width:20px; height:20px;}
-    .icon-btn i{font-size:18px; line-height:1;}
+    .icon-btn:active{background:rgba(255,255,255,.15);}
+    .icon-btn svg{width:24px; height:24px;}
+    .icon-btn i{font-size:22px; line-height:1;}
     .icon-btn.filled{background:#fff; color:var(--brand);}
 
     /* ===== MAIN CONTENT ===== */
@@ -238,8 +240,8 @@
     }
 
     .action-btn{
-        width:38px;
-        height:38px;
+        width:46px;
+        height:46px;
         border-radius:50%;
         border:1.5px solid rgba(255,255,255,.55);
         background:transparent;
@@ -264,8 +266,8 @@
     }
 
     .action-btn svg{
-        width:17px;
-        height:17px;
+        width:20px;
+        height:20px;
         stroke-width:1.6;
     }
 
@@ -482,16 +484,18 @@
         display:flex;
         justify-content:space-between;
         align-items:center;
-        padding:8px 14px;
+        padding:10px 12px;
         background:linear-gradient(180deg,var(--brand),var(--brand-dark));
         color:#fff;
         flex-shrink:0;
         gap:10px;
+        height:auto;
+        min-height:60px;
     }
 
     .nav-btn{
-        width:38px;
-        height:38px;
+        width:44px;
+        height:44px;
         border-radius:50%;
         border:1px solid rgba(255,255,255,.3);
         background:transparent;
@@ -508,14 +512,18 @@
         background:rgba(255,255,255,.1);
     }
 
+    .nav-btn:active{
+        background:rgba(255,255,255,.15);
+    }
+
     .nav-btn:disabled{
         opacity:0.5;
         cursor:not-allowed;
     }
 
     .nav-btn svg{
-        width:18px;
-        height:18px;
+        width:22px;
+        height:22px;
     }
 
     .page-info{
@@ -529,19 +537,21 @@
         display:flex;
         align-items:center;
         justify-content:space-between;
-        padding:8px 12px;
+        padding:10px 12px;
         background:linear-gradient(180deg,var(--brand),var(--brand-dark));
         color:#fff;
         flex-shrink:0;
-        gap:8px;
+        gap:10px;
         position:fixed;
         bottom:0;
         left:50%;
         transform:translateX(-50%);
         width:100%;
         max-width:480px;
-        z-index:49;
-        box-shadow:0 -2px 8px rgba(0,0,0,.15);
+        z-index:99;
+        box-shadow:0 -2px 8px rgba(0,0,0,.25);
+        height:auto;
+        min-height:60px;
     }
 
     .toolbar-left{
@@ -551,9 +561,9 @@
     }
 
     .toolbar-play-btn{
-        width:36px;
-        height:36px;
-        border-radius:4px;
+        width:44px;
+        height:44px;
+        border-radius:6px;
         background:transparent;
         border:1px solid rgba(255,255,255,.3);
         color:#fff;
@@ -569,13 +579,17 @@
         background:rgba(255,255,255,.1);
     }
 
+    .toolbar-play-btn:active{
+        background:rgba(255,255,255,.15);
+    }
+
     .toolbar-play-btn svg{
-        width:18px;
-        height:18px;
+        width:22px;
+        height:22px;
     }
 
     .toolbar-play-btn i{
-        font-size:16px;
+        font-size:20px;
         line-height:1;
     }
 
@@ -639,9 +653,9 @@
 
     .toolbar-icon-btn{
         position:relative;
-        width:32px;
-        height:32px;
-        border-radius:4px;
+        width:40px;
+        height:40px;
+        border-radius:6px;
         background:transparent;
         border:none;
         color:#fff;
@@ -657,12 +671,16 @@
         background:rgba(255,255,255,.1);
     }
 
+    .toolbar-icon-btn:active{
+        background:rgba(255,255,255,.15);
+    }
+
     /* আয়াত নির্বাচন বন্ধ থাকলে আইকনের উপর "বন্ধ" চিহ্ন */
     #selectionModeBtn:not(.active)::after{
         content:'';
         position:absolute;
-        width:22px;
-        height:2px;
+        width:24px;
+        height:2.5px;
         background:#ff5252;
         border-radius:2px;
         transform:rotate(-45deg);
@@ -670,13 +688,13 @@
     }
 
     .toolbar-icon-btn svg{
-        width:18px;
-        height:18px;
+        width:22px;
+        height:22px;
         stroke-width:1.5;
     }
 
     .toolbar-icon-btn i{
-        font-size:16px;
+        font-size:20px;
         line-height:1;
     }
 
@@ -3872,6 +3890,27 @@
         if (legacy) legacy.remove();
     }
 
+    // রিয়েল-টাইম অডিও প্লেব্যাক চলাকালীন বর্তমান আয়াত হাইলাইট করুন
+    function highlightCurrentAyah(ayahNum) {
+        // শুধুমাত্র যদি সুরা ফাতেহা হয়
+        if (!currentAudioAyah || currentAudioAyah.surah !== 1) return;
+        
+        const exactId = 'ayah-1-' + ayahNum;
+        const matched = currentAyahList.find(a => a.id === exactId) 
+            || currentAyahList.find(a => a.surahNum === 1 && a.ayahNum === ayahNum);
+        
+        if (matched && matched.region) {
+            clearHighlight();
+            showHighlight(matched.region);
+        }
+    }
+
+    // সকল আয়াত হাইলাইট সরান
+    function clearAllAyahHighlights() {
+        clearHighlight();
+        hideActionButtons();
+    }
+
     // অ্যাকশন বোতাম দেখান — হাইলাইট করা আয়াতের ঠিক নিচে বসবে
     function showActionButtons(region) {
         if (region) {
@@ -5204,6 +5243,15 @@
         }
     }
 
+    // অডিও টাইম আপডেট হ্যান্ডলার - রিয়েল-টাইম হাইলাইটিং সিঙ্ক করতে
+    document.getElementById('quranAudio')?.addEventListener('timeupdate', () => {
+        // বর্তমানে চলমান আয়াত হাইলাইট করুন
+        if (currentAudioAyah) {
+            const ayahNum = currentAudioAyah.ayah;
+            highlightCurrentAyah(ayahNum);
+        }
+    });
+
     // অডিও শেষ হলে হ্যান্ডলার - পরবর্তী আয়াত অটো প্লে হবে
     document.getElementById('quranAudio')?.addEventListener('ended', () => {
         // যদি প্লেলিস্ট মোড চালু থাকে, পরবর্তী আয়াত প্লে করুন
@@ -5215,6 +5263,8 @@
                 playBtn.classList.remove('playing');
             }
             isAudioPlaying = false;
+            // সকল হাইলাইট সরান
+            clearAllAyahHighlights();
         }
     });
 
