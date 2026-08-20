@@ -410,6 +410,21 @@
         line-height:1;
     }
 
+    /* অডিও চলমান অবস্থা - পালসিং এনিমেশন */
+    .toolbar-play-btn.playing {
+        animation: toolbar-pulse 1.5s ease-in-out infinite;
+        border-color: rgba(255,255,255,.7);
+    }
+
+    @keyframes toolbar-pulse {
+        0%, 100% {
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+        }
+        50% {
+            box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+        }
+    }
+
     .toolbar-title{
         font-size:14px;
         font-weight:500;
@@ -923,146 +938,7 @@
     }
 
     /* ===== সূরা প্লে সিলেক্ট মডাল (কেন্দ্রীভূত কার্ড) ===== */
-    .surah-play-modal{
-        position:fixed;
-        inset:0;
-        background:rgba(0,0,0,.55);
-        z-index:960;
-        display:none;
-        align-items:center;
-        justify-content:center;
-        padding:20px;
-    }
-    .surah-play-modal.active{ display:flex; }
-    .surah-play-card{
-        background:var(--cream);
-        width:100%;
-        max-width:340px;
-        border-radius:16px;
-        overflow:hidden;
-        box-shadow:0 10px 40px rgba(0,0,0,.35);
-        animation:spmFadeIn .2s ease-out;
-    }
-    @keyframes spmFadeIn{
-        from{ opacity:0; transform:scale(.94); }
-        to{ opacity:1; transform:scale(1); }
-    }
-    .spm-header{
-        padding:18px 16px 14px;
-        text-align:center;
-        font-size:17px;
-        font-weight:700;
-        color:var(--brand);
-        border-bottom:1px solid var(--line);
-    }
-    .spm-body{
-        padding:14px 18px 4px;
-        min-height:40px;
-        max-height:38vh;
-        overflow-y:auto;
-    }
-    .spm-radio-row{
-        display:flex;
-        align-items:center;
-        gap:12px;
-        padding:8px 0;
-        cursor:pointer;
-    }
-    .spm-radio-circle{
-        width:20px; height:20px;
-        border-radius:50%;
-        border:2px solid var(--brand);
-        display:flex; align-items:center; justify-content:center;
-        flex-shrink:0;
-    }
-    .spm-radio-circle::after{
-        content:'';
-        width:10px; height:10px;
-        border-radius:50%;
-        background:var(--brand);
-    }
-    .spm-radio-label{ font-size:16px; color:var(--ink); font-weight:500; }
-    .spm-range{
-        display:flex;
-        border-top:1px solid var(--line);
-        margin-top:10px;
-    }
-    .spm-range-col{
-        flex:1;
-        padding:14px 12px;
-        text-align:center;
-    }
-    .spm-range-col:first-child{ border-right:1px solid var(--line); }
-    .spm-range-label{ font-size:14px; color:var(--brand); font-weight:600; margin-bottom:8px; }
-    .spm-range-input{
-        width:100%;
-        text-align:center;
-        border:1px solid var(--line);
-        border-radius:8px;
-        padding:8px 6px;
-        font-family:var(--main-font);
-        font-size:16px;
-        color:var(--ink);
-        background:#fff;
-    }
-    .spm-range-input:focus{ outline:none; border-color:var(--brand); }
-    .spm-footer{
-        padding:14px 16px 18px;
-        display:flex;
-        flex-direction:column;
-        gap:10px;
-    }
-    .spm-btn{
-        width:100%;
-        padding:12px;
-        border-radius:10px;
-        font-family:var(--main-font);
-        font-size:15px;
-        font-weight:700;
-        cursor:pointer;
-        background:#fff;
-        transition:background .15s;
-    }
-    .spm-btn-confirm{
-        border:1.5px solid var(--brand);
-        color:var(--brand);
-    }
-    .spm-btn-confirm:active{ background:rgba(23,90,69,.1); }
-    .spm-btn-cancel{
-        border:1.5px solid #d9534f;
-        color:#d9534f;
-    }
-    .spm-btn-cancel:active{ background:rgba(217,83,79,.1); }
 
-    /* ===== AUDIO PLAYER PROGRESS BAR ===== */
-    #audioProgressBar {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 100%;
-        height: 4px;
-        border-radius: 2px;
-        background: #ddd;
-        outline: none;
-    }
-    #audioProgressBar::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background: var(--brand);
-        cursor: pointer;
-        box-shadow: 0 2px 6px rgba(23, 90, 69, 0.3);
-    }
-    #audioProgressBar::-moz-range-thumb {
-        width: 16px;
-        height: 16px;
-        border-radius: 50%;
-        background: var(--brand);
-        cursor: pointer;
-        border: none;
-        box-shadow: 0 2px 6px rgba(23, 90, 69, 0.3);
-    }
 
     /* ===== FULLSCREEN PDF VIEW (মোবাইলে) ===== */
     #header, #customToolbar {
@@ -2298,31 +2174,6 @@
     <div class="bookmark-image-content">
         <button class="bookmark-image-close-btn" id="menuItemsImageCloseBtn">✕</button>
         <img id="menuItemsImage" class="bookmark-image-img" src="1787139578089_image.png" alt="মেনু আইটেম">
-    </div>
-</div>
-
-<!-- ===== অডিও প্লেয়ার মডাল (toolbar-play-btn ক্লিকে / অডিও প্লে হলে দেখাবে) ===== -->
-<div id="surahPlayModal" class="surah-play-modal">
-    <div class="surah-play-card">
-        <div class="spm-header">
-            <span id="audioPlayerTitle">কুরআন শরীফ</span>
-            <button id="audioPlayerCloseBtn" style="position:absolute; right:12px; top:12px; background:none; border:none; color:var(--brand); font-size:20px; cursor:pointer; width:32px; height:32px; display:flex; align-items:center; justify-content:center;">✕</button>
-        </div>
-        <div class="spm-body" style="padding:20px; text-align:center;">
-            <div style="font-size:18px; font-weight:700; color:var(--brand); margin-bottom:16px;" id="audioPlayerSurah">সূরা নাম</div>
-            <div style="font-size:13px; color:#777; margin-bottom:20px;">অডিও চলছে...</div>
-            <div style="background:#f5f5f5; border-radius:10px; padding:14px; margin-bottom:16px;">
-                <div style="font-size:12px; color:#999; margin-bottom:6px;">সময়</div>
-                <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600; color:var(--brand);">
-                    <span id="audioCurrentTime">0:00</span>
-                    <span id="audioDuration">0:00</span>
-                </div>
-                <input type="range" id="audioProgressBar" min="0" max="100" value="0" style="width:100%; margin-top:8px; cursor:pointer;">
-            </div>
-            <div style="display:flex; gap:10px; justify-content:center;">
-                <button id="audioPlayPauseBtn" style="width:50px; height:50px; border-radius:50%; background:var(--brand); color:#fff; border:none; cursor:pointer; font-size:20px; display:flex; align-items:center; justify-content:center;">▶</button>
-            </div>
-        </div>
     </div>
 </div>
 
@@ -4087,77 +3938,23 @@
     });
 
     // ===== সূরা নির্বাচন করুন মডাল (toolbar-play-btn ক্লিকে) =====
-    function getCurrentSurahForPlay() {
-        if (currentAyahList && currentAyahList.length > 0) {
-            const num = currentAyahList[0].surahNum;
-            const s = SURAHS.find(x => x.num === num);
-            if (s) return s;
-        }
-        if (currentSurah) return currentSurah;
-        return SURAHS[1]; // ডিফল্ট: আল বাকারা
-    }
-
-    // ===== অডিও প্লেয়ার মডাল =====
-    function openAudioPlayerModal() {
-        const surah = currentSurah || SURAHS[0];
-        document.getElementById('audioPlayerSurah').textContent = surah.bn;
-        document.getElementById('audioPlayerTitle').textContent = `${surah.bn} অডিও`;
-        document.getElementById('surahPlayModal').classList.add('active');
-    }
-
-    function closeAudioPlayerModal() {
-        document.getElementById('surahPlayModal').classList.remove('active');
-    }
-
-    document.getElementById('audioPlayerCloseBtn').addEventListener('click', closeAudioPlayerModal);
-    document.getElementById('surahPlayModal').addEventListener('click', (e) => {
-        if (e.target.id === 'surahPlayModal') closeAudioPlayerModal();
-    });
-
-    // অডিও প্লেব্যাক ইভেন্ট হ্যান্ডলার
-    let audioUpdateInterval = null;
-    function updateAudioUI() {
-        const current = quranAudio.currentTime;
-        const duration = quranAudio.duration;
-        document.getElementById('audioCurrentTime').textContent = formatTime(current);
-        document.getElementById('audioDuration').textContent = formatTime(duration);
-        if (duration > 0) {
-            document.getElementById('audioProgressBar').value = (current / duration) * 100;
-        }
-    }
-
+    // ===== TOOLBAR PLAY BUTTON — অডিও চলার সময় পালসিং অ্যানিমেশন =====
     quranAudio.addEventListener('play', () => {
-        openAudioPlayerModal();
-        document.getElementById('audioPlayPauseBtn').textContent = '⏸';
-        if (audioUpdateInterval) clearInterval(audioUpdateInterval);
-        audioUpdateInterval = setInterval(updateAudioUI, 500);
+        document.querySelectorAll('.toolbar-play-btn').forEach(btn => {
+            btn.classList.add('playing');
+        });
     });
 
     quranAudio.addEventListener('pause', () => {
-        document.getElementById('audioPlayPauseBtn').textContent = '▶';
-        if (audioUpdateInterval) clearInterval(audioUpdateInterval);
+        document.querySelectorAll('.toolbar-play-btn').forEach(btn => {
+            btn.classList.remove('playing');
+        });
     });
 
     quranAudio.addEventListener('ended', () => {
-        closeAudioPlayerModal();
-        document.getElementById('audioPlayPauseBtn').textContent = '▶';
-        if (audioUpdateInterval) clearInterval(audioUpdateInterval);
-    });
-
-    quranAudio.addEventListener('timeupdate', updateAudioUI);
-
-    document.getElementById('audioPlayPauseBtn').addEventListener('click', () => {
-        if (quranAudio.paused) {
-            quranAudio.play().catch(() => {});
-        } else {
-            quranAudio.pause();
-        }
-    });
-
-    document.getElementById('audioProgressBar').addEventListener('change', (e) => {
-        if (!isNaN(quranAudio.duration)) {
-            quranAudio.currentTime = (e.target.value / 100) * quranAudio.duration;
-        }
+        document.querySelectorAll('.toolbar-play-btn').forEach(btn => {
+            btn.classList.remove('playing');
+        });
     });
 
     // ===== অনুবাদক (Translator) সিলেকশন পেজ =====
