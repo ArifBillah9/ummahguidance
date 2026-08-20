@@ -663,6 +663,8 @@
   .hh-action-ic.gold{ background:#fdf3e0; color:#c9772e; }
   .hh-action-ic.pink{ background:#fde9ee; color:#d1495b; }
   .hh-action-label{ font-size:12.5px; color:var(--ink); font-weight:600; }
+  .hh-action.active .hh-action-ic{ background:var(--leaf-green); color:#fff; }
+  .hh-action.active .hh-action-label{ color:var(--deep-teal); }
 
   .hh-section{ padding:24px 18px 10px; }
   .hh-section-title{
@@ -711,6 +713,18 @@
   }
   .hh-bn-item svg{ width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.8; }
   .hh-bn-item.active{ color:var(--mid-green); }
+
+  /* Hide hh-actions-card on all screens except the home/hadithView screen */
+  #hadithTopicsScreen .hh-actions-card,
+  #hadithTahqiqScreen .hh-actions-card,
+  #hadithSavedScreen .hh-actions-card {
+    display: none !important;
+  }
+
+  /* Ensure hh-bottomnav is visible on all pages */
+  .hh-bottomnav {
+    display: flex !important;
+  }
 
   /* ---------- Hadith CHAPTER LIST screen (matches native app screenshot) ---------- */
   .hcl-shell{ max-width:520px; margin:0 auto; background:#f0f4f8; min-height:100vh; position:relative; }
@@ -1447,6 +1461,11 @@
     color:var(--mid-green);
   }
   .sas-card-icon svg{ width:27px; height:27px; }
+  .topic-badge{
+    border-radius:50%; color:#fff; font-weight:700; font-size:14px;
+    width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+    font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+  }
   .sas-card-body{ flex:1; min-width:0; text-align:left; }
   .sas-card-title{
     margin:0 0 2px; font-weight:700; font-size:15.5px; color:var(--ink); line-height:1.35;
@@ -1755,29 +1774,21 @@
       </svg>
 
       <div class="hh-actions-card">
-        <button class="hh-action" id="hhLatestBtn">
-          <span class="hh-action-ic">
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke-width="1.8"/><path stroke-width="1.8" stroke-linecap="round" d="M12 7v5l3.5 3.5"/></svg>
-          </span>
-          <span class="hh-action-label">সর্বশেষ</span>
+        <button class="hh-bn-item active" data-hhbn="home">
+          <svg viewBox="0 0 24 24"><path d="M3 11l9 -7l9 7"/><path d="M5 10v10h5v-6h4v6h5v-10"/></svg>
+          <span>হোম</span>
         </button>
-        <button class="hh-action" id="hhAppsBtn">
-          <span class="hh-action-ic">
-            <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linejoin="round" d="M4 5c4 -2 8 -2 8 0v14c0 -2 -4 -2 -8 0z"/><path stroke-width="1.8" stroke-linejoin="round" d="M20 5c-4 -2 -8 -2 -8 0v14c0 -2 4 -2 8 0z"/></svg>
-          </span>
-          <span class="hh-action-label">অ্যাপস</span>
+        <button class="hh-bn-item" data-hhbn="books">
+          <svg viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
+          <span>কিতাব</span>
         </button>
-        <button class="hh-action" id="hhGotoBtn">
-          <span class="hh-action-ic gold">
-            <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" d="M3 11l18 -8l-8 18l-2 -8z"/></svg>
-          </span>
-          <span class="hh-action-label">হাদিসে যান</span>
+        <button class="hh-bn-item" data-hhbn="notes">
+          <svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13h-14z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+          <span>নোট</span>
         </button>
-        <button class="hh-action" id="hhDonateBtn">
-          <span class="hh-action-ic pink">
-            <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linejoin="round" d="M12 21s-7 -4.5 -9.5 -9C1 8 2.5 4.5 6 4.5c2 0 3.5 1.2 4 2.6c.5 -1.4 2 -2.6 4 -2.6c3.5 0 5 3.5 3.5 7.5c-2.5 4.5 -9.5 9 -9.5 9z"/></svg>
-          </span>
-          <span class="hh-action-label">সদাকা</span>
+        <button class="hh-bn-item" data-hhbn="bookmark">
+          <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6 -4l-6 4z"/></svg>
+          <span>বুকমার্ক</span>
         </button>
       </div>
     </header>
@@ -1800,21 +1811,29 @@
     </div>
 
     <nav class="hh-bottomnav" id="hhBottomNav">
-      <button class="hh-bn-item active" data-hhbn="home">
-        <svg viewBox="0 0 24 24"><path d="M3 11l9 -7l9 7"/><path d="M5 10v10h5v-6h4v6h5v-10"/></svg>
-        <span>হোম</span>
+      <button class="hh-action active" id="hhBookViewBtn" data-hh-view="hadithBookView">
+        <span class="hh-action-ic">
+          <svg viewBox="0 0 24 24"><path stroke-width="1.8" d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path stroke-width="1.8" d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
+        </span>
+        <span class="hh-action-label">হাদিসের কিতাব</span>
       </button>
-      <button class="hh-bn-item" data-hhbn="books">
-        <svg viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
-        <span>কিতাব</span>
+      <button class="hh-action" id="hhTopicsViewBtn" data-hh-view="hadithTopicsScreen">
+        <span class="hh-action-ic">
+          <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linecap="round" d="M3 7h18M3 12h18M3 17h18"/></svg>
+        </span>
+        <span class="hh-action-label">বিষয়ভিত্তিক</span>
       </button>
-      <button class="hh-bn-item" data-hhbn="notes">
-        <svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13h-14z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
-        <span>নোট</span>
+      <button class="hh-action" id="hhUlumBtn">
+        <span class="hh-action-ic gold">
+          <svg viewBox="0 0 24 24"><path stroke-width="1.8" d="M12 2L2 7l10 5l10-5-10-5z"/><path stroke-width="1.8" d="M2 17l10 5l10-5"/><path stroke-width="1.8" d="M2 12l10 5l10-5"/></svg>
+        </span>
+        <span class="hh-action-label">উলুমূ হাদিস</span>
       </button>
-      <button class="hh-bn-item" data-hhbn="bookmark">
-        <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6 -4l-6 4z"/></svg>
-        <span>বুকমার্ক</span>
+      <button class="hh-action" id="hhSavedBtn">
+        <span class="hh-action-ic pink">
+          <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linejoin="round" d="M6 3h12v18l-6 -4l-6 4z"/></svg>
+        </span>
+        <span class="hh-action-label">সংরক্ষিত</span>
       </button>
     </nav>
   </div>
@@ -1838,21 +1857,29 @@
     <div class="sas-no-results" id="topicsNoResults">কোনো বিষয় পাওয়া যায়নি।</div>
   </div>
   <nav class="hh-bottomnav">
-    <button class="hh-bn-item" data-hhbn="home">
-      <svg viewBox="0 0 24 24"><path d="M3 11l9 -7l9 7"/><path d="M5 10v10h5v-6h4v6h5v-10"/></svg>
-      <span>হোম</span>
+    <button class="hh-action" data-hh-view="hadithBookView">
+      <span class="hh-action-ic">
+        <svg viewBox="0 0 24 24"><path stroke-width="1.8" d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path stroke-width="1.8" d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
+      </span>
+      <span class="hh-action-label">হাদিসের কিতাব</span>
     </button>
-    <button class="hh-bn-item active" data-hhbn="books">
-      <svg viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
-      <span>কিতাব</span>
+    <button class="hh-action active" data-hh-view="hadithTopicsScreen">
+      <span class="hh-action-ic">
+        <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linecap="round" d="M3 7h18M3 12h18M3 17h18"/></svg>
+      </span>
+      <span class="hh-action-label">বিষয়ভিত্তিক</span>
     </button>
-    <button class="hh-bn-item" data-hhbn="notes">
-      <svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13h-14z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
-      <span>নোট</span>
+    <button class="hh-action" id="hhUlumBtn2">
+      <span class="hh-action-ic gold">
+        <svg viewBox="0 0 24 24"><path stroke-width="1.8" d="M12 2L2 7l10 5l10-5-10-5z"/><path stroke-width="1.8" d="M2 17l10 5l10-5"/><path stroke-width="1.8" d="M2 12l10 5l10-5"/></svg>
+      </span>
+      <span class="hh-action-label">উলুমূ হাদিস</span>
     </button>
-    <button class="hh-bn-item" data-hhbn="bookmark">
-      <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6 -4l-6 4z"/></svg>
-      <span>বুকমার্ক</span>
+    <button class="hh-action" id="hhSavedBtn2">
+      <span class="hh-action-ic pink">
+        <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linejoin="round" d="M6 3h12v18l-6 -4l-6 4z"/></svg>
+      </span>
+      <span class="hh-action-label">সংরক্ষিত</span>
     </button>
   </nav>
 </div>
@@ -1875,21 +1902,29 @@
     <div class="sas-no-results" id="tahqiqNoResults">কোনো তাহকিক পাওয়া যায়নি।</div>
   </div>
   <nav class="hh-bottomnav">
-    <button class="hh-bn-item" data-hhbn="home">
-      <svg viewBox="0 0 24 24"><path d="M3 11l9 -7l9 7"/><path d="M5 10v10h5v-6h4v6h5v-10"/></svg>
-      <span>হোম</span>
+    <button class="hh-action" data-hh-view="hadithBookView">
+      <span class="hh-action-ic">
+        <svg viewBox="0 0 24 24"><path stroke-width="1.8" d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path stroke-width="1.8" d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
+      </span>
+      <span class="hh-action-label">হাদিসের কিতাব</span>
     </button>
-    <button class="hh-bn-item" data-hhbn="books">
-      <svg viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
-      <span>কিতাব</span>
+    <button class="hh-action" data-hh-view="hadithTopicsScreen">
+      <span class="hh-action-ic">
+        <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linecap="round" d="M3 7h18M3 12h18M3 17h18"/></svg>
+      </span>
+      <span class="hh-action-label">বিষয়ভিত্তিক</span>
     </button>
-    <button class="hh-bn-item active" data-hhbn="notes">
-      <svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13h-14z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
-      <span>নোট</span>
+    <button class="hh-action active" id="hhUlumBtn3">
+      <span class="hh-action-ic gold">
+        <svg viewBox="0 0 24 24"><path stroke-width="1.8" d="M12 2L2 7l10 5l10-5-10-5z"/><path stroke-width="1.8" d="M2 17l10 5l10-5"/><path stroke-width="1.8" d="M2 12l10 5l10-5"/></svg>
+      </span>
+      <span class="hh-action-label">উলুমূ হাদিস</span>
     </button>
-    <button class="hh-bn-item" data-hhbn="bookmark">
-      <svg viewBox="0 0 24 24"><path d="M6 3h12v18l-6 -4l-6 4z"/></svg>
-      <span>বুকমার্ক</span>
+    <button class="hh-action" id="hhSavedBtn3">
+      <span class="hh-action-ic pink">
+        <svg viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linejoin="round" d="M6 3h12v18l-6 -4l-6 4z"/></svg>
+      </span>
+      <span class="hh-action-label">সংরক্ষিত</span>
     </button>
   </nav>
 </div>
@@ -2023,11 +2058,13 @@
       </button>
       <div class="hcl-title-block">
         <div class="hcl-book-title" id="topicSubcatTitle">বিষয়</div>
+        <div class="hcl-book-count">যে কিতাবে এই অধ্যায় আছে, বেছে নিন</div>
       </div>
     </div>
   </div>
   <div class="tsc-body">
     <div class="sas-list" id="topicSubcatList"></div>
+    <div class="sas-no-results" id="topicSubcatNoResults">এই বিষয়ে এখনো কোনো কিতাবে অধ্যায় যুক্ত করা হয়নি। ইনশাআল্লাহ শীঘ্রই যুক্ত করা হবে।</div>
   </div>
 </div>
 
@@ -3957,46 +3994,122 @@ function showHadithListing(){
   window.scrollTo(0,0);
   buildHadithGrid();
   setActiveNav('home');
+  document.querySelectorAll('.hh-action[data-hh-view]').forEach(btn=> btn.classList.remove('active'));
+  const bookViewBtn = document.getElementById('hhBookViewBtn');
+  if(bookViewBtn) bookViewBtn.classList.add('active');
   if(typeof startHHHeaderRotation === 'function') startHHHeaderRotation();
 }
 document.getElementById('navHadithLink').addEventListener('click', showHadithListing);
 
-/* ---- বিষয়ভিত্তিক হাদিস (Topic-based Hadith) ---- */
-const TOPIC_CATEGORIES = [
-  { title:'ইসলামী অর্থনীতি', count:59 },
-  { title:'ইসলামী আকিদা', count:27 },
-  { title:'ইসলামী উত্তরাধিকার', count:14 },
-  { title:'ইসলামী দাওয়াহ', count:3 },
-  { title:'ইসলামী নৈতিকতা', count:92 },
-  { title:'ইসলামী যুদ্ধনীতি', count:32 },
-  { title:'ইসলামের ইতিহাস', count:48 },
-  { title:'ইসলামী রাজনীতি', count:21 },
-  { title:'ইসলামী শিক্ষা', count:16 },
-  { title:'ইসলামী আইন ও বিচার', count:37 },
-  { title:'ইবাদত', count:64 },
-  { title:'পারিবারিক জীবন', count:29 }
+/* ---- বিষয়ভিত্তিক হাদিস (Topic-based Hadith) ----
+   ফিকহের প্রচলিত ধারাক্রম অনুযায়ী একটি নির্দিষ্ট বিষয়-তালিকা (ইমাম মালিক রহঃ এর
+   মুওয়াত্তার ৬১টি কিতাবের ধারাক্রম অনুসরণ করে, শুরুতে "ঈমান-আকীদা" ও "তহারাত"
+   যোগ করা হয়েছে)। এটিই এখন "বিষয়ভিত্তিক" ট্যাবে দেখানো একমাত্র/স্থির তালিকা —
+   কোনো নির্দিষ্ট কিতাবের বদলে সরাসরি এই ৬৩টি বিষয় এখানে "অধ্যায়" হিসেবে থাকে। */
+const FIQH_TOPICS = [
+  { num:1,  title:'ঈমান-আকীদা' },
+  { num:2,  title:'তহারাত' },
+  { num:3,  title:'সালাতের ওয়াক্ত' },
+  { num:4,  title:'পবিত্রতা' },
+  { num:5,  title:'সালাত' },
+  { num:6,  title:'সালাতে ভুলে যাওয়া' },
+  { num:7,  title:"জুমু'আ" },
+  { num:8,  title:'রমাযানের সালাত' },
+  { num:9,  title:'তাহাজ্জুদ' },
+  { num:10, title:'জামাআতে সালাত' },
+  { num:11, title:'সালাত কসর করা' },
+  { num:12, title:'দুই ঈদ' },
+  { num:13, title:'সালাতুল খাওফ' },
+  { num:14, title:'কুসুফের সালাত' },
+  { num:15, title:'ইসতিসকা' },
+  { num:16, title:'কিবলা' },
+  { num:17, title:'কুরআন' },
+  { num:18, title:'দাফন-কাফন' },
+  { num:19, title:'যাকাত' },
+  { num:20, title:'সিয়াম' },
+  { num:21, title:"রমাযানের ই'তিকাফ" },
+  { num:22, title:'হজ্জ' },
+  { num:23, title:'জিহাদ' },
+  { num:24, title:'মানত ও কসম' },
+  { num:25, title:'কুরবানীর পশু' },
+  { num:26, title:'পশু যবেহ' },
+  { num:27, title:'শিকার' },
+  { num:28, title:'আকীকা' },
+  { num:29, title:'ফারায়েয' },
+  { num:30, title:'বিবাহ' },
+  { num:31, title:'তালাক' },
+  { num:32, title:'দুধপান' },
+  { num:33, title:'ক্রয়-বিক্রয়' },
+  { num:34, title:'কিরায (মুদারাবা)' },
+  { num:35, title:'বর্গাচাষ' },
+  { num:36, title:'জমি ভাড়া' },
+  { num:37, title:'সম্পত্তিতে শুফআ' },
+  { num:38, title:'বিচার-ফায়সালা' },
+  { num:39, title:'ওসিয়ত' },
+  { num:40, title:'দাস মুক্তি ও ওয়ালা' },
+  { num:41, title:'মুকাতাব' },
+  { num:42, title:'মুদাব্বার' },
+  { num:43, title:'হদ্দসমূহ' },
+  { num:44, title:'পানীয়' },
+  { num:45, title:'দিয়াত' },
+  { num:46, title:'কসামত' },
+  { num:47, title:'মদীনা' },
+  { num:48, title:'তাকদীর' },
+  { num:49, title:'উত্তম চরিত্র' },
+  { num:50, title:'পোশাক' },
+  { num:51, title:'নবীজির বর্ণনা' },
+  { num:52, title:'বদনজর' },
+  { num:53, title:'চুল' },
+  { num:54, title:'স্বপ্ন' },
+  { num:55, title:'সালাম' },
+  { num:56, title:'বিবিধ বিষয়' },
+  { num:57, title:'বাইয়াত' },
+  { num:58, title:'বাক্য/কথাবার্তা' },
+  { num:59, title:'জাহান্নাম' },
+  { num:60, title:'সদকা' },
+  { num:61, title:'ইলম' },
+  { num:62, title:"মজলুমের দু'আ" },
+  { num:63, title:'নবীজির নামসমূহ' },
 ];
+
+/* কোনো একটি বিষয়ের নামের সাথে (HADITH_CHAPTER_BN-এ) হুবহু মিলে এমন অধ্যায় যেসব
+   কিতাবে পাওয়া যায়, সেগুলো {entry, chapterNum, label}[] আকারে খুঁজে বের করে —
+   যাতে ঐ কিতাবের আসল হাদিস রিডারে সরাসরি নিয়ে যাওয়া যায়। */
+function findTopicChapterMatches(title){
+  const matches = [];
+  HADITH_BOOKS.forEach(entry=>{
+    if(entry.comingSoon) return;
+    const bnMap = HADITH_CHAPTER_BN[hadithBaseBook(entry)];
+    if(!bnMap) return;
+    Object.keys(bnMap).forEach(chNum=>{
+      if(bnMap[chNum] === title){
+        matches.push({ entry, chapterNum:Number(chNum), label:bnMap[chNum] });
+      }
+    });
+  });
+  return matches;
+}
+
 const topicsList = document.getElementById('topicsList');
 const topicsNoResults = document.getElementById('topicsNoResults');
 const topicsSearchInput = document.getElementById('topicsSearchInput');
-const TOPIC_BOOK_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>`;
 
 function buildTopicsList(){
   const q = (topicsSearchInput.value||'').trim().toLowerCase();
   topicsList.innerHTML = '';
   let shown = 0;
-  TOPIC_CATEGORIES.forEach(t=>{
+  FIQH_TOPICS.forEach((t, idx)=>{
     if(q && !t.title.toLowerCase().includes(q)) return;
     shown++;
+    const color = HADITH_BADGE_COLORS[idx % HADITH_BADGE_COLORS.length];
     const card = document.createElement('button');
     card.className = 'sas-card';
     card.innerHTML = `
-      <span class="sas-card-icon">${TOPIC_BOOK_ICON}</span>
+      <span class="sas-card-icon topic-badge" style="background:${color}">${t.num ? toBnDigits(t.num) : ''}</span>
       <span class="sas-card-body">
         <p class="sas-card-title">${t.title}</p>
-        <p class="sas-card-sub">${toBnDigits(t.count)} টি সাবক্যাটাগরি</p>
       </span>`;
-    card.addEventListener('click', ()=> showTopicSubcatList(t.title));
+    card.addEventListener('click', ()=> showTopicDetail(t));
     topicsList.appendChild(card);
   });
   topicsNoResults.style.display = shown===0 ? 'block' : 'none';
@@ -4009,107 +4122,61 @@ function showHadithTopics(){
   window.scrollTo(0,0);
   buildTopicsList();
   setActiveNav('books');
+  document.querySelectorAll('.hh-action[data-hh-view]').forEach(btn=> btn.classList.remove('active'));
+  const topicsViewBtn = document.getElementById('hhTopicsViewBtn');
+  if(topicsViewBtn) topicsViewBtn.classList.add('active');
 }
 
-/* ---- বিষয়ভিত্তিক হাদিস: প্রতিটি বিষয়ের সাবক্যাটাগরি তালিকা ---- */
-const TOPIC_SUBCATEGORIES = {
-  'ইসলামী অর্থনীতি': [
-    { title:'আমানত ও গচ্ছিত সম্পদ', count:2 },
-    { title:'ইসলামী অগ্রক্রয়াধিকার আইন', count:3 },
-    { title:'ইসলামী বাণিজ্যের নিয়ম', count:4 },
-    { title:'ইসলামী ব্যবসা ও বাণিজ্য', count:5 },
-    { title:'ইসলামী ব্যবসার নিয়ম', count:73 },
-    { title:'ইসলামে অবৈধ উপার্জন', count:23 },
-    { title:'ইসলামে আজীবন দান', count:23 },
-    { title:'ইসলামে ঋণ', count:29 }
-  ],
-  'ইসলামী আকিদা': [
-    { title:'তাওহীদের মূলনীতি', count:18 },
-    { title:'ঈমানের রুকনসমূহ', count:22 },
-    { title:'আখিরাত ও পরকাল বিশ্বাস', count:15 },
-    { title:'শিরক ও তার প্রকারভেদ', count:11 },
-    { title:'তাকদীরে বিশ্বাস', count:9 }
-  ],
-  'ইসলামী উত্তরাধিকার': [
-    { title:'ওয়ারিসের হকসমূহ', count:6 },
-    { title:'ওসিয়তের বিধান', count:4 },
-    { title:'সম্পদ বণ্টনের নিয়ম', count:4 }
-  ],
-  'ইসলামী দাওয়াহ': [
-    { title:'দাওয়াতের পদ্ধতি', count:2 },
-    { title:'দাঈর গুণাবলি', count:1 }
-  ],
-  'ইসলামী নৈতিকতা': [
-    { title:'সততা ও আমানতদারিতা', count:14 },
-    { title:'ক্ষমা ও সহনশীলতা', count:12 },
-    { title:'প্রতিবেশীর হক', count:9 },
-    { title:'সদাচরণ ও শিষ্টাচার', count:20 },
-    { title:'মিথ্যা ও গীবত পরিহার', count:16 }
-  ],
-  'ইসলামী যুদ্ধনীতি': [
-    { title:'জিহাদের বিধান', count:13 },
-    { title:'যুদ্ধবন্দীর অধিকার', count:7 },
-    { title:'যুদ্ধের নৈতিকতা', count:6 }
-  ],
-  'ইসলামের ইতিহাস': [
-    { title:'নবুওয়াতের সূচনা', count:10 },
-    { title:'মক্কী জীবন', count:12 },
-    { title:'মাদানী জীবন', count:14 },
-    { title:'খুলাফায়ে রাশেদীন', count:8 }
-  ],
-  'ইসলামী রাজনীতি': [
-    { title:'শাসকের দায়িত্ব', count:9 },
-    { title:'শূরা ও পরামর্শ', count:5 },
-    { title:'ন্যায়বিচার', count:7 }
-  ],
-  'ইসলামী শিক্ষা': [
-    { title:'ইলম অর্জনের ফজিলত', count:11 },
-    { title:'শিক্ষক-ছাত্রের সম্পর্ক', count:5 }
-  ],
-  'ইসলামী আইন ও বিচার': [
-    { title:'বিচারকের যোগ্যতা', count:8 },
-    { title:'সাক্ষ্যদানের বিধান', count:10 },
-    { title:'হদ্দের বিধান', count:9 },
-    { title:'দিয়াত ও কিসাস', count:10 }
-  ],
-  'ইবাদত': [
-    { title:'সালাতের গুরুত্ব', count:22 },
-    { title:'সিয়ামের ফজিলত', count:16 },
-    { title:'যাকাতের বিধান', count:14 },
-    { title:'হজ্জের নিয়মাবলি', count:12 }
-  ],
-  'পারিবারিক জীবন': [
-    { title:'স্বামী-স্ত্রীর হক', count:11 },
-    { title:'সন্তান লালন-পালন', count:9 },
-    { title:'পিতা-মাতার হক', count:9 }
-  ]
-};
-
+/* ---- একটি নির্দিষ্ট বিষয়ে ক্লিক করলে যেসব কিতাবে হুবহু এই নামে অধ্যায় আছে
+   তার তালিকা দেখায়; সেখান থেকে কিতাব বেছে নিলে সরাসরি সেই অধ্যায়ের আসল হাদিস
+   (হাদিস রিডারে) খুলে যায় — তাই প্রতিটি বিষয় বাস্তব হাদিসে গিয়ে শেষ হয়। */
 const topicSubcatList = document.getElementById('topicSubcatList');
 const topicSubcatTitle = document.getElementById('topicSubcatTitle');
 const topicSubcatBackBtn = document.getElementById('topicSubcatBackBtn');
-let currentTopicCategory = null;
+const topicSubcatNoResults = document.getElementById('topicSubcatNoResults');
+let currentTopic = null;
 
-function showTopicSubcatList(categoryTitle){
+function showTopicDetail(topic){
   hideAllAppScreens();
-  currentTopicCategory = categoryTitle;
-  topicSubcatTitle.textContent = categoryTitle;
-  const subs = TOPIC_SUBCATEGORIES[categoryTitle] || [];
-  topicSubcatList.innerHTML = '';
-  subs.forEach(s=>{
-    const card = document.createElement('button');
-    card.className = 'sas-card';
-    card.innerHTML = `
-      <span class="sas-card-icon">${TOPIC_BOOK_ICON}</span>
-      <span class="sas-card-body">
-        <p class="sas-card-title">${s.title}</p>
-        <p class="sas-card-sub">${toBnDigits(s.count)} টি হাদিস</p>
-      </span>`;
-    card.addEventListener('click', ()=> openTopicHadithDetail(categoryTitle, s.title));
-    topicSubcatList.appendChild(card);
-  });
+  currentTopic = topic;
+  topicSubcatTitle.textContent = topic.title;
+  buildTopicDetail();
   topicSubcatScreen.style.display = 'block';
   window.scrollTo(0,0);
+}
+
+function buildTopicDetail(){
+  if(!currentTopic) return;
+  const matches = findTopicChapterMatches(currentTopic.title);
+  topicSubcatList.innerHTML = '';
+  matches.forEach(m=>{
+    const item = document.createElement('div');
+    item.className = 'hcl-item';
+    item.innerHTML = `
+      <div class="hcl-badge">${m.entry.badge || ''}</div>
+      <div class="hcl-item-info">
+        <p class="hcl-item-name">${m.entry.short}</p>
+        <p class="hcl-item-range">অধ্যায় নং ${digitsFor(m.entry.lang, m.chapterNum)}</p>
+      </div>`;
+    item.addEventListener('click', ()=> openTopicChapter(m.entry, m.chapterNum, item));
+    topicSubcatList.appendChild(item);
+  });
+  if(topicSubcatNoResults) topicSubcatNoResults.style.display = matches.length===0 ? 'block' : 'none';
+}
+
+/* একটি বিষয়ে ক্লিক করলে সেই কিতাবের ডেটা (প্রয়োজনে) লোড করে সরাসরি সংশ্লিষ্ট
+   অধ্যায়ের হাদিস রিডার খুলে দেয়। */
+function openTopicChapter(entry, chNum, itemEl){
+  const nameEl = itemEl ? itemEl.querySelector('.hcl-item-name') : null;
+  const originalName = nameEl ? nameEl.textContent : '';
+  if(nameEl) nameEl.textContent = 'লোড হচ্ছে...';
+  currentHadithBook = entry;
+  loadHadithBookData(entry).then(()=>{
+    openHadithReaderForChapter(chNum);
+  }).catch(()=>{
+    if(nameEl) nameEl.textContent = originalName;
+    alert('দুঃখিত, হাদীসের তথ্য লোড করা যায়নি। ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।');
+  });
 }
 topicSubcatBackBtn.addEventListener('click', showHadithTopics);
 
@@ -4247,15 +4314,23 @@ document.getElementById('hhSearchBtn').addEventListener('click', ()=>{
 document.getElementById('hhBackBtn').addEventListener('click', ()=>{
   window.location.href = 'https://ummahguidance.vercel.app/';
 });
-document.getElementById('hhLatestBtn').addEventListener('click', ()=>{
-  if(HADITH_BOOKS.length) openHadithChapterList(HADITH_BOOKS[0]);
+/* Hadith view switcher buttons */
+document.querySelectorAll('.hh-action[data-hh-view]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const viewId = btn.dataset.hhView;
+    document.querySelectorAll('.hh-action[data-hh-view]').forEach(b=> b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    if(viewId === 'hadithBookView'){
+      showHadithListing();
+    } else if(viewId === 'hadithTopicsScreen'){
+      showHadithTopics();
+    }
+  });
 });
-document.getElementById('hhAppsBtn').addEventListener('click', ()=> alert('এই ফিচারটি শীঘ্রই যুক্ত করা হবে।'));
-document.getElementById('hhGotoBtn').addEventListener('click', ()=>{
-  hhSearchSection.style.display = '';
-  hadithSearchInput.focus();
-});
-document.getElementById('hhDonateBtn').addEventListener('click', ()=> alert('জাযাকাল্লাহু খাইরান! সদাকা ফিচারটি শীঘ্রই যুক্ত করা হবে।'));
+
+document.getElementById('hhUlumBtn').addEventListener('click', ()=> alert('উলুমূ হাদিস ফিচারটি শীঘ্রই যুক্ত করা হবে।'));
+document.getElementById('hhSavedBtn').addEventListener('click', ()=> alert('সংরক্ষিত হাদিস ফিচারটি শীঘ্রই যুক্ত করা হবে।'));
 
 /* ---- Persistent bottom nav: always visible, works the same on desktop and mobile,
        and across every screen (home / books / notes / bookmark each have their own

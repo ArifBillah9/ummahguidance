@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floating Bottom Navigation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background:#7c3aed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 20px;
+            padding-bottom: 150px;
+        }
+
+        .demo-content {
+            text-align: center;
+            color: white;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .demo-content h1 {
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .demo-content p {
+            font-size: 16px;
+            opacity: 0.8;
+        }
+
+        /* ===== FLOATING BOTTOM NAVIGATION ===== */
+        .floating-nav-wrapper {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            padding: 12px;
+            z-index: 1000;
+        }
+
+        .floating-nav-container {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-radius: 28px;
+            padding: 20px 8px 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15),
+                        0 -4px 12px rgba(124, 58, 237, 0.08);
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            min-height: 50px;
+            overflow: visible;
+        }
+
+        /* Dome / bump that rises from the bar to meet the floating bubble.
+           Same white fill as the bar so the two shapes read as one silhouette. */
+
+
+        /* Floating Active Bubble */
+        .floating-bubble {
+            position: absolute;
+            width: 56px;
+            height: 56px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: -28px;
+            left: 0;
+            border: 6px solid #7c3aed;
+            box-shadow: 0 4px 20px rgba(124, 58, 237, 0.3),
+                        0 0 0 4px rgba(124, 58, 237, 0.12);
+            transition: left 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 10;
+        }
+
+        .floating-bubble svg {
+            width: 28px;
+            height: 28px;
+            stroke: #7c3aed;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* Navigation Items */
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 4px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0 8px;
+            flex: 1;
+            position: relative;
+            transition: all 0.3s ease;
+            min-height: 40px;
+            border-radius: 16px;
+            z-index: 2;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            stroke: #999;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: all 0.3s ease;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            color: #999;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        /* Active State: the icon moves into the floating bubble above,
+           so its spot in the bar stays empty — only the label remains, bold. */
+        .nav-item.active {
+            pointer-events: none;
+        }
+
+        .nav-item.active .nav-icon {
+            opacity: 0;
+        }
+
+        .nav-item.active .nav-label {
+            color: #1f2937;
+            font-weight: 700;
+            opacity: 1;
+        }
+
+        .nav-item:not(.active):hover {
+            background: rgba(124, 58, 237, 0.08);
+        }
+
+        /* Static home-indicator pill — always centered, not tied to the active item */
+        .home-indicator {
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            border-radius: 2px;
+            background: #6b7280;
+            opacity: 0.55;
+        }
+
+        /* Responsive Design — the bar stays full-width edge-to-edge on phones,
+           only the inner elements shrink a little on very small screens. */
+        @media (max-width: 400px) {
+            .floating-nav-container {
+                padding: 16px 4px 10px;
+            }
+
+            .floating-bubble {
+                width: 52px;
+                height: 52px;
+                top: -26px;
+                border-width: 5px;
+            }
+
+            .floating-bubble svg {
+                width: 26px;
+                height: 26px;
+            }
+
+      
+
+            .nav-label {
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .nav-item {
+                padding: 0 4px;
+            }
+
+            .nav-label {
+                font-size: 9px;
+            }
+        }
+
+        /* Accessibility */
+        .nav-item:focus {
+            outline: 2px solid #7c3aed;
+            outline-offset: 2px;
+        }
+
+        .nav-item:focus:not(:focus-visible) {
+            outline: none;
+        }
+
+        .nav-item:focus-visible {
+            outline: 2px solid #7c3aed;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-content">
+        <h1>🚀 Floating Navigation</h1>
+        <p>Click the navigation items below</p>
+    </div>
+
+    <!-- FLOATING BOTTOM NAVIGATION -->
+    <div class="floating-nav-wrapper">
+        <nav class="floating-nav-container" role="navigation">
+            <!-- Dome that merges the bar with the floating bubble -->
+
+            <!-- Floating Bubble -->
+            <div class="floating-bubble" id="floatingBubble">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </div>
+
+            <!-- Home -->
+            <button class="nav-item active" data-nav="0" aria-label="Home" tabindex="0">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                <span class="nav-label">Home</span>
+            </button>
+
+            <!-- Cards -->
+            <button class="nav-item" data-nav="1" aria-label="Cards" tabindex="0">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <rect x="1" y="4" width="22" height="16" rx="2"/>
+                    <line x1="1" y1="10" x2="23" y2="10"/>
+                </svg>
+                <span class="nav-label">Cards</span>
+            </button>
+
+            <!-- Add Funds -->
+            <button class="nav-item" data-nav="2" aria-label="Add Funds" tabindex="0">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <rect x="3" y="11" width="18" height="10" rx="1"/>
+                    <path d="M7 11V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4"/>
+                    <line x1="12" y1="14" x2="12" y2="20"/>
+                    <line x1="9" y1="17" x2="15" y2="17"/>
+                </svg>
+                <span class="nav-label">Add Funds</span>
+            </button>
+
+            <!-- Transaction -->
+            <button class="nav-item" data-nav="3" aria-label="Transaction" tabindex="0">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <polyline points="5 12 3 12 3 19 21 19 21 12 19 12"/>
+                    <polyline points="12 2 12 9 16 5"/>
+                    <polyline points="12 9 8 5"/>
+                </svg>
+                <span class="nav-label">Transaction</span>
+            </button>
+
+            <!-- Profile -->
+            <button class="nav-item" data-nav="4" aria-label="Profile" tabindex="0">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span class="nav-label">Profile</span>
+            </button>
+
+            <!-- Static home indicator (always centered, not tied to active item) -->
+            <div class="home-indicator"></div>
+        </nav>
+    </div>
+
+    <script>
+        const navItems = document.querySelectorAll('.nav-item');
+        const floatingBubble = document.getElementById('floatingBubble');
+        const navBump = document.getElementById('navBump');
+        const bubbleSvgs = [
+            // Home
+            '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>',
+            // Cards
+            '<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+            // Add Funds
+            '<rect x="3" y="11" width="18" height="10" rx="1"/><path d="M7 11V7a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v4"/><line x1="12" y1="14" x2="12" y2="20"/><line x1="9" y1="17" x2="15" y2="17"/>',
+            // Transaction
+            '<polyline points="5 12 3 12 3 19 21 19 21 12 19 12"/><polyline points="12 2 12 9 16 5"/><polyline points="12 9 8 5"/>',
+            // Profile
+            '<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>'
+        ];
+
+        navItems.forEach((item, index) => {
+            item.addEventListener('click', () => selectNav(index));
+            item.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    selectNav(index);
+                }
+            });
+        });
+
+        function positionFloaters(index) {
+            const container = document.querySelector('.floating-nav-container');
+            const containerWidth = container.offsetWidth;
+            const edgeMargin = 10;
+
+            const selectedItem = navItems[index];
+            const itemWidth = selectedItem.offsetWidth;
+            const itemLeft = selectedItem.offsetLeft;
+            const centerX = itemLeft + itemWidth / 2;
+
+            const bubbleW = floatingBubble.offsetWidth;
+            let bubbleLeft = centerX - bubbleW / 2;
+            bubbleLeft = Math.max(edgeMargin, Math.min(bubbleLeft, containerWidth - bubbleW - edgeMargin));
+            floatingBubble.style.left = bubbleLeft + 'px';
+
+            const bumpW = navBump.offsetWidth;
+            let bumpLeft = centerX - bumpW / 2;
+            bumpLeft = Math.max(edgeMargin - 12, Math.min(bumpLeft, containerWidth - bumpW - (edgeMargin - 12)));
+            navBump.style.left = bumpLeft + 'px';
+        }
+
+        function selectNav(index) {
+            navItems.forEach(item => item.classList.remove('active'));
+            navItems[index].classList.add('active');
+
+            positionFloaters(index);
+
+            floatingBubble.querySelector('svg').innerHTML = bubbleSvgs[index];
+
+            navItems.forEach(item => item.removeAttribute('aria-current'));
+            navItems[index].setAttribute('aria-current', 'page');
+        }
+
+        window.addEventListener('load', () => {
+            selectNav(0);
+        });
+
+        window.addEventListener('resize', () => {
+            const activeIndex = Array.from(navItems).findIndex(item => item.classList.contains('active'));
+            if (activeIndex !== -1) {
+                positionFloaters(activeIndex);
+            }
+        });
+    </script>
+</body>
+</html>
