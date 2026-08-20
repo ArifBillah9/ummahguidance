@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>তিলাওয়াত | কুরআন শরীফ</title>
+<meta name="theme-color" content="#175a45">
+<meta name="description" content="মোবাইলে কুরআন শরীফ পড়া, সূরা খোঁজা, বুকমার্ক ও তিলাওয়াত শোনার অ্যাপ">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Amiri:wght@400;700&family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -2232,6 +2235,27 @@
         background:#f0f0f0;
     }
 
+    /* ===== মোবাইল অ্যাপ polish ===== */
+    button,input{font:inherit;}
+    button:focus-visible,input:focus-visible{outline:3px solid rgba(201,151,63,.75);outline-offset:2px;}
+    .app-status{
+        position:fixed;left:50%;bottom:76px;transform:translate(-50%,12px);
+        z-index:300;background:#173f31;color:#fff;border-radius:22px;padding:9px 15px;
+        font-size:13px;box-shadow:0 4px 16px rgba(0,0,0,.25);opacity:0;pointer-events:none;
+        transition:opacity .2s,transform .2s;white-space:nowrap;
+    }
+    .app-status.show{opacity:1;transform:translate(-50%,0);}
+    .tutorial-modal{display:none;position:fixed;inset:0;z-index:260;background:rgba(0,0,0,.72);align-items:center;justify-content:center;padding:16px;}
+    .tutorial-modal.active{display:flex;}
+    .tutorial-card{width:100%;max-width:460px;background:var(--cream);border-radius:18px;overflow:hidden;box-shadow:0 14px 50px rgba(0,0,0,.35);}
+    .tutorial-card header{position:static;transform:none;width:100%;height:56px;max-width:none;box-shadow:none;}
+    .tutorial-card video{display:block;width:100%;max-height:68vh;background:#111;object-fit:contain;}
+    .tutorial-footer{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;gap:10px;}
+    .tutorial-footer strong{font-size:14px;color:var(--brand-dark);}
+    .tutorial-close{border:0;background:var(--brand);color:#fff;border-radius:10px;padding:9px 14px;cursor:pointer;}
+    @media (max-width:360px){header h1{font-size:16px}.icon-btn{width:40px;height:40px}.action-btn{width:42px;height:42px}.custom-toolbar{padding-left:8px;padding-right:8px;}}
+    @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+
 </style>
 </head>
 <body>
@@ -2275,6 +2299,10 @@
                         <i class="fa-solid fa-hand-pointer"></i>
                     </div>
                     <span>আয়াত সিলেকশন বন্ধ করুন</span>
+                </div>
+                <div class="dropdown-menu-item" id="menuItemTutorial">
+                    <div class="dropdown-menu-icon"><i class="fa-solid fa-circle-play"></i></div>
+                    <span>ব্যবহারের ভিডিও দেখুন</span>
                 </div>
             </div>
         </div>
@@ -2362,6 +2390,19 @@
         </div>
     </div>
 </div>
+
+<!-- ব্যবহার নির্দেশিকা ভিডিও -->
+<div class="tutorial-modal" id="tutorialModal" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle">
+    <div class="tutorial-card">
+        <header><h2 id="tutorialTitle">তিলাওয়াত অ্যাপ ব্যবহার</h2><button class="icon-btn" id="tutorialCloseBtn" aria-label="বন্ধ করুন"><i class="fa-solid fa-xmark"></i></button></header>
+        <video id="tutorialVideo" controls playsinline preload="metadata">
+            <source src="WhatsApp_Video_2026-08-20_at_10.15.03_AM_1787220505359.mp4" type="video/mp4">
+            আপনার ব্রাউজার ভিডিও চালাতে পারে না।
+        </video>
+        <div class="tutorial-footer"><strong>পৃষ্ঠা, সূরা, অডিও ও বুকমার্ক ব্যবহার শিখুন</strong><button class="tutorial-close" id="tutorialDoneBtn">বন্ধ করুন</button></div>
+    </div>
+</div>
+<div class="app-status" id="appStatus" role="status" aria-live="polite"></div>
 
 <!-- IMAGE MODAL -->
 <div class="image-modal" id="imageModal">
@@ -3559,16 +3600,17 @@
     async function loadPdf() {
         await loadRegions();
         const candidatePaths = [
-            '/tilawat/Emdadia-Hafezi-Quran.pdf',
-            '/tilawat/Emdadia-Hafezi-Quran.pdf',
-            '/tilawat/Emdadia-Hafezi-Quran.pdf'
+            'Emdadia-Hafezi-Quran_1787220461980.pdf',
+            './Emdadia-Hafezi-Quran_1787220461980.pdf',
+            '/Emdadia-Hafezi-Quran_1787220461980.pdf'
         ];
         let lastError = null;
         for (const pdfUrl of candidatePaths) {
             try {
                 pdfDoc = await pdfjsLib.getDocument(pdfUrl).promise;
                 totalPages = pdfDoc.numPages;
-                await renderPage(1);
+                const savedPage = Number(localStorage.getItem('tilawat_last_page') || 1);
+                await renderPage(Math.min(Math.max(savedPage, 1), totalPages));
                 setTimeout(backgroundScan, 1200);
                 return;
             } catch (e) {
@@ -3606,6 +3648,7 @@
     async function renderPage(num) {
         if (!pdfDoc) return;
         currentPage = Math.max(1, Math.min(num, totalPages));
+        localStorage.setItem('tilawat_last_page', String(currentPage));
 
         const page = await pdfDoc.getPage(currentPage);
         const scale = Math.min(pageDisplay.clientWidth / page.getViewport({ scale: 1 }).width, 1.5);
@@ -4277,7 +4320,12 @@
     })();
 
     document.getElementById('homeBtn').addEventListener('click', () => {
-        alert('হোম পৃষ্ঠা শীঘ্রই আসছে।');
+        closeDropdownMenu();
+        document.body.classList.remove('pdf-fullscreen', 'night');
+        document.getElementById('searchPageOverlay')?.classList.remove('active');
+        document.getElementById('surahListModal')?.classList.remove('active');
+        const savedPage = Number(localStorage.getItem('tilawat_last_page') || 1);
+        if (pdfDoc) renderPage(Math.min(Math.max(savedPage, 1), totalPages));
     });
 
     // ===== DROPDOWN MENU FUNCTIONALITY =====
@@ -4295,6 +4343,28 @@
         closeDropdownMenu();
         const modal = document.getElementById('guideImageModal');
         modal.classList.add('active');
+    }
+
+    // ===== ব্যবহার নির্দেশিকা ভিডিও =====
+    const tutorialModal = document.getElementById('tutorialModal');
+    const tutorialVideo = document.getElementById('tutorialVideo');
+    function openTutorial() {
+        closeDropdownMenu();
+        tutorialModal.classList.add('active');
+    }
+    function closeTutorial() {
+        tutorialVideo.pause();
+        tutorialModal.classList.remove('active');
+    }
+    document.getElementById('menuItemTutorial')?.addEventListener('click', openTutorial);
+    document.getElementById('tutorialCloseBtn')?.addEventListener('click', closeTutorial);
+    document.getElementById('tutorialDoneBtn')?.addEventListener('click', closeTutorial);
+    tutorialModal?.addEventListener('click', e => { if (e.target === tutorialModal) closeTutorial(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && tutorialModal?.classList.contains('active')) closeTutorial(); });
+
+    // একই ফোল্ডার থেকে চালালে অ্যাপ শেল ও কুরআন PDF ক্যাশ করার চেষ্টা করুন।
+    if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+        navigator.serviceWorker.register('./service-worker.js').catch(() => {});
     }
 
     function closeGuideImageModal() {
