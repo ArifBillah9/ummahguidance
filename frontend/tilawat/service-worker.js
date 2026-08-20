@@ -3,7 +3,7 @@ const CORE = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './Emdadia-Hafezi-Quran_1787220461980.pdf',
+  './Emdadia-Hafezi-Quran.pdf',
   './WhatsApp_Video_2026-08-20_at_10.15.03_AM_1787220505359.mp4'
 ];
 
