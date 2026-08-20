@@ -4363,9 +4363,9 @@
     loadPdf();
 
     // ===== SURAH LIST MODAL FUNCTIONS =====
-    const surahData = [
+const surahData = [
         { num: 1, name: 'الفاتحة', bn: 'ফাতিহা', ayahs: 7, juz: 1, desc: 'সুরা' },
-        { num: 2, name: 'البقرة', bn: 'বাকারা', ayahs: 286, juz: 1, desc: 'গক/পাঠী' },
+        { num: 2, name: 'البقرة', bn: 'বাকারা', ayahs: 286, juz: 1, desc: 'গরু' },
         { num: 3, name: 'آل عمران', bn: 'আল-ইমরান', ayahs: 200, juz: 3, desc: 'ইমরানের পরিবার' },
         { num: 4, name: 'النساء', bn: 'নিসা', ayahs: 176, juz: 4, desc: 'নারী' },
         { num: 5, name: 'المائدة', bn: 'মায়েদা', ayahs: 120, juz: 6, desc: 'খাওয়ার টেবিল' },
@@ -4442,7 +4442,7 @@
         { num: 76, name: 'الإنسان', bn: 'ইনসান', ayahs: 31, juz: 30, desc: 'মানুষ' },
         { num: 77, name: 'المرسلات', bn: 'মুরসালাত', ayahs: 50, juz: 30, desc: 'প্রেরিত' },
         { num: 78, name: 'النبأ', bn: 'নাবা', ayahs: 40, juz: 30, desc: 'সংবাদ' },
-        { num: 79, name: 'الناشئات', bn: 'নাজিয়াত', ayahs: 46, juz: 30, desc: 'উদ্বুদ্ধকারী' },
+        { num: 79, name: 'الناشئات', bn: 'নাজিয়াত', ayahs: 46, juz: 30, desc: 'উদ্যমকারী' },
         { num: 80, name: 'عبس', bn: 'আবাসা', ayahs: 42, juz: 30, desc: 'ভ্রূকুটি' },
         { num: 81, name: 'التكوير', bn: 'তাকভির', ayahs: 29, juz: 30, desc: 'মোড়ানো' },
         { num: 82, name: 'الإنفطار', bn: 'ইনফিতার', ayahs: 19, juz: 30, desc: 'বিভাজন' },
@@ -4479,7 +4479,7 @@
         { num: 113, name: 'الفلق', bn: 'ফালাক', ayahs: 5, juz: 30, desc: 'ভোর' },
         { num: 114, name: 'الناس', bn: 'নাস', ayahs: 6, juz: 30, desc: 'মানুষ' }
     ];
-
+    
     let bookmarkedSurahs = new Set();
 
     // বুকমার্ক লোড করুন localStorage থেকে
@@ -4764,25 +4764,6 @@
 
     // স্টার্টআপে বুকমার্ক লোড করুন
     loadBookmarks();
-
-    // ===== সূরা ডেটা =====
-    const surahData = [
-        {num: 1, name: 'আল ফাতিহা', bn: 'আল ফাতিহা', ayahs: 7},
-        {num: 2, name: 'আল বাকারা', bn: 'আল বাকারা', ayahs: 286},
-        {num: 3, name: 'আল ইমরান', bn: 'আল ইমরান', ayahs: 200},
-        {num: 4, name: 'আন নিসা', bn: 'আন নিসা', ayahs: 176},
-        {num: 5, name: 'আল মাইদা', bn: 'আল মাইদা', ayahs: 120},
-        {num: 6, name: 'আল আনআম', bn: 'আল আনআম', ayahs: 165},
-        {num: 7, name: 'আল আরাফ', bn: 'আল আরাফ', ayahs: 206},
-        {num: 8, name: 'আল আনফাল', bn: 'আল আনফাল', ayahs: 75},
-        {num: 9, name: 'আত তাওবা', bn: 'আত তাওবা', ayahs: 129},
-        {num: 10, name: 'ইউনুস', bn: 'ইউনুস', ayahs: 109},
-        {num: 11, name: 'হুদ', bn: 'হুদ', ayahs: 123},
-        {num: 12, name: 'ইউসুফ', bn: 'ইউসুফ', ayahs: 111},
-        {num: 13, name: 'আর রা\'দ', bn: 'আর রা\'দ', ayahs: 43},
-        {num: 14, name: 'ইব্রাহীম', bn: 'ইব্রাহীম', ayahs: 52},
-        {num: 15, name: 'আল হিজর', bn: 'আল হিজর', ayahs: 99},
-    ];
 
     // ===== অনুবাদক ডেটা =====
     const translators = {
