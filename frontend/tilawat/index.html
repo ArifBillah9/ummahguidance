@@ -1971,7 +1971,7 @@
     /* ===== SURAH LIST BOTTOM TABS (সূরা / পারা / বুকমার্ক) ===== */
     .surah-list-tabs {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         background: var(--slh-header);
         flex-shrink: 0;
         border-top: 1px solid var(--slh-border);
@@ -2517,7 +2517,6 @@
             <button class="surah-list-tab-btn active" id="surahTabBtn" data-tab="surah">সূরা</button>
             <button class="surah-list-tab-btn" id="paraTabBtn" data-tab="para">পারা</button>
             <button class="surah-list-tab-btn" id="bookmarkTabBtn" data-tab="bookmark">বুকমার্ক</button>
-            <button class="surah-list-tab-btn" id="settingsTabBtn" data-tab="settings">সেটিংস</button>
         </div>
     </div>
 </div>
@@ -5365,19 +5364,6 @@
             if (expandedJuzNum) {
                 rightCol.appendChild(buildPageGridEl(expandedJuzNum));
             }
-        } else if (activeSurahListTab === 'settings') {
-            // সেটিংস ট্যাবে শুধুমাত্র বুকমার্ক সেটিংস দেখান
-            const settingsContent = document.getElementById('bookmark-settings-content');
-            if (settingsContent) {
-                // বুকমার্ক সেটিংস কন্টেন্ট কপি করুন
-                const clonedContent = settingsContent.cloneNode(true);
-                leftCol.appendChild(clonedContent);
-            } else {
-                const empty = document.createElement('div');
-                empty.className = 'surah-list-empty';
-                empty.textContent = 'সেটিংস পাওয়া যায়নি।';
-                leftCol.appendChild(empty);
-            }
         }
     }
 
@@ -5403,24 +5389,10 @@
             if (tab === 'para') {
                 leftHead.textContent = 'পারা';
                 rightHead.textContent = 'পৃষ্ঠা';
-            } else if (tab === 'settings') {
-                leftHead.textContent = 'সেটিংস';
-                rightHead.textContent = '';
             } else {
                 leftHead.textContent = 'সূরা';
                 rightHead.textContent = 'আয়াত';
             }
-        }
-        
-        // সেটিংস ট্যাবের জন্য কলামগুলি লুকান
-        const leftCol = document.getElementById('surahListColSurah');
-        const rightCol = document.getElementById('surahListColAyah');
-        if (tab === 'settings') {
-            if (leftCol) leftCol.style.display = 'none';
-            if (rightCol) rightCol.style.display = 'none';
-        } else {
-            if (leftCol) leftCol.style.display = '';
-            if (rightCol) rightCol.style.display = '';
         }
         
         renderSurahListBody();
@@ -5430,7 +5402,6 @@
     document.getElementById('surahTabBtn')?.addEventListener('click', () => setSurahListTab('surah'));
     document.getElementById('paraTabBtn')?.addEventListener('click', () => setSurahListTab('para'));
     document.getElementById('bookmarkTabBtn')?.addEventListener('click', () => setSurahListTab('bookmark'));
-    document.getElementById('settingsTabBtn')?.addEventListener('click', () => setSurahListTab('settings'));
 
     // সূরা লিস্ট মডাল খোলা
     function openSurahListModal() {
