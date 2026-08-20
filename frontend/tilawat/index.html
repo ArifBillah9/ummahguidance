@@ -893,6 +893,256 @@
         display: flex;
     }
 
+    /* ===== বুকমার্ক সেটিংস মডাল ===== */
+    .bookmark-settings-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+        z-index: 950;
+    }
+
+    .bookmark-settings-modal.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .bookmark-settings-content {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        max-width: 90%;
+        width: 100%;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .bookmark-settings-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--ink);
+        margin-bottom: 8px;
+        text-align: center;
+        font-family: var(--main-font);
+    }
+
+    .bookmark-settings-divider {
+        height: 1px;
+        background: var(--line);
+        margin: 12px 0 20px 0;
+    }
+
+    .bookmark-settings-option {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        margin-bottom: 12px;
+        border-radius: 8px;
+        background: #f5f5f5;
+        cursor: pointer;
+    }
+
+    .bookmark-settings-option input[type="radio"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: var(--brand);
+    }
+
+    .bookmark-settings-option label {
+        flex: 1;
+        cursor: pointer;
+        font-family: var(--main-font);
+        font-size: 16px;
+        color: var(--ink);
+    }
+
+    .bookmark-settings-counters {
+        display: flex;
+        justify-content: space-around;
+        gap: 16px;
+        margin: 20px 0;
+        padding: 16px;
+        background: #f5f5f5;
+        border-radius: 12px;
+    }
+
+    .counter-box {
+        text-align: center;
+        flex: 1;
+    }
+
+    .counter-label {
+        font-size: 12px;
+        color: #999;
+        font-family: var(--main-font);
+        margin-bottom: 8px;
+    }
+
+    .counter-value {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--brand);
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        padding: 8px;
+        min-width: 60px;
+    }
+
+    .bookmark-settings-buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+    }
+
+    .bookmark-settings-btn {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        font-family: var(--main-font);
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .bookmark-settings-btn.confirm {
+        background: var(--brand);
+        color: white;
+    }
+
+    .bookmark-settings-btn.cancel {
+        background: #e0e0e0;
+        color: var(--ink);
+    }
+
+    /* ===== সুরা নির্বাচন মডাল ===== */
+    .surah-selection-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: flex-end;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+        z-index: 900;
+    }
+
+    .surah-selection-modal.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .surah-selection-container {
+        width: 100%;
+        background: white;
+        border-radius: 16px 16px 0 0;
+        max-height: 80vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .surah-selection-header {
+        background: var(--brand);
+        color: white;
+        padding: 16px;
+        text-align: center;
+        flex-shrink: 0;
+        position: relative;
+    }
+
+    .surah-selection-header h3 {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+        font-family: var(--main-font);
+    }
+
+    .surah-selection-close {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .surah-selection-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0;
+    }
+
+    .surah-selection-item {
+        padding: 16px;
+        border-bottom: 1px solid var(--line);
+        cursor: pointer;
+    }
+
+    .surah-selection-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--ink);
+        font-family: var(--main-font);
+        margin-bottom: 4px;
+    }
+
+    .surah-selection-info {
+        font-size: 13px;
+        color: #999;
+        font-family: var(--main-font);
+    }
+
+    .surah-selection-footer {
+        display: flex;
+        gap: 12px;
+        padding: 16px;
+        background: #f5f5f5;
+        flex-shrink: 0;
+    }
+
+    .surah-selection-action-btn {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        font-family: var(--main-font);
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .surah-selection-action-btn.play {
+        background: var(--brand);
+        color: white;
+    }
+
+    .surah-selection-action-btn.cancel {
+        background: white;
+        color: var(--ink);
+        border: 1px solid var(--line);
+    }
+
     .bookmark-image-content {
         position: relative;
         max-width: 90vw;
@@ -1425,6 +1675,31 @@
         right: 10px;
         top: 50%;
         transform: translateY(-50%);
+    }
+
+    /* ===== পারার শুরুর শব্দের বাংলা উচ্চারণ বার (শুধু "পারা" ট্যাবে দেখাবে) ===== */
+    .surah-list-subheader {
+        background: var(--slh-colhead);
+        color: #fff;
+        text-align: center;
+        padding: 9px 12px;
+        font-family: var(--main-font);
+        font-size: 15px;
+        font-weight: 600;
+        border-bottom: 1px solid var(--slh-border);
+        flex-shrink: 0;
+    }
+
+    /* "পারা" ট্যাবে সক্রিয় থাকলে দুইটি কলাম সমান প্রস্থে (৫০/৫০) দেখাবে */
+    .surah-list-container.para-active .surah-list-colhead-surah,
+    .surah-list-container.para-active .surah-list-col-surah {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    .surah-list-container.para-active .surah-list-colhead-ayah,
+    .surah-list-container.para-active .surah-list-col-ayah {
+        flex: 0 0 50%;
+        max-width: 50%;
     }
 
     /* ===== "সূরা | আয়াত" কলাম হেডার ===== */
@@ -2099,6 +2374,52 @@
 <!-- HIDDEN AUDIO ELEMENT -->
 <audio id="quranAudio" preload="none"></audio>
 
+<!-- ===== বুকমার্ক সেটিংস মডাল ===== -->
+<div id="bookmarkSettingsModal" class="bookmark-settings-modal">
+    <div class="bookmark-settings-content">
+        <h2 class="bookmark-settings-title">সূরা নির্বাচন করুন</h2>
+        <div class="bookmark-settings-divider"></div>
+        
+        <div class="bookmark-settings-option">
+            <input type="radio" id="bookmarkAllBakara" name="bookmarkSurah" value="all" checked>
+            <label for="bookmarkAllBakara">আল বাকারা</label>
+        </div>
+
+        <div class="bookmark-settings-counters">
+            <div class="counter-box">
+                <div class="counter-label">আয়াত</div>
+                <div class="counter-value" id="bookmarkAyahCounter">49</div>
+            </div>
+            <div class="counter-box">
+                <div class="counter-label">পৃষ্ঠা</div>
+                <div class="counter-value" id="bookmarkPageCounter">57</div>
+            </div>
+        </div>
+
+        <div class="bookmark-settings-buttons">
+            <button class="bookmark-settings-btn cancel" id="bookmarkSettingsCancelBtn">অনুরোধ দেখুন</button>
+            <button class="bookmark-settings-btn confirm" id="bookmarkSettingsConfirmBtn">বাটিল করুন</button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== সুরা নির্বাচন মডাল ===== -->
+<div id="surahSelectionModal" class="surah-selection-modal">
+    <div class="surah-selection-container">
+        <div class="surah-selection-header">
+            <h3>সুরা নির্বাচন করুন</h3>
+            <button class="surah-selection-close" id="surahSelectionCloseBtn">✕</button>
+        </div>
+        <div class="surah-selection-body" id="surahSelectionBody">
+            <!-- সুরা লিস্ট এখানে যাবে -->
+        </div>
+        <div class="surah-selection-footer">
+            <button class="surah-selection-action-btn cancel" id="surahSelectionCancelBtn">বাতিল করুন</button>
+            <button class="surah-selection-action-btn play" id="surahSelectionPlayBtn">শুনুন</button>
+        </div>
+    </div>
+</div>
+
 <!-- SURAH LIST MODAL -->
 <div id="surahListModal" class="surah-list-modal">
     <div class="surah-list-container">
@@ -2106,6 +2427,7 @@
             <button id="closeSurahListBtn" aria-label="বন্ধ করুন">✕</button>
             <h2 id="selectedSurahName">الفاتحة</h2>
         </div>
+        <div class="surah-list-subheader" id="surahListSubheader" style="display:none;"></div>
         <div class="surah-list-colheads">
             <div class="surah-list-colhead-surah" id="surahListColheadLeft">সূরা</div>
             <div class="surah-list-colhead-ayah" id="surahListColheadRight">আয়াত</div>
@@ -4516,6 +4838,40 @@
     let expandedSurahNum = 1;
 
     // ===== পারা (Juz) ট্যাবের জন্য হেল্পার =====
+    // প্রতিটি পারার শুরুর শব্দ — আরবি ও তার বাংলা উচ্চারণ (ঐতিহ্যবাহী "আজযা" তালিকা অনুযায়ী)
+    const JUZ_START_TEXT = {
+        1:  { ar: 'الٓمٓ', bn: 'আলিফ-লাম-মীম' },
+        2:  { ar: 'سَيَقُولُ السُّفَهَاءُ', bn: 'সাইয়াকুলুস সুফাহাউ' },
+        3:  { ar: 'تِلْكَ الرُّسُلُ', bn: 'তিলকার রুসুলু' },
+        4:  { ar: 'لَن تَنَالُوا الْبِرَّ', bn: 'লান তানালুল বিররা' },
+        5:  { ar: 'وَالْمُحْصَنَاتُ', bn: 'ওয়াল মুহসানাতু' },
+        6:  { ar: 'لَّا يُحِبُّ اللَّهُ الْجَهْرَ', bn: 'লা ইউহিব্বুল্লাহুল জাহরা' },
+        7:  { ar: 'وَإِذَا سَمِعُوا', bn: 'ওয়া ইযা সামিউ' },
+        8:  { ar: 'وَلَوْ أَنَّنَا نَزَّلْنَا', bn: 'ওয়ালাও আন্নানা নাযযালনা' },
+        9:  { ar: 'قَالَ الْمَلَأُ', bn: 'কালাল মালাউ' },
+        10: { ar: 'وَاعْلَمُوا أَنَّمَا غَنِمْتُم', bn: 'ওয়া\'লামু আন্নামা গানিমতুম' },
+        11: { ar: 'يَعْتَذِرُونَ إِلَيْكُمْ', bn: 'ইয়া\'তাযিরুনা ইলাইকুম' },
+        12: { ar: 'وَمَا مِن دَابَّةٍ', bn: 'ওয়ামা মিন দাব্বাতিন' },
+        13: { ar: 'وَمَا أُبَرِّئُ', bn: 'ওয়ামা উবাররিউ' },
+        14: { ar: 'رُبَمَا يَوَدُّ', bn: 'রুবামা ইয়াওয়াদ্দু' },
+        15: { ar: 'سُبْحَانَ الَّذِي أَسْرَىٰ', bn: 'সুবহানাল্লাযি আসরা' },
+        16: { ar: 'قَالَ أَلَمْ', bn: 'কালা আলাম' },
+        17: { ar: 'اقْتَرَبَ لِلنَّاسِ', bn: 'ইকতারাবা লিন্নাসি' },
+        18: { ar: 'قَدْ أَفْلَحَ', bn: 'কাদ আফলাহা' },
+        19: { ar: 'وَقَالَ الَّذِينَ لَا يَرْجُونَ', bn: 'ওয়া কালাল্লাযিনা লা ইয়ারজুনা' },
+        20: { ar: 'أَمَّنْ خَلَقَ', bn: 'আম্মান খালাকা' },
+        21: { ar: 'اتْلُ مَا أُوحِيَ', bn: 'উতলু মা উহিয়া' },
+        22: { ar: 'وَمَن يَقْنُتْ', bn: 'ওয়া মাই ইয়াকনুত' },
+        23: { ar: 'وَمَا لِيَ', bn: 'ওয়ামা লিয়া' },
+        24: { ar: 'فَمَنْ أَظْلَمُ', bn: 'ফামান আজলামু' },
+        25: { ar: 'إِلَيْهِ يُرَدُّ', bn: 'ইলাইহি ইউরাদ্দু' },
+        26: { ar: 'حم', bn: 'হা-মীম' },
+        27: { ar: 'قَالَ فَمَا خَطْبُكُمْ', bn: 'কালা ফামা খাতবুকুম' },
+        28: { ar: 'قَدْ سَمِعَ اللَّهُ', bn: 'কাদ সামি\'আল্লাহু' },
+        29: { ar: 'تَبَارَكَ الَّذِي', bn: 'তাবারাকাল্লাযি' },
+        30: { ar: 'عَمَّ يَتَسَاءَلُونَ', bn: 'আম্মা ইয়াতাসাআলুন' }
+    };
+
     // দ্রষ্টব্য: নিচের পৃষ্ঠা-ম্যাপিং আনুমানিক — totalPages-কে ৩০ পারায় সমানভাবে ভাগ করে গণনা করা হয়েছে।
     // আপনার Mushaf PDF-এ প্রতিটি পারা ঠিক কোন পৃষ্ঠা থেকে শুরু হয় তা জানা থাকলে
     // নিচের JUZ_START_PAGE array-টি বাস্তব পৃষ্ঠা নম্বর দিয়ে পূরণ করুন (৩০টি সংখ্যা, পারা ১ থেকে ৩০ পর্যন্ত)।
@@ -4575,6 +4931,7 @@
     function toggleExpandedJuz(juzNum) {
         expandedJuzNum = (expandedJuzNum === juzNum) ? null : juzNum;
         renderSurahListBody();
+        updateSelectedSurahHeader(); // পারা ক্লিক করলে হেডার আপডেট করুন
     }
 
     // একটি পারার পৃষ্ঠা-নম্বর তালিকা তৈরি করুন (ডান কলামে)
@@ -4636,13 +4993,22 @@
     // হেডার আপডেট করুন — ট্যাব অনুযায়ী (সূরা/বুকমার্ক ট্যাবে সূরার আরবি নাম, পারা ট্যাবে বর্তমান পৃষ্ঠার আরবি লাইন)
     function updateSelectedSurahHeader() {
         const headerEl = document.getElementById('selectedSurahName');
+        const subheaderEl = document.getElementById('surahListSubheader');
         if (activeSurahListTab === 'para') {
-            const line = getCurrentPageArabicLine();
-            headerEl.textContent = line || ('পৃষ্ঠা ' + toBengaliNumeral(currentPage));
-        } else if (expandedSurahNum) {
-            const selectedSurah = surahData.find(s => s.num === expandedSurahNum);
-            if (selectedSurah) {
-                headerEl.textContent = selectedSurah.name;
+            const juzNum = expandedJuzNum || 1;
+            const info = JUZ_START_TEXT[juzNum];
+            headerEl.textContent = info ? info.ar : ('পারা ' + toBengaliNumeral(juzNum));
+            if (subheaderEl) {
+                subheaderEl.textContent = info ? info.bn : '';
+                subheaderEl.style.display = 'block';
+            }
+        } else {
+            if (subheaderEl) subheaderEl.style.display = 'none';
+            if (expandedSurahNum) {
+                const selectedSurah = surahData.find(s => s.num === expandedSurahNum);
+                if (selectedSurah) {
+                    headerEl.textContent = selectedSurah.name;
+                }
             }
         }
     }
@@ -4729,9 +5095,14 @@
         document.querySelectorAll('.surah-list-tab-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.tab === tab);
         });
-        // পারা ট্যাবে প্রথমবার গেলে ডিফল্টভাবে বর্তমান পৃষ্ঠা যে পারায় আছে সেটি expand থাকবে
+        // পারা ট্যাবে প্রথমবার গেলে ডিফল্টভাবে ১নং পারা সিলেক্টেড/এক্সপ্যান্ড থাকবে
         if (tab === 'para' && !expandedJuzNum) {
-            expandedJuzNum = getJuzForPage(currentPage);
+            expandedJuzNum = 1;
+        }
+        // পারা ট্যাবে দুইটি কলাম সমান প্রস্থে দেখানোর জন্য ক্লাস টগল করুন
+        const containerEl = document.querySelector('.surah-list-container');
+        if (containerEl) {
+            containerEl.classList.toggle('para-active', tab === 'para');
         }
         // কলাম হেডারের লেবেল ট্যাব অনুযায়ী পরিবর্তন করুন
         const leftHead = document.getElementById('surahListColheadLeft');
@@ -4757,7 +5128,7 @@
     function openSurahListModal() {
         const modal = document.getElementById('surahListModal');
         expandedSurahNum = 1; // ডিফল্টভাবে সূরা ফাতিহা সিলেক্ট থাকবে
-        expandedJuzNum = null; // পারা ট্যাবে গেলে বর্তমান পৃষ্ঠা অনুযায়ী auto-detect হবে
+        expandedJuzNum = 1; // ডিফল্টভাবে ১নং পারা সিলেক্ট/এক্সপ্যান্ড থাকবে
         setSurahListTab('surah');
         modal.classList.add('active');
     }
@@ -4781,6 +5152,76 @@
 
     // স্টার্টআপে বুকমার্ক লোড করুন
     loadBookmarks();
+
+    /* ===== বুকমার্ক সেটিংস মডাল ===== */
+    let selectedBookmarkSurah = 2;
+
+    function openBookmarkSettingsModal() {
+        const modal = document.getElementById('bookmarkSettingsModal');
+        modal.classList.add('active');
+    }
+
+    function closeBookmarkSettingsModal() {
+        const modal = document.getElementById('bookmarkSettingsModal');
+        modal.classList.remove('active');
+    }
+
+    document.getElementById('bookmarkSettingsCancelBtn')?.addEventListener('click', () => {
+        closeBookmarkSettingsModal();
+    });
+
+    document.getElementById('bookmarkSettingsConfirmBtn')?.addEventListener('click', () => {
+        closeBookmarkSettingsModal();
+    });
+
+    /* ===== সুরা নির্বাচন মডাল ===== */
+    let selectedSurahForPlay = 1;
+
+    function openSurahSelectionModal() {
+        const modal = document.getElementById('surahSelectionModal');
+        const body = document.getElementById('surahSelectionBody');
+        
+        body.innerHTML = '';
+        surahData.forEach(surah => {
+            const item = document.createElement('div');
+            item.className = 'surah-selection-item';
+            item.innerHTML = `
+                <div class="surah-selection-name">${surah.num}. ${surah.bn}</div>
+                <div class="surah-selection-info">${surah.ayahs} আয়াত</div>
+            `;
+            item.addEventListener('click', () => {
+                selectedSurahForPlay = surah.num;
+            });
+            body.appendChild(item);
+        });
+
+        modal.classList.add('active');
+    }
+
+    function closeSurahSelectionModal() {
+        const modal = document.getElementById('surahSelectionModal');
+        modal.classList.remove('active');
+    }
+
+    document.getElementById('surahSelectionCloseBtn')?.addEventListener('click', () => {
+        closeSurahSelectionModal();
+    });
+
+    document.getElementById('surahSelectionCancelBtn')?.addEventListener('click', () => {
+        closeSurahSelectionModal();
+    });
+
+    document.getElementById('surahSelectionPlayBtn')?.addEventListener('click', () => {
+        closeSurahSelectionModal();
+    });
+
+    // প্লে বাটন ক্লিক ইভেন্ট
+    document.querySelectorAll('.toolbar-play-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openBookmarkSettingsModal();
+        });
+    });
 
 </script>
 
