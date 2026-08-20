@@ -141,15 +141,18 @@
     /* ===== ACTION BUTTONS BAR (হাইলাইট করা আয়াতের ঠিক নিচে ওভারলে হিসেবে দেখাবে) ===== */
     .action-buttons-bar{
         position:absolute;
-        left:0;
-        right:0;
+        left:50%;
+        transform:translateX(-50%);
+        width:auto;
+        max-width:92%;
         background:rgba(15,69,52,.95);
         display:none;
         flex-direction:row;
         align-items:center;
         justify-content:space-evenly;
-        padding:9px 8px;
-        gap:2px;
+        padding:9px 14px;
+        gap:6px;
+        border-radius:26px;
         z-index:40;
         box-shadow:0 3px 12px rgba(0,0,0,.28);
     }
@@ -383,6 +386,7 @@
     }
 
     .toolbar-icon-btn{
+        position:relative;
         width:32px;
         height:32px;
         border-radius:4px;
@@ -399,6 +403,18 @@
 
     .toolbar-icon-btn:hover{
         background:rgba(255,255,255,.1);
+    }
+
+    /* আয়াত নির্বাচন বন্ধ থাকলে আইকনের উপর "বন্ধ" চিহ্ন */
+    #selectionModeBtn:not(.active)::after{
+        content:'';
+        position:absolute;
+        width:22px;
+        height:2px;
+        background:#ff5252;
+        border-radius:2px;
+        transform:rotate(-45deg);
+        pointer-events:none;
     }
 
     .toolbar-icon-btn svg{
@@ -1842,7 +1858,7 @@
         </div>
 
         <div class="toolbar-right">
-            <button class="toolbar-icon-btn" id="selectionModeBtn" title="আয়াত নির্বাচন">
+            <button class="toolbar-icon-btn active" id="selectionModeBtn" title="আয়াত নির্বাচন">
                 <i class="fa-solid fa-hand-pointer"></i>
             </button>
             <button class="toolbar-icon-btn" id="deleteBtn" title="সব ডেটা ডিলিট করুন">
@@ -3312,11 +3328,6 @@
         selectionModeBtn.addEventListener('click', () => {
             selectionModeEnabled = !selectionModeEnabled;
             selectionModeBtn.classList.toggle('active');
-            if (selectionModeEnabled) {
-                alert('আয়াত নির্বাচন সক্রিয় করা হয়েছে।');
-            } else {
-                alert('আয়াত নির্বাচন নিষ্ক্রিয় করা হয়েছে।');
-            }
         });
     }
 
@@ -4247,6 +4258,6 @@
     loadBookmarks();
 
 </script>
-  
+
 </body>
 </html>
