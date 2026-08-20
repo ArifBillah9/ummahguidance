@@ -102,6 +102,7 @@
         display:flex;
         align-items:center;
         justify-content:center;
+        perspective:1600px;
     }
 
     .page-wrap{
@@ -110,6 +111,73 @@
         max-width:100%;
         max-height:100%;
     }
+
+    /* ===== বাস্তব পৃষ্ঠা উল্টানোর (page-flip) অ্যানিমেশন ===== */
+    .page-flip{
+        position:absolute;
+        top:0;
+        left:0;
+        z-index:30;
+        pointer-events:none;
+        transform-style:preserve-3d;
+        transform:rotateY(0deg);
+        transition:transform .62s cubic-bezier(.45,.05,.35,1);
+        will-change:transform;
+    }
+
+    .page-flip.flip-next{
+        transform-origin:right center;
+        box-shadow:-6px 0 18px rgba(0,0,0,.25);
+    }
+    .page-flip.flip-prev{
+        transform-origin:left center;
+        box-shadow:6px 0 18px rgba(0,0,0,.25);
+    }
+
+    .page-flip.flip-next.flipping{ transform:rotateY(-115deg); }
+    .page-flip.flip-prev.flipping{ transform:rotateY(115deg); }
+
+    .page-flip-face{
+        position:absolute;
+        inset:0;
+        background-repeat:no-repeat;
+        background-size:100% 100%;
+        backface-visibility:hidden;
+        -webkit-backface-visibility:hidden;
+    }
+
+    /* কার্ল/ভাঁজ ছায়া — উল্টানোর সময় পৃষ্ঠার উপর ধীরে ধীরে গাঢ় হয় */
+    .page-flip-shade{
+        position:absolute;
+        inset:0;
+        opacity:0;
+        transition:opacity .62s ease;
+        pointer-events:none;
+    }
+    .page-flip.flip-next .page-flip-shade{
+        background:linear-gradient(to left, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 55%);
+    }
+    .page-flip.flip-prev .page-flip-shade{
+        background:linear-gradient(to right, rgba(0,0,0,.45) 0%, rgba(0,0,0,0) 55%);
+    }
+    .page-flip.flipping .page-flip-shade{ opacity:1; }
+
+    /* উল্টানো পৃষ্ঠার নিচে নতুন পৃষ্ঠার উপর পড়া ছায়া (depth) */
+    .page-flip-cast-shadow{
+        position:absolute;
+        inset:0;
+        z-index:25;
+        pointer-events:none;
+        opacity:.55;
+        transition:opacity .62s ease;
+    }
+    .page-flip-cast-shadow.flip-next{
+        background:linear-gradient(to right, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 35%);
+    }
+    .page-flip-cast-shadow.flip-prev{
+        background:linear-gradient(to left, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 35%);
+    }
+    .page-flip-cast-shadow.fading{ opacity:0; }
 
     .ayah-highlight{
         position:absolute;
@@ -3096,6 +3164,74 @@
         } catch (e) { /* ঐচ্ছিক */ }
     }
 
+    // ===== বাস্তব বই-এর মতো পৃষ্ঠা উল্টানোর অ্যানিমেশন =====
+    let isFlipping = false;
+
+    async function flipToPage(targetNum, direction) {
+        if (!pdfDoc || isFlipping) return;
+        const target = Math.max(1, Math.min(targetNum, totalPages));
+        if (target === currentPage) return;
+
+        isFlipping = true;
+
+        // ১) বর্তমান পৃষ্ঠার স্ন্যাপশট নিন (এটাই "উল্টানো" পাতা হিসেবে দেখানো হবে)
+        let oldSnapshot;
+        try {
+            oldSnapshot = canvas.toDataURL('image/png');
+        } catch (e) {
+            // ক্যানভাস থেকে স্ন্যাপশট নেওয়া না গেলে অ্যানিমেশন ছাড়াই সরাসরি পৃষ্ঠা পরিবর্তন করুন
+            await renderPage(target);
+            isFlipping = false;
+            return;
+        }
+
+        const rect = pageWrap.getBoundingClientRect();
+        const w = rect.width, h = rect.height;
+
+        // ২) নতুন পৃষ্ঠা রেন্ডার করুন — এটি উল্টানো পাতার ঠিক নিচে ইতিমধ্যেই প্রস্তুত থাকবে
+        await renderPage(target);
+
+        const dirClass = direction === 'next' ? 'flip-next' : 'flip-prev';
+
+        // ৩) নিচে পড়া ছায়া (depth) স্তর
+        const castShadow = document.createElement('div');
+        castShadow.className = 'page-flip-cast-shadow ' + dirClass;
+        castShadow.style.width = w + 'px';
+        castShadow.style.height = h + 'px';
+        pageWrap.appendChild(castShadow);
+
+        // ৪) উল্টানো পাতার স্তর
+        const flip = document.createElement('div');
+        flip.className = 'page-flip ' + dirClass;
+        flip.style.width = w + 'px';
+        flip.style.height = h + 'px';
+
+        const face = document.createElement('div');
+        face.className = 'page-flip-face';
+        face.style.backgroundImage = `url(${oldSnapshot})`;
+
+        const shade = document.createElement('div');
+        shade.className = 'page-flip-shade';
+
+        flip.appendChild(face);
+        flip.appendChild(shade);
+        pageWrap.appendChild(flip);
+
+        // রিফ্লো নিশ্চিত করে অ্যানিমেশন শুরু করুন
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                flip.classList.add('flipping');
+                castShadow.classList.add('fading');
+            });
+        });
+
+        flip.addEventListener('transitionend', () => {
+            flip.remove();
+            castShadow.remove();
+            isFlipping = false;
+        }, { once: true });
+    }
+
     // পুরনো নামের সঙ্গে সামঞ্জস্য
     function buildAyahListForPage(pageNum) {
         const regions = ALL_REGIONS[String(pageNum)] || AUTO_REGIONS[String(pageNum)] || [];
@@ -3784,8 +3920,8 @@
         if (touchStartX === null) return;
         const dx = e.changedTouches[0].clientX - touchStartX;
         if (Math.abs(dx) > 50) {
-            if (dx < 0 && currentPage < totalPages) renderPage(currentPage + 1);
-            else if (dx > 0 && currentPage > 1) renderPage(currentPage - 1);
+            if (dx < 0 && currentPage < totalPages) flipToPage(currentPage + 1, 'next');
+            else if (dx > 0 && currentPage > 1) flipToPage(currentPage - 1, 'prev');
         }
         touchStartX = null;
     }, { passive: true });
