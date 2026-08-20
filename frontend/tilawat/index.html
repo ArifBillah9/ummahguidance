@@ -52,6 +52,7 @@
         position:relative;
         box-shadow:0 0 30px rgba(0,0,0,.15);
         overflow:hidden;
+        padding-top:110px;
     }
 
     /* ===== HEADER ===== */
@@ -62,10 +63,16 @@
         align-items:center;
         justify-content:space-between;
         padding:10px 12px;
-        position:relative;
-        z-index:30;
+        position:fixed;
+        top:0;
+        left:50%;
+        transform:translateX(-50%);
+        width:100%;
+        max-width:480px;
+        z-index:50;
         flex-shrink:0;
         height:56px;
+        box-shadow:0 2px 8px rgba(0,0,0,.15);
     }
 
     header .left{display:flex; align-items:center; gap:10px;}
@@ -90,6 +97,7 @@
         flex-direction:column;
         min-height:0;
         position:relative;
+        padding-bottom:60px;
     }
 
     .page-display{
@@ -526,6 +534,14 @@
         color:#fff;
         flex-shrink:0;
         gap:8px;
+        position:fixed;
+        bottom:0;
+        left:50%;
+        transform:translateX(-50%);
+        width:100%;
+        max-width:480px;
+        z-index:49;
+        box-shadow:0 -2px 8px rgba(0,0,0,.15);
     }
 
     .toolbar-left{
@@ -3740,6 +3756,11 @@
         const lowest = regions.reduce((m, r) => (r.y1 > m.y1 ? r : m), regions[0]);
         showActionButtons(lowest);
         renderAyahBar();
+        
+        // সুরা ফাতেহা হলে অডিও প্লে করুন
+        if (ayah.surahNum === 1) {
+            playAyahAudio(ayah.surahNum, ayah.ayahNum);
+        }
     }
 
     // নির্বাচন বাতিল করুন
@@ -5095,8 +5116,63 @@
         return wrap;
     }
 
+    /* ===== অডিও প্লেব্যাক ফাংশনালিটি - শুধুমাত্র সুরা ফাতেহার জন্য ===== */
+    let currentAudioAyah = null;
+    let isAudioPlaying = false;
+
+    // সুরা ফাতেহার আয়াত - বিভিন্ন ক্বারীর অডিও URL
+    const surahFatihaAudio = {
+        1: 'https://cdn.islamic.network/quran/recitations/128/1/1.mp3',
+        2: 'https://cdn.islamic.network/quran/recitations/128/1/2.mp3',
+        3: 'https://cdn.islamic.network/quran/recitations/128/1/3.mp3',
+        4: 'https://cdn.islamic.network/quran/recitations/128/1/4.mp3',
+        5: 'https://cdn.islamic.network/quran/recitations/128/1/5.mp3',
+        6: 'https://cdn.islamic.network/quran/recitations/128/1/6.mp3',
+        7: 'https://cdn.islamic.network/quran/recitations/128/1/7.mp3'
+    };
+
+    // আয়াতের জন্য অডিও প্লে করুন
+    function playAyahAudio(surahNum, ayahNum) {
+        // শুধুমাত্র সুরা ফাতেহার জন্য (সুরা নম্বর ১)
+        if (surahNum !== 1) return;
+        
+        const audioEl = document.getElementById('quranAudio');
+        if (!audioEl) return;
+
+        const audioUrl = surahFatihaAudio[ayahNum];
+        if (!audioUrl) return;
+
+        currentAudioAyah = { surah: surahNum, ayah: ayahNum };
+        
+        // অডিও সোর্স সেট করুন
+        audioEl.src = audioUrl;
+        
+        // প্লে বাটনে পালসিং অ্যানিমেশন যোগ করুন
+        const playBtn = document.querySelector('.toolbar-play-btn');
+        if (playBtn) {
+            playBtn.classList.add('playing');
+        }
+        
+        isAudioPlaying = true;
+        audioEl.play().catch(err => {
+            console.warn('অডিও প্লে করতে ব্যর্থ:', err);
+            if (playBtn) playBtn.classList.remove('playing');
+            isAudioPlaying = false;
+        });
+    }
+
+    // অডিও শেষ হলে হ্যান্ডলার
+    document.getElementById('quranAudio')?.addEventListener('ended', () => {
+        const playBtn = document.querySelector('.toolbar-play-btn');
+        if (playBtn) {
+            playBtn.classList.remove('playing');
+        }
+        isAudioPlaying = false;
+    });
+
     // একটি আয়াত নম্বর নির্বাচন করা হলে — মোডাল বন্ধ করে পিডিএফের সেই সূরার
     // সেই আয়াতে নিয়ে গিয়ে আয়াতটি স্বয়ংক্রিয়ভাবে সিলেক্ট/হাইলাইট করে দেখানো হয়
+    // এবং সুরা ফাতেহা হলে অডিও প্লে হয়
     function selectAyahFromGrid(surahNum, ayahNum, badgeEl) {
         document.querySelectorAll('.ayah-number-badge.selected').forEach(el => el.classList.remove('selected'));
         badgeEl.classList.add('selected');
@@ -5104,6 +5180,11 @@
         setTimeout(() => {
             closeSurahListModal();
             goToAyahInPdf(surahNum, ayahNum);
+            
+            // সুরা ফাতেহা হলে অডিও প্লে করুন
+            if (surahNum === 1) {
+                playAyahAudio(surahNum, ayahNum);
+            }
         }, 200);
     }
 
@@ -5285,11 +5366,27 @@
         closeSurahSelectionModal();
     });
 
-    // প্লে বাটন ক্লিক ইভেন্ট
+    // প্লে বাটন ক্লিক ইভেন্ট - অডিও প্লে/পজ টগল
     document.querySelectorAll('.toolbar-play-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            openBookmarkSettingsModal();
+            const audioEl = document.getElementById('quranAudio');
+            if (!audioEl) return;
+            
+            // যদি কোনো অডিও চলছে, তবে পজ করুন
+            if (isAudioPlaying && !audioEl.paused) {
+                audioEl.pause();
+                btn.classList.remove('playing');
+                isAudioPlaying = false;
+            } else if (currentAudioAyah) {
+                // যদি আগে কোনো আয়াত নির্বাচিত ছিল, তার অডিও রিজিউম করুন
+                audioEl.play().catch(err => console.warn('অডিও প্লে করতে ব্যর্থ:', err));
+                btn.classList.add('playing');
+                isAudioPlaying = true;
+            } else {
+                // নতুন সুরা/আয়াত সিলেক্ট করার জন্য বুকমার্ক মোডাল খুলুন
+                openBookmarkSettingsModal();
+            }
         });
     });
 
