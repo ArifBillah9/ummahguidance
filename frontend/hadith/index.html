@@ -646,7 +646,11 @@
   }
   .hh-quote-dots span.active{ background:var(--gold); transform:scale(1.2); }
   .hh-mosque-silhouette{
-    position:absolute; left:0; right:0; bottom:0; height:64px; opacity:.16; z-index:1; pointer-events:none;
+    position:absolute; left:0; right:0; bottom:0; top:0; width:100%; height:100%; opacity:.16; z-index:0; pointer-events:none;
+    background-image: url('assets/mosque-silhouette.png');
+    background-repeat: repeat-x;
+    background-position: bottom;
+    background-size: auto 110px;
   }
   .hh-actions-card{
     background:var(--paper); border-radius:18px; box-shadow:0 16px 34px -16px rgba(14,59,49,.4);
@@ -658,10 +662,7 @@
     background:none; border:none; cursor:pointer; height:100%; position:relative;
     font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
   }
-  .hh-action-ic{
-    width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    background:transparent; color:var(--muted); transition:all .3s cubic-bezier(.34,1.4,.64,1);
-  }
+  
   .hh-action-ic svg{ width:19px; height:19px; stroke:currentColor; fill:none; transition:all .3s ease; }
   .hh-action-ic i{ font-size:18px; color:var(--muted); transition:all .3s ease; }
   .hh-action-ic.gold{ color:#c9772e; }
@@ -673,18 +674,12 @@
     max-width:58px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
     transition:opacity .2s ease, height .2s ease, margin .2s ease;
   }
-  .hh-action.active .hh-action-ic{
-    width:50px; height:50px; transform:translateY(-20px);
-    background:linear-gradient(160deg,var(--mid-green),var(--deep-teal));
-    box-shadow:0 10px 22px -6px rgba(14,59,49,.55), 0 0 0 5px var(--paper);
-  }
-  .hh-action.active .hh-action-ic svg{ width:22px; height:22px; stroke:#fff; }
+
   .hh-action.active .hh-action-ic i{ color:#fff; font-size:20px; }
   .hh-action.active .hh-action-ic.gold{ background:linear-gradient(160deg,#e0ac4f,#c9772e); }
   .hh-action.active .hh-action-ic.gold i{ color:#fff; }
   .hh-action.active .hh-action-ic.pink{ background:linear-gradient(160deg,#e8677a,#d1495b); }
   .hh-action.active .hh-action-ic.pink i{ color:#fff; }
-  .hh-action.active .hh-action-label{ opacity:0; height:0; margin:0; overflow:hidden; }
 
   .hh-section{ padding:24px 18px 10px; }
   .hh-section-title{
@@ -718,47 +713,39 @@
   }
   .hh-book-count-label{ font-size:11.5px; color:var(--muted); }
 
-  /* Persistent bottom nav for the Hadith home screen — always visible on every screen size,
-     not restricted to a "mobile only" media query like the Quran section's r-bottomnav. */
+  /* SIMPLIFIED: Persistent bottom nav for Hadith section */
   .hh-bottomnav{
-    position:fixed; left:50%; bottom:14px; transform:translateX(-50%); z-index:40;
-    width:calc(100% - 28px); max-width:420px; height:60px;
-    padding:0 6px; border:1px solid rgba(226,221,201,.7); border-radius:999px;
-    background:rgba(255,253,247,.98); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
-    display:flex; align-items:center; justify-content:space-around; gap:0; overflow:visible;
-    box-shadow:0 20px 40px -16px rgba(14,59,49,.42), 0 4px 14px rgba(14,59,49,.10);
+    position:fixed; left:50%; bottom:0; transform:translateX(-50%); z-index:40;
+    width:100%; max-width:100%; height:56px;
+    padding:0; border:none; border-radius:0;
+    background:#faf8f3;
+    display:flex; align-items:center; justify-content:space-around; gap:0;
+    box-shadow:0 -2px 8px rgba(0,0,0,0.08);
+    border-top:1px solid #d4ceb8;
   }
-  .hh-bn-item{
-    position:relative; flex:1; min-width:0; background:none; border:none; cursor:pointer; padding:3px 2px 3px;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
-    border-radius:14px; font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
-    font-size:9.5px; line-height:1.2; color:var(--muted); transition:color .2s ease, transform .2s ease;
+  .hh-bn-item,.hh-action{
+    position:relative; flex:1; min-width:0; background:none; border:none; cursor:pointer; padding:8px 4px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    border-radius:0; font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
+    font-size:11px; line-height:1.1; color:var(--muted); transition:color .2s ease, background-color .2s ease;
   }
-  .hh-bn-item::before{
-    content:""; position:absolute; inset:2px 8px; border-radius:12px; background:transparent;
-    transform:scale(.82); opacity:0; transition:background .2s ease, transform .2s ease, opacity .2s ease;
+  .hh-bn-item svg,.hh-action-ic{
+    position:relative; z-index:1; width:20px; height:20px; display:flex; align-items:center; justify-content:center; transition:color .2s ease;
   }
-  .hh-bn-item svg{ position:relative; z-index:1; width:17px; height:17px; stroke:currentColor; fill:none; stroke-width:1.8; transition:transform .2s ease; }
-  .hh-bn-item span{ position:relative; z-index:1; white-space:nowrap; }
-  .hh-bn-item.active{ color:var(--deep-teal); font-weight:700; }
-  .hh-bn-item.active::before{ background:#e6f2ec; transform:scale(1); opacity:1; }
-  .hh-bn-item.active svg{ color:var(--mid-green); transform:translateY(-1px); stroke-width:2.2; }
-  .hh-bn-item:hover{ color:var(--mid-green); transform:translateY(-1px); }
-  .hh-bn-item:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  .hh-bn-item svg{ stroke:currentColor; fill:none; stroke-width:1.5; }
+  .hh-action-ic i{ font-size:18px; color:inherit; }
+  .hh-bn-item span,.hh-action-label{ position:relative; z-index:1; white-space:nowrap; font-weight:500; }
+  .hh-bn-item.active,.hh-action.active{ color:var(--mid-green); background-color:#e8f0eb; }
+  .hh-action.active .hh-action-ic i{ color:var(--mid-green); }
+  .hh-bn-item:hover,.hh-action:hover{ color:var(--leaf-green); background-color:#f0f5f2; }
+  .hh-bn-item:focus-visible,.hh-action:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  .hh-action-ic.gold i{ color:var(--gold); }
+  .hh-action-ic.pink i{ color:#e74c3c; }
   @media (max-width:520px){
-    .hh-bottomnav{ bottom:8px; width:calc(100% - 16px); min-height:50px; border-radius:18px; padding:3px 5px 4px; }
-    .hh-bn-item{ font-size:9px; padding:2px 2px 2px; }
-    .hh-bn-item svg{ width:16px; height:16px; }
-  }
-  @media (max-width:520px){
-    .hh-bottomnav{ bottom:10px; width:calc(100% - 20px); height:56px; padding:0 4px; }
-    .hh-action-ic{ width:34px; height:34px; }
-    .hh-action-ic svg{ width:17px; height:17px; }
+    .hh-bottomnav{ bottom:0; width:100%; height:54px; padding:0; border-radius:0; border-top:1px solid #d4ceb8; }
+    .hh-bn-item,.hh-action{ font-size:10px; padding:7px 2px; border-radius:0; }
+    .hh-bn-item svg,.hh-action-ic{ width:18px; height:18px; }
     .hh-action-ic i{ font-size:16px; }
-    .hh-action.active .hh-action-ic{ width:46px; height:46px; transform:translateY(-18px); }
-    .hh-action.active .hh-action-ic svg{ width:20px; height:20px; }
-    .hh-action.active .hh-action-ic i{ font-size:18px; }
-    .hh-action-label{ font-size:9px; }
   }
 
 
@@ -1588,6 +1575,122 @@
     margin:0; font-size:15.5px; line-height:2; color:var(--ink);
     font-family:'Kalpurush','Hind Siliguri','Noto Sans Bengali',sans-serif;
   }
+
+  /* ============ তাহকিক স্টাইল ============ */
+  .tahkik-header {
+    background: linear-gradient(180deg, var(--deep-teal) 0%, var(--mid-green) 100%);
+    color: var(--paper);
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .tahkik-header-title {
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  
+  .tahkik-header-sub {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.72);
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+  }
+  
+  .tahkik-search-section {
+    padding: 20px;
+    max-width: 100%;
+  }
+  
+  .tahkik-search-wrap {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .tahkik-search-wrap input {
+    width: 100%;
+    padding: 16px 54px 16px 22px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    outline: none;
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+    transition: border-color 0.2s;
+  }
+  
+  .tahkik-search-wrap input:focus {
+    border-color: var(--gold);
+  }
+  
+  .tahkik-search-wrap input::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .tahkik-search-wrap svg {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    stroke: var(--muted);
+  }
+  
+  .tahkik-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 16px 100px;
+  }
+  
+  .tahkik-item {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: border-color 0.16s, box-shadow 0.16s;
+  }
+  
+  .tahkik-item:hover {
+    border-color: var(--leaf-green);
+    box-shadow: 0 8px 16px -8px rgba(14, 59, 49, 0.3);
+  }
+  
+  .tahkik-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--leaf-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: white;
+    font-size: 20px;
+  }
+  
+  .tahkik-text {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--ink);
+    flex: 1;
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+  }
+  
+  .tahkik-no-results {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--muted);
+    font-size: 15px;
+    font-family: 'Kalpurush', 'Hind Siliguri', 'Noto Sans Bengali', sans-serif;
+  }
 </style>
 </head>
 <body>
@@ -1805,30 +1908,27 @@
         </button>
       </div>
 
+      <div class="hh-mosque-silhouette"></div>
+
       <div class="hh-quote-wrap" id="hhQuoteWrap">
         <p class="hh-quote-line">
           <span class="hh-quote-text" id="hhQuoteText">"আল্লাহর রসূল (ﷺ) ইরশাদ করেন, ‘‘সে-ই মুসলিম যার জিহ্বা ও হাত হতে সকল মুসলিম নিরাপদ এবং সে-ই প্রকৃত মুহাজির, আল্লাহ যা নিষেধ করেছেন তা ত্যাগ করে।’’"</span>
           <span class="hh-quote-cite" id="hhQuoteCite">[সহিহ বুখারী]</span>
         </p>
-        <div class="hh-quote-moon">☾</div>
+
         <div class="hh-quote-dots" id="hhQuoteDots"></div>
       </div>
 
-      <svg class="hh-mosque-silhouette" viewBox="0 0 400 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#fff" d="M0,60 L0,40 L20,40 L20,30 L30,20 L40,30 L40,40 L60,40 L60,25 L70,15 L80,25 L80,40
-          L110,40 L110,20 L120,10 L130,20 L130,40 L160,40 L160,30 L170,20 L180,30 L180,40
-          L220,40 L220,15 L230,5 L240,15 L240,40 L270,40 L270,28 L280,18 L290,28 L290,40
-          L320,40 L320,22 L330,12 L340,22 L340,40 L370,40 L370,32 L380,24 L390,32 L390,40 L400,40 L400,60 Z"/>
-      </svg>
+
 
       <div class="hh-actions-card">
         <button class="hh-bn-item active" data-hhbn="home">
           <svg viewBox="0 0 24 24"><path d="M3 11l9 -7l9 7"/><path d="M5 10v10h5v-6h4v6h5v-10"/></svg>
           <span>হোম</span>
         </button>
-        <button class="hh-bn-item" data-hhbn="books">
+        <button class="hh-bn-item" data-hhbn="tahqiq">
           <svg viewBox="0 0 24 24"><path d="M4 4h6a3 3 0 0 1 3 3v13a2.5 2.5 0 0 0 -2.5 -2.5h-6.5z"/><path d="M20 4h-6a3 3 0 0 0 -3 3v13a2.5 2.5 0 0 1 2.5 -2.5h6.5z"/></svg>
-          <span>কিতাব</span>
+          <span>তাহকিক</span>
         </button>
         <button class="hh-bn-item" data-hhbn="notes">
           <svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13h-14z"/><path d="M14 3v5h5"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
@@ -1859,26 +1959,26 @@
     </div>
 
     <nav class="hh-bottomnav" id="hhBottomNav">
-      <button class="hh-action active" id="hhBookViewBtn" data-hh-view="hadithBookView">
+      <button class="hh-action" data-hh-view="hadithBookView">
         <span class="hh-action-ic">
           <i class="fa-solid fa-table-list"></i>
         </span>
         <span class="hh-action-label">হাদিসের কিতাব</span>
       </button>
-      <button class="hh-action" id="hhTopicsViewBtn" data-hh-view="hadithTopicsScreen">
+      <button class="hh-action" data-hh-view="hadithTopicsScreen">
         <span class="hh-action-ic">
           <i class="fa-solid fa-book-open"></i>
         </span>
         <span class="hh-action-label">বিষয়ভিত্তিক</span>
       </button>
-      <button class="hh-action" id="hhUlumBtn">
-        <span class="hh-action-ic gold">
+      <button class="hh-action" data-hh-view="hadithUlumScreen">
+        <span class="hh-action-ic">
           <i class="fa-solid fa-graduation-cap"></i>
         </span>
         <span class="hh-action-label">উলুমুল হাদিস</span>
       </button>
-      <button class="hh-action" id="hhSavedBtn">
-        <span class="hh-action-ic pink">
+      <button class="hh-action" data-hh-view="hadithSavedScreen">
+        <span class="hh-action-ic">
           <i class="fa-solid fa-bookmark"></i>
         </span>
         <span class="hh-action-label">সংরক্ষিত</span>
@@ -1891,7 +1991,9 @@
 <div class="sas-screen" id="hadithTopicsScreen">
   <header class="sas-header">
     <div class="sas-topbar">
-      <div class="sas-header-spacer"></div>
+      <button class="sas-icon-btn" id="hhTopicsBackBtn" title="ফিরে যান" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </button>
       <h1 class="sas-title">বিষয়ভিত্তিক হাদিস</h1>
       <div class="sas-header-spacer"></div>
     </div>
@@ -1911,20 +2013,20 @@
       </span>
       <span class="hh-action-label">হাদিসের কিতাব</span>
     </button>
-    <button class="hh-action active" data-hh-view="hadithTopicsScreen">
+    <button class="hh-action" data-hh-view="hadithTopicsScreen">
       <span class="hh-action-ic">
         <i class="fa-solid fa-book-open"></i>
       </span>
       <span class="hh-action-label">বিষয়ভিত্তিক</span>
     </button>
-    <button class="hh-action" id="hhUlumBtn2">
-      <span class="hh-action-ic gold">
+    <button class="hh-action" data-hh-view="hadithUlumScreen">
+      <span class="hh-action-ic">
         <i class="fa-solid fa-graduation-cap"></i>
       </span>
       <span class="hh-action-label">উলুমুল হাদিস</span>
     </button>
-    <button class="hh-action" id="hhSavedBtn2">
-      <span class="hh-action-ic pink">
+    <button class="hh-action" data-hh-view="hadithSavedScreen">
+      <span class="hh-action-ic">
         <i class="fa-solid fa-bookmark"></i>
       </span>
       <span class="hh-action-label">সংরক্ষিত</span>
@@ -1936,7 +2038,9 @@
 <div class="sas-screen" id="hadithTahqiqScreen">
   <header class="sas-header">
     <div class="sas-topbar">
-      <div class="sas-header-spacer"></div>
+      <button class="sas-icon-btn" id="tahqiqBackBtn" title="হোমে ফিরুন" aria-label="হোমে ফিরুন">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </button>
       <h1 class="sas-title">তাহকিক</h1>
       <div class="sas-header-spacer"></div>
     </div>
@@ -1962,14 +2066,14 @@
       </span>
       <span class="hh-action-label">বিষয়ভিত্তিক</span>
     </button>
-    <button class="hh-action active" id="hhUlumBtn3">
-      <span class="hh-action-ic gold">
+    <button class="hh-action" data-hh-view="hadithUlumScreen">
+      <span class="hh-action-ic">
         <i class="fa-solid fa-graduation-cap"></i>
       </span>
-      <span class="hh-action-label">উলুমুল হাদিসস</span>
+      <span class="hh-action-label">উলুমুল হাদিস</span>
     </button>
-    <button class="hh-action" id="hhSavedBtn3">
-      <span class="hh-action-ic pink">
+    <button class="hh-action" data-hh-view="hadithSavedScreen">
+      <span class="hh-action-ic">
         <i class="fa-solid fa-bookmark"></i>
       </span>
       <span class="hh-action-label">সংরক্ষিত</span>
@@ -2073,14 +2177,127 @@
       </span>
       <span class="hh-action-label">বিষয়ভিত্তিক</span>
     </button>
-    <button class="hh-action active" id="hhUlumBtn3">
-      <span class="hh-action-ic gold">
+    <button class="hh-action" data-hh-view="hadithUlumScreen">
+      <span class="hh-action-ic">
         <i class="fa-solid fa-graduation-cap"></i>
       </span>
-      <span class="hh-action-label">উলুমুল হাদিসস</span>
+      <span class="hh-action-label">উলুমুল হাদিস</span>
     </button>
-    <button class="hh-action" id="hhSavedBtn3">
-      <span class="hh-action-ic pink">
+    <button class="hh-action" data-hh-view="hadithSavedScreen">
+      <span class="hh-action-ic">
+        <i class="fa-solid fa-bookmark"></i>
+      </span>
+      <span class="hh-action-label">সংরক্ষিত</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ============ উলুমুল হাদিস (Science of Hadith terminology) ============ -->
+<div class="sas-screen" id="hadithUlumScreen">
+  <header class="sas-header">
+    <div class="sas-topbar">
+      <button class="sas-icon-btn" id="hhUlumBackBtn" title="ফিরে যান" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </button>
+      <h1 class="sas-title">উলুমুল হাদিস</h1>
+      <div class="sas-header-spacer"></div>
+    </div>
+  </header>
+  <div class="sas-body">
+    <div class="sas-search">
+      <input type="text" id="ulumSearchInput" placeholder="পরিভাষা সার্চ করুন">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </div>
+    <div class="sas-list" id="ulumList"></div>
+    <div class="sas-no-results" id="ulumNoResults">কোনো পরিভাষা পাওয়া যায়নি।</div>
+  </div>
+  <nav class="hh-bottomnav">
+    <button class="hh-action" data-hh-view="hadithBookView">
+      <span class="hh-action-ic">
+        <i class="fa-solid fa-table-list"></i>
+      </span>
+      <span class="hh-action-label">হাদিসের কিতাব</span>
+    </button>
+    <button class="hh-action" data-hh-view="hadithTopicsScreen">
+      <span class="hh-action-ic">
+        <i class="fa-solid fa-book-open"></i>
+      </span>
+      <span class="hh-action-label">বিষয়ভিত্তিক</span>
+    </button>
+    <button class="hh-action" data-hh-view="hadithUlumScreen">
+      <span class="hh-action-ic">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </span>
+      <span class="hh-action-label">উলুমুল হাদিস</span>
+    </button>
+    <button class="hh-action" data-hh-view="hadithSavedScreen">
+      <span class="hh-action-ic">
+        <i class="fa-solid fa-bookmark"></i>
+      </span>
+      <span class="hh-action-label">সংরক্ষিত</span>
+    </button>
+  </nav>
+</div>
+
+<!-- ============ উলুমুল হাদিস বিস্তারিত (Term definition) ============ -->
+<div id="ulumDetailScreen" style="display:none;">
+  <div class="hcl-header">
+    <div class="hcl-topbar">
+      <button class="hcl-back-btn" id="ulumDetailBackBtn" title="পরিভাষার তালিকায় ফিরুন">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="hcl-title-block">
+        <div class="hcl-book-title" id="ulumDetailTitle">পরিভাষা</div>
+      </div>
+    </div>
+  </div>
+  <div class="tqd-body">
+    <div class="tqd-card"><p id="ulumDetailText"></p></div>
+  </div>
+</div>
+
+<!-- ============ সংরক্ষিত (Saved Hadiths) ============ -->
+<div class="sas-screen" id="hadithSavedScreen">
+  <header class="sas-header">
+    <div class="sas-topbar">
+      <button class="sas-icon-btn" id="hhSavedBackBtn" title="ফিরে যান" aria-label="ফিরে যান">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      </button>
+      <h1 class="sas-title">সংরক্ষিত হাদিস</h1>
+      <div class="sas-header-spacer"></div>
+    </div>
+  </header>
+  <div class="sas-body">
+    <div class="sas-empty-block" id="savedEmptyBlock">
+      <div class="sas-empty-illust">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 3h12v18l-6 -4l-6 4z"/>
+        </svg>
+      </div>
+      <p>এখনো কোনো হাদিস সংরক্ষণ করা হয়নি। পছন্দের হাদিস সংরক্ষণ করে রাখতে হাদিস পড়ার সময় বুকমার্ক আইকনে ক্লিক করুন।</p>
+    </div>
+  </div>
+  <nav class="hh-bottomnav">
+    <button class="hh-action" data-hh-view="hadithBookView">
+      <span class="hh-action-ic">
+        <i class="fa-solid fa-table-list"></i>
+      </span>
+      <span class="hh-action-label">হাদিসের কিতাব</span>
+    </button>
+    <button class="hh-action" data-hh-view="hadithTopicsScreen">
+      <span class="hh-action-ic">
+        <i class="fa-solid fa-book-open"></i>
+      </span>
+      <span class="hh-action-label">বিষয়ভিত্তিক</span>
+    </button>
+    <button class="hh-action" data-hh-view="hadithUlumScreen">
+      <span class="hh-action-ic">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </span>
+      <span class="hh-action-label">উলুমুল হাদিস</span>
+    </button>
+    <button class="hh-action" data-hh-view="hadithSavedScreen">
+      <span class="hh-action-ic">
         <i class="fa-solid fa-bookmark"></i>
       </span>
       <span class="hh-action-label">সংরক্ষিত</span>
@@ -4006,6 +4223,9 @@ if(hrSettingsBtn){
 const hadithTopicsScreen = document.getElementById('hadithTopicsScreen');
 const hadithTahqiqScreen = document.getElementById('hadithTahqiqScreen');
 const hadithCollectionsScreen = document.getElementById('hadithCollectionsScreen');
+const hadithUlumScreen = document.getElementById('hadithUlumScreen');
+const hadithSavedScreen = document.getElementById('hadithSavedScreen');
+const ulumDetailScreen = document.getElementById('ulumDetailScreen');
 const tahqiqDetailScreen = document.getElementById('tahqiqDetailScreen');
 const topicSubcatScreen = document.getElementById('topicSubcatScreen');
 
@@ -4016,6 +4236,9 @@ function hideHadithViews(){
   hadithTopicsScreen.style.display = 'none';
   hadithTahqiqScreen.style.display = 'none';
   hadithCollectionsScreen.style.display = 'none';
+  hadithUlumScreen.style.display = 'none';
+  hadithSavedScreen.style.display = 'none';
+  ulumDetailScreen.style.display = 'none';
   tahqiqDetailScreen.style.display = 'none';
   topicSubcatScreen.style.display = 'none';
 }
@@ -4034,6 +4257,9 @@ function hideAllAppScreens(){
   hadithTopicsScreen.style.display = 'none';
   hadithTahqiqScreen.style.display = 'none';
   hadithCollectionsScreen.style.display = 'none';
+  hadithUlumScreen.style.display = 'none';
+  hadithSavedScreen.style.display = 'none';
+  ulumDetailScreen.style.display = 'none';
   tahqiqDetailScreen.style.display = 'none';
   topicSubcatScreen.style.display = 'none';
 }
@@ -4044,15 +4270,22 @@ function setActiveNav(which){
   });
 }
 
+/* Keeps every copy of the persistent bottom nav (one per screen) in sync:
+   whichever screen is currently showing, its matching nav button — and every
+   other hidden copy of that same button — gets the "active" state. */
+function syncBottomNav(viewId){
+  document.querySelectorAll('.hh-bottomnav .hh-action[data-hh-view]').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.hhView === viewId);
+  });
+}
+
 function showHadithListing(){
   hideAllAppScreens();
   hadithView.style.display = 'block';
   window.scrollTo(0,0);
   buildHadithGrid();
   setActiveNav('home');
-  document.querySelectorAll('.hh-action[data-hh-view]').forEach(btn=> btn.classList.remove('active'));
-  const bookViewBtn = document.getElementById('hhBookViewBtn');
-  if(bookViewBtn) bookViewBtn.classList.add('active');
+  syncBottomNav('hadithBookView');
   if(typeof startHHHeaderRotation === 'function') startHHHeaderRotation();
 }
 document.getElementById('navHadithLink').addEventListener('click', showHadithListing);
@@ -4178,10 +4411,9 @@ function showHadithTopics(){
   window.scrollTo(0,0);
   buildTopicsList();
   setActiveNav('books');
-  document.querySelectorAll('.hh-action[data-hh-view]').forEach(btn=> btn.classList.remove('active'));
-  const topicsViewBtn = document.getElementById('hhTopicsViewBtn');
-  if(topicsViewBtn) topicsViewBtn.classList.add('active');
+  syncBottomNav('hadithTopicsScreen');
 }
+document.getElementById('hhTopicsBackBtn').addEventListener('click', showHadithListing);
 
 /* ---- একটি নির্দিষ্ট বিষয়ে ক্লিক করলে যেসব কিতাবে হুবহু এই নামে অধ্যায় আছে
    তার তালিকা দেখায়; সেখান থেকে কিতাব বেছে নিলে সরাসরি সেই অধ্যায়ের আসল হাদিস
@@ -4236,6 +4468,77 @@ function openTopicChapter(entry, chNum, itemEl){
 }
 topicSubcatBackBtn.addEventListener('click', showHadithTopics);
 
+/* ---- উলুমুল হাদিস (Science of Hadith — key terminology) ---- */
+const ULUM_TERMS = [
+  { title:'হাদিস', def:'হাদিস বলা হয় রাসূলুল্লাহ (ﷺ)-এর বাণী, কর্ম, মৌন সম্মতি বা তাঁর গুণাবলি সম্পর্কিত বর্ণনাকে। হাদিসশাস্ত্রে একে সুন্নাহও বলা হয়ে থাকে।' },
+  { title:'সনদ', def:'সনদ হলো কোনো হাদিসের বর্ণনাকারীদের ধারাবাহিক তালিকা, যা একজন বর্ণনাকারী থেকে আরেকজন বর্ণনাকারী হয়ে রাসূলুল্লাহ (ﷺ) পর্যন্ত পৌঁছায়। সনদের মাধ্যমেই একটি হাদিসের নির্ভরযোগ্যতা যাচাই করা হয়।' },
+  { title:'মতন', def:'মতন হলো হাদিসের মূল বাণী বা বক্তব্য অংশ, অর্থাৎ সনদ ব্যতীত হাদিসের প্রকৃত টেক্সট। সনদ যাচাইয়ের পাশাপাশি মতনও বিশ্লেষণ করে দেখা হয় তা শরীয়তের মূলনীতির সাথে সাংঘর্ষিক কি না।' },
+  { title:'রাবী', def:'রাবী বলতে বোঝায় হাদিসের সেই বর্ণনাকারীকে, যিনি সনদের অংশ হিসেবে একজন থেকে অন্যজনের কাছে হাদিস বর্ণনা করেছেন। রাবীর সততা ও স্মরণশক্তি যাচাই করে হাদিসের মান নির্ধারণ করা হয়।' },
+  { title:'মুতাওয়াতির হাদিস', def:'যে হাদিস প্রতিটি স্তরে (তাবাকায়) এত সংখ্যক স্বতন্ত্র বর্ণনাকারী দ্বারা বর্ণিত হয়েছে যে, মিথ্যার ওপর তাদের একমত হওয়া অসম্ভব—তাকে মুতাওয়াতির হাদিস বলা হয়। এ ধরনের হাদিস দ্বারা নিশ্চিত জ্ঞান লাভ হয়।' },
+  { title:'খবরে আহাদ', def:'যে হাদিস মুতাওয়াতিরের শর্ত পূরণ করে না, অর্থাৎ সীমিতসংখ্যক বর্ণনাকারীর মাধ্যমে বর্ণিত হয়েছে, তাকে খবরে আহাদ বলা হয়। অধিকাংশ হাদিস এই শ্রেণির অন্তর্ভুক্ত এবং সনদ যাচাই করেই এর গ্রহণযোগ্যতা নির্ধারণ করা হয়।' },
+  { title:'হাদিসে মারফু', def:'যে বর্ণনা সরাসরি রাসূলুল্লাহ (ﷺ)-এর কথা, কাজ বা মৌন সম্মতির প্রতি সম্বন্ধিত করা হয়েছে, তাকে মারফু হাদিস বলা হয়—চাই তার সনদ অবিচ্ছিন্ন হোক বা না হোক।' },
+  { title:'হাদিসে মাওকুফ', def:'যে বর্ণনা কোনো সাহাবীর নিজস্ব উক্তি, কর্ম বা মতামতের প্রতি সম্বন্ধিত, রাসূলুল্লাহ (ﷺ)-এর প্রতি নয়, তাকে মাওকুফ হাদিস বলা হয়।' },
+  { title:'হাদিসে মাকতু', def:'যে বর্ণনা কোনো তাবিয়ীর নিজস্ব উক্তি বা কর্মের প্রতি সম্বন্ধিত, তাকে মাকতু হাদিস বলা হয়। এটি সরাসরি রাসূলুল্লাহ (ﷺ) পর্যন্ত পৌঁছায় না।' },
+  { title:'মুত্তাসিল সনদ', def:'যে সনদের প্রতিটি বর্ণনাকারী তার ঠিক পূর্ববর্তী বর্ণনাকারী থেকে সরাসরি শুনে হাদিস গ্রহণ করেছেন, অর্থাৎ সনদে কোনো বিচ্ছিন্নতা নেই—তাকে মুত্তাসিল (অবিচ্ছিন্ন) সনদ বলা হয়।' },
+  { title:'মুনকাতি সনদ', def:'যে সনদের কোনো এক বা একাধিক স্থানে বর্ণনাকারী বাদ পড়েছে বা ধারাবাহিকতা ভেঙে গেছে, তাকে মুনকাতি (বিচ্ছিন্ন) সনদ বলা হয়। এ ধরনের হাদিস সাধারণত দুর্বল বলে গণ্য হয়।' },
+  { title:'হাদিসে কুদসী', def:'যে হাদিসের অর্থ আল্লাহ তা\'আলার পক্ষ থেকে হলেও শব্দবিন্যাস রাসূলুল্লাহ (ﷺ)-এর নিজের, তাকে হাদিসে কুদসী বলা হয়। এটি কুরআনের আয়াত নয়, তবে এর মর্যাদা অন্যান্য হাদিসের চেয়ে বিশেষ।' },
+  { title:'মুসনাদ', def:'যে হাদিসগ্রন্থে প্রতিটি সাহাবীর বর্ণিত হাদিস আলাদাভাবে, তাঁর নামের অধীনে সংকলিত করা হয়েছে—বিষয়ভিত্তিকভাবে নয়—তাকে মুসনাদ বলা হয়। ইমাম আহমাদ (রহঃ)-এর মুসনাদ এর সুপরিচিত উদাহরণ।' },
+];
+const ulumList = document.getElementById('ulumList');
+const ulumNoResults = document.getElementById('ulumNoResults');
+const ulumSearchInput = document.getElementById('ulumSearchInput');
+const ULUM_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3 L21 8 L12 13 L3 8 Z"/><path d="M6 10.5V16c0 1.3 2.7 3 6 3s6-1.7 6-3v-5.5"/></svg>`;
+
+function buildUlumList(){
+  const q = (ulumSearchInput.value||'').trim().toLowerCase();
+  ulumList.innerHTML = '';
+  let shown = 0;
+  ULUM_TERMS.forEach(t=>{
+    if(q && !t.title.toLowerCase().includes(q)) return;
+    shown++;
+    const card = document.createElement('button');
+    card.className = 'sas-card compact';
+    card.innerHTML = `
+      <span class="sas-hex-icon">${ULUM_ICON}</span>
+      <span class="sas-card-body"><p class="sas-card-title">${t.title}</p></span>`;
+    card.addEventListener('click', ()=> showUlumDetail(t));
+    ulumList.appendChild(card);
+  });
+  ulumNoResults.style.display = shown===0 ? 'block' : 'none';
+}
+if(ulumSearchInput) ulumSearchInput.addEventListener('input', buildUlumList);
+
+function showHadithUlum(){
+  hideAllAppScreens();
+  hadithUlumScreen.style.display = 'block';
+  window.scrollTo(0,0);
+  buildUlumList();
+  syncBottomNav('hadithUlumScreen');
+}
+document.getElementById('hhUlumBackBtn').addEventListener('click', showHadithListing);
+
+const ulumDetailTitle = document.getElementById('ulumDetailTitle');
+const ulumDetailText = document.getElementById('ulumDetailText');
+const ulumDetailBackBtn = document.getElementById('ulumDetailBackBtn');
+
+function showUlumDetail(term){
+  hideAllAppScreens();
+  ulumDetailTitle.textContent = term.title;
+  ulumDetailText.textContent = term.def;
+  ulumDetailScreen.style.display = 'block';
+  window.scrollTo(0,0);
+}
+ulumDetailBackBtn.addEventListener('click', showHadithUlum);
+
+/* ---- সংরক্ষিত (Saved Hadiths) ---- */
+function showHadithSaved(){
+  hideAllAppScreens();
+  hadithSavedScreen.style.display = 'block';
+  window.scrollTo(0,0);
+  syncBottomNav('hadithSavedScreen');
+}
+document.getElementById('hhSavedBackBtn').addEventListener('click', showHadithListing);
+
 /* ---- তাহকিক (Hadith Grading) ---- */
 const TAHQIQ_GRADES = [
   'নির্ণীত নয়', 'সহিহ', 'হাসান', 'দুর্বল', 'জাল', 'অন্যান্য',
@@ -4271,6 +4574,7 @@ function showHadithTahqiq(){
   window.scrollTo(0,0);
   buildTahqiqList();
   setActiveNav('notes');
+  syncBottomNav('hadithBookView');
 }
 
 /* ---- তাহকিক-এর সংজ্ঞা (বিস্তারিত পাতা) ---- */
@@ -4331,6 +4635,7 @@ function showHadithCollections(){
   hadithCollectionsScreen.style.display = 'block';
   window.scrollTo(0,0);
   setActiveNav('bookmark');
+  syncBottomNav('hadithBookView');
 }
 
 function buildHadithGrid(){
@@ -4370,23 +4675,22 @@ document.getElementById('hhSearchBtn').addEventListener('click', ()=>{
 document.getElementById('hhBackBtn').addEventListener('click', ()=>{
   window.location.href = 'https://ummahguidance.vercel.app/';
 });
-/* Hadith view switcher buttons */
-document.querySelectorAll('.hh-action[data-hh-view]').forEach(btn=>{
+/* Hadith persistent bottom nav (হাদিসের কিতাব / বিষয়ভিত্তিক / উলুমুল হাদিস / সংরক্ষিত):
+   every screen carries its own copy of this <nav>, so a single delegated map of
+   viewId -> show-function drives all of them, and syncBottomNav() (called inside
+   each show function) keeps every copy's "active" highlight consistent. */
+const HH_VIEW_SHOW = {
+  hadithBookView: showHadithListing,
+  hadithTopicsScreen: showHadithTopics,
+  hadithUlumScreen: showHadithUlum,
+  hadithSavedScreen: showHadithSaved
+};
+document.querySelectorAll('.hh-bottomnav .hh-action[data-hh-view]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    const viewId = btn.dataset.hhView;
-    document.querySelectorAll('.hh-action[data-hh-view]').forEach(b=> b.classList.remove('active'));
-    btn.classList.add('active');
-    
-    if(viewId === 'hadithBookView'){
-      showHadithListing();
-    } else if(viewId === 'hadithTopicsScreen'){
-      showHadithTopics();
-    }
+    const fn = HH_VIEW_SHOW[btn.dataset.hhView];
+    if(fn) fn();
   });
 });
-
-document.getElementById('hhUlumBtn').addEventListener('click', ()=> alert('উলুমুল হাদিস ফিচারটি শীঘ্রই যুক্ত করা হবে।'));
-document.getElementById('hhSavedBtn').addEventListener('click', ()=> alert('সংরক্ষিত হাদিস ফিচারটি শীঘ্রই যুক্ত করা হবে।'));
 
 /* ---- Persistent bottom nav: always visible, works the same on desktop and mobile,
        and across every screen (home / books / notes / bookmark each have their own
@@ -5314,6 +5618,145 @@ applyHadithReaderSettings();
 
 /* This page opens directly into the Hadith section by default */
 showHadithListing();
+
+/* ================= তাহকিক (Tahkik) List Handler ================= */
+const TAHKIK_ITEMS = [
+  'নিবৃত্ত নয়',
+  'সহিহ',
+  'হাসান',
+  'দুর্বল',
+  'জাল',
+  'অনায়না',
+  'সহিহ লিপাইহিরিহি',
+  'সহিহ মাকতু',
+  'সহিহ মাওকুফ',
+  'সহিহ মারফু',
+  'সহিহ মূতাআয়ির',
+  'হাসান সহিহ',
+  'হাসান মাওকুফ',
+  'হাসান মাকতু',
+  'হাসান লিপাইহিরিহি',
+  'খুবই দুর্বল',
+  'দুর্বল মুনকার',
+  'দুর্বল মাকতু',
+  'দুর্বল মাওকুফ',
+  'শায়',
+  'মুনকার',
+  'সহিহ মাওকুফ শায়',
+  'শায় মাকতু',
+  'দুর্বল মুরসাল',
+  'দুর্বল মারফু',
+  'দুর্বল মুযাতারিব',
+  'দুর্বল মুদাল',
+  'মিথ্যা',
+  'খুবই দুর্বল মাকতু',
+  'দুর্বল মুনকাতি',
+  'বাতিল',
+  'সাকতু',
+  'সইহ লিযাইতুই',
+  'হাসান লিজাইতুই',
+  'সু\'আলাক',
+  'মুনকাতি',
+  'সু\'দাল',
+  'মুদাচাস',
+  'সা\'রুফ',
+  'সাউররক',
+  'সুবহাম',
+  'সুদরাজ',
+  'সুতাআয়িতির',
+  'খুবর ওয়াহিদ',
+  'সাওকুফ',
+  'সুওয়াসিল',
+  'মাহফুজ',
+  'আজছুল',
+  'জাহালাত',
+  'তারে',
+  'শাহিদ',
+  'সুতাবাআত',
+  'সুসাহাফ',
+  'সুরাহ',
+  'সু\'আহাফ',
+  'হাদিস',
+  'খুবর',
+  'আসার',
+  'ইসলামে হাদিসের কর্তৃপক্ষ পরিভাষা',
+  'তা\'লীক',
+  'সুতারিবি ও শাহিদ'
+];
+
+function renderTahkikList(items = TAHKIK_ITEMS) {
+  const container = document.getElementById('tahkikItemsContainer');
+  const noResults = document.getElementById('tahkikNoResults');
+  if (!container) return;
+  
+  if (items.length === 0) {
+    container.innerHTML = '';
+    noResults.style.display = 'block';
+    return;
+  }
+  
+  noResults.style.display = 'none';
+  container.innerHTML = items.map(item => `
+    <div class="tahkik-item">
+      <div class="tahkik-icon">
+        <i class="fa-solid fa-check"></i>
+      </div>
+      <div class="tahkik-text">${item}</div>
+    </div>
+  `).join('');
+}
+
+function showTahkikView() {
+  // হোম স্ক্রীন লুকাই
+  const hhShell = document.querySelector('.hh-shell');
+  if(hhShell) hhShell.style.display = 'none';
+  
+  // সব ট্যাব থেকে active ক্লাস সরাই
+  document.querySelectorAll('.hh-bn-item').forEach(btn => btn.classList.remove('active'));
+  
+  // tahqiq ট্যাব active করি
+  document.querySelector('[data-hhbn="tahqiq"]').classList.add('active');
+  
+  // তাহকিক স্ক্রীন দেখাই (সম্পূর্ণ পেজ)
+  showHadithTahqiq();
+}
+
+function showHomeView() {
+  // হোম স্ক্রীন দেখাই
+  const hhShell = document.querySelector('.hh-shell');
+  if(hhShell) hhShell.style.display = 'block';
+  
+  // তাহকিক স্ক্রীন লুকাই
+  const hadithTahqiqScreen = document.getElementById('hadithTahqiqScreen');
+  if(hadithTahqiqScreen) hadithTahqiqScreen.style.display = 'none';
+  
+  // সব ট্যাব থেকে active ক্লাস সরাই
+  document.querySelectorAll('.hh-bn-item').forEach(btn => btn.classList.remove('active'));
+  
+  // home ট্যাব active করি
+  document.querySelector('[data-hhbn="home"]').classList.add('active');
+  
+  // হোম ফাংশনালিটি (যদি থাকে)
+  if(typeof showHadithListing === 'function') {
+    showHadithListing();
+  }
+}
+
+// tahqiq ট্যাব হ্যান্ডলার
+document.querySelector('[data-hhbn="tahqiq"]').addEventListener('click', showTahkikView);
+
+// home ট্যাব হ্যান্ডলার
+document.querySelector('[data-hhbn="home"]').addEventListener('click', showHomeView);
+
+// ডিফল্টভাবে হোম পেজ লোড করুন
+showHomeView();
+
+// তাহকিক স্ক্রীন back button
+const tahqiqBackBtn = document.getElementById('tahqiqBackBtn');
+if(tahqiqBackBtn) {
+  tahqiqBackBtn.addEventListener('click', showHomeView);
+}
+
 
 </script>
 
